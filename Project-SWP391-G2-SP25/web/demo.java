@@ -8,5 +8,9 @@
  * @author Legion
  */
 public class demo {
-    
+    private boolean 
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
+    }
 }
