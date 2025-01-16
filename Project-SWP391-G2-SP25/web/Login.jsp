@@ -23,7 +23,7 @@
     </head>
 
     <body class="bg-gray-100">
-        <jsp:include page="notification.jsp"></jsp:include>
+        
 
 
         <!-- Login Form -->
