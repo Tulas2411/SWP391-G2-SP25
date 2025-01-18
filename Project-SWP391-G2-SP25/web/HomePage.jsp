@@ -170,26 +170,25 @@
                         <li class="main__left-posts-items main__left-posts-items--vertical">
                             <img src="assets/img/BV-1.jpg" alt="Phim siêu anh hùng" class="main__left-posts-img" />
                             <a href="#" class="main__left-posts-link">
-                                <span class="main__left-posts-title">Anh em đạo diễn Russo: Sức hút của 
-                                    "Avengers: Endgame quá lớn, không cần bỏ tiền marketing</span>
+                                <span class="main__left-posts-title">Khóa Cửa Thông Minh: Bước Đột Phá An Ninh Thời 4.0</span>
                             </a>
                         </li>
                         <li class="main__left-posts-items main__left-posts-items--vertical">
                             <img src="assets/img/BV-2.jpg" alt="Tổng thống Trump" class="main__left-posts-img" />
                             <a href="#" class="main__left-posts-link">
-                                <span class="main__left-posts-title">Tổng thống Trump: “Tôi sẽ không bao giờ bước vào trong một chiếc xe tự lái”</span>
+                                <span class="main__left-posts-title">Giới Thiệu Bộ Đèn LED Thanh Hắt: Xu Hướng Mới Trong Trang Trí</span>
                             </a>
                         </li>
                         <li class="main__left-posts-items main__left-posts-items--vertical">
                             <img src="assets/img/BV-3.jpg" alt="Hình ảnh Facebook" class="main__left-posts-img" />
                             <a href="#" class="main__left-posts-link">
-                                <span class="main__left-posts-title">Facebook bổ sung thêm tab Gaming vào ứng dụng trên smartphone</span>
+                                <span class="main__left-posts-title">Quạt Hơi Nước Hay Quạt Điều Hoà: Đâu Là Sự Lựa Chọn Hoàn Hảo?</span>
                             </a>
                         </li>
                         <li class="main__left-posts-items" style="padding-bottom: 20px;"> <!-- Nội tuyến -->
                             <img src="assets/img/BV-4.jpg" alt="Hình ảnh Galaxy S10" class="main__left-posts-img" />
                             <a href="#" class="main__left-posts-link">
-                                <span class="main__left-posts-title">Đôi điều về gốm trên Galaxy S10</span>
+                                <span class="main__left-posts-title">Top 10 Ổ Cắm Điện Cao Cấp Đáng Mua Nhất Hiện Nay</span>
                             </a>
                         </li>
                     </ul>
