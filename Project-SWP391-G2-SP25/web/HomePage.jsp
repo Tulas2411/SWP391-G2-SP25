@@ -162,7 +162,7 @@
                             <span class="main__left-product-omount"><strong>289.000đ</strong></span>
                         </li>
                     </ul>
-                    
+
                     <!-- Main Left Post -->
                     <!-- Các bài báo mới - Hiển thị dưới Sản phẩm mới -->
                     <h2 class="main__left-title main__left-margin-top">BÀI VIẾT MỚI</h2>
@@ -533,7 +533,7 @@
                             </div>
                             <div class="main__right-sensor-items">
                                 <a href="#" class="main__right-sensor-link">
-                                    <img src="assets/img/Module-6.jpg" alt="" class="main__right-sensor-img" />
+                                    <img src="assets/img/TBTM-6.jpg" alt="" class="main__right-sensor-img" />
                                     <div class="main__right-sensor-title">Cảm biến chuyển động</div>
                                 </a>
                                 <span class="main__right-sensor-price">360.000đ</span>
@@ -594,5 +594,9 @@
         </main>
 
         <%@ include file="./Public/footer.jsp" %>
+
+        <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+        <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+        <script src="assets/Javascript/main.js"></script>
     </body>
 </html>
