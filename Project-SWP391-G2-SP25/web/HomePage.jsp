@@ -558,6 +558,38 @@
                 </div>
                 <div class="clear"></div>
 
+                <!-- Thông tin vận chuyển, giao hàng, thanh toán và chăm sóc khách hàng của cửa hàng -->
+                <div class="main__installation clear">
+                    <div class="main__installation-box">
+                        <img src="assets/img/KT-1.png" alt="Hình ảnh minh họa cho chức năng" />
+                        <br />
+                        <strong class="main__installation-strong">Lắp đặt chuyên nghiệp</strong>
+                        <br />
+                        <span class="main__installation-title">Đội ngũ lắp đặt giàu kinh nghiệm</span>
+                    </div>
+                    <div class="main__installation-box">
+                        <img src="assets/img/KT-2.png" alt="Hình ảnh minh họa cho chức năng" />
+                        <br />
+                        <strong class="main__installation-strong">Giao nhận tiện lợi</strong>
+                        <br />
+                        <span class="main__installation-title">Giao nhận trong ngày nhanh</span>
+                    </div>
+                    <div class="main__installation-box">
+                        <img src="assets/img/KT-3.png" alt="Hình ảnh minh họa cho chức năng" />
+                        <br />
+                        <strong class="main__installation-strong">Thanh toán linh hoạt</strong>
+                        <br />
+                        <span class="main__installation-title">Phương thức thanh toán đa dạng</span>
+                    </div>
+                    <div class="main__installation-box">
+                        <img src="assets/img/KT-4.png" alt="Hình ảnh minh họa cho chức năng" />
+                        <br />
+                        <strong class="main__installation-strong">Hậu mãi chu đáo</strong>
+                        <br />
+                        <span class="main__installation-title">Chăm sóc khách hàng tận tình</span>
+                    </div>
+                    <div class="clear"></div>
+                </div>
             </div>
         </main>
 
