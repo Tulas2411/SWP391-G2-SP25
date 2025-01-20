@@ -55,6 +55,15 @@
                                    class="mt-1 block w-full rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500" required>
                         </div>
                         <div class="mb-4">
+                            <label for="gender" class="block text-sm font-medium text-zinc-700">Gender <span class="text-red-500">*</span></label>
+                            <div class="mt-1">
+                                <input type="radio" id="male" name="gender" value="male" required>
+                                <label for="male" class="text-zinc-700">Male</label>
+                                <input type="radio" id="female" name="gender" value="female" class="ml-4" required>
+                                <label for="female" class="text-zinc-700">Female</label>
+                            </div>
+                        </div>
+                        <div class="mb-4">
                             <label for="phone" class="block text-sm font-medium text-zinc-700">Phone Number <span class="text-red-500">*</span></label>
                             <input type="number" id="phone" name="phone"
                                    class="mt-1 block w-full rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500" required>
