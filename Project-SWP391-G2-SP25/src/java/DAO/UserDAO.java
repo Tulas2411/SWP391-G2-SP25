@@ -65,7 +65,7 @@ public class UserDAO {
         tblUsers user = null;
         Connection cn = null;
         try {
-            cn = DBUtils.makeConnection();
+            cn = DBContext.makeConnection();
             if (cn != null) {
                 String sql = "SELECT * FROM tblUsers WHERE userID = ?";
                 PreparedStatement pst = cn.prepareStatement(sql);
@@ -104,7 +104,7 @@ public class UserDAO {
         tblUsers user = null;
         Connection cn = null;
         try {
-            cn = DBUtils.makeConnection();
+            cn = DBContext.makeConnection();
             if (cn != null) {
                 String sql = "SELECT * FROM tblUsers WHERE gmail = ?";
                 PreparedStatement pst = cn.prepareStatement(sql);
@@ -142,7 +142,7 @@ public class UserDAO {
         Connection cn = null;
         boolean exist = false;
         try {
-            cn = DBUtils.makeConnection();
+            cn = DBContext.makeConnection();
             if (cn != null) {
                 String sql = "SELECT gmail FROM tblUsers WHERE gmail = ? AND userID != ?";
                 PreparedStatement pst = cn.prepareStatement(sql);
@@ -172,7 +172,7 @@ public class UserDAO {
         Connection cn = null;
         boolean result = false;
         try {
-            cn = DBUtils.makeConnection();
+            cn = DBContext.makeConnection();
             if (cn != null) {
                 String sql = "INSERT INTO tblUsers (userID, userName, firstName, lastName, password, roleID, gmail, address, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 PreparedStatement pst = cn.prepareStatement(sql);
@@ -205,7 +205,7 @@ public class UserDAO {
         Connection cn = null;
         boolean exist = false;
         try {
-            cn = DBUtils.makeConnection();
+            cn = DBContext.makeConnection();
             if (cn != null) {
                 String sql = "SELECT userID FROM tblUsers WHERE userID = ?";
                 PreparedStatement pst = cn.prepareStatement(sql);
@@ -233,7 +233,7 @@ public class UserDAO {
         Connection cn = null;
         boolean exist = false;
         try {
-            cn = DBUtils.makeConnection();
+            cn = DBContext.makeConnection();
             if (cn != null) {
                 String sql = "SELECT gmail FROM tblUsers WHERE gmail = ?";
                 PreparedStatement pst = cn.prepareStatement(sql);
@@ -262,7 +262,7 @@ public class UserDAO {
         Connection cn = null;
         boolean result = false;
         try {
-            cn = DBUtils.makeConnection();
+            cn = DBContext.makeConnection();
             if (cn != null) {
                 String sql = "UPDATE tblUsers SET firstName = ?, lastName = ?, userName = ?, password = ?, roleID = ?, gmail = ?, address = ?, status = ? WHERE userID = ?";
                 PreparedStatement pst = cn.prepareStatement(sql);
@@ -297,7 +297,7 @@ public class UserDAO {
         ArrayList<tblUsers> users = new ArrayList<>();
         Connection cn = null;
         try {
-            cn = DBUtils.makeConnection();
+            cn = DBContext.makeConnection();
             if (cn != null) {
                 String sql = "SELECT * FROM tblUsers WHERE lastName LIKE ?";
                 PreparedStatement pst = cn.prepareStatement(sql);

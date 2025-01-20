@@ -5,8 +5,8 @@
  */
 package controller;
 
-import DAO.UserDAO;
 import Dto.tblUsers;
+import dao.UserDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -20,7 +20,7 @@ import jakarta.servlet.http.HttpSession;
  *
  * @author Acer
  */
-public class LoginController extends HttpServlet {
+public class LoginServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
