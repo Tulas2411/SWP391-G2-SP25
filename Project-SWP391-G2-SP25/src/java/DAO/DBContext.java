@@ -10,7 +10,7 @@ public class DBContext {
     public static Connection makeConnection() {
 		Connection cons = null;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			cons = DriverManager.getConnection(
 					"jdbc:mysql://localhost:3306/EcommerceDB1", "root", "1234");
 		} catch (Exception e) {

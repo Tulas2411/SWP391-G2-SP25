@@ -16,10 +16,10 @@ public class tblUsers {
     private String gender;
     private String phone;
     private String password;
-    private String roleID;
+    private String role;
     private String gmail;
     private String address;
-    private boolean status;
+
 
     public String getUserID() {
         return userID;
@@ -77,12 +77,12 @@ public class tblUsers {
         this.password = password;
     }
 
-    public String getRoleID() {
-        return roleID;
+    public String getRole() {
+        return role;
     }
 
-    public void setRoleID(String roleID) {
-        this.roleID = roleID;
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public String getGmail() {
@@ -101,14 +101,6 @@ public class tblUsers {
         this.address = address;
     }
 
-    public boolean isStatus() {
-        return status;
-    }
-
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
-    
     
 }
 
