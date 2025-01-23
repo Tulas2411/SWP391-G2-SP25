@@ -186,13 +186,27 @@ INSERT INTO Category (CategoryID, CategoryName)
 VALUES 
 (1, 'Quạt điện'),
 (2, 'Tủ lạnh'),
-(3, 'Điều hòa');
+(3, 'Điều hòa'),
+(4, 'Dây nước'),
+(5, 'Đèn'),
+(6, 'Bồn nước'),
+(7, 'Bình nước nóng'),
+(8, 'Vòi xịt')
+;
 
 -- Thêm dữ liệu vào bảng Products
 INSERT INTO Products (ProductID, CategoryID, ProductName, Description, Provider, Price, WarrantyPeriod, Amount, ImageLink, IsPromoted, CreateAt)
 VALUES 
 (1, 1, 'Quạt trần Panasonic', 'Quạt trần cao cấp 5 cánh', 'Panasonic', 5000000, 24, 10, 'images/quat_tran.jpg', TRUE, NOW()),
-(2, 2, 'Tủ lạnh Samsung', 'Tủ lạnh Inverter 350L', 'Samsung', 12000000, 36, 5, 'images/tu_lanh.jpg', FALSE, NOW());
+(2, 2, 'Tủ lạnh Samsung', 'Tủ lạnh Inverter 350L', 'Samsung', 12000000, 36, 5, 'images/tu_lanh.jpg', FALSE, NOW()),
+(3, 1, 'Quạt trần Apple', 'Quạt trần cao cấp 5 cánh', 'Panasonic', 5000000, 24, 10, 'images/Products/quat_tran.jpg', TRUE, NOW()),
+(4, 2, 'Tủ lạnh LG', 'Tủ lạnh Inverter 350L', 'Samsung', 12000000, 36, 5, 'images/tulanh.jpg', TRUE, NOW()),
+(5, 4, 'Dây cấp nước SE', 'Dây cấp nước siêu dài', 'SE', 12000000, 36, 5, 'images/daycapnuoc.jpg', TRUE, NOW()),
+(6, 5, 'Đèn LED âm trần', 'Đèn LED âm trần siêu ngầu', 'Apple', 12000000, 36, 5, 'images/DenLed.jpg', TRUE, NOW()),
+(7, 6, 'Bồn nước Đại Thành 500L', 'Bồn nước Đại Thành siêu câp to ', 'Đại Thành', 12000000, 36, 5, 'images/bonnuoc.jpg', TRUE, NOW()),
+(8, 7, 'Binh nước nóng Mitsubishi', 'Binh nước nóng Mitsubishi Ngầu nhất bồn cầu ', 'Mitsubishi', 12000000, 36, 5, 'images/binhnuocnong.jpg', TRUE, NOW()),
+(9, 8, 'Vòi xịt bồn cầu', 'Vòi xịt bồn cầu ngầu nhất Bắc Bộ', 'Mitsubishi', 12000000, 36, 5, 'images/Voixit.jpg', TRUE, NOW())
+;
 
 -- Thêm dữ liệu vào bảng Orders
 INSERT INTO Orders (OrderID, CustomerID, OrderDate, DeliveryAddress, Status, TotalAmount, BillOfLading)
