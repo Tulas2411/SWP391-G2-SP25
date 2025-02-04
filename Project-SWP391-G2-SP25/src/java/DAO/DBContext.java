@@ -8,15 +8,15 @@ import java.util.logging.Logger;
 
 public class DBContext {
     public static Connection makeConnection() {
-		Connection cons = null;
+		Connection conn = null;
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			cons = DriverManager.getConnection(
+			conn = DriverManager.getConnection(
 					"jdbc:mysql://localhost:3306/EcommerceDB", "root", "1234");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return cons;
+		return conn;
 	}
     protected Connection connection;
     public DBContext()

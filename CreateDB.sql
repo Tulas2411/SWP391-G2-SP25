@@ -194,24 +194,43 @@ CREATE TABLE Sliders (
 -- Chèn dữ liệu vào bảng Users
 INSERT INTO Users (FirstName, LastName, Gender, DateOfBirth, UserName, Password, Role, Email, PhoneNumber, Address)
 VALUES
-('Tuan', 'Minh', 'Male', '2004-11-24', 'admin', '123', 'Admin', 'john@example.com', '1234567890', '123 Main St'),
-('JaneT', 'Smith', 'Female', '1985-09-22', 'sale1', '123', 'SaleManager', 'jane@example.com', '0987654321', '456 Oak St'),
-('Alice', 'Johnson', 'Female', '1992-07-10', 'sale2', '123', 'Sale', 'alice@example.com', '1122334455', '789 Pine St'),
-('Bob', 'Brown', 'Male', '1988-11-30', 'mkt1', '123', 'Marketing', 'bob@example.com', '2233445566', '321 Elm St'),
-('Charlie', 'White', 'Male', '1995-03-25', 'customer1', '123', 'Customer', 'charlie@example.com', '3344556677', '654 Birch St');
+('Tuan', 'Minh', 'Male', '2004-11-24', 'admin', '123', 'Admin', 'admin@example.com', '1234567890', '123 Main St'),
+('Tung', 'Duong', 'Male', '2004-10-12', 'sale1', '123', 'SaleManager', 'salemanager@example.com', '0987654321', '456 Oak St'),
+('Duc', 'Manh', 'Female', '1992-07-10', 'sale2', '123', 'Sale', 'sale@example.com', '1122334455', '789 Pine St'),
+('The', 'Quang', 'Male', '1988-11-30', 'mkt1', '123', 'Marketing', 'marketing@example.com', '2233445566', '321 Elm St'),
+('Quang', 'Son', 'Male', '1995-03-25', 'customer1', '123', 'Customer', 'customer@example.com', '3344556677', '654 Birch St');
 
 -- Chèn dữ liệu vào bảng Category
 INSERT INTO Category (CategoryID, CategoryName)
-VALUES ('TBCS', 'Thiết bị chiếu sáng'), ('TBTM', 'Thiết bị thông minh'), ('TBQ', 'Thiết bị quạt'), ('FURN04', 'Furniture'), ('TOYS05', 'Toys');
+VALUES 
+('TBQ', 'Thiết bị quạt'), ('TBCS', 'Thiết bị chiếu sáng'), ('CTD', 'Công tắc điện'), ('TBTM', 'Thiết bị thông minh'), ('TBSCBT', 'Thiết bị sửa chữa & bảo trì'),
+('SPM', 'Sản phẩm mới'), ('SPKM', 'Sản phẩm khuyến mãi');
 
 -- Chèn dữ liệu vào bảng Products
-INSERT INTO Products (CategoryID, ProductName, Description, Provider, Price, WarrantyPeriod, Amount, ImageLink, IsPromoted, CreateAt)
+INSERT INTO Products (CategoryID, ProductName, Description, Provider, Price, WarrantyPeriod, Amount, ImageLink, IsPromoted, CreateAt) 
 VALUES
-('TBCS', 'Bóng đèn LED đui to 120W MPE', 'High-end smartphone', 'Tech Corp', 999.99, '2 years', 50, 'assets/img/TBCS-1.jpg', 1, NOW()),
-('TBCS', 'Bóng đèn led âm tường', 'Denim blue jeans', 'Fashion Co', 49.99, '1 year', 100, 'assets/img/TBCS-2.jpg', 0, NOW()),
-('TBCS', 'Bóng đèn led để sân', 'Bestselling book', 'BookHouse', 19.99, 'N/A', 200, 'assets/img/TBCS-3.jpg', 1, NOW()),
-('TBTM', 'Đèn cảm ứng người đi qua âm tương', 'Ergonomic chair', 'Furniture Ltd', 149.99, '5 years', 30, 'assets/img/TBTM-1.jpg', 0, NOW()),
-('TBTM', 'Bóng đèn thông minh cảm ứng', 'Superhero collectible', 'ToyWorld', 29.99, 'N/A', 75, 'assets/img/TBTM-1.jpg', 1, NOW());
+('TBQ', 'Quạt tích điện', 'Quạt sử dụng pin sạc tiện lợi.', 'ElectroCorp', 195000, '1 năm', 100, 'assets/img/TBQ-1.jpg', 1, NOW()),
+('TBQ', 'Quạt hơi nước', 'Giúp làm mát không khí hiệu quả.', 'ElectroCorp', 499000, '1 năm', 50, 'assets/img/TBQ-2.jpg', 1, NOW()),
+('TBQ', 'Quạt điều hòa', 'Điều hòa không khí với hơi nước.', 'ElectroCorp', 499000, '2 năm', 30, 'assets/img/TBQ-3.jpg', 1, NOW()),
+('TBQ', 'Quạt trần treo tường', 'Quạt treo trần tiết kiệm diện tích.', 'ElectroCorp', 800000, '2 năm', 20, 'assets/img/TBQ-4.jpg', 0, NOW()),
+('TBQ', 'Quạt treo tường', 'Dễ dàng lắp đặt và sử dụng.', 'ElectroCorp', 180000, '1 năm', 50, 'assets/img/TBQ-5.jpg', 0, NOW()),
+('TBQ', 'Quạt cây', 'Quạt cây 3 tốc độ, có điều khiển.', 'ElectroCorp', 159000, '1 năm', 50, 'assets/img/TBQ-6.jpg', 0, NOW()),
+('TBQ', 'Quạt phun sương tạo ẩm', 'Phun sương giúp tăng độ ẩm.', 'ElectroCorp', 3050000, '2 năm', 15, 'assets/img/TBQ-7.jpg', 1, NOW()),
+('TBQ', 'Quạt sàn', 'Quạt công suất lớn cho không gian rộng.', 'ElectroCorp', 785000, '1 năm', 25, 'assets/img/TBQ-8.jpg', 0, NOW()),
+('TBCS', 'Bóng đèn LED MPE LBD-50V 50W', 'Bóng đèn LED MPE LBD-50V 50W.', 'LightingCo', 290000, '2 năm', 100, 'assets/img/TBCS-1.jpg', 1, NOW()),
+('TBCS', 'Đèn Led âm trần chống chói 7W', 'Đèn Led âm trần chống chói 7W.', 'LightingCo', 115000, '3 năm', 50, 'assets/img/TBCS-2.jpg', 1, NOW()),
+('TBCS', 'Đèn pha LED 200w cao cấp ngoài trời', 'Đèn pha LED 200w cao cấp ngoài trời.', 'LightingCo', 795000, '2 năm', 75, 'assets/img/TBCS-3.jpg', 1, NOW()),
+('TBCS', 'Bộ đèn led tuýp T8 thuỷ tinh 1,2m', 'Bộ đèn led tuýp T8 thuỷ tinh 1,2m.', 'LightingCo', 160000, '2 năm', 100, 'assets/img/TBCS-8.jpg', 0, NOW()),
+('TBCS', 'Bóng đèn LED kẹp bàn 60 bóng LED', 'Đèn LED kẹp bàn tiết kiệm điện.', 'LightingCo', 96000, '2 năm', 100, 'assets/img/TBCS-5.jpg', 1, NOW()),
+('TBCS', 'Đèn LED âm đất 36W', 'Đèn LED gắn âm đất.', 'LightingCo', 860000, '3 năm', 50, 'assets/img/TBCS-6.jpg', 1, NOW()),
+('TBCS', 'Đèn LED thanh hắt', 'Đèn LED dài phù hợp trang trí.', 'LightingCo', 640000, '2 năm', 75, 'assets/img/TBCS-7.jpg', 1, NOW()),
+('TBCS', 'Đèn LED rọi 12W mắt ếch', 'Đèn rọi giúp chiếu sáng tập trung.', 'LightingCo', 270000, '2 năm', 100, 'assets/img/TBCS-8.jpg', 0, NOW()),
+('CTD', 'Bộ 3 công tắc điện 1 chiều Size S', 'Bộ 3 công tắc điện 1 chiều Size S.', 'ElectricCo', 175000, '1 năm', 500, 'assets/img/CTD-1.jpg', 0, NOW()),
+('CTD', 'Công tắc 2 nút và 1 ổ cắm đôi âm tường', 'Công tắc 2 nút và 1 ổ cắm đôi âm tường.', 'ElectricCo', 180000, '2 năm', 200, 'assets/img/CTD-2.jpg', 0, NOW()),
+('CTD', 'Công tắc điện quả nhót', 'Công tắc điện dạng nhỏ gọn.', 'ElectricCo', 9000, '5 năm', 500, 'assets/img/CTD-3.jpg', 0, NOW()),
+('CTD', 'Công tắc ON-OFF điện 3 pha', 'Công tắc ON-OFF điện 3 pha.', 'ElectricCo', 125000, '5 năm', 200, 'assets/img/CTD-4.jpg', 0, NOW()),
+('CTD', 'Công tắc điện điều khiển từ xa qua remote', 'Điều khiển từ xa qua remote tiện lợi.', 'ElectricCo', 550000, '5 năm', 100, 'assets/img/CTD-5.jpg', 1, NOW()),
+('CTD', 'Công tắc bập bênh 2 chân', 'Công tắc bập bênh tiêu chuẩn.', 'ElectricCo', 8000, '5 năm', 300, 'assets/img/CTD-6.jpg', 0, NOW());
 
 -- Chèn dữ liệu vào bảng Orders
 INSERT INTO Orders (CustomerID, OrderDate, DeliveryAddress, Status, TotalAmount, BillOfLading)
@@ -241,19 +260,21 @@ VALUES
 (5, 5, 4, 'Nice collectible figure.', NOW());
 
 -- Chèn dữ liệu vào bảng MarketingPosts
-INSERT INTO MarketingPosts (Title, Content, Author, CreateDate, Status, ImageLink)
+INSERT INTO MarketingPosts (Title, Content, Author, CreateDate, Status, ImageLink) 
 VALUES
-('New Smartphone Launch', 'Introducing the latest smartphone with cutting-edge features.', 1, NOW(), 'Published', 'smartphone_launch.jpg'),
-('Winter Fashion Trends', 'Discover the latest trends for this winter season.', 2, NOW(), 'Published', 'winter_fashion.jpg'),
-('Bestselling Books of the Year', 'A list of the top-selling books this year.', 3, NOW(), 'Published', 'bestselling_books.jpg'),
-('Ergonomic Office Chairs', 'Upgrade your office with the best ergonomic chairs.', 4, NOW(), 'Published', 'ergonomic_chair.jpg'),
-('Top 10 Toys for Kids', 'Find out the most popular toys for children.', 5, NOW(), 'Published', 'top10_toys.jpg');
+('Khóa cửa thông minh: Bước đột phá an ninh thời 4.0', 'Khám phá công nghệ khóa cửa thông minh mới nhất.', 1, NOW(), 'Published', 'assets/img/BV-1.jpg'),
+('Giới thiệu bộ đèn LED thanh hắt: Xu hướng mới', 'Đèn LED thanh hắt phù hợp cho trang trí hiện đại.', 1, NOW(), 'Published', 'assets/img/BV-2.jpg'),
+('Quạt hơi nước hay quạt điều hòa: Đâu là sự lựa chọn hoàn hảo?', 'So sánh giữa quạt hơi nước và quạt điều hòa.', 1, NOW(), 'Published', 'assets/img/BV-3.jpg'),
+('Top 10 ổ cắm điện cao cấp đáng mua nhất hiện nay', 'Danh sách các ổ cắm điện tốt nhất.', 1, NOW(), 'Published', 'assets/img/BV-4.jpg');
+
+
 
 -- Chèn dữ liệu vào bảng Blog
 INSERT INTO Blog (CateID, Title, Author, Image, BriefInfor, CreateDate, BlogContent, Status, Thumbnail, Flag, DateModified, NumberOfAccess)
 VALUES
-('Chia sẻ kinh nghiệm', 'Lợi ích của bóng đèn LED trong gia đình', 1, 'led_benefits.jpg', 'Bóng đèn LED giúp tiết kiệm điện và bảo vệ môi trường.', NOW(), 'Chi tiết về ưu điểm và cách chọn bóng đèn LED phù hợp.', 'Published', 'led_thumb.jpg', 1, NOW(), 50),
-('Chia sẻ kinh nghiệm', 'Cách chọn quạt điều hòa tốt nhất', 1, 'quat_tips.jpg', 'Hướng dẫn cách chọn quạt điều hòa phù hợp với không gian.', NOW(), 'Những điều cần biết khi mua quạt điều hòa cho gia đình.', 'Published', 'quat_thumb.jpg', 1, NOW(), 40),
-('Hướng dẫn sử dụng', 'Bí quyết sử dụng dây điện an toàn', 1, 'day_dien_an_toan.jpg', 'Hướng dẫn cách sử dụng dây điện đúng cách và an toàn.', NOW(), 'Cách nhận biết dây điện chất lượng và an toàn khi sử dụng.', 'Published', 'day_dien_thumb.jpg', 1, NOW(), 30),
-('Thảo luận', 'Ổ cắm điện đa năng - Giải pháp tiện lợi', 1, 'o_cam_tien_loi.jpg', 'Lợi ích của ổ cắm điện đa năng trong gia đình.', NOW(), 'Những loại ổ cắm điện đa năng tốt nhất hiện nay.', 'Published', 'o_cam_thumb.jpg', 1, NOW(), 20),
-('Thảo luận', 'Tại sao cần dùng cầu dao tự động?', 1, 'cau_dao_tu_dong.jpg', 'Công dụng và cách chọn cầu dao tự động cho nhà bạn.', NOW(), 'Hướng dẫn cách lắp đặt và sử dụng cầu dao tự động.', 'Published', 'cau_dao_thumb.jpg', 1, NOW(), 10);
+('Chia sẻ kinh nghiệm', 'Lợi ích của bóng đèn LED trong gia đình', 1, 'led_benefits.jpg', 'Bóng đèn LED giúp tiết kiệm điện và bảo vệ môi trường.', NOW(), 'Chi tiết về ưu điểm và cách chọn bóng đèn LED phù hợp.', 'Published', 'assets/img/led_thumb.jpg', 1, NOW(), 50),
+('Chia sẻ kinh nghiệm', 'Cách chọn quạt điều hòa tốt nhất', 1, 'quat_tips.jpg', 'Hướng dẫn cách chọn quạt điều hòa phù hợp với không gian.', NOW(), 'Những điều cần biết khi mua quạt điều hòa cho gia đình.', 'Published', 'assets/img/quat_thumb.jpg', 1, NOW(), 40),
+('Hướng dẫn sử dụng', 'Bí quyết sử dụng dây điện an toàn', 1, 'day_dien_an_toan.jpg', 'Hướng dẫn cách sử dụng dây điện đúng cách và an toàn.', NOW(), 'Cách nhận biết dây điện chất lượng và an toàn khi sử dụng.', 'Published', 'assets/img/day_dien_thumb.jpg', 1, NOW(), 30),
+('Thảo luận', 'Ổ cắm điện đa năng - Giải pháp tiện lợi', 1, 'o_cam_tien_loi.jpg', 'Lợi ích của ổ cắm điện đa năng trong gia đình.', NOW(), 'Những loại ổ cắm điện đa năng tốt nhất hiện nay.', 'Published', 'assets/img/o_cam_thumb.jpg', 1, NOW(), 20),
+('Thảo luận', 'Tại sao cần dùng cầu dao tự động?', 1, 'cau_dao_tu_dong.jpg', 'Công dụng và cách chọn cầu dao tự động cho nhà bạn.', NOW(), 'Hướng dẫn cách lắp đặt và sử dụng cầu dao tự động.', 'Published', 'assets/img/cau_dao_thumb.jpg', 1, NOW(), 10);
+
