@@ -7,17 +7,20 @@ package dao;
 
 import DAO.DBContext;
 import Dto.tblUsers;
+import Model.Users;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
  * @author Acer
  */
-public class UserDAO {
+public class UserDAO extends DBContext{
 
     // Phương thức lấy về danh sách tất cả user
     public ArrayList<tblUsers> listUsers() {
@@ -349,9 +352,70 @@ public class UserDAO {
         return result;
     }
 
+    public Map<Integer, Users> getAllUsers() {
+        Map<Integer, Users> list = new HashMap<>();
+        try {
+            String sql = "SELECT * FROM Users";
+            Statement st = connection.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            while (rs.next()) {
+                Users u = new Users();
+                u.setUserID(rs.getInt("UserID"));
+                u.setFirstName(rs.getString("FirstName"));
+                u.setLastName(rs.getString("LastName"));
+                u.setGender(rs.getString("Gender"));
+                u.setDateOfBirth(rs.getDate("DateOfBirth"));
+                u.setUserName(rs.getString("UserName"));
+                u.setPassword(rs.getString("Password"));
+                u.setRole(rs.getString("Role"));
+                u.setEmail(rs.getString("Email"));
+                u.setPhoneNumber(rs.getString("PhoneNumber"));
+                u.setAddress(rs.getString("Address"));
+                
+                list.put(u.getUserID(), u);
+            }
+            rs.close();
+            st.close();
+        } catch (Exception e) {
+            e.printStackTrace();  // In lỗi ra console để kiểm tra
+        }
+        return list;
+    }
+    PreparedStatement stm;//thuc hien cau lenh sql
+    ResultSet rs;//dung luu tru du lieu lay ve tu select
+    public Users getUserByID(int id) {
+        try {
+            String strSQL = "select * from Users where UserID = ?";
+            stm = connection.prepareStatement(strSQL);
+            stm.setInt(1, id);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+
+                Users u = new Users();
+                u.setUserID(rs.getInt("UserID"));
+                u.setFirstName(rs.getString("FirstName"));
+                u.setLastName(rs.getString("LastName"));
+                u.setGender(rs.getString("Gender"));
+                u.setDateOfBirth(rs.getDate("DateOfBirth"));
+                u.setUserName(rs.getString("UserName"));
+                u.setPassword(rs.getString("Password"));
+                u.setRole(rs.getString("Role"));
+                u.setEmail(rs.getString("Email"));
+                u.setPhoneNumber(rs.getString("PhoneNumber"));
+                u.setAddress(rs.getString("Address"));
+                
+                return u;
+            }
+        } catch (Exception e) {
+            System.out.println("getUserByAcc: " + e.getMessage());
+        }
+        return null;
+    }
+    
     public static void main(String[] args) {
         UserDAO dao = new UserDAO();
-        System.out.println(dao.listUsers());
+        //<%=uDAO.getUserByID(r.getCustomerID()).getFirstName()%>
+        System.out.println(dao.getUserByID(1));
 //
 //        // Kiểm tra chèn user mới
 //        tblUsers newUser = new tblUsers();

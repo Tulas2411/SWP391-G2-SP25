@@ -4,7 +4,9 @@
  */
 package Model;
 
+import java.text.NumberFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  *
@@ -80,8 +82,10 @@ public class Products {
         this.Provider = Provider;
     }
 
-    public float getPrice() {
-        return price;
+    public String getPrice() {
+        NumberFormat currencyFormat = NumberFormat.getInstance(new Locale("vi", "VN"));
+        String formattedPrice = currencyFormat.format(price) + "đ";
+        return formattedPrice;
     }
 
     public void setPrice(float price) {
