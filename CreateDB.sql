@@ -268,6 +268,7 @@ VALUES
 ('Top 10 ổ cắm điện cao cấp đáng mua nhất hiện nay', 'Danh sách các ổ cắm điện tốt nhất.', 1, NOW(), 'Published', 'assets/img/BV-4.jpg');
 
 
+
 -- Chèn dữ liệu vào bảng Blog
 INSERT INTO Blog (CateID, Title, Author, Image, BriefInfor, CreateDate, BlogContent, Status, Thumbnail, Flag, DateModified, NumberOfAccess)
 VALUES
@@ -276,3 +277,4 @@ VALUES
 ('Hướng dẫn sử dụng', 'Bí quyết sử dụng dây điện an toàn', 1, 'day_dien_an_toan.jpg', 'Hướng dẫn cách sử dụng dây điện đúng cách và an toàn.', NOW(), 'Cách nhận biết dây điện chất lượng và an toàn khi sử dụng.', 'Published', 'assets/img/day_dien_thumb.jpg', 1, NOW(), 30),
 ('Thảo luận', 'Ổ cắm điện đa năng - Giải pháp tiện lợi', 1, 'o_cam_tien_loi.jpg', 'Lợi ích của ổ cắm điện đa năng trong gia đình.', NOW(), 'Những loại ổ cắm điện đa năng tốt nhất hiện nay.', 'Published', 'assets/img/o_cam_thumb.jpg', 1, NOW(), 20),
 ('Thảo luận', 'Tại sao cần dùng cầu dao tự động?', 1, 'cau_dao_tu_dong.jpg', 'Công dụng và cách chọn cầu dao tự động cho nhà bạn.', NOW(), 'Hướng dẫn cách lắp đặt và sử dụng cầu dao tự động.', 'Published', 'assets/img/cau_dao_thumb.jpg', 1, NOW(), 10);
+
