@@ -117,7 +117,14 @@
                     <!-- Product details -->
                     <div class="col-md-5">
                         <div class="product-details">
-                            <h2 class="product-name"><%= p.getProductName() %></h2>
+                            <div class="switch-container">
+                            <h2 id="product-name"><%= p.getProductName() %></h2>
+                            <label class="switch">
+                                <input type="checkbox" id="edit-toggle">
+                                <span class="slider"></span>
+                            </label>
+                            <span class="switch-label">Chế độ chỉnh sửa</span>
+                            </div>
                             <%
                                 double rate = 0;
                                 if (listr == null || listr.size() == 0) {
@@ -155,10 +162,10 @@
                             </div>
                             <%}%>
                             <div>
-                                <h3 class="product-price"><%= p.getPrice() %><del class="product-old-price">      <%= p.getPrice() %></del></h3>
+                                <h3 class="product-price"><%= p.getPrice() %></h3><del class="product-old-price"> <%= p.getOldPrice()%></del>
                                 <span class="product-available">Còn Hàng</span>
                             </div>
-                            <p><%= p.getDescription() %></p>
+                                <p id="Description"><%= p.getDescription() %></p>
 
                             <div class="add-to-cart">
                                 <div class="qty-label">
@@ -177,8 +184,16 @@
                             </ul>
 
                             <ul class="product-links">
-                                <li>Category:</li>
-                                <li><a href="#"><%= p.getCategoryID() %></a></li>
+                                <li>Danh mục:</li>
+                                <li><a href="#" id="Category"><%= p.getCategoryID() %></a></li>
+                            </ul>
+                            <ul class="product-links">
+                                <li>Số lượng tồn kho:</li>
+                                <li><a href="#" id="Amount"><%= p.getAmount() %></a></li>
+                            </ul>
+                            <ul class="product-links">
+                                <li>Thời gian bảo hành:</li>
+                                <li><a href="#" id="WarrantyPeriod"><%= p.getWarrantyPeriod() %></a></li>
                             </ul>
 
                             <ul class="product-links">
@@ -200,7 +215,7 @@
                             <ul class="tab-nav">
                                 <li class="active"><a data-toggle="tab" href="#tab1">Description</a></li>
                                 <li><a data-toggle="tab" href="#tab2">Details</a></li>
-                                <li><a data-toggle="tab" href="#tab3">Reviews (3)</a></li>
+                                <li><a data-toggle="tab" href="#tab3">Reviews (<%=listr.size()%>)</a></li>
                             </ul>
                             <!-- /product tab nav -->
 
@@ -593,4 +608,127 @@
         <script src="TulasCSS/js/main.js"></script>
 
     </body>
+    <script>
+document.getElementById('edit-toggle').addEventListener('change', function() {
+    const productNameElement = document.getElementById('product-name');
+    const productNewPriceElement = document.querySelector('.product-price');
+    const productOldPriceElement = document.querySelector('.product-old-price');
+    const productDescriptionElement = document.getElementById('Description');
+    const productCategoryElement = document.getElementById('Category');
+    const productAmountElement = document.getElementById('Amount');
+    const productWarrantyElement = document.getElementById('WarrantyPeriod');
+
+    if (this.checked) {
+        // Chuyển đổi Product Name
+        const nameInput = document.createElement('input');
+        nameInput.type = 'text';
+        nameInput.value = productNameElement.textContent;
+        nameInput.className = 'edit-mode-input';
+        nameInput.id = 'product-name-input';
+        productNameElement.parentNode.replaceChild(nameInput, productNameElement);
+
+        // Chuyển đổi New Price
+        const newPriceInput = document.createElement('input');
+        newPriceInput.type = 'text';
+        newPriceInput.value = productNewPriceElement.textContent.replace(/\D/g, '');
+        newPriceInput.className = 'edit-mode-input';
+        newPriceInput.id = 'product-new-price-input';
+        productNewPriceElement.parentNode.replaceChild(newPriceInput, productNewPriceElement);
+
+        // Chuyển đổi Old Price
+        const oldPriceInput = document.createElement('input');
+        oldPriceInput.type = 'text';
+        oldPriceInput.value = productOldPriceElement.textContent.replace(/\D/g, '');
+        oldPriceInput.className = 'edit-mode-input';
+        oldPriceInput.id = 'product-old-price-input';
+        productOldPriceElement.parentNode.replaceChild(oldPriceInput, productOldPriceElement);
+
+        // Chuyển đổi Description
+        const descriptionInput = document.createElement('textarea');
+        descriptionInput.value = productDescriptionElement.textContent;
+        descriptionInput.className = 'edit-mode-input';
+        descriptionInput.id = 'product-description-input';
+        productDescriptionElement.parentNode.replaceChild(descriptionInput, productDescriptionElement);
+
+        // Chuyển đổi Danh mục
+        const categoryInput = document.createElement('input');
+        categoryInput.type = 'text';
+        categoryInput.value = productCategoryElement.textContent;
+        categoryInput.className = 'edit-mode-input';
+        categoryInput.id = 'product-category-input';
+        productCategoryElement.parentNode.replaceChild(categoryInput, productCategoryElement);
+
+        // Chuyển đổi Số lượng tồn kho
+        const amountInput = document.createElement('input');
+        amountInput.type = 'number';
+        amountInput.value = productAmountElement.textContent;
+        amountInput.className = 'edit-mode-input';
+        amountInput.id = 'product-amount-input';
+        productAmountElement.parentNode.replaceChild(amountInput, productAmountElement);
+
+        // Chuyển đổi Thời gian bảo hành
+        const warrantyInput = document.createElement('input');
+        warrantyInput.type = 'text';
+        warrantyInput.value = productWarrantyElement.textContent;
+        warrantyInput.className = 'edit-mode-input';
+        warrantyInput.id = 'product-warranty-input';
+        productWarrantyElement.parentNode.replaceChild(warrantyInput, productWarrantyElement);
+
+        // Tự động focus vào trường đầu tiên
+        setTimeout(() => nameInput.focus(), 50);
+    } else {
+        // Khôi phục Product Name
+        const nameInput = document.getElementById('product-name-input');
+        const nameText = document.createElement('h2');
+        nameText.id = 'product-name';
+        nameText.textContent = nameInput.value;
+        nameInput.parentNode.replaceChild(nameText, nameInput);
+
+        // Khôi phục New Price
+        const newPriceInput = document.getElementById('product-new-price-input');
+        const newPriceText = document.createElement('h3');
+        newPriceText.className = 'product-price';
+        newPriceText.textContent = newPriceInput.value;
+        newPriceInput.parentNode.replaceChild(newPriceText, newPriceInput);
+
+        // Khôi phục Old Price
+        const oldPriceInput = document.getElementById('product-old-price-input');
+        const oldPriceText = document.createElement('del');
+        oldPriceText.className = 'product-old-price';
+        oldPriceText.textContent = oldPriceInput.value;
+        oldPriceInput.parentNode.replaceChild(oldPriceText, oldPriceInput);
+
+        // Khôi phục Description
+        const descriptionInput = document.getElementById('product-description-input');
+        const descriptionText = document.createElement('p');
+        descriptionText.id = 'Description';
+        descriptionText.textContent = descriptionInput.value;
+        descriptionInput.parentNode.replaceChild(descriptionText, descriptionInput);
+
+        // Khôi phục Danh mục
+        const categoryInput = document.getElementById('product-category-input');
+        const categoryText = document.createElement('a');
+        categoryText.href = '#';
+        categoryText.id = 'Category';
+        categoryText.textContent = categoryInput.value;
+        categoryInput.parentNode.replaceChild(categoryText, categoryInput);
+
+        // Khôi phục Số lượng tồn kho
+        const amountInput = document.getElementById('product-amount-input');
+        const amountText = document.createElement('a');
+        amountText.href = '#';
+        amountText.id = 'Amount';
+        amountText.textContent = amountInput.value;
+        amountInput.parentNode.replaceChild(amountText, amountInput);
+
+        // Khôi phục Thời gian bảo hành
+        const warrantyInput = document.getElementById('product-warranty-input');
+        const warrantyText = document.createElement('a');
+        warrantyText.href = '#';
+        warrantyText.id = 'WarrantyPeriod';
+        warrantyText.textContent = warrantyInput.value;
+        warrantyInput.parentNode.replaceChild(warrantyText, warrantyInput);
+    }
+});
+</script>
 </html>

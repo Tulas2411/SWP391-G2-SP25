@@ -5,7 +5,9 @@
 package DAO;
 
 import Model.Products;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
@@ -69,6 +71,25 @@ public class ProductsDAO extends DBContext{
         }
         return null;
 
+    }
+    public void updateProduct1(Products product) {
+        String sql = "UPDATE Products SET product_name = ?, description = ?, price = ?, quantity = ?, supplier_id = ?, category_id = ?, expiration_date = ?, img_url = ? WHERE product_id = ?";
+
+        try (PreparedStatement pre = connection.prepareStatement(sql)) {
+            pre.setString(1, product.getProductName());
+            pre.setString(2, product.getDescription());
+            pre.setDouble(3, product.getPrice());
+            pre.setInt(4, product.getQuantity());
+            pre.setInt(5, product.getSupplierId());
+            pre.setInt(6, product.getCategoryId());
+            pre.setDate(7, new java.sql.Date(product.getExpirationDate().getTime()));
+            pre.setString(8, product.getImg_url());
+            pre.setInt(9, product.getProductId());
+
+            pre.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error updating product: " + e.getMessage());
+        }
     }
     public static void main(String[] args) {
         ProductsDAO p = new ProductsDAO();

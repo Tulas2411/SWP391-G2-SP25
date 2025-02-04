@@ -131,5 +131,9 @@ public class Products {
     public void setCreatAt(Date CreatAt) {
         this.CreatAt = CreatAt;
     }
-    
+    public String getOldPrice() {
+        NumberFormat currencyFormat = NumberFormat.getInstance(new Locale("vi", "VN"));
+        String formattedPrice = currencyFormat.format(price + 1000) + "đ";
+        return formattedPrice;
+    }
 }
