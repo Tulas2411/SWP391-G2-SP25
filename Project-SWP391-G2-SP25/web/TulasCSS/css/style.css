@@ -2205,16 +2205,16 @@ textarea.input {
         }
 /* Style cho input khi ở chế độ chỉnh sửa */
 .edit-mode-input {
-    font-size: 24px; /* Kích thước font giống h2 */
+    font-size: 18px; /* Kích thước font giống h2 */
     font-weight: 700; /* Độ đậm giống h2 */
     font-family: 'Montserrat', sans-serif; /* Font chữ giống h2 */
     color: #333; /* Màu chữ giống h2 */
-    width: 100%; /* Chiều rộng đầy đủ */
-    padding: 8px 15px; /* Padding để trông đẹp hơn */
+    width: 60%; /* Chiều rộng đầy đủ */
+    padding: 8px 8px; /* Padding để trông đẹp hơn */
     border: 2px solid #4CAF50; /* Viền xanh lá */
     border-radius: 4px; /* Bo góc */
     transition: all 0.3s ease; /* Hiệu ứng mượt mà */
-    margin: 10px 0; /* Khoảng cách với các phần tử khác */
+    margin: 8px 0; /* Khoảng cách với các phần tử khác */
     box-sizing: border-box; /* Đảm bảo padding không làm thay đổi kích thước */
     background-color: transparent; /* Nền trong suốt */
 }

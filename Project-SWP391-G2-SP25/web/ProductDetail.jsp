@@ -9,6 +9,7 @@
 <%@page import="Model.*"%>
 <%@page import="java.lang.*"%>
 <%@page import="java.util.*"%>
+<%@page import="com.google.gson.Gson"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -61,6 +62,10 @@
         <%@ include file="./Public/header.jsp" %>
         <%
             UsersDAO uDAO = new UsersDAO();
+            ProductsDAO pDAO = new ProductsDAO();
+            List<Category> categories = pDAO.getAllCategories();
+            request.setAttribute("categories", categories);
+            String categoriesJson = new Gson().toJson(categories);
             Products p = (Products) request.getAttribute("product");
             Map<Integer, Reviews> listr = (Map<Integer, Reviews>)request.getAttribute("listr");
         %>
@@ -118,6 +123,9 @@
                     <div class="col-md-5">
                         <div class="product-details">
                             <div class="switch-container">
+                             <input type="hidden" id="product-id" value="<%= p.getProductID() %>">
+                             <input type="hidden" id="product-img" value="<%= p.getImageLink() %>">
+                             <input type="hidden" id="product-pro" value="<%= p.isIsPromoted() %>">
                             <h2 id="product-name"><%= p.getProductName() %></h2>
                             <label class="switch">
                                 <input type="checkbox" id="edit-toggle">
@@ -185,7 +193,7 @@
 
                             <ul class="product-links">
                                 <li>Danh mục:</li>
-                                <li><a href="#" id="Category"><%= p.getCategoryID() %></a></li>
+                                <li><a href="#" id="Category"><%= pDAO.GetCategorybyID(p.getCategoryID()).getCategoryName() %></a></li>
                             </ul>
                             <ul class="product-links">
                                 <li>Số lượng tồn kho:</li>
@@ -195,6 +203,11 @@
                                 <li>Thời gian bảo hành:</li>
                                 <li><a href="#" id="WarrantyPeriod"><%= p.getWarrantyPeriod() %></a></li>
                             </ul>
+                            <ul class="product-links">
+                                <li>Thời gian bảo hành:</li>
+                                <li><a href="#" id="Provider"><%= p.getProvider() %></a></li>
+                            </ul>
+                            <button id="save-button" style="display:none;">Lưu</button>
 
                             <ul class="product-links">
                                 <li>Share:</li>
@@ -609,6 +622,64 @@
 
     </body>
     <script>
+    document.getElementById('save-button').addEventListener('click', function() {
+    var newProductId = document.getElementById('product-id').value;
+    var newProductImg = document.getElementById('product-img').value;
+    var newProductPro = document.getElementById('product-pro').checked;
+    var newProductName = document.getElementById('product-name-input').value;
+    var newProductPrice = document.getElementById('product-new-price-input').value;
+    var newProductOldPrice = document.getElementById('product-old-price-input').value;
+    var newProductDescription = document.getElementById('product-description-input').value;
+    var newProductCategory = document.getElementById('product-category-input').value;
+    var newProductAmount = document.getElementById('product-amount-input').value;
+    var newProductWarranty = document.getElementById('product-warranty-input').value;
+    var newProductProvider = document.getElementById('product-provider-input').value;
+
+    // Tạo đối tượng chứa tất cả các giá trị cần cập nhật
+    var productData = {
+        productId: newProductId,
+        newProductImg: newProductImg,
+        newProductPro: newProductPro,
+        productName: newProductName,
+        productPrice: newProductPrice,
+        productOldPrice: newProductOldPrice,
+        productDescription: newProductDescription,
+        productCategory: newProductCategory,
+        productAmount: newProductAmount,
+        productWarranty: newProductWarranty,
+        productProvider: newProductProvider
+    };
+
+    // Debug: In ra dữ liệu sản phẩm để kiểm tra
+    console.log('Product Data:', productData);
+
+    // Gửi yêu cầu AJAX để cập nhật thông tin sản phẩm
+    $.ajax({
+        url: '<%=request.getContextPath()%>/update-product',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(productData),
+        success: function(data) {
+            if (data.success) {
+                alert('Thông tin sản phẩm đã được cập nhật thành công');
+            } else {
+                alert('Có lỗi xảy ra khi cập nhật thông tin sản phẩm' + data.error);
+                console.error(data.error);  // Log lỗi trả về từ server
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('AJAX Error:', error);  // Log lỗi AJAX nếu có
+            alert('Có lỗi xảy ra khi gửi yêu cầu cập nhật');
+        }
+    });
+});
+
+
+
+
+</script>
+    
+    <script>
 document.getElementById('edit-toggle').addEventListener('change', function() {
     const productNameElement = document.getElementById('product-name');
     const productNewPriceElement = document.querySelector('.product-price');
@@ -617,7 +688,9 @@ document.getElementById('edit-toggle').addEventListener('change', function() {
     const productCategoryElement = document.getElementById('Category');
     const productAmountElement = document.getElementById('Amount');
     const productWarrantyElement = document.getElementById('WarrantyPeriod');
-
+    const productProviderElement = document.getElementById('Provider');
+    var saveButton = document.getElementById('save-button');
+    
     if (this.checked) {
         // Chuyển đổi Product Name
         const nameInput = document.createElement('input');
@@ -650,13 +723,30 @@ document.getElementById('edit-toggle').addEventListener('change', function() {
         descriptionInput.id = 'product-description-input';
         productDescriptionElement.parentNode.replaceChild(descriptionInput, productDescriptionElement);
 
+        window.categories = <%= categoriesJson %>;
         // Chuyển đổi Danh mục
-        const categoryInput = document.createElement('input');
-        categoryInput.type = 'text';
-        categoryInput.value = productCategoryElement.textContent;
-        categoryInput.className = 'edit-mode-input';
-        categoryInput.id = 'product-category-input';
-        productCategoryElement.parentNode.replaceChild(categoryInput, productCategoryElement);
+        const categorySelect = document.createElement('select');
+        categorySelect.className = 'edit-mode-input';
+        categorySelect.id = 'product-category-input';
+
+        // Lấy giá trị category hiện tại của sản phẩm
+        const currentCategoryName = productCategoryElement.textContent.trim();
+
+        // Lặp qua danh sách categories từ biến JavaScript
+        window.categories.forEach(category => {
+            const option = document.createElement('option');
+            option.value = category.CategoryID; // Sử dụng CategoryID làm giá trị
+            option.textContent = category.CategoryName; // Hiển thị CategoryName
+
+            // So sánh tên category để chọn mục hiện tại
+            if (category.CategoryName === currentCategoryName) {
+                option.selected = true;
+            }
+            categorySelect.appendChild(option);
+        });
+
+        
+        productCategoryElement.parentNode.replaceChild(categorySelect, productCategoryElement);
 
         // Chuyển đổi Số lượng tồn kho
         const amountInput = document.createElement('input');
@@ -673,6 +763,15 @@ document.getElementById('edit-toggle').addEventListener('change', function() {
         warrantyInput.className = 'edit-mode-input';
         warrantyInput.id = 'product-warranty-input';
         productWarrantyElement.parentNode.replaceChild(warrantyInput, productWarrantyElement);
+        
+        const ProviderInput = document.createElement('input');
+        ProviderInput.type = 'text';
+        ProviderInput.value = productProviderElement.textContent;
+        ProviderInput.className = 'edit-mode-input';
+        ProviderInput.id = 'product-provider-input';
+        productProviderElement.parentNode.replaceChild(ProviderInput, productProviderElement);
+        
+        saveButton.style.display = 'inline-block';
 
         // Tự động focus vào trường đầu tiên
         setTimeout(() => nameInput.focus(), 50);
@@ -688,14 +787,14 @@ document.getElementById('edit-toggle').addEventListener('change', function() {
         const newPriceInput = document.getElementById('product-new-price-input');
         const newPriceText = document.createElement('h3');
         newPriceText.className = 'product-price';
-        newPriceText.textContent = newPriceInput.value;
+        newPriceText.textContent = formatCurrency(parseInt(newPriceInput.value.replace(/\D/g, ''))); // Định dạng lại giá trị
         newPriceInput.parentNode.replaceChild(newPriceText, newPriceInput);
 
         // Khôi phục Old Price
         const oldPriceInput = document.getElementById('product-old-price-input');
         const oldPriceText = document.createElement('del');
         oldPriceText.className = 'product-old-price';
-        oldPriceText.textContent = oldPriceInput.value;
+        oldPriceText.textContent = formatCurrency(parseInt(oldPriceInput.value.replace(/\D/g, ''))); // Định dạng lại giá trị
         oldPriceInput.parentNode.replaceChild(oldPriceText, oldPriceInput);
 
         // Khôi phục Description
@@ -706,12 +805,12 @@ document.getElementById('edit-toggle').addEventListener('change', function() {
         descriptionInput.parentNode.replaceChild(descriptionText, descriptionInput);
 
         // Khôi phục Danh mục
-        const categoryInput = document.getElementById('product-category-input');
+        const categorySelect = document.getElementById('product-category-input');
         const categoryText = document.createElement('a');
         categoryText.href = '#';
         categoryText.id = 'Category';
-        categoryText.textContent = categoryInput.value;
-        categoryInput.parentNode.replaceChild(categoryText, categoryInput);
+        categoryText.textContent = categorySelect.options[categorySelect.selectedIndex].text;
+        categorySelect.parentNode.replaceChild(categoryText, categorySelect);
 
         // Khôi phục Số lượng tồn kho
         const amountInput = document.getElementById('product-amount-input');
@@ -728,7 +827,21 @@ document.getElementById('edit-toggle').addEventListener('change', function() {
         warrantyText.id = 'WarrantyPeriod';
         warrantyText.textContent = warrantyInput.value;
         warrantyInput.parentNode.replaceChild(warrantyText, warrantyInput);
+        
+        // Khôi phục Thời gian bảo hành
+        const ProviderInput = document.getElementById('product-provider-input');
+        const ProviderText = document.createElement('a');
+        ProviderText.href = '#';
+        ProviderText.id = 'Provider';
+        ProviderText.textContent = ProviderInput.value;
+        ProviderInput.parentNode.replaceChild(ProviderText, ProviderInput);
+        
+        saveButton.style.display = 'none';
     }
 });
+
+function formatCurrency(value) {
+    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+}
 </script>
 </html>
