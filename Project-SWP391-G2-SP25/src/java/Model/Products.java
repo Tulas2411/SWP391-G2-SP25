@@ -19,6 +19,7 @@ public class Products {
     String Description;
     String Provider;
     float price;
+    float oldprice;
     String WarrantyPeriod;
     int Amount;
     String ImageLink;
@@ -28,13 +29,14 @@ public class Products {
     public Products() {
     }
 
-    public Products(int ProductID, String CategoryID, String ProductName, String Description, String Provider, float price, String WarrantyPeriod, int Amount, String ImageLink, boolean IsPromoted, Date CreatAt) {
+    public Products(int ProductID, String CategoryID, String ProductName, String Description, String Provider, float price, float oldprice, String WarrantyPeriod, int Amount, String ImageLink, boolean IsPromoted, Date CreatAt) {
         this.ProductID = ProductID;
         this.CategoryID = CategoryID;
         this.ProductName = ProductName;
         this.Description = Description;
         this.Provider = Provider;
         this.price = price;
+        this.oldprice = oldprice;
         this.WarrantyPeriod = WarrantyPeriod;
         this.Amount = Amount;
         this.ImageLink = ImageLink;
@@ -87,7 +89,25 @@ public class Products {
         String formattedPrice = currencyFormat.format(price) + "đ";
         return formattedPrice;
     }
+    
+    public float getPriceFloat() {
+        return price;
+    }
 
+    public String getOldPrice() {
+        NumberFormat currencyFormat = NumberFormat.getInstance(new Locale("vi", "VN"));
+        String formattedPrice = currencyFormat.format(oldprice) + "đ";
+        return formattedPrice;
+    }
+    
+    public float getOldPriceFloat() {
+        return oldprice;
+    }
+
+    public void setOldPrice(float oldprice) {
+        this.oldprice = oldprice;
+    }
+    
     public void setPrice(float price) {
         this.price = price;
     }
@@ -130,10 +150,5 @@ public class Products {
 
     public void setCreatAt(Date CreatAt) {
         this.CreatAt = CreatAt;
-    }
-    public String getOldPrice() {
-        NumberFormat currencyFormat = NumberFormat.getInstance(new Locale("vi", "VN"));
-        String formattedPrice = currencyFormat.format(price + 1000) + "đ";
-        return formattedPrice;
     }
 }
