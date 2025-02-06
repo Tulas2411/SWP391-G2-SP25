@@ -8,125 +8,124 @@ import java.util.Date;
 
 /**
  *
- * @author admin
+ * @author Tùng Dương
  */
 public class Users {
-    private int UserID;
-    private String FirstName;
-    private String LastName;
-    private String Gender;
-    private Date DateOfBirth;
-    private String UserName;
-    private String Password;
-    private String Role;
-    private String Email;
-    private String PhoneNumber;
-    private String Address;
+    private int userID;
+    private String firstName;
+    private String lastName;
+    private String gender;
+    private String dateOfBirth;
+    private String userName;
+    private String password;
+    private String role;
+    private String email;
+    private String phoneNumber;
+    private String address;
 
     public Users() {
     }
 
-    public Users(int UserID, String FirstName, String LastName, String Gender, Date DateOfBirth, String UserName, String Password, String Role, String Email, String PhoneNumber, String Address) {
-        this.UserID = UserID;
-        this.FirstName = FirstName;
-        this.LastName = LastName;
-        this.Gender = Gender;
-        this.DateOfBirth = DateOfBirth;
-        this.UserName = UserName;
-        this.Password = Password;
-        this.Role = Role;
-        this.Email = Email;
-        this.PhoneNumber = PhoneNumber;
-        this.Address = Address;
+    public Users(int userID, String firstName, String lastName, String gender, String dateOfBirth, String userName, String password, String role, String email, String phoneNumber, String address) {
+        this.userID = userID;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.gender = gender;
+        this.dateOfBirth = dateOfBirth;
+        this.userName = userName;
+        this.password = password;
+        this.role = role;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
     }
-
 
     public int getUserID() {
-        return UserID;
+        return userID;
     }
 
-    public void setUserID(int UserID) {
-        this.UserID = UserID;
+    public void setUserID(int userID) {
+        this.userID = userID;
     }
 
     public String getFirstName() {
-        return FirstName;
+        return firstName;
     }
 
-    public void setFirstName(String FirstName) {
-        this.FirstName = FirstName;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getLastName() {
-        return LastName;
+        return lastName;
     }
 
-    public void setLastName(String LastName) {
-        this.LastName = LastName;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getGender() {
-        return Gender;
+        return gender;
     }
 
-    public void setGender(String Gender) {
-        this.Gender = Gender;
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
-    public Date getDateOfBirth() {
-        return DateOfBirth;
+    public String getDateOfBirth() {
+        return dateOfBirth;
     }
 
-    public void setDateOfBirth(Date DateOfBirth) {
-        this.DateOfBirth = DateOfBirth;
+    public void setDateOfBirth(String dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
     public String getUserName() {
-        return UserName;
+        return userName;
     }
 
-    public void setUserName(String UserName) {
-        this.UserName = UserName;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getPassword() {
-        return Password;
+        return password;
     }
 
-    public void setPassword(String Password) {
-        this.Password = Password;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getRole() {
-        return Role;
+        return role;
     }
 
-    public void setRole(String Role) {
-        this.Role = Role;
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public String getEmail() {
-        return Email;
+        return email;
     }
 
-    public void setEmail(String Email) {
-        this.Email = Email;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPhoneNumber() {
-        return PhoneNumber;
+        return phoneNumber;
     }
 
-    public void setPhoneNumber(String PhoneNumber) {
-        this.PhoneNumber = PhoneNumber;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getAddress() {
-        return Address;
+        return address;
     }
 
-    public void setAddress(String Address) {
-        this.Address = Address;
+    public void setAddress(String address) {
+        this.address = address;
     }
     
 }

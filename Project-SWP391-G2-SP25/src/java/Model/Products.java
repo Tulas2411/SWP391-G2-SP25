@@ -4,151 +4,139 @@
  */
 package Model;
 
-import java.text.NumberFormat;
 import java.util.Date;
-import java.util.Locale;
 
 /**
  *
- * @author admin
+ * @author Tùng Dương
  */
 public class Products {
-    int ProductID;
-    String CategoryID;
-    String ProductName;
-    String Description;
-    String Provider;
-    float price;
-    float oldprice;
-    String WarrantyPeriod;
-    int Amount;
-    String ImageLink;
-    boolean IsPromoted;
-    Date CreatAt;
+    private int productID;
+    private String categoryID;
+    private String productName;
+    private String description;
+    private String provider;
+    private float price;
+    private float oldprice;
+    private String warrantyPeriod;
+    private int amount;
+    private String imageLink;
+    private Boolean isPromoted;
+    private String createAt;
 
     public Products() {
     }
 
-    public Products(int ProductID, String CategoryID, String ProductName, String Description, String Provider, float price, float oldprice, String WarrantyPeriod, int Amount, String ImageLink, boolean IsPromoted, Date CreatAt) {
-        this.ProductID = ProductID;
-        this.CategoryID = CategoryID;
-        this.ProductName = ProductName;
-        this.Description = Description;
-        this.Provider = Provider;
+    public Products(int productID, String categoryID, String productName, String description, String provider, float price, float oldprice, String warrantyPeriod, int amount, String imageLink, Boolean isPromoted, String createAt) {
+        this.productID = productID;
+        this.categoryID = categoryID;
+        this.productName = productName;
+        this.description = description;
+        this.provider = provider;
         this.price = price;
         this.oldprice = oldprice;
-        this.WarrantyPeriod = WarrantyPeriod;
-        this.Amount = Amount;
-        this.ImageLink = ImageLink;
-        this.IsPromoted = IsPromoted;
-        this.CreatAt = CreatAt;
+        this.warrantyPeriod = warrantyPeriod;
+        this.amount = amount;
+        this.imageLink = imageLink;
+        this.isPromoted = isPromoted;
+        this.createAt = createAt;
     }
 
     public int getProductID() {
-        return ProductID;
+        return productID;
     }
 
-    public void setProductID(int ProductID) {
-        this.ProductID = ProductID;
+    public void setProductID(int productID) {
+        this.productID = productID;
     }
 
     public String getCategoryID() {
-        return CategoryID;
+        return categoryID;
     }
 
-    public void setCategoryID(String CategoryID) {
-        this.CategoryID = CategoryID;
+    public void setCategoryID(String categoryID) {
+        this.categoryID = categoryID;
     }
 
     public String getProductName() {
-        return ProductName;
+        return productName;
     }
 
-    public void setProductName(String ProductName) {
-        this.ProductName = ProductName;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     public String getDescription() {
-        return Description;
+        return description;
     }
 
-    public void setDescription(String Description) {
-        this.Description = Description;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getProvider() {
-        return Provider;
+        return provider;
     }
 
-    public void setProvider(String Provider) {
-        this.Provider = Provider;
+    public void setProvider(String provider) {
+        this.provider = provider;
     }
 
-    public String getPrice() {
-        NumberFormat currencyFormat = NumberFormat.getInstance(new Locale("vi", "VN"));
-        String formattedPrice = currencyFormat.format(price) + "đ";
-        return formattedPrice;
-    }
-    
-    public float getPriceFloat() {
+    public float getPrice() {
         return price;
     }
 
-    public String getOldPrice() {
-        NumberFormat currencyFormat = NumberFormat.getInstance(new Locale("vi", "VN"));
-        String formattedPrice = currencyFormat.format(oldprice) + "đ";
-        return formattedPrice;
-    }
-    
-    public float getOldPriceFloat() {
-        return oldprice;
-    }
-
-    public void setOldPrice(float oldprice) {
-        this.oldprice = oldprice;
-    }
-    
     public void setPrice(float price) {
         this.price = price;
     }
 
-    public String getWarrantyPeriod() {
-        return WarrantyPeriod;
+    public float getOldprice() {
+        return oldprice;
     }
 
-    public void setWarrantyPeriod(String WarrantyPeriod) {
-        this.WarrantyPeriod = WarrantyPeriod;
+    public void setOldprice(float oldprice) {
+        this.oldprice = oldprice;
+    }
+
+    public String getWarrantyPeriod() {
+        return warrantyPeriod;
+    }
+
+    public void setWarrantyPeriod(String warrantyPeriod) {
+        this.warrantyPeriod = warrantyPeriod;
     }
 
     public int getAmount() {
-        return Amount;
+        return amount;
     }
 
-    public void setAmount(int Amount) {
-        this.Amount = Amount;
+    public void setAmount(int amount) {
+        this.amount = amount;
     }
 
     public String getImageLink() {
-        return ImageLink;
+        return imageLink;
     }
 
-    public void setImageLink(String ImageLink) {
-        this.ImageLink = ImageLink;
+    public void setImageLink(String imageLink) {
+        this.imageLink = imageLink;
     }
 
-    public boolean isIsPromoted() {
-        return IsPromoted;
+    public Boolean getIsPromoted() {
+        return isPromoted;
     }
 
-    public void setIsPromoted(boolean IsPromoted) {
-        this.IsPromoted = IsPromoted;
+    public void setIsPromoted(Boolean isPromoted) {
+        this.isPromoted = isPromoted;
     }
 
-    public Date getCreatAt() {
-        return CreatAt;
+    public String getCreateAt() {
+        return createAt;
     }
 
-    public void setCreatAt(Date CreatAt) {
-        this.CreatAt = CreatAt;
+    public void setCreateAt(String createAt) {
+        this.createAt = createAt;
     }
+    
+    
 }
