@@ -154,9 +154,11 @@
                                     <%
                                             for (int id : listr.keySet()) {
                                                 Reviews r = listr.get(id);
-                                                rate += r.getRating();
+                                                if (r != null) { // Kiểm tra r có tồn tại không
+                                                    rate += r.getRating();
+                                                }
                                             }
-                                            rate = rate/listr.size();
+                                            rate = listr.size() > 0 ? rate / listr.size() : 0; // Tránh chia cho 0
                                             for (int i = 0; i < rate; i++) {
                                     %>
                                     <i class="fa fa-star"></i>
@@ -166,7 +168,7 @@
                                     <i class="fa fa-star-o"></i>
                                     <%}%>
                                 </div>
-                                <a class="review-link" href="#"><%=listr.size()%> Review(s) | Add your review</a>
+                                <a class="review-link" href="#"><%= (listr != null) ? listr.size() : 0 %> Review(s) | Add your review</a>
                             </div>
                             <%}%>
                             <div>
@@ -256,8 +258,16 @@
 
                                 <!-- tab3  -->
                                 <div id="tab3" class="tab-pane fade in">
+                                    
                                     <div class="row">
                                         <!-- Rating -->
+                                        <%
+                                        if (listr == null || listr.size() == 0) {
+                                    %>
+                                        <div class="col-md-9">
+                                            <p>Sản phậm hiện chưa có đánh giá. Hãy là người đầu tiên để lại đánh giá của sản phẩm này</p>
+                                        </div>
+                                        <%}else{%>
                                         <div class="col-md-3">
                                             <div id="rating">
                                                 <div class="rating-avg">
@@ -380,8 +390,8 @@
                                                 <ul class="reviews">
                                                     <% 
                                                         int reviewsPerPage = 4;
-                                                        int totalReviews = listr.size();
-                                                        int totalPages = (int) Math.ceil((double) totalReviews / reviewsPerPage);
+                                                        int totalReviews = (listr != null) ? listr.size() : 0;
+                                                        int totalPages = (totalReviews > 0) ? (int) Math.ceil((double) totalReviews / reviewsPerPage) : 0;
                 
                                                         // Lấy số trang từ request, mặc định là trang 1
                                                         String pageParam = request.getParameter("page");
@@ -434,7 +444,7 @@
                                             </div>
                                         </div>
                                         <!-- /Reviews -->
-
+                                        <%}%>
                                         <!-- Review Form -->
                                         <div class="col-md-3">
                                             <div id="review-form">
@@ -457,7 +467,7 @@
                                             </div>
                                         </div>
                                         <!-- /Review Form -->
-                                    </div>
+                                    </div>                                               
                                 </div>
                                 <!-- /tab3  -->
                             </div>
@@ -662,6 +672,11 @@
         success: function(data) {
             if (data.success) {
                 alert('Thông tin sản phẩm đã được cập nhật thành công');
+                // Tắt chế độ chỉnh sửa
+                document.getElementById('edit-toggle').checked = false;
+
+                // Kích hoạt sự kiện change để khôi phục giao diện
+                document.getElementById('edit-toggle').dispatchEvent(new Event('change'));
             } else {
                 alert('Có lỗi xảy ra khi cập nhật thông tin sản phẩm' + data.error);
                 console.error(data.error);  // Log lỗi trả về từ server
