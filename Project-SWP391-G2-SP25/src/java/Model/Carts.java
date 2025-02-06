@@ -9,27 +9,18 @@ package Model;
  * @author Tùng Dương
  */
 public class Carts {
-    private int cartItemID;
+
     private int cartID;
-    private int productID;
-    private int quantity;
+    private int customerID;
+    private String status;
 
     public Carts() {
     }
 
-    public Carts(int cartItemID, int cartID, int productID, int quantity) {
-        this.cartItemID = cartItemID;
+    public Carts(int cartID, int customerID, String status) {
         this.cartID = cartID;
-        this.productID = productID;
-        this.quantity = quantity;
-    }
-
-    public int getCartItemID() {
-        return cartItemID;
-    }
-
-    public void setCartItemID(int cartItemID) {
-        this.cartItemID = cartItemID;
+        this.customerID = customerID;
+        this.status = status;
     }
 
     public int getCartID() {
@@ -40,21 +31,20 @@ public class Carts {
         this.cartID = cartID;
     }
 
-    public int getProductID() {
-        return productID;
+    public int getCustomerID() {
+        return customerID;
     }
 
-    public void setProductID(int productID) {
-        this.productID = productID;
+    public void setCustomerID(int customerID) {
+        this.customerID = customerID;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public String getStatus() {
+        return status;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public void setStatus(String status) {
+        this.status = status;
     }
-    
-    
+
 }

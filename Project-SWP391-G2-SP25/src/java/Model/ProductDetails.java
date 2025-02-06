@@ -9,37 +9,27 @@ package Model;
  * @author Tùng Dương
  */
 public class ProductDetails {
-    private int orderDetailID;
-    private int orderID;
+    private int productDetailID;
     private int productID;
-    private int quantity;
-    private double price;
+    private String productDetailName;
+    private String value;
 
     public ProductDetails() {
     }
 
-    public ProductDetails(int orderDetailID, int orderID, int productID, int quantity, double price) {
-        this.orderDetailID = orderDetailID;
-        this.orderID = orderID;
+    public ProductDetails(int productDetailID, int productID, String productDetailName, String value) {
+        this.productDetailID = productDetailID;
         this.productID = productID;
-        this.quantity = quantity;
-        this.price = price;
+        this.productDetailName = productDetailName;
+        this.value = value;
     }
 
-    public int getOrderDetailID() {
-        return orderDetailID;
+    public int getProductDetailID() {
+        return productDetailID;
     }
 
-    public void setOrderDetailID(int orderDetailID) {
-        this.orderDetailID = orderDetailID;
-    }
-
-    public int getOrderID() {
-        return orderID;
-    }
-
-    public void setOrderID(int orderID) {
-        this.orderID = orderID;
+    public void setProductDetailID(int productDetailID) {
+        this.productDetailID = productDetailID;
     }
 
     public int getProductID() {
@@ -50,21 +40,20 @@ public class ProductDetails {
         this.productID = productID;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public String getProductDetailName() {
+        return productDetailName;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public void setProductDetailName(String productDetailName) {
+        this.productDetailName = productDetailName;
     }
 
-    public double getPrice() {
-        return price;
+    public String getValue() {
+        return value;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setValue(String value) {
+        this.value = value;
     }
-    
-    
+
 }
