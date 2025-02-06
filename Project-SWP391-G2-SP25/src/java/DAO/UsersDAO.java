@@ -1,83 +1,135 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package DAO;
-
-import Model.Users;
-import dao.UserDAO;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  *
- * @author admin
+ * @author Tùng Dương
  */
-public class UsersDAO extends DBContext{
-    public Map<Integer, Users> getAllUsers() {
-        Map<Integer, Users> list = new HashMap<>();
-        try {
-            String sql = "SELECT * FROM Users";
-            Statement st = connection.createStatement();
-            ResultSet rs = st.executeQuery(sql);
-            while (rs.next()) {
-                Users u = new Users();
-                u.setUserID(rs.getInt("UserID"));
-                u.setFirstName(rs.getString("FirstName"));
-                u.setLastName(rs.getString("LastName"));
-                u.setGender(rs.getString("Gender"));
-                u.setDateOfBirth(rs.getDate("DateOfBirth"));
-                u.setUserName(rs.getString("UserName"));
-                u.setPassword(rs.getString("Password"));
-                u.setRole(rs.getString("Role"));
-                u.setEmail(rs.getString("Email"));
-                u.setPhoneNumber(rs.getString("PhoneNumber"));
-                u.setAddress(rs.getString("Address"));
-                
-                list.put(u.getUserID(), u);
-            }
-            rs.close();
-            st.close();
-        } catch (Exception e) {
-            e.printStackTrace();  // In lỗi ra console để kiểm tra
-        }
-        return list;
-    }
-    public Users getUserByID(int id) {
-        try {
-            String strSQL = "select * from Users where UserID = ?";
-            PreparedStatement stm = connection.prepareStatement(strSQL);
-            stm.setInt(1, id);
-            ResultSet rs = stm.executeQuery();
-            while (rs.next()) {
+import Model.Users;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
-                Users u = new Users();
-                u.setUserID(rs.getInt("UserID"));
-                u.setFirstName(rs.getString("FirstName"));
-                u.setLastName(rs.getString("LastName"));
-                u.setGender(rs.getString("Gender"));
-                u.setDateOfBirth(rs.getDate("DateOfBirth"));
-                u.setUserName(rs.getString("UserName"));
-                u.setPassword(rs.getString("Password"));
-                u.setRole(rs.getString("Role"));
-                u.setEmail(rs.getString("Email"));
-                u.setPhoneNumber(rs.getString("PhoneNumber"));
-                u.setAddress(rs.getString("Address"));
-                
-                return u;
+public class UsersDAO {
+
+    private Connection conn;
+
+    public UsersDAO() {
+        conn = DBContext.makeConnection();
+    }
+
+    public List<Users> getAllUsers() {
+        List<Users> users = new ArrayList<>();
+        try {
+            String query = "SELECT * FROM Users";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                users.add(new Users(
+                        rs.getInt("UserID"),
+                        rs.getString("FirstName"),
+                        rs.getString("LastName"),
+                        rs.getString("Gender"),
+                        rs.getString("DateOfBirth"),
+                        rs.getString("UserName"),
+                        rs.getString("Password"),
+                        rs.getString("Role"),
+                        rs.getString("Email"),
+                        rs.getString("PhoneNumber"),
+                        rs.getString("Address")
+                ));
             }
         } catch (Exception e) {
-            System.out.println("getUserByAcc: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return users;
+    }
+
+    public Users getUserById(int id) {
+        try {
+            String query = "SELECT * FROM Users WHERE UserID = ?";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return new Users(
+                        rs.getInt("UserID"),
+                        rs.getString("FirstName"),
+                        rs.getString("LastName"),
+                        rs.getString("Gender"),
+                        rs.getString("DateOfBirth"),
+                        rs.getString("UserName"),
+                        rs.getString("Password"),
+                        rs.getString("Role"),
+                        rs.getString("Email"),
+                        rs.getString("PhoneNumber"),
+                        rs.getString("Address")
+                );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return null;
     }
-    
+
+    public boolean addUser(Users user) {
+        try {
+            String query = "INSERT INTO Users (FirstName, LastName, Gender, DateOfBirth, UserName, Password, Role, Email, PhoneNumber, Address) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setString(1, user.getFirstName());
+            ps.setString(2, user.getLastName());
+            ps.setString(3, user.getGender());
+            ps.setString(4, user.getDateOfBirth());
+            ps.setString(5, user.getUserName());
+            ps.setString(6, user.getPassword());
+            ps.setString(7, user.getRole());
+            ps.setString(8, user.getEmail());
+            ps.setString(9, user.getPhoneNumber());
+            ps.setString(10, user.getAddress());
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean updateUser(Users user) {
+        try {
+            String query = "UPDATE Users SET FirstName = ?, LastName = ?, Gender = ?, DateOfBirth = ?, UserName = ?, Password = ?, Role = ?, Email = ?, PhoneNumber = ?, Address = ? WHERE UserID = ?";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setString(1, user.getFirstName());
+            ps.setString(2, user.getLastName());
+            ps.setString(3, user.getGender());
+            ps.setString(4, user.getDateOfBirth());
+            ps.setString(5, user.getUserName());
+            ps.setString(6, user.getPassword());
+            ps.setString(7, user.getRole());
+            ps.setString(8, user.getEmail());
+            ps.setString(9, user.getPhoneNumber());
+            ps.setString(10, user.getAddress());
+            ps.setInt(11, user.getUserID());
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean removeUser(int id) {
+        try {
+            String query = "DELETE FROM Users WHERE UserID = ?";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setInt(1, id);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public static void main(String[] args) {
-        UserDAO dao = new UserDAO();
-        //<%=uDAO.getUserByID(r.getCustomerID()).getFirstName()%>
-        System.out.println(dao.getUserByID(1));
-}
+        UsersDAO dao = new UsersDAO();
+        System.out.println(dao.getUserById(1));
+    }
 }
