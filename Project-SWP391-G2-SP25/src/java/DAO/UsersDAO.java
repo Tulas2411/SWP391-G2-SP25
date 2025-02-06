@@ -5,7 +5,6 @@
 package DAO;
 
 import Model.Users;
-import dao.UserDAO;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -74,10 +73,5 @@ public class UsersDAO extends DBContext{
         }
         return null;
     }
-    
-    public static void main(String[] args) {
-        UserDAO dao = new UserDAO();
-        //<%=uDAO.getUserByID(r.getCustomerID()).getFirstName()%>
-        System.out.println(dao.getUserByID(1));
-}
+   
 }
