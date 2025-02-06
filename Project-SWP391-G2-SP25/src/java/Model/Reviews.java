@@ -4,78 +4,77 @@
  */
 package Model;
 
-import java.util.Date;
-
 /**
  *
- * @author admin
+ * @author Tùng Dương
  */
 public class Reviews {
-    int ReviewID;
-    int ProductID;
-    int CustomerID;
-    int Rating;
-    String Comment;
-    Date ReviewDate;
+    private int reviewID;
+    private int productID;
+    private int customerID;
+    private int rating;
+    private String comment;
+    private String reviewDate;
 
     public Reviews() {
     }
 
-    public Reviews(int ReviewID, int ProductID, int CustomerID, int Rating, String Comment, Date ReviewDate) {
-        this.ReviewID = ReviewID;
-        this.ProductID = ProductID;
-        this.CustomerID = CustomerID;
-        this.Rating = Rating;
-        this.Comment = Comment;
-        this.ReviewDate = ReviewDate;
+    public Reviews(int reviewID, int productID, int customerID, int rating, String comment, String reviewDate) {
+        this.reviewID = reviewID;
+        this.productID = productID;
+        this.customerID = customerID;
+        this.rating = rating;
+        this.comment = comment;
+        this.reviewDate = reviewDate;
     }
 
     public int getReviewID() {
-        return ReviewID;
+        return reviewID;
     }
 
-    public void setReviewID(int ReviewID) {
-        this.ReviewID = ReviewID;
+    public void setReviewID(int reviewID) {
+        this.reviewID = reviewID;
     }
 
     public int getProductID() {
-        return ProductID;
+        return productID;
     }
 
-    public void setProductID(int ProductID) {
-        this.ProductID = ProductID;
+    public void setProductID(int productID) {
+        this.productID = productID;
     }
 
     public int getCustomerID() {
-        return CustomerID;
+        return customerID;
     }
 
-    public void setCustomerID(int CustomerID) {
-        this.CustomerID = CustomerID;
+    public void setCustomerID(int customerID) {
+        this.customerID = customerID;
     }
 
     public int getRating() {
-        return Rating;
+        return rating;
     }
 
-    public void setRating(int Rating) {
-        this.Rating = Rating;
+    public void setRating(int rating) {
+        this.rating = rating;
     }
 
     public String getComment() {
-        return Comment;
+        return comment;
     }
 
-    public void setComment(String Comment) {
-        this.Comment = Comment;
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
-    public Date getReviewDate() {
-        return ReviewDate;
+    public String getReviewDate() {
+        return reviewDate;
     }
 
-    public void setReviewDate(Date ReviewDate) {
-        this.ReviewDate = ReviewDate;
+    public void setReviewDate(String reviewDate) {
+        this.reviewDate = reviewDate;
     }
+    
     
 }
