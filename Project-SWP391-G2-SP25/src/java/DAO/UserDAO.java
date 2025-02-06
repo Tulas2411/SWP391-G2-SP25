@@ -6,7 +6,6 @@
 package dao;
 
 import DAO.DBContext;
-import Dto.tblUsers;
 import Model.Users;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -23,8 +22,8 @@ import java.util.Map;
 public class UserDAO extends DBContext{
 
     // Phương thức lấy về danh sách tất cả user
-    public ArrayList<tblUsers> listUsers() {
-        ArrayList<tblUsers> users = new ArrayList<>();
+    public ArrayList<Users> listUsers() {
+        ArrayList<Users> users = new ArrayList<>();
         Connection cn = null;
         try {
             cn = DBContext.makeConnection();
@@ -34,7 +33,7 @@ public class UserDAO extends DBContext{
                 ResultSet table = st.executeQuery(sql);
                 if (table != null) {
                     while (table.next()) {
-                        tblUsers user = new tblUsers();
+                        Users user = new Users();
                         user.setUserID(table.getString("UserID"));
                         user.setFirstName(table.getString("FirstName"));
                         user.setLastName(table.getString("LastName"));
@@ -63,18 +62,18 @@ public class UserDAO extends DBContext{
     }
 
     // Phương thức lấy về một user theo userID
-    public tblUsers getUserByID(String userID) {
-        tblUsers user = null;
+    public Users getUserByID(String userID) {
+        Users user = null;
         Connection cn = null;
         try {
             cn = DBContext.makeConnection();
             if (cn != null) {
-                String sql = "SELECT * FROM tblUsers WHERE userID = ?";
+                String sql = "SELECT * FROM Users WHERE userID = ?";
                 PreparedStatement pst = cn.prepareStatement(sql);
                 pst.setString(1, userID);
                 ResultSet table = pst.executeQuery();
                 if (table != null && table.next()) {
-                    user = new tblUsers();
+                    user = new Users();
                     user.setUserID(table.getString("userID"));
                     user.setFirstName(table.getString("firstName"));
                         user.setLastName(table.getString("lastName"));
@@ -101,18 +100,18 @@ public class UserDAO extends DBContext{
     }
 
     // Phương thức lấy về một user theo email
-    public tblUsers getUserByEmail(String email) {
-        tblUsers user = null;
+    public Users getUserByEmail(String email) {
+        Users user = null;
         Connection cn = null;
         try {
             cn = DBContext.makeConnection();
             if (cn != null) {
-                String sql = "SELECT * FROM tblUsers WHERE gmail = ?";
+                String sql = "SELECT * FROM Users WHERE gmail = ?";
                 PreparedStatement pst = cn.prepareStatement(sql);
                 pst.setString(1, email);
                 ResultSet table = pst.executeQuery();
                 if (table != null && table.next()) {
-                    user = new tblUsers();
+                    user = new Users();
                     user.setUserID(table.getString("userID"));
                     user.setFirstName(table.getString("firstName"));
                         user.setLastName(table.getString("lastName"));
@@ -144,7 +143,7 @@ public class UserDAO extends DBContext{
         try {
             cn = DBContext.makeConnection();
             if (cn != null) {
-                String sql = "SELECT gmail FROM tblUsers WHERE gmail = ? AND userID != ?";
+                String sql = "SELECT gmail FROM Users WHERE gmail = ? AND userID != ?";
                 PreparedStatement pst = cn.prepareStatement(sql);
                 pst.setString(1, email);
                 pst.setString(2, userID);
@@ -168,13 +167,13 @@ public class UserDAO extends DBContext{
     }
 
     // Phương thức chèn (insert) một user mới
-    public boolean insertUser(tblUsers user) {
+    public boolean insertUser(Users user) {
         Connection cn = null;
         boolean result = false;
         try {
             cn = DBContext.makeConnection();
             if (cn != null) {
-                String sql = "INSERT INTO tblUsers (userID, userName, firstName, lastName, password, roleID, gmail, address, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                String sql = "INSERT INTO Users (userID, userName, firstName, lastName, password, roleID, gmail, address, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 PreparedStatement pst = cn.prepareStatement(sql);
                 pst.setString(1, user.getUserID());
                 pst.setString(2, user.getUserName());
@@ -206,7 +205,7 @@ public class UserDAO extends DBContext{
         try {
             cn = DBContext.makeConnection();
             if (cn != null) {
-                String sql = "SELECT userID FROM tblUsers WHERE userID = ?";
+                String sql = "SELECT userID FROM Users WHERE userID = ?";
                 PreparedStatement pst = cn.prepareStatement(sql);
                 pst.setString(1, userID);
                 ResultSet rs = pst.executeQuery();
@@ -234,7 +233,7 @@ public class UserDAO extends DBContext{
         try {
             cn = DBContext.makeConnection();
             if (cn != null) {
-                String sql = "SELECT gmail FROM tblUsers WHERE gmail = ?";
+                String sql = "SELECT gmail FROM Users WHERE gmail = ?";
                 PreparedStatement pst = cn.prepareStatement(sql);
                 pst.setString(1, email);
                 ResultSet rs = pst.executeQuery();
@@ -257,13 +256,13 @@ public class UserDAO extends DBContext{
     }
 
     // Phương thức cập nhật thông tin tài khoản
-    public boolean updateUser(tblUsers user) {
+    public boolean updateUser(Users user) {
         Connection cn = null;
         boolean result = false;
         try {
             cn = DBContext.makeConnection();
             if (cn != null) {
-                String sql = "UPDATE tblUsers SET firstName = ?, lastName = ?, userName = ?, password = ?, roleID = ?, gmail = ?, address = ?, status = ? WHERE userID = ?";
+                String sql = "UPDATE Users SET firstName = ?, lastName = ?, userName = ?, password = ?, roleID = ?, gmail = ?, address = ?, status = ? WHERE userID = ?";
                 PreparedStatement pst = cn.prepareStatement(sql);
                 pst.setString(1, user.getFirstName());
                 pst.setString(2, user.getLastName());
@@ -291,18 +290,18 @@ public class UserDAO extends DBContext{
 // Phương thức xóa (chuyển trạng thái thành false) một user
 // Phương thức tìm kiếm người dùng theo tên đầy đủ (full name)
 
-    public ArrayList<tblUsers> searchUsersByLastName(String lastName) {
-        ArrayList<tblUsers> users = new ArrayList<>();
+    public ArrayList<Users> searchUsersByLastName(String lastName) {
+        ArrayList<Users> users = new ArrayList<>();
         Connection cn = null;
         try {
             cn = DBContext.makeConnection();
             if (cn != null) {
-                String sql = "SELECT * FROM tblUsers WHERE lastName LIKE ?";
+                String sql = "SELECT * FROM Users WHERE lastName LIKE ?";
                 PreparedStatement pst = cn.prepareStatement(sql);
                 pst.setString(1, "%" + lastName + "%");
                 ResultSet rs = pst.executeQuery();
                 while (rs.next()) {
-                    tblUsers user = new tblUsers();
+                    Users user = new Users();
                     user.setUserName(rs.getString("userID"));
                     user.setLastName(rs.getString("userName"));
                     user.setPassword(rs.getString("password"));
@@ -332,7 +331,7 @@ public class UserDAO extends DBContext{
         try {
             cn = DBContext.makeConnection();
             if (cn != null) {
-                String sql = "UPDATE tblUsers SET status = ? WHERE userID = ?";
+                String sql = "UPDATE Users SET status = ? WHERE userID = ?";
                 PreparedStatement pst = cn.prepareStatement(sql);
                 pst.setBoolean(1, false);
                 pst.setString(2, userID);
@@ -418,7 +417,7 @@ public class UserDAO extends DBContext{
         System.out.println(dao.getUserByID(1));
 //
 //        // Kiểm tra chèn user mới
-//        tblUsers newUser = new tblUsers();
+//        Users newUser = new Users();
 //        newUser.setUserID("U004");
 //        newUser.setFullName("Pham Thi D");
 //        newUser.setPassword("password4");
