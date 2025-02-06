@@ -7,17 +7,20 @@ package dao;
 
 import DAO.DBContext;
 import Dto.tblUsers;
+import Model.Users;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
  * @author Acer
  */
-public class UserDAO {
+public class UserDAO extends DBContext{
 
     // Phương thức lấy về danh sách tất cả user
     public ArrayList<tblUsers> listUsers() {
@@ -26,22 +29,21 @@ public class UserDAO {
         try {
             cn = DBContext.makeConnection();
             if (cn != null) {
-                String sql = "SELECT * FROM tblUsers where status = 1";
+                String sql = "SELECT * FROM User";
                 Statement st = cn.createStatement();
                 ResultSet table = st.executeQuery(sql);
                 if (table != null) {
                     while (table.next()) {
                         tblUsers user = new tblUsers();
-                        user.setUserID(table.getString("userID"));
-                        user.setFirstName(table.getString("firstName"));
-                        user.setLastName(table.getString("lastName"));
-                        user.setUserName(table.getString("userName"));
-                        user.setPassword(table.getString("password"));
-                        user.setRoleID(table.getString("roleID"));
-                        user.setGmail(table.getString("gmail"));
-                        user.setPhone(table.getString("phone"));
-                        user.setAddress(table.getString("address"));
-                        user.setStatus(table.getBoolean("status"));
+                        user.setUserID(table.getString("UserID"));
+                        user.setFirstName(table.getString("FirstName"));
+                        user.setLastName(table.getString("LastName"));
+                        user.setUserName(table.getString("UserName"));
+                        user.setPassword(table.getString("Password"));
+                        user.setRole(table.getString("Role"));
+                        user.setGmail(table.getString("Email"));
+                        user.setPhone(table.getString("PhoneNumber"));
+                        user.setAddress(table.getString("Address"));
                         users.add(user);
                     }
                 }
@@ -78,11 +80,10 @@ public class UserDAO {
                         user.setLastName(table.getString("lastName"));
                         user.setUserName(table.getString("userName"));
                         user.setPassword(table.getString("password"));
-                        user.setRoleID(table.getString("roleID"));
+                        user.setRole(table.getString("roleID"));
                         user.setGmail(table.getString("gmail"));
                         user.setPhone(table.getString("phone"));
                         user.setAddress(table.getString("address"));
-                        user.setStatus(table.getBoolean("status"));
                 }
             }
         } catch (Exception e) {
@@ -117,11 +118,10 @@ public class UserDAO {
                         user.setLastName(table.getString("lastName"));
                         user.setUserName(table.getString("userName"));
                         user.setPassword(table.getString("password"));
-                        user.setRoleID(table.getString("roleID"));
+                        user.setRole(table.getString("roleID"));
                         user.setGmail(table.getString("gmail"));
                         user.setPhone(table.getString("phone"));
                         user.setAddress(table.getString("address"));
-                        user.setStatus(table.getBoolean("status"));
                 }
             }
         } catch (Exception e) {
@@ -181,10 +181,9 @@ public class UserDAO {
                 pst.setString(3, user.getFirstName());
                 pst.setString(4, user.getLastName());
                 pst.setString(5, user.getPassword());
-                pst.setString(6, user.getRoleID());
+                pst.setString(6, user.getRole());
                 pst.setString(7, user.getGmail());
                 pst.setString(8, user.getAddress());
-                pst.setBoolean(9, user.isStatus());
                 result = pst.executeUpdate() > 0;
             }
         } catch (Exception e) {
@@ -270,10 +269,9 @@ public class UserDAO {
                 pst.setString(2, user.getLastName());
                 pst.setString(3, user.getUserName());
                 pst.setString(4, user.getPassword());
-                pst.setString(5, user.getRoleID());
+                pst.setString(5, user.getRole());
                 pst.setString(6, user.getGmail());
                 pst.setString(7, user.getAddress());
-                pst.setBoolean(8, user.isStatus());
                 pst.setString(9, user.getUserID());
                 result = pst.executeUpdate() > 0;
             }
@@ -308,10 +306,9 @@ public class UserDAO {
                     user.setUserName(rs.getString("userID"));
                     user.setLastName(rs.getString("userName"));
                     user.setPassword(rs.getString("password"));
-                    user.setRoleID(rs.getString("roleID"));
+                    user.setRole(rs.getString("roleID"));
                     user.setGmail(rs.getString("gmail"));
                     user.setAddress(rs.getString("address"));
-                    user.setStatus(rs.getBoolean("status"));
                     users.add(user);
                 }
             }
@@ -355,16 +352,70 @@ public class UserDAO {
         return result;
     }
 
+    public Map<Integer, Users> getAllUsers() {
+        Map<Integer, Users> list = new HashMap<>();
+        try {
+            String sql = "SELECT * FROM Users";
+            Statement st = connection.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            while (rs.next()) {
+                Users u = new Users();
+                u.setUserID(rs.getInt("UserID"));
+                u.setFirstName(rs.getString("FirstName"));
+                u.setLastName(rs.getString("LastName"));
+                u.setGender(rs.getString("Gender"));
+                u.setDateOfBirth(rs.getDate("DateOfBirth"));
+                u.setUserName(rs.getString("UserName"));
+                u.setPassword(rs.getString("Password"));
+                u.setRole(rs.getString("Role"));
+                u.setEmail(rs.getString("Email"));
+                u.setPhoneNumber(rs.getString("PhoneNumber"));
+                u.setAddress(rs.getString("Address"));
+                
+                list.put(u.getUserID(), u);
+            }
+            rs.close();
+            st.close();
+        } catch (Exception e) {
+            e.printStackTrace();  // In lỗi ra console để kiểm tra
+        }
+        return list;
+    }
+    PreparedStatement stm;//thuc hien cau lenh sql
+    ResultSet rs;//dung luu tru du lieu lay ve tu select
+    public Users getUserByID(int id) {
+        try {
+            String strSQL = "select * from Users where UserID = ?";
+            stm = connection.prepareStatement(strSQL);
+            stm.setInt(1, id);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+
+                Users u = new Users();
+                u.setUserID(rs.getInt("UserID"));
+                u.setFirstName(rs.getString("FirstName"));
+                u.setLastName(rs.getString("LastName"));
+                u.setGender(rs.getString("Gender"));
+                u.setDateOfBirth(rs.getDate("DateOfBirth"));
+                u.setUserName(rs.getString("UserName"));
+                u.setPassword(rs.getString("Password"));
+                u.setRole(rs.getString("Role"));
+                u.setEmail(rs.getString("Email"));
+                u.setPhoneNumber(rs.getString("PhoneNumber"));
+                u.setAddress(rs.getString("Address"));
+                
+                return u;
+            }
+        } catch (Exception e) {
+            System.out.println("getUserByAcc: " + e.getMessage());
+        }
+        return null;
+    }
+    
     public static void main(String[] args) {
         UserDAO dao = new UserDAO();
-
-        // Kiểm tra lấy user theo userID
-        tblUsers user1 = dao.getUserByID("U001");
-        System.out.println(dao.deleteUser("U001"));
-
-        // Kiểm tra lấy user theo email
-        tblUsers user2 = dao.getUserByEmail("tranthib@gmail.com");
-        System.out.println(user2);
+        //<%=uDAO.getUserByID(r.getCustomerID()).getFirstName()%>
+        System.out.println(dao.getUserByID(1));
 //
 //        // Kiểm tra chèn user mới
 //        tblUsers newUser = new tblUsers();
