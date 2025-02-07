@@ -62,8 +62,8 @@
         <%@ include file="./Public/header.jsp" %>
         <%
             UsersDAO uDAO = new UsersDAO();
-            ProductsDAO pDAO = new ProductsDAO();
-            List<Category> categories = pDAO.getAllCategories();
+            CategoryDAO cDAO = new CategoryDAO();
+            List<Category> categories = cDAO.getAllCategories();
             request.setAttribute("categories", categories);
             String categoriesJson = new Gson().toJson(categories);
             Products p = (Products) request.getAttribute("product");
@@ -170,7 +170,7 @@
                             </div>
                             <%}%>
                             <div>
-                                <h3 class="product-price"><%= p.getPrice() %></h3><del class="product-old-price"> <%= p.getOldPrice()%></del>
+                                <h3 class="product-price"><%= p.getPrice() %></h3><del class="product-old-price"> <%= p.getOldprice()%></del>
                                 <span class="product-available">Còn Hàng</span>
                             </div>
                                 <p id="Description"><%= p.getDescription() %></p>
@@ -193,7 +193,7 @@
 
                             <ul class="product-links">
                                 <li>Danh mục:</li>
-                                <li><a href="#" id="Category"><%= pDAO.GetCategorybyID(p.getCategoryID()).getCategoryName() %></a></li>
+                                <li><a href="#" id="Category"><%= cDAO.getCategoryByID(p.getCategoryID()).getCategoryName() %></a></li>
                             </ul>
                             <ul class="product-links">
                                 <li>Số lượng tồn kho:</li>

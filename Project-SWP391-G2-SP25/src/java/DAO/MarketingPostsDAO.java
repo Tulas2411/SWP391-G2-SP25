@@ -6,7 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -41,6 +43,23 @@ public class MarketingPostsDAO extends DBContext {
         return posts;
     }
 
+    public List<MarketingPosts> getLatestPosts(int limit) {
+        List<MarketingPosts> posts = new ArrayList<>();
+        String query = "SELECT * FROM MarketingPosts WHERE Status = 'Published' ORDER BY CreateDate DESC LIMIT ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, limit);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                MarketingPosts post = extractMarketingPostFromResultSet(rs);
+                posts.add(post);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching latest posts: " + e.getMessage());
+        }
+        return posts;
+    }
+    
     public MarketingPosts getMarketingPostByID(int postID) {
         String sql = "SELECT * FROM MarketingPosts WHERE PostID = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
