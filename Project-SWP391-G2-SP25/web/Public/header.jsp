@@ -61,7 +61,7 @@
                     </div>
                     <ul class="header__table-list">
                         <li class="header__table-items header__table-items-underlined">
-                            <a href="#" class="header__table-link">
+                            <a href="${pageContext.request.contextPath}/home" class="header__table-link">
                                 TRANG CHỦ
                             </a>
                         </li>
@@ -120,7 +120,7 @@
 
                 <!-- Logo của website - Hiển thị bên trái header -->
                 <div class="header__shop-logo">
-                    <a href="#"> 
+                    <a href="${pageContext.request.contextPath}/home"> 
                         <img src="assets/img/S4EWhite.png" class="header__shop-logo-img" alt="Logo linh kiện điện tử" />
                     </a>
                 </div>
@@ -167,7 +167,7 @@
             <div class="header__navbar">
                 <ul class="header__navbar-list">
                     <li class="header__navbar-items header__navbar-items-vertical">
-                        <a style="color: #666;" href="#" class="header__navbar-link">
+                        <a style="color: #666;" href="${pageContext.request.contextPath}/home" class="header__navbar-link">
                             Trang chủ
                         </a>
                     </li>

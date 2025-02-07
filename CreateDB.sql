@@ -278,9 +278,15 @@ VALUES
 ('Thảo luận', 'Ổ cắm điện đa năng - Giải pháp tiện lợi', 1, 'o_cam_tien_loi.jpg', 'Lợi ích của ổ cắm điện đa năng trong gia đình.', NOW(), 'Những loại ổ cắm điện đa năng tốt nhất hiện nay.', 'Published', 'assets/img/o_cam_thumb.jpg', 1, NOW(), 20),
 ('Thảo luận', 'Tại sao cần dùng cầu dao tự động?', 1, 'cau_dao_tu_dong.jpg', 'Công dụng và cách chọn cầu dao tự động cho nhà bạn.', NOW(), 'Hướng dẫn cách lắp đặt và sử dụng cầu dao tự động.', 'Published', 'assets/img/cau_dao_thumb.jpg', 1, NOW(), 10);
 
-ALTER TABLE Products ADD COLUMN OldPrice DECIMAL(10,2) NULL;
-UPDATE Products
-SET OldPrice = Price * 1.10
-WHERE IsPromoted = 1;
+-- Chèn dữ liệu thiết bị thông minh vào bảng Products
+INSERT INTO Products (CategoryID, ProductName, Description, Provider, Price, WarrantyPeriod, Amount, ImageLink, IsPromoted, CreateAt) 
+VALUES
+('TBTM', 'Đèn LED sạc không dây cảm ứng siêu mỏng', 'Đèn LED sạc không dây cảm ứng siêu mỏng.', 'SmartTech', 190000, '1 năm', 50, 'assets/img/TBTM-1.jpg', 0, NOW()),
+('TBTM', 'Đèn LED cảm ứng chuyển động PIR', 'Đèn LED cảm ứng chuyển động PIR.', 'SmartTech', 115000, '2 năm', 80, 'assets/img/TBTM-2.jpg', 0, NOW()),
+('TBTM', 'Công tắc điện cảm ứng', 'Công tắc điện cảm ứng điều khiển dễ dàng.', 'SmartTech', 520000, '3 năm', 30, 'assets/img/TBTM-3.jpg', 1, NOW()),
+('TBTM', 'Khoá cửa thông minh tích hợp camera AB-24K', 'Khoá cửa thông minh tích hợp camera AB-24K, an ninh tối ưu.', 'SmartTech', 4160000, '5 năm', 20, 'assets/img/TBTM-4.jpg', 0, NOW()),
+('TBTM', 'Cảm biến khói Panasonic', 'Cảm biến khói Panasonic, bảo vệ an toàn cho gia đình.', 'Panasonic', 960000, '2 năm', 50, 'assets/img/TBTM-5.jpg', 1, NOW()),
+('TBTM', 'Cảm biến chuyển động', 'Cảm biến chuyển động sử dụng trong hệ thống an ninh.', 'SmartTech', 360000, '2 năm', 70, 'assets/img/TBTM-6.jpg', 0, NOW()),
+('TBTM', 'Rèm thông minh điều khiển từ xa', 'Rèm thông minh điều khiển từ xa thông qua ứng dụng điện thoại.', 'SmartTech', 2140000, '3 năm', 40, 'assets/img/TBTM-7.jpg', 1, NOW()),
+('TBTM', 'Cảm biến cửa SmartLock', 'Cảm biến cửa SmartLock, bảo mật và điều khiển từ xa.', 'SmartTech', 700000, '2 năm', 60, 'assets/img/TBTM-8.jpg', 1, NOW());
 
-select * from products

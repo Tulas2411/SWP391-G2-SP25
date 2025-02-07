@@ -57,6 +57,20 @@ public class ProductsDAO extends DBContext {
         return promotedProducts;
     }
 
+    public List<Products> getNewProducts() {
+        List<Products> newProducts = new ArrayList<>();
+        String sql = "SELECT * FROM Products ORDER BY CreateAt DESC";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                newProducts.add(extractProductFromResultSet(rs));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching new products: " + e.getMessage());
+        }
+        return newProducts;
+    }
+
     public Products getProductByID(int id) {
         String sql = "SELECT * FROM Products WHERE ProductID = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -70,6 +84,23 @@ public class ProductsDAO extends DBContext {
             System.out.println("Error fetching product by ID: " + e.getMessage());
         }
         return null;
+    }
+
+    public List<Products> getProductsByCategory(String categoryID) {
+        List<Products> productList = new ArrayList<>();
+        String sql = "SELECT * FROM Products WHERE CategoryID = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, categoryID);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    productList.add(extractProductFromResultSet(rs));
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching products by category: " + e.getMessage());
+        }
+        return productList;
     }
 
     public boolean addProduct(Products product) {
