@@ -103,7 +103,7 @@
                             </a>
                         </li>
                         <li class="header__table-items header__table-items-underlined">
-                            <a href="#" class="header__table-link">
+                            <a href="LienHe.jsp" class="header__table-link">
                                 LIÊN HỆ
                             </a>
                         </li>
@@ -213,7 +213,7 @@
                         </a>
                     </li>
                     <li class="header__navbar-items">
-                        <a href="#" class="header__navbar-link">
+                        <a href="LienHe.jsp" class="header__navbar-link">
                             Liên hệ
                         </a>
                     </li>
