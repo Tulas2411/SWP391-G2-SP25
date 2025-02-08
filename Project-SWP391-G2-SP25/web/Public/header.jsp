@@ -66,7 +66,7 @@
                             </a>
                         </li>
                         <li class="header__table-items header__table-items-underlined">
-                            <a href="#" class="header__table-link">
+                            <a href="GioiThieu.jsp" class="header__table-link">
                                 GIỚI THIỆU
                             </a>
                         </li>
@@ -172,7 +172,7 @@
                         </a>
                     </li>
                     <li class="header__navbar-items header__navbar-items-vertical">
-                        <a href="#" class="header__navbar-link">
+                        <a href="GioiThieu.jsp" class="header__navbar-link">
                             Giới thiệu
                         </a>
                     </li>
