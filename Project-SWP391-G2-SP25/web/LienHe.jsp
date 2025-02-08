@@ -172,7 +172,7 @@
                         0969.995.633</p>
 
                     <p><strong>Thời gian làm việc</strong><br/>
-                        Thứ 2 đến Thứ 6 từ 8h đến 18h; Thứ 7 và Chủ nhật từ 8h00 đến 17h00</p>
+                        Thứ 2 đến Thứ 6 từ 8h đến 22h; Thứ 7 và Chủ nhật từ 8h00 đến 20h00</p>
                 </div>
             </div>
         </main>
