@@ -159,189 +159,72 @@
                     <!--Danh mục Thiết bị chiếu sáng 
                         Lighting equipment : Thiết bị chiếu sáng - Start -->
                     <div class="main__right-sensor">
-                        <!--                        Tiêu đề cho danh mục Thiết bị chiếu sáng -->
                         <h3 class="main__right-heading">
                             <span class="main__right-heading-title">Thiết bị chiếu sáng</span>
-                            <a href="#" class="main__right-heading-link">
+                            <a href="Category.jsp?id=TBCS" class="main__right-heading-link">
                                 Xem thêm
                                 <i class="main__right-heading-icon fa-solid fa-angle-right"></i>
                             </a>
                         </h3>
-                        <!--Các sản phẩm là Thiết bị chiếu sáng - Người dùng có thể trượt qua phải, trái để xem nhiều hơn 
-                            Danh sách các sản phẩm theo thanh trượt -->
                         <div class="main__right-sensor-list swiper mySwiper1">
                             <div class="swiper-wrapper">
-                                <div class="swiper-slide">
-                                    <div class="main__right-sensor-item">
-                                        <a href="#" class="main__right-sensor-link">
-                                            <img src="assets/img/TBCS-1.jpg" alt="" class="main__right-sensor-img" />
-                                            <div class="main__right-sensor-title">Bóng đèn LED MPE LBD-50V 50W</div>
-                                        </a>
-                                        <span class="main__right-sensor-promotion">399.000đ</span>
-                                        <span class="main__right-sensor-price">290.000đ</span>
+                                <c:forEach var="product" items="${lightingProducts}">
+                                    <div class="swiper-slide">
+                                        <div class="main__right-sensor-item">
+                                            <a href="ProductDetail.jsp?id=${product.productID}" class="main__right-sensor-link">
+                                                <img src="${product.imageLink}" alt="${product.productName}" class="main__right-sensor-img" />
+                                                <div class="main__right-sensor-title">${product.productName}</div>
+                                            </a>
+                                            <span class="main__right-sensor-price">
+                                                <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="đ"/>
+                                            </span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="main__right-sensor-item">
-                                        <a href="#" class="main__right-sensor-link">
-                                            <img src="assets/img/TBCS-2.jpg" alt="" class="main__right-sensor-img" />
-                                            <div class="main__right-sensor-title">Đèn Led âm trần chống chói 7W</div>
-                                        </a>
-                                        <span class="main__right-sensor-price">115.000đ</span>
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="main__right-sensor-item">
-                                        <a href="#" class="main__right-sensor-link">
-                                            <img src="assets/img/TBCS-3.jpg" alt="" class="main__right-sensor-img" />
-                                            <div class="main__right-sensor-title">Đèn pha LED 200w cao cấp ngoài trời</div>
-                                        </a>
-                                        <span class="main__right-sensor-promotion">900.000đ</span>
-                                        <span class="main__right-sensor-price">795.000đ</span>
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="main__right-sensor-item">
-                                        <a href="#" class="main__right-sensor-link">
-                                            <img src="assets/img/TBCS-4.jpg" alt="" class="main__right-sensor-img" />
-                                            <div class="main__right-sensor-title">Bộ đèn led tuýp T8 thuỷ tinh 1,2m</div>
-                                        </a>
-                                        <span class="main__right-sensor-price">160.000đ</span>
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="main__right-sensor-item">
-                                        <a href="#" class="main__right-sensor-link">
-                                            <img src="assets/img/TBCS-5.jpg" alt="" class="main__right-sensor-img" />
-                                            <div class="main__right-sensor-title">Bóng đèn LED kẹp bàn 60 bóng LED</div>
-                                        </a>
-                                        <span class="main__right-sensor-price">96.000đ</span>
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="main__right-sensor-item">
-                                        <a href="#" class="main__right-sensor-link">
-                                            <img src="assets/img/TBCS-6.jpg" alt="" class="main__right-sensor-img" />
-                                            <div class="main__right-sensor-title">Đèn LED âm đất 36W</div>
-                                        </a>
-                                        <span class="main__right-sensor-price">860.000đ</span>
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="main__right-sensor-item">
-                                        <a href="#" class="main__right-sensor-link">
-                                            <img src="assets/img/TBCS-7.jpg" alt="" class="main__right-sensor-img" />
-                                            <div class="main__right-sensor-title">Đèn LED thanh hắt</div>
-                                        </a>
-                                        <span class="main__right-sensor-price">640.000đ</span>
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="main__right-sensor-item">
-                                        <a href="#" class="main__right-sensor-link">
-                                            <img src="assets/img/TBCS-8.jpg" alt="" class="main__right-sensor-img" />
-                                            <div class="main__right-sensor-title">Đèn LED rọi 12W mắt ếch</div>
-                                        </a>
-                                        <span class="main__right-sensor-price">270.000đ</span>
-                                    </div>
-                                </div>                           
-                            </div>                            
-
-                            <!--Các nút bấm để người dùng kích vào xem những sản phẩm trong thanh trượt -->
+                                </c:forEach>
+                            </div>
                             <div class="main__right-sensor-prev">
                                 <i class="fa-solid fa-angle-left sensor-button-prev"></i>
                             </div>
                             <div class="main__right-sensor-next">
                                 <i class="fa-solid fa-angle-right sensor-button-next"></i>
                             </div>
-
-                        </div>                   
-
+                        </div>
                     </div>
                     <!--Lighting equipment : Thiết bị chiếu sáng - End -->
 
                     <!-- Danh mục các sản phẩm Công tắc điện -->
                     <!-- Electronic Switch : Công tắc điện - Start -->
                     <div class="main__right-sensor">
-                        <!-- Tiêu đề của Công tắc điện -->
                         <h3 class="main__right-heading">
                             <span class="main__right-heading-title">Công tắc điện</span>
-                            <a href="#" class="main__right-heading-link">
+                            <a href="Category.jsp?id=CTD" class="main__right-heading-link">
                                 Xem thêm
                                 <i class="main__right-heading-icon fa-solid fa-angle-right"></i>
                             </a>
                         </h3>
-                        <!-- Các sản phẩm Công tắc điện - Người dùng có thể trượt qua phải, trái để xem nhiều hơn -->
-                        <!-- Danh sách các sản phẩm theo thanh trượt -->
                         <div class="main__right-sensor-list swiper mySwiper2">
                             <div class="swiper-wrapper">
-                                <div class="swiper-slide">
-                                    <div class="main__right-sensor-item">
-                                        <a href="#" class="main__right-sensor-link">
-                                            <img src="assets/img/CTD-1.jpg" alt="" class="main__right-sensor-img" />
-                                            <div class="main__right-sensor-title">Bộ 3 công tắc điện 1 chiều Size S</div>
-                                        </a>
-                                        <span class="main__right-sensor-price">175.000đ</span>
+                                <c:forEach var="product" items="${electricalSwitchProducts}">
+                                    <div class="swiper-slide">
+                                        <div class="main__right-sensor-item">
+                                            <a href="ProductDetail.jsp?id=${product.productID}" class="main__right-sensor-link">
+                                                <img src="${product.imageLink}" alt="${product.productName}" class="main__right-sensor-img" />
+                                                <div class="main__right-sensor-title">${product.productName}</div>
+                                            </a>
+                                            <span class="main__right-sensor-price">
+                                                <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="đ"/>
+                                            </span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="main__right-sensor-item">
-                                        <a href="#" class="main__right-sensor-link">
-                                            <img src="assets/img/CTD-2.jpg" alt="" class="main__right-sensor-img" />
-                                            <div class="main__right-sensor-title">Công tắc 2 nút và 1 ổ cắm đôi âm tường</div>
-                                        </a>
-                                        <span class="main__right-sensor-price">180.000đ</span>
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="main__right-sensor-item">
-                                        <a href="#" class="main__right-sensor-link">
-                                            <img src="assets/img/CTD-3.jpg" alt="" class="main__right-sensor-img" />
-                                            <div class="main__right-sensor-title">Công tắc điện quả nhót</div>
-                                        </a>
-                                        <span class="main__right-sensor-price">9.000đ</span>
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="main__right-sensor-item">
-                                        <a href="#" class="main__right-sensor-link">
-                                            <img src="assets/img/CTD-4.jpg" alt="" class="main__right-sensor-img" />
-                                            <div class="main__right-sensor-title">Công tắc ON-OFF điện 3 pha</div>
-                                        </a>
-                                        <span class="main__right-sensor-price">125.000đ</span>
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="main__right-sensor-item">
-                                        <a href="#" class="main__right-sensor-link">
-                                            <img src="assets/img/CTD-5.jpg" alt="" class="main__right-sensor-img" />
-                                            <div class="main__right-sensor-title">Công tắc điện điều khiển từ xa qua remote</div>
-                                        </a>
-                                        <span class="main__right-sensor-price">550.000đ</span>
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="main__right-sensor-item">
-                                        <a href="#" class="main__right-sensor-link">
-                                            <img src="assets/img/CTD-6.jpg" alt="" class="main__right-sensor-img" />
-                                            <div class="main__right-sensor-title">Công tắc bập bênh 2 chân</div>
-                                        </a>
-                                        <span class="main__right-sensor-price">8.000đ</span>
-                                    </div>
-                                </div>
-
-                            </div>                            
-
-                            <!-- Các nút bấm để người dùng kích vào xem những sản phẩm trong thanh trượt -->
+                                </c:forEach>
+                            </div>
                             <div class="main__right-electrical-prev">
                                 <i class="fa-solid fa-angle-left electrical-button-prev"></i>
                             </div>
                             <div class="main__right-electrical-next">
                                 <i class="fa-solid fa-angle-right electrical-button-next"></i>
                             </div>
-
-                        </div>                   
-
+                        </div>
                     </div>
                     <!-- Electronic Switch : Công tắc điện - End -->
 
