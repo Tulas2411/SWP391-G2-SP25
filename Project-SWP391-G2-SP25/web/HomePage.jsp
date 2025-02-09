@@ -62,8 +62,12 @@
                                         <span class="main__left-product-title">${product.productName}</span>
                                     </a>
                                     <br />
-                                    <span class="main__left-product"><del><fmt:formatNumber value="${product.oldprice}" type="number" groupingUsed="true"/>đ</del></span>
-                                    <span class="main__left-product-omount"><strong><fmt:formatNumber value="${product.price}" type="number" groupingUsed="true"/>đ</strong></span>
+                                    <span class="main__left-product"><del>
+                                            <fmt:formatNumber value="${product.oldprice}" type="number" groupingUsed="true"/>đ
+                                        </del></span>
+                                    <span class="main__right-sensor-price">
+                                        <strong><fmt:formatNumber value="${product.price}" type="number" groupingUsed="true"/>đ</strong>
+                                    </span>
                                 </li>
                             </c:if>
                         </c:forEach>
