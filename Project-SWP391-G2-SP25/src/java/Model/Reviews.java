@@ -4,6 +4,8 @@
  */
 package Model;
 
+import java.util.Date;
+
 /**
  *
  * @author Tùng Dương
@@ -14,12 +16,12 @@ public class Reviews {
     private int customerID;
     private int rating;
     private String comment;
-    private String reviewDate;
+    private Date reviewDate;
 
     public Reviews() {
     }
 
-    public Reviews(int reviewID, int productID, int customerID, int rating, String comment, String reviewDate) {
+    public Reviews(int reviewID, int productID, int customerID, int rating, String comment, Date reviewDate) {
         this.reviewID = reviewID;
         this.productID = productID;
         this.customerID = customerID;
@@ -68,11 +70,11 @@ public class Reviews {
         this.comment = comment;
     }
 
-    public String getReviewDate() {
+    public Date getReviewDate() {
         return reviewDate;
     }
 
-    public void setReviewDate(String reviewDate) {
+    public void setReviewDate(Date reviewDate) {
         this.reviewDate = reviewDate;
     }
     
