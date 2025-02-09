@@ -4,7 +4,9 @@
  */
 package Model;
 
+import java.text.NumberFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  *
@@ -22,12 +24,12 @@ public class Products {
     private int amount;
     private String imageLink;
     private Boolean isPromoted;
-    private String createAt;
+    private Date createAt;
 
     public Products() {
     }
 
-    public Products(int productID, String categoryID, String productName, String description, String provider, float price, float oldprice, String warrantyPeriod, int amount, String imageLink, Boolean isPromoted, String createAt) {
+    public Products(int productID, String categoryID, String productName, String description, String provider, float price, float oldprice, String warrantyPeriod, int amount, String imageLink, Boolean isPromoted, Date createAt) {
         this.productID = productID;
         this.categoryID = categoryID;
         this.productName = productName;
@@ -82,7 +84,13 @@ public class Products {
         this.provider = provider;
     }
 
-    public float getPrice() {
+    public String getPrice() {
+        NumberFormat currencyFormat = NumberFormat.getInstance(new Locale("vi", "VN"));
+        String formattedPrice = currencyFormat.format(price) + "đ";
+        return formattedPrice;
+    }
+    
+    public float getPriceFloat() {
         return price;
     }
 
@@ -90,7 +98,13 @@ public class Products {
         this.price = price;
     }
 
-    public float getOldprice() {
+    public String getOldPrice() {
+        NumberFormat currencyFormat = NumberFormat.getInstance(new Locale("vi", "VN"));
+        String formattedPrice = currencyFormat.format(oldprice) + "đ";
+        return formattedPrice;
+    }
+    
+    public float getOldPriceFloat() {
         return oldprice;
     }
 
@@ -130,11 +144,11 @@ public class Products {
         this.isPromoted = isPromoted;
     }
 
-    public String getCreateAt() {
+    public Date getCreateAt() {
         return createAt;
     }
 
-    public void setCreateAt(String createAt) {
+    public void setCreateAt(Date createAt) {
         this.createAt = createAt;
     }
     
