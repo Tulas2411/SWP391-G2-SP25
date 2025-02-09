@@ -62,8 +62,8 @@
                                         <span class="main__left-product-title">${product.productName}</span>
                                     </a>
                                     <br />
-                                    <span class="main__left-product"><del>${product.oldprice}đ</del></span>
-                                    <span class="main__left-product-omount"><strong>${product.price}đ</strong></span>
+                                    <span class="main__left-product"><del><fmt:formatNumber value="${product.oldprice}" type="number" groupingUsed="true"/>đ</del></span>
+                                    <span class="main__left-product-omount"><strong><fmt:formatNumber value="${product.price}" type="number" groupingUsed="true"/>đ</strong></span>
                                 </li>
                             </c:if>
                         </c:forEach>
@@ -81,7 +81,9 @@
                                         <span class="main__left-product-title">${product.productName}</span>
                                     </a>
                                     <br />
-                                    <span class="main__left-product-omount"><strong>${product.price}đ</strong></span>
+                                    <span class="main__right-sensor-price">
+                                        <strong><fmt:formatNumber value="${product.price}" type="number" groupingUsed="true"/>đ</strong>
+                                    </span>
                                 </li>
                             </c:if>
                         </c:forEach>
@@ -94,7 +96,7 @@
                         <c:forEach var="post" items="${latestPosts}">
                             <li class="main__left-posts-items main__left-posts-items--vertical">
                                 <img src="${post.imageLink}" alt="${post.title}" class="main__left-posts-img" />
-                                <a href="PostDetail.jsp?id=${post.postID}" class="main__left-posts-link">
+                                <a href="PostDetailsController?postId=${post.postID}" class="main__left-posts-link">
                                     <span class="main__left-posts-title">${post.title}</span>
                                 </a>
                             </li>
@@ -149,7 +151,7 @@
                                     </a>
                                     <!-- Hiển thị giá sản phẩm -->
                                     <span class="main__right-sensor-price">
-                                        <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="đ"/>
+                                        <strong><fmt:formatNumber value="${product.price}" type="number" groupingUsed="true"/>đ</strong>
                                     </span>
                                 </div>
                             </c:forEach>
@@ -176,7 +178,7 @@
                                                 <div class="main__right-sensor-title">${product.productName}</div>
                                             </a>
                                             <span class="main__right-sensor-price">
-                                                <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="đ"/>
+                                                <strong><fmt:formatNumber value="${product.price}" type="number" groupingUsed="true"/>đ</strong>
                                             </span>
                                         </div>
                                     </div>
@@ -212,7 +214,7 @@
                                                 <div class="main__right-sensor-title">${product.productName}</div>
                                             </a>
                                             <span class="main__right-sensor-price">
-                                                <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="đ"/>
+                                                <strong><fmt:formatNumber value="${product.price}" type="number" groupingUsed="true"/>đ</strong>
                                             </span>
                                         </div>
                                     </div>
@@ -247,7 +249,7 @@
                                         <div class="main__right-sensor-title">${product.productName}</div>
                                     </a>
                                     <span class="main__right-sensor-price">
-                                        <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="đ"/>
+                                        <strong><fmt:formatNumber value="${product.price}" type="number" groupingUsed="true"/>đ</strong>
                                     </span>
                                 </div>
                             </c:forEach>
