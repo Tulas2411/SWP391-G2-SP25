@@ -5,6 +5,10 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="Model.Category, Model.Products, Model.MarketingPosts"%>
+<%@page import="java.util.List"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -31,167 +35,72 @@
             <div class="main__gird gird"> <!-- Cái khung của trang web -->
                 <div class="main__left">
                     <!-- Danh mục sản phẩm - Gom các sản phẩm thành các danh mục nhỏ - Hiển thị trên cùng bên trái main trang web -->
+                    <h2 class="main__left-title">DANH MỤC SẢN PHẨM</h2>
                     <ul class="main__left-category-list">
-                        <h2 class="main__left-title">DANH MỤC SẢN PHẨM</h2>
-                        <li class="main__left-category-items">
-                            <a href="#" class="main__left-category-link">
-                                Thiết bị quạt
-                            </a>
-                        </li>
-                        <li class="main__left-category-items">
-                            <a href="#" class="main__left-category-link">
-                                Thiết bị chiếu sáng
-                            </a>
-                        </li>
-                        <li class="main__left-category-items">
-                            <a href="#" class="main__left-category-link">
-                                Công tắc điện
-                            </a>
-                        </li>
-                        <li class="main__left-category-items">
-                            <a href="#" class="main__left-category-link">
-                                Thiết bị thông minh
-                            </a>
-                        </li>
-                        <li class="main__left-category-items">
-                            <a href="#" class="main__left-category-link">
-                                Phụ kiện & linh kiện
-                            </a>
-                        </li>
-                        <li class="main__left-category-items">
-                            <a href="#" class="main__left-category-link">
-                                Thiết bị sửa chữa và bảo trì
-                            </a>
-                        </li>
+                        <c:forEach var="categoryID" items="${['TBQ', 'TBCS', 'CTD', 'TBTM', 'TBSCBT']}">
+                            <c:forEach var="category" items="${categories}">
+                                <c:if test="${category.categoryID == categoryID}">
+                                    <li class="main__left-category-items">
+                                        <a href="Category.jsp?id=${category.categoryID}" class="main__left-category-link">
+                                            ${category.categoryName}
+                                        </a>
+                                    </li>
+                                </c:if>
+                            </c:forEach>
+                        </c:forEach>
                     </ul>
-                    <!-- Main Left Promotional Products : Sản phẩm khuyến mãi -->
 
+                    <!-- Main Left Promotional Products : Sản phẩm khuyến mãi -->
                     <!-- Một số sản phẩm khuyến mãi - Hiển thị dưới Danh mục sản phẩm -->
                     <h2 class="main__left-title main__left-margin-top">SẢN PHẨM KHUYẾN MÃI</h2>
                     <ul class="main__left-product-list">
-                        <li class="main__left-product-items main__left-product-items--vertical">
-                            <img src="assets/img/SPKM-1.jpg" alt="Quạt điều hoà" class="main__left-product-img" />
-                            <a href="#" class="main__left-product-link">
-                                <span class="main__left-product-title">Quạt điều hoà</span>
-                            </a>
-                            <br />
-                            <span class="main__left-product">999.000đ</span>
-                            <span class="main__left-product-omount"><strong>499.000đ</strong></span>
-                        </li>
-                        <li class="main__left-product-items main__left-product-items--vertical  main__left-new">
-                            <a href="#" class="main__left-product-link">
-                                <img src="assets/img/SPKM-2.jpg" alt="Quạt cây" class="main__left-product-img" />
-                                <span class="main__left-product-title">Quạt cây</span>
-                            </a>
-                            <br />
-                            <span class="main__left-product">359.000đ</span>
-                            <span class="main__left-product-omount"><strong>159.000đ</strong></span>
-                        </li>
-                        <li class="main__left-product-items main__left-product-items--vertical  main__left-new">
-                            <a href="#" class="main__left-product-link">
-                                <img src="assets/img/SPKM-3.jpg" alt="Đèn led trang trí" class="main__left-product-img" />
-                                <span class="main__left-product-title">Đèn led trang trí</span>
-                            </a>
-                            <br />
-                            <span class="main__left-product">99.000đ</span>
-                            <span class="main__left-product-omount"><strong>45.000đ</strong></span>
-                        </li>
-                        <li class="main__left-product-items main__left-product-items--vertical">
-                            <a href="#" class="main__left-product-link">
-                                <img src="assets/img/SPKM-4.jpg" alt="Ổ cắm điện" class="main__left-product-img" />
-                                <span class="main__left-product-title">Ổ cắm điện</span>
-                            </a>
-                            <br />
-                            <span class="main__left-product">66.000đ</span>
-                            <span class="main__left-product-omount"><strong>52.000đ</strong></span>
-                        </li>
-                        <li class="main__left-product-items main__left-product-items--vertical">
-                            <a href="#" class="main__left-product-link">
-                                <img src="assets/img/SPKM-5.jpg" alt="Bộ tua vít chất lượng cao" class="main__left-product-img" />
-                                <span class="main__left-product-title">Bộ tua vít chất lượng cao</span>
-                            </a>
-                            <br />
-                            <span class="main__left-product">95.000đ</span>
-                            <span class="main__left-product-omount"><strong>88.000đ</strong></span>
-                        </li>
+                        <c:forEach var="product" items="${promotedProducts}" varStatus="status">
+                            <c:if test="${status.index < 5}">  <%-- Chỉ hiển thị 5 sản phẩm đầu tiên --%>
+                                <li class="main__left-product-items main__left-product-items--vertical">
+                                    <a href="ProductDetail.jsp?id=${product.productID}" class="main__left-product-link">
+                                        <img src="${product.imageLink}" alt="${product.productName}" class="main__left-product-img" />
+                                        <span class="main__left-product-title">${product.productName}</span>
+                                    </a>
+                                    <br />
+                                    <span class="main__left-product"><del>${product.oldprice}đ</del></span>
+                                    <span class="main__left-product-omount"><strong>${product.price}đ</strong></span>
+                                </li>
+                            </c:if>
+                        </c:forEach>
                     </ul>
 
                     <!-- Main Left New products : Sản phẩm mới -->
                     <!-- Một số sản phẩm mới của cửa hàng - Hiển thị dưới Sản phẩm khuyến mãi -->
                     <h2 class="main__left-title main__left-margin-top">SẢN PHẨM MỚI</h2>
                     <ul class="main__left-product-list">
-                        <li class="main__left-product-items main__left-product-items--vertical  main__left-new">
-                            <img src="assets/img/SPM-1.jpg" alt="Quạt phun sương tạo ẩm" class="main__left-product-img" />
-                            <a href="#" class="main__left-product-link">
-                                <span class="main__left-product-title">Quạt phun sương tạo ẩm</span>
-                            </a>
-                            <br />
-                            <span class="main__left-product-omount"><strong>3.050.000đ</strong></span>
-                        </li>
-                        <li class="main__left-product-items main__left-product-items--vertical">
-                            <a href="#" class="main__left-product-link">
-                                <img src="assets/img/SPM-2.jpg" alt="Đèn chùm pha lê trang trí phòng khách" class="main__left-product-img" />
-                                <span class="main__left-product-title">Đèn chùm pha lê trang trí phòng khách</span>
-                            </a>
-                            <br />
-                            <span class="main__left-product-omount"><strong>6.500.000đ</strong></span>
-                        </li>
-                        <li class="main__left-product-items main__left-product-items--vertical">
-                            <a href="#" class="main__left-product-link">
-                                <img src="assets/img/SPM-3.jpg" alt="Aptomat MCB" class="main__left-product-img" />
-                                <span class="main__left-product-title">Aptomat MCB</span>
-                            </a>
-                            <br />
-                            <span class="main__left-product-omount"><strong>115.000đ</strong></span>
-                        </li>
-                        <li class="main__left-product-items main__left-product-items--vertical">
-                            <a href="#" class="main__left-product-link">
-                                <img src="assets/img/SPM-4.jpg" alt="Khoá cửa thông minh tích hợp khuôn mặt" class="main__left-product-img" />
-                                <span class="main__left-product-title">Khoá cửa thông minh tích hợp khuôn mặt</span>
-                            </a>
-                            <br />
-                            <span class="main__left-product">6.500.000đ</span>
-                            <span class="main__left-product-omount"><strong>5.500.000đ</strong></span>
-                        </li>
-                        <li class="main__left-product-items main__left-product-items--vertical">
-                            <a href="#" class="main__left-product-link">
-                                <img src="assets/img/SPM-5.jpg" alt="Công tắc gạc 6 chân 6A (2 trạng thái)" class="main__left-product-img" />
-                                <span class="main__left-product-title">Công tắc điện mạ vàng mặt vuông</span>
-                            </a>
-                            <br />
-                            <span class="main__left-product-omount"><strong>289.000đ</strong></span>
-                        </li>
+                        <c:forEach var="product" items="${newProducts}" varStatus="status">
+                            <c:if test="${status.index < 5}">
+                                <li class="main__left-product-items main__left-product-items--vertical">
+                                    <a href="ProductDetail.jsp?id=${product.productID}" class="main__left-product-link">
+                                        <img src="${product.imageLink}" alt="${product.productName}" class="main__left-product-img" />
+                                        <span class="main__left-product-title">${product.productName}</span>
+                                    </a>
+                                    <br />
+                                    <span class="main__left-product-omount"><strong>${product.price}đ</strong></span>
+                                </li>
+                            </c:if>
+                        </c:forEach>
                     </ul>
 
                     <!-- Main Left Post -->
                     <!-- Các bài báo mới - Hiển thị dưới Sản phẩm mới -->
                     <h2 class="main__left-title main__left-margin-top">BÀI VIẾT MỚI</h2>
                     <ul class="main__left-posts-list">
-                        <li class="main__left-posts-items main__left-posts-items--vertical">
-                            <img src="assets/img/BV-1.jpg" alt="Phim siêu anh hùng" class="main__left-posts-img" />
-                            <a href="#" class="main__left-posts-link">
-                                <span class="main__left-posts-title">Khóa Cửa Thông Minh: Bước Đột Phá An Ninh Thời 4.0</span>
-                            </a>
-                        </li>
-                        <li class="main__left-posts-items main__left-posts-items--vertical">
-                            <img src="assets/img/BV-2.jpg" alt="Tổng thống Trump" class="main__left-posts-img" />
-                            <a href="#" class="main__left-posts-link">
-                                <span class="main__left-posts-title">Giới Thiệu Bộ Đèn LED Thanh Hắt: Xu Hướng Mới Trong Trang Trí</span>
-                            </a>
-                        </li>
-                        <li class="main__left-posts-items main__left-posts-items--vertical">
-                            <img src="assets/img/BV-3.jpg" alt="Hình ảnh Facebook" class="main__left-posts-img" />
-                            <a href="#" class="main__left-posts-link">
-                                <span class="main__left-posts-title">Quạt Hơi Nước Hay Quạt Điều Hoà: Đâu Là Sự Lựa Chọn Hoàn Hảo?</span>
-                            </a>
-                        </li>
-                        <li class="main__left-posts-items" style="padding-bottom: 20px;"> <!-- Nội tuyến -->
-                            <img src="assets/img/BV-4.jpg" alt="Hình ảnh Galaxy S10" class="main__left-posts-img" />
-                            <a href="#" class="main__left-posts-link">
-                                <span class="main__left-posts-title">Top 10 Ổ Cắm Điện Cao Cấp Đáng Mua Nhất Hiện Nay</span>
-                            </a>
-                        </li>
+                        <c:forEach var="post" items="${latestPosts}">
+                            <li class="main__left-posts-items main__left-posts-items--vertical">
+                                <img src="${post.imageLink}" alt="${post.title}" class="main__left-posts-img" />
+                                <a href="PostDetail.jsp?id=${post.postID}" class="main__left-posts-link">
+                                    <span class="main__left-posts-title">${post.title}</span>
+                                </a>
+                            </li>
+                        </c:forEach>
                     </ul>
+
                 </div>
 
                 <!-- Main Right -->
@@ -220,269 +129,107 @@
                         </div>
                     </div>   
                     <!-- Imgage Slider end -->
+
                     <!-- Danh mục các sản phẩm quạt điện -->
-                    <!-- Fan Equipment - Quạt điện -->
                     <div class="main__right-sensor">
-                        <!-- Tiêu đề cho danh mục Thiết bị quạt -->
                         <h3 class="main__right-heading">
                             <span class="main__right-heading-title">Thiết bị quạt</span>
-                            <a href="#" class="main__right-heading-link">
+                            <a href="Category.jsp?id=TBQ" class="main__right-heading-link">
                                 Xem thêm
                                 <i class="main__right-heading-icon fa-solid fa-angle-right"></i>
                             </a>
                         </h3>
 
-                        <!-- Các sản phẩm của danh mục Thiết bị quạt -->
                         <div class="main__right-sensor-list">
-                            <div class="main__right-sensor-items">
-                                <a href="#" class="main__right-sensor-link">
-                                    <img src="assets/img/TBQ-1.jpg" alt="" class="main__right-sensor-img" />
-                                    <div class="main__right-sensor-title">Quạt tích điện</div>
-                                </a>
-                                <span class="main__right-sensor-price">195.000đ</span>
-                            </div>
-                            <div class="main__right-sensor-items">
-                                <a href="#" class="main__right-sensor-link">
-                                    <img src="assets/img/TBQ-2.jpg" alt="" class="main__right-sensor-img" />
-                                    <div class="main__right-sensor-title">Quạt hơi nước</div>
-                                </a>
-                                <span class="main__right-sensor-price">499.000đ</span>
-                            </div>
-                            <div class="main__right-sensor-items">
-                                <a href="#" class="main__right-sensor-link">
-                                    <img src="assets/img/TBQ-3.jpg" alt="" class="main__right-sensor-img" />
-                                    <div class="main__right-sensor-title">Quạt điều hoà</div>
-                                </a>
-                                <span class="main__right-sensor-price">499.000đ</span>
-                            </div>
-                            <div class="main__right-sensor-items">
-                                <a href="#" class="main__right-sensor-link">
-                                    <img src="assets/img/TBQ-4.jpg" alt="" class="main__right-sensor-img" />
-                                    <div class="main__right-sensor-title">Quạt trần treo tường</div>
-                                </a>
-                                <span class="main__right-sensor-price">800.000đ</span>
-                            </div>
-                            <div class="main__right-sensor-items">
-                                <a href="#" class="main__right-sensor-link">
-                                    <img src="assets/img/TBQ-5.jpg" alt="" class="main__right-sensor-img" />
-                                    <div class="main__right-sensor-title">Quạt treo tường</div>
-                                </a>
-                                <span class="main__right-sensor-price">180.000đ</span>
-                            </div>
-                            <div class="main__right-sensor-items">
-                                <a href="#" class="main__right-sensor-link">
-                                    <img src="assets/img/TBQ-6.jpg" alt="" class="main__right-sensor-img" />
-                                    <div class="main__right-sensor-title">Quạt cây</div>
-                                </a>
-                                <span class="main__right-sensor-price">159.000đ</span>
-                            </div>
-                            <div class="main__right-sensor-items">
-                                <a href="#" class="main__right-sensor-link">
-                                    <img src="assets/img/TBQ-7.jpg" alt="" class="main__right-sensor-img" />
-                                    <div class="main__right-sensor-title">Quạt phun sương tạo ẩm</div>
-                                </a>
-                                <span class="main__right-sensor-price">3.050.000đ</span>
-                            </div>
-                            <div class="main__right-sensor-items">
-                                <a href="#" class="main__right-sensor-link">
-                                    <img src="assets/img/TBQ-8.jpg" alt="" class="main__right-sensor-img" />
-                                    <div class="main__right-sensor-title">Quạt sàn</div>
-                                </a>
-                                <span class="main__right-sensor-price">785.000đ</span>
-                            </div>
+                            <c:forEach var="product" items="${fanProducts}">
+                                <div class="main__right-sensor-items">
+                                    <a href="ProductDetail.jsp?id=${product.productID}" class="main__right-sensor-link">
+                                        <img src="${product.imageLink}" alt="${product.productName}" class="main__right-sensor-img" />
+                                        <div class="main__right-sensor-title">${product.productName}</div>
+                                    </a>
+                                    <!-- Hiển thị giá sản phẩm -->
+                                    <span class="main__right-sensor-price">
+                                        <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="đ"/>
+                                    </span>
+                                </div>
+                            </c:forEach>
                         </div>
                     </div>
 
-                    <!-- Danh mục Thiết bị chiếu sáng -->
-                    <!-- Lighting equipment : Thiết bị chiếu sáng - Start -->
+                    <!--Danh mục Thiết bị chiếu sáng 
+                        Lighting equipment : Thiết bị chiếu sáng - Start -->
                     <div class="main__right-sensor">
-                        <!-- Tiêu đề cho danh mục Thiết bị chiếu sáng -->
                         <h3 class="main__right-heading">
                             <span class="main__right-heading-title">Thiết bị chiếu sáng</span>
-                            <a href="#" class="main__right-heading-link">
+                            <a href="Category.jsp?id=TBCS" class="main__right-heading-link">
                                 Xem thêm
                                 <i class="main__right-heading-icon fa-solid fa-angle-right"></i>
                             </a>
                         </h3>
-                        <!-- Các sản phẩm là Thiết bị chiếu sáng - Người dùng có thể trượt qua phải, trái để xem nhiều hơn -->
-                        <!-- Danh sách các sản phẩm theo thanh trượt -->
                         <div class="main__right-sensor-list swiper mySwiper1">
                             <div class="swiper-wrapper">
-                                <div class="swiper-slide">
-                                    <div class="main__right-sensor-item">
-                                        <a href="#" class="main__right-sensor-link">
-                                            <img src="assets/img/TBCS-1.jpg" alt="" class="main__right-sensor-img" />
-                                            <div class="main__right-sensor-title">Bóng đèn LED MPE LBD-50V 50W</div>
-                                        </a>
-                                        <span class="main__right-sensor-promotion">399.000đ</span>
-                                        <span class="main__right-sensor-price">290.000đ</span>
+                                <c:forEach var="product" items="${lightingProducts}">
+                                    <div class="swiper-slide">
+                                        <div class="main__right-sensor-item">
+                                            <a href="ProductDetail.jsp?id=${product.productID}" class="main__right-sensor-link">
+                                                <img src="${product.imageLink}" alt="${product.productName}" class="main__right-sensor-img" />
+                                                <div class="main__right-sensor-title">${product.productName}</div>
+                                            </a>
+                                            <span class="main__right-sensor-price">
+                                                <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="đ"/>
+                                            </span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="main__right-sensor-item">
-                                        <a href="#" class="main__right-sensor-link">
-                                            <img src="assets/img/TBCS-2.jpg" alt="" class="main__right-sensor-img" />
-                                            <div class="main__right-sensor-title">Đèn Led âm trần chống chói 7W</div>
-                                        </a>
-                                        <span class="main__right-sensor-price">115.000đ</span>
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="main__right-sensor-item">
-                                        <a href="#" class="main__right-sensor-link">
-                                            <img src="assets/img/TBCS-3.jpg" alt="" class="main__right-sensor-img" />
-                                            <div class="main__right-sensor-title">Đèn pha LED 200w cao cấp ngoài trời</div>
-                                        </a>
-                                        <span class="main__right-sensor-promotion">900.000đ</span>
-                                        <span class="main__right-sensor-price">795.000đ</span>
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="main__right-sensor-item">
-                                        <a href="#" class="main__right-sensor-link">
-                                            <img src="assets/img/TBCS-4.jpg" alt="" class="main__right-sensor-img" />
-                                            <div class="main__right-sensor-title">Bộ đèn led tuýp T8 thuỷ tinh 1,2m</div>
-                                        </a>
-                                        <span class="main__right-sensor-price">160.000đ</span>
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="main__right-sensor-item">
-                                        <a href="#" class="main__right-sensor-link">
-                                            <img src="assets/img/TBCS-5.jpg" alt="" class="main__right-sensor-img" />
-                                            <div class="main__right-sensor-title">Bóng đèn LED kẹp bàn 60 bóng LED</div>
-                                        </a>
-                                        <span class="main__right-sensor-price">96.000đ</span>
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="main__right-sensor-item">
-                                        <a href="#" class="main__right-sensor-link">
-                                            <img src="assets/img/TBCS-6.jpg" alt="" class="main__right-sensor-img" />
-                                            <div class="main__right-sensor-title">Đèn LED âm đất 36W</div>
-                                        </a>
-                                        <span class="main__right-sensor-price">860.000đ</span>
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="main__right-sensor-item">
-                                        <a href="#" class="main__right-sensor-link">
-                                            <img src="assets/img/TBCS-7.jpg" alt="" class="main__right-sensor-img" />
-                                            <div class="main__right-sensor-title">Đèn LED thanh hắt</div>
-                                        </a>
-                                        <span class="main__right-sensor-price">640.000đ</span>
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="main__right-sensor-item">
-                                        <a href="#" class="main__right-sensor-link">
-                                            <img src="assets/img/TBCS-8.jpg" alt="" class="main__right-sensor-img" />
-                                            <div class="main__right-sensor-title">Đèn LED rọi 12W mắt ếch</div>
-                                        </a>
-                                        <span class="main__right-sensor-price">270.000đ</span>
-                                    </div>
-                                </div>                           
-                            </div>                            
-
-                            <!-- Các nút bấm để người dùng kích vào xem những sản phẩm trong thanh trượt -->
+                                </c:forEach>
+                            </div>
                             <div class="main__right-sensor-prev">
                                 <i class="fa-solid fa-angle-left sensor-button-prev"></i>
                             </div>
                             <div class="main__right-sensor-next">
                                 <i class="fa-solid fa-angle-right sensor-button-next"></i>
                             </div>
-
-                        </div>                   
-
+                        </div>
                     </div>
-                    <!-- Lighting equipment : Thiết bị chiếu sáng - End -->
+                    <!--Lighting equipment : Thiết bị chiếu sáng - End -->
 
                     <!-- Danh mục các sản phẩm Công tắc điện -->
                     <!-- Electronic Switch : Công tắc điện - Start -->
                     <div class="main__right-sensor">
-                        <!-- Tiêu đề của Công tắc điện -->
                         <h3 class="main__right-heading">
                             <span class="main__right-heading-title">Công tắc điện</span>
-                            <a href="#" class="main__right-heading-link">
+                            <a href="Category.jsp?id=CTD" class="main__right-heading-link">
                                 Xem thêm
                                 <i class="main__right-heading-icon fa-solid fa-angle-right"></i>
                             </a>
                         </h3>
-                        <!-- Các sản phẩm Công tắc điện - Người dùng có thể trượt qua phải, trái để xem nhiều hơn -->
-                        <!-- Danh sách các sản phẩm theo thanh trượt -->
                         <div class="main__right-sensor-list swiper mySwiper2">
                             <div class="swiper-wrapper">
-                                <div class="swiper-slide">
-                                    <div class="main__right-sensor-item">
-                                        <a href="#" class="main__right-sensor-link">
-                                            <img src="assets/img/CTD-1.jpg" alt="" class="main__right-sensor-img" />
-                                            <div class="main__right-sensor-title">Bộ 3 công tắc điện 1 chiều Size S</div>
-                                        </a>
-                                        <span class="main__right-sensor-price">175.000đ</span>
+                                <c:forEach var="product" items="${electricalSwitchProducts}">
+                                    <div class="swiper-slide">
+                                        <div class="main__right-sensor-item">
+                                            <a href="ProductDetail.jsp?id=${product.productID}" class="main__right-sensor-link">
+                                                <img src="${product.imageLink}" alt="${product.productName}" class="main__right-sensor-img" />
+                                                <div class="main__right-sensor-title">${product.productName}</div>
+                                            </a>
+                                            <span class="main__right-sensor-price">
+                                                <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="đ"/>
+                                            </span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="main__right-sensor-item">
-                                        <a href="#" class="main__right-sensor-link">
-                                            <img src="assets/img/CTD-2.jpg" alt="" class="main__right-sensor-img" />
-                                            <div class="main__right-sensor-title">Công tắc 2 nút và 1 ổ cắm đôi âm tường</div>
-                                        </a>
-                                        <span class="main__right-sensor-price">180.000đ</span>
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="main__right-sensor-item">
-                                        <a href="#" class="main__right-sensor-link">
-                                            <img src="assets/img/CTD-3.jpg" alt="" class="main__right-sensor-img" />
-                                            <div class="main__right-sensor-title">Công tắc điện quả nhót</div>
-                                        </a>
-                                        <span class="main__right-sensor-price">9.000đ</span>
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="main__right-sensor-item">
-                                        <a href="#" class="main__right-sensor-link">
-                                            <img src="assets/img/CTD-4.jpg" alt="" class="main__right-sensor-img" />
-                                            <div class="main__right-sensor-title">Công tắc ON-OFF điện 3 pha</div>
-                                        </a>
-                                        <span class="main__right-sensor-price">125.000đ</span>
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="main__right-sensor-item">
-                                        <a href="#" class="main__right-sensor-link">
-                                            <img src="assets/img/CTD-5.jpg" alt="" class="main__right-sensor-img" />
-                                            <div class="main__right-sensor-title">Công tắc điện điều khiển từ xa qua remote</div>
-                                        </a>
-                                        <span class="main__right-sensor-price">550.000đ</span>
-                                    </div>
-                                </div>
-                                <div class="swiper-slide">
-                                    <div class="main__right-sensor-item">
-                                        <a href="#" class="main__right-sensor-link">
-                                            <img src="assets/img/CTD-6.jpg" alt="" class="main__right-sensor-img" />
-                                            <div class="main__right-sensor-title">Công tắc bập bênh 2 chân</div>
-                                        </a>
-                                        <span class="main__right-sensor-price">8.000đ</span>
-                                    </div>
-                                </div>
-
-                            </div>                            
-
-                            <!-- Các nút bấm để người dùng kích vào xem những sản phẩm trong thanh trượt -->
+                                </c:forEach>
+                            </div>
                             <div class="main__right-electrical-prev">
                                 <i class="fa-solid fa-angle-left electrical-button-prev"></i>
                             </div>
                             <div class="main__right-electrical-next">
                                 <i class="fa-solid fa-angle-right electrical-button-next"></i>
                             </div>
-
-                        </div>                   
-
+                        </div>
                     </div>
                     <!-- Electronic Switch : Công tắc điện - End -->
 
                     <!-- Thiết bị thông minh - Start -->
+                    <!-- Main Right Smart Devices -->
                     <div class="main__right-sensor">
                         <h3 class="main__right-heading">
                             <span class="main__right-heading-title">Thiết bị thông minh</span>
@@ -493,66 +240,20 @@
                         </h3>
 
                         <div class="main__right-sensor-list">
-                            <div class="main__right-sensor-items">
-                                <a href="#" class="main__right-sensor-link">
-                                    <img src="assets/img/TBTM-1.jpg" alt="" class="main__right-sensor-img" />
-                                    <div class="main__right-sensor-title">Đèn LED sạc không dây cảm ứng siêu mỏng</div>
-                                </a>
-                                <span class="main__right-sensor-promotion">299.000đ</span>
-                                <span class="main__right-sensor-price">190.000đ</span>
-                            </div>
-                            <div class="main__right-sensor-items">
-                                <a href="#" class="main__right-sensor-link">
-                                    <img src="assets/img/TBTM-2.jpg" alt="" class="main__right-sensor-img" />
-                                    <div class="main__right-sensor-title">Đèn LED cảm ứng chuyển động PIR</div>
-                                </a>
-                                <span class="main__right-sensor-price">115.000đ</span>
-                            </div>
-                            <div class="main__right-sensor-items">
-                                <a href="#" class="main__right-sensor-link">
-                                    <img src="assets/img/TBTM-3.jpg" alt="" class="main__right-sensor-img" />
-                                    <div class="main__right-sensor-title">Công tắc điện cảm ứng</div>
-                                </a>
-                                <span class="main__right-sensor-promotion">666.000đ</span>
-                                <span class="main__right-sensor-price">520.000đ</span>
-                            </div>
-                            <div class="main__right-sensor-items">
-                                <a href="#" class="main__right-sensor-link">
-                                    <img src="assets/img/TBTM-4.jpg" alt="" class="main__right-sensor-img" />
-                                    <div class="main__right-sensor-title">Khoá cửa thông minh tích hợp camera AB-24K</div>
-                                </a>
-                                <span class="main__right-sensor-price">4.160.000đ</span>
-                            </div>
-                            <div class="main__right-sensor-items">
-                                <a href="#" class="main__right-sensor-link">
-                                    <img src="assets/img/TBTM-5.jpg" alt="" class="main__right-sensor-img" />
-                                    <div class="main__right-sensor-title">Cảm biến khói Panasonic</div>
-                                </a>
-                                <span class="main__right-sensor-price">960.000đ</span>
-                            </div>
-                            <div class="main__right-sensor-items">
-                                <a href="#" class="main__right-sensor-link">
-                                    <img src="assets/img/TBTM-6.jpg" alt="" class="main__right-sensor-img" />
-                                    <div class="main__right-sensor-title">Cảm biến chuyển động</div>
-                                </a>
-                                <span class="main__right-sensor-price">360.000đ</span>
-                            </div>
-                            <div class="main__right-sensor-items">
-                                <a href="#" class="main__right-sensor-link">
-                                    <img src="assets/img/TBTM-7.jpg" alt="" class="main__right-sensor-img" />
-                                    <div class="main__right-sensor-title">Rèm thông minh điều khiển từ xa</div>
-                                </a>
-                                <span class="main__right-sensor-price">2.140.000đ</span>
-                            </div>
-                            <div class="main__right-sensor-items">
-                                <a href="#" class="main__right-sensor-link">
-                                    <img src="assets/img/TBTM-8.jpg" alt="" class="main__right-sensor-img" />
-                                    <div class="main__right-sensor-title">Cảm biến cửa SmartLock</div>
-                                </a>
-                                <span class="main__right-sensor-price">700.000đ</span>
-                            </div>
+                            <c:forEach var="product" items="${smartDevices}">
+                                <div class="main__right-sensor-items">
+                                    <a href="ProductDetail.jsp?id=${product.productID}" class="main__right-sensor-link">
+                                        <img src="${product.imageLink}" alt="${product.productName}" class="main__right-sensor-img" />
+                                        <div class="main__right-sensor-title">${product.productName}</div>
+                                    </a>
+                                    <span class="main__right-sensor-price">
+                                        <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="đ"/>
+                                    </span>
+                                </div>
+                            </c:forEach>
                         </div>
                     </div>
+
                     <!-- Thiết bị thông minh - End -->
                 </div>
                 <div class="clear"></div>
