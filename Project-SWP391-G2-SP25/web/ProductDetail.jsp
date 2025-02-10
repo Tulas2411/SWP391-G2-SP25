@@ -1,4 +1,4 @@
-<%-- 
+    <%-- 
     Document   : HomePage
     Created on : Jan 18, 2025, 12:47:06 AM
     Author     : Tung Duong
@@ -62,8 +62,8 @@
         <%@ include file="./Public/header.jsp" %>
         <%
             UsersDAO uDAO = new UsersDAO();
-            CategoryDAO cDAO = new CategoryDAO();
-            List<Category> categories = cDAO.getAllCategories();
+            ProductsDAO pDAO = new ProductsDAO();
+            List<Category> categories = pDAO.getAllCategories();
             request.setAttribute("categories", categories);
             String categoriesJson = new Gson().toJson(categories);
             Products p = (Products) request.getAttribute("product");
@@ -125,7 +125,7 @@
                             <div class="switch-container">
                              <input type="hidden" id="product-id" value="<%= p.getProductID() %>">
                              <input type="hidden" id="product-img" value="<%= p.getImageLink() %>">
-                             <input type="hidden" id="product-pro" value="<%= p.isIsPromoted() %>">
+                             <input type="hidden" id="product-pro" value="<%= p.getIsPromoted() %>">
                             <h2 id="product-name"><%= p.getProductName() %></h2>
                             <label class="switch">
                                 <input type="checkbox" id="edit-toggle">
@@ -154,9 +154,11 @@
                                     <%
                                             for (int id : listr.keySet()) {
                                                 Reviews r = listr.get(id);
-                                                rate += r.getRating();
+                                                if (r != null) { // Kiểm tra r có tồn tại không
+                                                    rate += r.getRating();
+                                                }
                                             }
-                                            rate = rate/listr.size();
+                                            rate = listr.size() > 0 ? rate / listr.size() : 0; // Tránh chia cho 0
                                             for (int i = 0; i < rate; i++) {
                                     %>
                                     <i class="fa fa-star"></i>
@@ -166,11 +168,11 @@
                                     <i class="fa fa-star-o"></i>
                                     <%}%>
                                 </div>
-                                <a class="review-link" href="#"><%=listr.size()%> Review(s) | Add your review</a>
+                                <a class="review-link" href="#"><%= (listr != null) ? listr.size() : 0 %> Review(s) | Add your review</a>
                             </div>
                             <%}%>
                             <div>
-                                <h3 class="product-price"><%= p.getPrice() %></h3><del class="product-old-price"> <%= p.getOldprice()%></del>
+                                <h3 class="product-price"><%= p.getPriceFormat() %></h3><del class="product-old-price"> <%= p.getOldPriceFormat()%></del>
                                 <span class="product-available">Còn Hàng</span>
                             </div>
                                 <p id="Description"><%= p.getDescription() %></p>
@@ -193,7 +195,7 @@
 
                             <ul class="product-links">
                                 <li>Danh mục:</li>
-                                <li><a href="#" id="Category"><%= cDAO.getCategoryByID(p.getCategoryID()).getCategoryName() %></a></li>
+                                <li><a href="#" id="Category"><%= pDAO.GetCategorybyID(p.getCategoryID()).getCategoryName() %></a></li>
                             </ul>
                             <ul class="product-links">
                                 <li>Số lượng tồn kho:</li>
@@ -256,8 +258,16 @@
 
                                 <!-- tab3  -->
                                 <div id="tab3" class="tab-pane fade in">
+                                    
                                     <div class="row">
                                         <!-- Rating -->
+                                        <%
+                                        if (listr == null || listr.size() == 0) {
+                                    %>
+                                        <div class="col-md-9">
+                                            <p>Sản phậm hiện chưa có đánh giá. Hãy là người đầu tiên để lại đánh giá của sản phẩm này</p>
+                                        </div>
+                                        <%}else{%>
                                         <div class="col-md-3">
                                             <div id="rating">
                                                 <div class="rating-avg">
@@ -380,8 +390,8 @@
                                                 <ul class="reviews">
                                                     <% 
                                                         int reviewsPerPage = 4;
-                                                        int totalReviews = listr.size();
-                                                        int totalPages = (int) Math.ceil((double) totalReviews / reviewsPerPage);
+                                                        int totalReviews = (listr != null) ? listr.size() : 0;
+                                                        int totalPages = (totalReviews > 0) ? (int) Math.ceil((double) totalReviews / reviewsPerPage) : 0;
                 
                                                         // Lấy số trang từ request, mặc định là trang 1
                                                         String pageParam = request.getParameter("page");
@@ -434,7 +444,7 @@
                                             </div>
                                         </div>
                                         <!-- /Reviews -->
-
+                                        <%}%>
                                         <!-- Review Form -->
                                         <div class="col-md-3">
                                             <div id="review-form">
@@ -457,7 +467,7 @@
                                             </div>
                                         </div>
                                         <!-- /Review Form -->
-                                    </div>
+                                    </div>                                               
                                 </div>
                                 <!-- /tab3  -->
                             </div>
@@ -662,6 +672,11 @@
         success: function(data) {
             if (data.success) {
                 alert('Thông tin sản phẩm đã được cập nhật thành công');
+                // Tắt chế độ chỉnh sửa
+                document.getElementById('edit-toggle').checked = false;
+
+                // Kích hoạt sự kiện change để khôi phục giao diện
+                document.getElementById('edit-toggle').dispatchEvent(new Event('change'));
             } else {
                 alert('Có lỗi xảy ra khi cập nhật thông tin sản phẩm' + data.error);
                 console.error(data.error);  // Log lỗi trả về từ server
@@ -735,11 +750,11 @@ document.getElementById('edit-toggle').addEventListener('change', function() {
         // Lặp qua danh sách categories từ biến JavaScript
         window.categories.forEach(category => {
             const option = document.createElement('option');
-            option.value = category.CategoryID; // Sử dụng CategoryID làm giá trị
-            option.textContent = category.CategoryName; // Hiển thị CategoryName
+            option.value = category.categoryID; // Sử dụng CategoryID làm giá trị
+            option.textContent = category.categoryName; // Hiển thị CategoryName
 
             // So sánh tên category để chọn mục hiện tại
-            if (category.CategoryName === currentCategoryName) {
+            if (category.categoryName === currentCategoryName) {
                 option.selected = true;
             }
             categorySelect.appendChild(option);

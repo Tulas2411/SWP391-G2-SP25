@@ -4,7 +4,9 @@
  */
 package Model;
 
+import java.text.NumberFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  *
@@ -137,6 +139,16 @@ public class Products {
     public void setCreateAt(String createAt) {
         this.createAt = createAt;
     }
+    public String getPriceFormat() {
+        NumberFormat currencyFormat = NumberFormat.getInstance(new Locale("vi", "VN"));
+        String formattedPrice = currencyFormat.format(price) + "đ";
+        return formattedPrice;
+    }
     
+    public String getOldPriceFormat() {
+        NumberFormat currencyFormat = NumberFormat.getInstance(new Locale("vi", "VN"));
+        String formattedPrice = currencyFormat.format(oldprice) + "đ";
+        return formattedPrice;
+    }
     
 }

@@ -1,5 +1,6 @@
 package DAO;
 
+import Model.Category;
 import Model.Products;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -172,6 +173,64 @@ public class ProductsDAO extends DBContext {
         ps.setBoolean(9, product.getIsPromoted());
         ps.setFloat(10, product.getOldprice());
         ps.setString(11, product.getCreateAt());
+    }
+    
+    public boolean updateProduct1(Products product) {
+        String sql = "UPDATE Products SET CategoryID = ?, ProductName = ?, Description = ?, Provider = ?, Price = ?, WarrantyPeriod = ?, Amount = ?, ImageLink = ?, IsPromoted = ?, OldPrice = ? WHERE ProductID = ?";
+
+        try (PreparedStatement pre = connection.prepareStatement(sql)) {
+            pre.setString(1, product.getCategoryID());
+            pre.setString(2, product.getProductName());
+            pre.setString(3, product.getDescription());
+            pre.setString(4, product.getProvider());
+            pre.setFloat(5, product.getPrice());
+            pre.setString(6, product.getWarrantyPeriod());
+            pre.setInt(7, product.getAmount());
+            pre.setString(8, product.getImageLink());
+            pre.setBoolean(9, product.getIsPromoted());
+            pre.setFloat(10, product.getOldprice());
+            pre.setInt(11, product.getProductID());
+            
+            
+            pre.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.out.println("Error updating product: " + e.getMessage());
+            return false;
+        }
+    }
+    
+    public Category GetCategorybyID(String id) {
+        try {
+            String sql = "Select * from Category where CategoryID = " + "'" + id + "'";
+            Statement st = connection.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            if (rs.next()) {
+                Category b = new Category();
+                b.setCategoryID(rs.getString("CategoryID"));
+                b.setCategoryName(rs.getString("CategoryName"));
+                return b;
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+
+    }
+    
+    public List<Category> getAllCategories() {
+        List<Category> categories = new ArrayList<>();
+        try {
+            String query = "SELECT * FROM Category";
+            PreparedStatement ps = connection.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                categories.add(new Category(rs.getString("CategoryID"), rs.getString("CategoryName")));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return categories;
     }
 
     public static void main(String[] args) {
