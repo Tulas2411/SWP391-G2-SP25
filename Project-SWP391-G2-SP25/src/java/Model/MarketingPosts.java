@@ -85,5 +85,17 @@ public class MarketingPosts {
     public void setImageLink(String imageLink) {
         this.imageLink = imageLink;
     }
-    
+
+    @Override
+    public String toString() {
+        return "MarketingPosts{" +
+               "postID=" + postID +
+               ", title='" + title + '\'' +
+               ", content='" + content + '\'' +
+               ", author=" + author +
+               ", createDate='" + createDate + '\'' +
+               ", status='" + status + '\'' +
+               ", imageLink='" + imageLink + '\'' +
+               '}';
+    }
 }

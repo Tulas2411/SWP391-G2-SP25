@@ -13,21 +13,40 @@ import java.util.Map;
 import java.util.Vector;
 
 public class MarketingPostsDAO extends DBContext {
+//
+//    public List<MarketingPosts> getAllMarketingPosts() {
+//        List<MarketingPosts> postList = new ArrayList<>();
+//        String sql = "SELECT * FROM MarketingPosts";
+//
+//        try (Statement st = connection.createStatement(); ResultSet rs = st.executeQuery(sql)) {
+//            while (rs.next()) {
+//                // Sử dụng phương thức extractMarketingPostFromResultSet để tạo đối tượng từ ResultSet
+//                MarketingPosts post = extractMarketingPostFromResultSet(rs);
+//                postList.add(post); // Thêm đối tượng vào danh sách
+//            }
+//        } catch (SQLException e) {
+//            System.out.println("Error fetching marketing posts: " + e.getMessage());
+//        }
+//
+//        return postList; // Trả về danh sách các bài viết
+//    }
 
-    public Map<Integer, MarketingPosts> getAllMarketingPosts() {
-        Map<Integer, MarketingPosts> postList = new HashMap<>();
-        String sql = "SELECT * FROM MarketingPosts";
+    public Map<Integer, MarketingPosts> getAllMarketingPostsAsMap() {
+    Map<Integer, MarketingPosts> postMap = new HashMap<>();
+    String sql = "SELECT * FROM MarketingPosts";
 
-        try (Statement st = connection.createStatement(); ResultSet rs = st.executeQuery(sql)) {
-            while (rs.next()) {
-                MarketingPosts post = extractMarketingPostFromResultSet(rs);
-                postList.put(post.getPostID(), post);
-            }
-        } catch (SQLException e) {
-            System.out.println("Error fetching marketing posts: " + e.getMessage());
+    try (Statement st = connection.createStatement(); ResultSet rs = st.executeQuery(sql)) {
+        while (rs.next()) {
+            // Sử dụng phương thức extractMarketingPostFromResultSet để tạo đối tượng từ ResultSet
+            MarketingPosts post = extractMarketingPostFromResultSet(rs);
+            postMap.put(post.getPostID(), post); // Thêm vào map với postID làm key
         }
-        return postList;
+    } catch (SQLException e) {
+        System.out.println("Error fetching marketing posts: " + e.getMessage());
     }
+
+    return postMap; // Trả về map chứa các bài viết
+}
 
     public Vector<MarketingPosts> getAllMarketingPostsAsVector() {
         Vector<MarketingPosts> posts = new Vector<>();
@@ -59,7 +78,7 @@ public class MarketingPostsDAO extends DBContext {
         }
         return posts;
     }
-    
+
     public MarketingPosts getMarketingPostByID(int postID) {
         String sql = "SELECT * FROM MarketingPosts WHERE PostID = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -135,4 +154,11 @@ public class MarketingPostsDAO extends DBContext {
         ps.setString(5, post.getStatus());
         ps.setString(6, post.getImageLink());
     }
+//public static void main(String[] args) {
+//        MarketingPostsDAO dao = new MarketingPostsDAO();
+//        List<MarketingPosts> list = dao.getAllMarketingPosts();
+//        for (MarketingPosts o : list) {
+//            System.out.println(o);
+//        }
+//    }
 }

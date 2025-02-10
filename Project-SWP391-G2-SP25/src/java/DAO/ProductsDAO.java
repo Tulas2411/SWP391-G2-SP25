@@ -16,18 +16,34 @@ import java.util.Vector;
 public class ProductsDAO extends DBContext {
 
     public Map<Integer, Products> getAllProducts() {
-        Map<Integer, Products> productList = new HashMap<>();
-        String sql = "SELECT * FROM Products";
-
-        try (Statement st = connection.createStatement(); ResultSet rs = st.executeQuery(sql)) {
+        Map<Integer, Products> list = new HashMap<>();
+        try {
+            String sql = "SELECT * "
+                    + "FROM Products";
+            Statement st = connection.createStatement();
+            ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
-                Products product = extractProductFromResultSet(rs);
-                productList.put(product.getProductID(), product);
+                Products b = new Products();
+                b.setProductID(rs.getInt("ProductID"));
+                b.setCategoryID(rs.getString("CategoryID"));
+                b.setProductName(rs.getString("ProductName"));
+                b.setDescription(rs.getString("Description"));
+                b.setProvider(rs.getString("Provider"));
+                b.setPrice(rs.getFloat("Price"));
+                b.setWarrantyPeriod(rs.getString("WarrantyPeriod"));
+                b.setAmount(rs.getInt("Amount"));
+                b.setImageLink(rs.getString("ImageLink"));
+                b.setIsPromoted(rs.getBoolean("IsPromoted"));
+                b.setCreateAt(rs.getDate("CreateAt"));
+                b.setOldprice(rs.getInt("OldPrice"));
+                list.put(b.getProductID(), b);
             }
-        } catch (SQLException e) {
-            System.out.println("Error fetching products: " + e.getMessage());
+            rs.close();
+            st.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
-        return productList;
+        return list;
     }
 
     public Vector<Products> getAllProductsAsVector() {
@@ -156,7 +172,6 @@ public class ProductsDAO extends DBContext {
         product.setAmount(rs.getInt("Amount"));
         product.setImageLink(rs.getString("ImageLink"));
         product.setIsPromoted(rs.getBoolean("IsPromoted"));
-        product.setCreateAt(rs.getString("CreateAt"));
         product.setOldprice(rs.getFloat("OldPrice"));
         return product;
     }
@@ -166,13 +181,98 @@ public class ProductsDAO extends DBContext {
         ps.setString(2, product.getProductName());
         ps.setString(3, product.getDescription());
         ps.setString(4, product.getProvider());
-        ps.setFloat(5, product.getPrice());
+        ps.setFloat(5, product.getPriceFloat());
         ps.setString(6, product.getWarrantyPeriod());
         ps.setInt(7, product.getAmount());
         ps.setString(8, product.getImageLink());
         ps.setBoolean(9, product.getIsPromoted());
-        ps.setFloat(10, product.getOldprice());
-        ps.setString(11, product.getCreateAt());
+        ps.setFloat(10, product.getOldPriceFloat());
+    }
+    
+    public Products GetProductbyID(int id) {
+        try {
+            String sql = "Select * from Products where ProductID = " + id;
+            Statement st = connection.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            if (rs.next()) {
+                Products b = new Products();
+                b.setProductID(rs.getInt("ProductID"));
+                b.setCategoryID(rs.getString("CategoryID"));
+                b.setProductName(rs.getString("ProductName"));
+                b.setDescription(rs.getString("Description"));
+                b.setProvider(rs.getString("Provider"));
+                b.setPrice(rs.getFloat("Price"));
+                b.setWarrantyPeriod(rs.getString("WarrantyPeriod"));
+                b.setAmount(rs.getInt("Amount"));
+                b.setImageLink(rs.getString("ImageLink"));
+                b.setIsPromoted(rs.getBoolean("IsPromoted"));
+                b.setCreateAt(rs.getDate("CreateAt"));
+                b.setOldprice(rs.getInt("OldPrice"));
+                return b;
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+
+    }
+    
+    public boolean updateProduct1(Products product) {
+        String sql = "UPDATE Products SET CategoryID = ?, ProductName = ?, Description = ?, Provider = ?, Price = ?, WarrantyPeriod = ?, Amount = ?, ImageLink = ?, IsPromoted = ?, OldPrice = ? WHERE ProductID = ?";
+
+        try (PreparedStatement pre = connection.prepareStatement(sql)) {
+            pre.setString(1, product.getCategoryID());
+            pre.setString(2, product.getProductName());
+            pre.setString(3, product.getDescription());
+            pre.setString(4, product.getProvider());
+            pre.setFloat(5, product.getPriceFloat());
+            pre.setString(6, product.getWarrantyPeriod());
+            pre.setInt(7, product.getAmount());
+            pre.setString(8, product.getImageLink());
+            pre.setBoolean(9, product.getIsPromoted());
+            pre.setFloat(10, product.getOldPriceFloat());
+            pre.setInt(11, product.getProductID());
+            
+            
+            pre.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.out.println("Error updating product: " + e.getMessage());
+            return false;
+        }
+    }
+    
+    public Category GetCategorybyID(String id) {
+        try {
+            String sql = "Select * from Category where CategoryID = " + "'" + id + "'";
+            Statement st = connection.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            if (rs.next()) {
+                Category b = new Category();
+                b.setCategoryID(rs.getString("CategoryID"));
+                b.setCategoryName(rs.getString("CategoryName"));
+                return b;
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+
+    }
+    
+    public List<Category> getAllCategories() {
+        List<Category> categories = new ArrayList<>();
+        try {
+            String query = "SELECT * FROM Category";
+            PreparedStatement ps = connection.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                categories.add(new Category(rs.getString("CategoryID"), rs.getString("CategoryName")));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return categories;
     }
     
     public boolean updateProduct1(Products product) {
@@ -234,16 +334,10 @@ public class ProductsDAO extends DBContext {
     }
 
     public static void main(String[] args) {
-        ProductsDAO productsDAO = new ProductsDAO();
-        List<Products> promotedList = productsDAO.getPromotedProducts();
-
-        if (promotedList.isEmpty()) {
-            System.out.println("No promoted products found.");
-        } else {
-            for (Products product : promotedList) {
-                System.out.println("Promoted Product: " + product.getProductName() + " - Price: " + product.getPrice());
-            }
-        }
+        ProductsDAO p = new ProductsDAO();
+        Products p1 = p.GetProductbyID(1);
+        p1.setProductName("Quat dien aaa");
+        System.out.println(p.getAllCategories());
     }
 
 }
