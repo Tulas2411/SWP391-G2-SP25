@@ -151,6 +151,16 @@ public class Products {
     public void setCreateAt(Date createAt) {
         this.createAt = createAt;
     }
+    public String getPriceFormat() {
+        NumberFormat currencyFormat = NumberFormat.getInstance(new Locale("vi", "VN"));
+        String formattedPrice = currencyFormat.format(price) + "đ";
+        return formattedPrice;
+    }
     
+    public String getOldPriceFormat() {
+        NumberFormat currencyFormat = NumberFormat.getInstance(new Locale("vi", "VN"));
+        String formattedPrice = currencyFormat.format(oldprice) + "đ";
+        return formattedPrice;
+    }
     
 }

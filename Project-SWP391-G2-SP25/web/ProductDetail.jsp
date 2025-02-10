@@ -172,7 +172,8 @@
                             </div>
                             <%}%>
                             <div>
-                                <h3 class="product-price"><%= p.getPrice() %></h3><del class="product-old-price"> <%= p.getOldPrice()%></del>
+                                <h3 class="product-price"><%= p.getPriceFormat() %></h3><del class="product-old-price"> <%= p.getOldPriceFormat()%></del>
+
                                 <span class="product-available">Còn Hàng</span>
                             </div>
                                 <p id="Description"><%= p.getDescription() %></p>
