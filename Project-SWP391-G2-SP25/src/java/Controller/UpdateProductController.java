@@ -106,7 +106,7 @@ public class UpdateProductController extends HttpServlet {
             product.setIsPromoted(productPro);
             product.setProductName(productName);
             product.setPrice(productPrice);
-            product.setOldPrice(productOldPrice);
+            product.setOldprice(productOldPrice);
             product.setDescription(productDescription);
             product.setCategoryID(productCategory);
             product.setAmount(productAmount);
