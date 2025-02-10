@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -158,6 +159,73 @@ public class ProductsDAO extends DBContext {
             System.out.println("Error removing product: " + e.getMessage());
             return false;
         }
+    }
+
+    public List<Products> getProductsByPaging(int index, int pageSize, String name, List<String> categoryIds, String orderBy) {
+        List<Products> productList = new LinkedList<>();
+        String sql = "SELECT * FROM Products WHERE ProductName like ? ";
+        if (categoryIds.size() != 0) {
+            sql += " AND ";
+            String conditionCategory = "(";
+            for (String categoryId : categoryIds) {
+                conditionCategory += "CategoryID = ? OR ";
+            }
+            conditionCategory = conditionCategory.substring(0, conditionCategory.length() - 3) + ")";
+            sql += conditionCategory;
+        }
+        sql += " ORDER BY " + orderBy;
+        sql += " LIMIT ? OFFSET ? ";
+        System.out.println(sql);
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            int indexQuery = 1;
+            ps.setString(indexQuery++, "%" + name + "%");
+            if (categoryIds.size() != 0) {
+                for (String categoryId : categoryIds) {
+                    ps.setString(indexQuery++, categoryId);
+                }
+            }
+//            ps.setString(indexQuery++, orderBy);
+            ps.setInt(indexQuery++, pageSize);
+            ps.setInt(indexQuery++, (index - 1) * pageSize);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    productList.add(extractProductFromResultSet(rs));
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching products by category: " + e.getMessage());
+        }
+        return productList;
+    }
+
+    public int getTotalProducts(String name, List<String> categoryIds, String orderBy) {
+        String sql = "SELECT COUNT(*) FROM Products WHERE ProductName like ? ";
+        if (categoryIds.size() != 0) {
+            sql += " AND ";
+            String conditionCategory = "(";
+            for (String categoryId : categoryIds) {
+                conditionCategory += "CategoryID = ? OR ";
+            }
+            conditionCategory = conditionCategory.substring(0, conditionCategory.length() - 3) + ")";
+            sql += conditionCategory;
+        }
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            int indexQuery = 1;
+            ps.setString(indexQuery++, "%" + name + "%");
+            if (categoryIds.size() != 0) {
+                for (String categoryId : categoryIds) {
+                    ps.setString(indexQuery++, categoryId);
+                }
+            }
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching products by category: " + e.getMessage());
+        }
+        return 0;
     }
 
     private Products extractProductFromResultSet(ResultSet rs) throws SQLException {
