@@ -28,7 +28,7 @@ public class UsersDAO extends DBContext{
                 u.setFirstName(rs.getString("FirstName"));
                 u.setLastName(rs.getString("LastName"));
                 u.setGender(rs.getString("Gender"));
-                u.setDateOfBirth(rs.getDate("DateOfBirth"));
+                u.setDateOfBirth(rs.getString("DateOfBirth"));
                 u.setUserName(rs.getString("UserName"));
                 u.setPassword(rs.getString("Password"));
                 u.setRole(rs.getString("Role"));
@@ -58,7 +58,36 @@ public class UsersDAO extends DBContext{
                 u.setFirstName(rs.getString("FirstName"));
                 u.setLastName(rs.getString("LastName"));
                 u.setGender(rs.getString("Gender"));
-                u.setDateOfBirth(rs.getDate("DateOfBirth"));
+                u.setDateOfBirth(rs.getString("DateOfBirth"));
+                u.setUserName(rs.getString("UserName"));
+                u.setPassword(rs.getString("Password"));
+                u.setRole(rs.getString("Role"));
+                u.setEmail(rs.getString("Email"));
+                u.setPhoneNumber(rs.getString("PhoneNumber"));
+                u.setAddress(rs.getString("Address"));
+                
+                return u;
+            }
+        } catch (Exception e) {
+            System.out.println("getUserByAcc: " + e.getMessage());
+        }
+        return null;
+    }
+    
+    public Users getUserByEmail(String email) {
+        try {
+            String strSQL = "select * from Users where Email = ?";
+            PreparedStatement stm = connection.prepareStatement(strSQL);
+            stm.setString(1, email);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+
+                Users u = new Users();
+                u.setUserID(rs.getInt("UserID"));
+                u.setFirstName(rs.getString("FirstName"));
+                u.setLastName(rs.getString("LastName"));
+                u.setGender(rs.getString("Gender"));
+                u.setDateOfBirth(rs.getString("DateOfBirth"));
                 u.setUserName(rs.getString("UserName"));
                 u.setPassword(rs.getString("Password"));
                 u.setRole(rs.getString("Role"));

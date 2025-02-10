@@ -1,76 +1,91 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
 <!DOCTYPE html>
 <html lang="en">
-
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>Login Page</title>
-        <script src="https://cdn.tailwindcss.com"></script>
-        <style>
-            .nav-link {
-                transition: all 0.3s ease;
-            }
 
-            .nav-link:hover {
-                transform: translateY(-5px);
-                text-align: center;
-            }
-        </style>
+        <!-- Font Icon -->
+        <link rel="stylesheet"
+              href="fonts/material-icon/css/material-design-iconic-font.min.css">
 
+        <!-- Main css -->
+        <link rel="stylesheet" href="css/style.css">
     </head>
+    <body>
+        <input type="hidden" id="status" value="<%= request.getAttribute("status")%>">
 
-    <body class="bg-gray-100">
-        
+        <div class="main">
 
+            <!-- Sing in  Form -->
+            <section class="sign-in">
+                <div class="container">
+                    <div class="signin-content">
+                        <div class="signin-image">
+                            <figure>
+                                <img src="images/ImageLogin.jpg" alt="sing up image">
+                            </figure>
+                            <a href="Register.jsp" class="signup-image-link">Create an
+                                account</a>
+                        </div>
 
-        <!-- Login Form -->
-        <div class="flex items-center justify-center max-h-screen mt-10">
-            <div class="w-full max-w-sm bg-white p-8 border border-gray-300 rounded-lg shadow-lg">
-                <h2 class="text-center text-2xl font-bold text-gray-800">Login</h2>
-                <form class="mt-8 space-y-6" method="POST" action="MainController">
-                    <input type="hidden" name="action" value="Login">
-                    <div>
-                        <label for="identifier" class="block text-sm font-medium text-gray-700"> Email <span class="text-red-500">*</span></label>
-                        <input id="identifier" name="identifier" type="text" value="${cookie.cuser.value}" autocomplete="identifier" required
-                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
-                    </div>
-                    <div>
-                        <label for="password" class="block text-sm font-medium text-gray-700">Password <span class="text-red-500">*</span></label>
-                        <input id="password" value="${cookie.cpass.value}" name="password" type="password" autocomplete="current-password" required
-                               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
-                    </div>
-                        <div class="flex items-center justify-between w-full">
-                            <div class="flex items-center">
-                                <input id="remember_me" name="remember_me" type="checkbox" ${(cookie.crem != null ? 'checked' : '')}
-                                       class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded">
-                                <label for="remember_me" class="ml-2 block text-sm text-gray-900">Remember me</label>
-                            </div>
-                            <div>
-                                <a href="FogotPassword.jsp" class="text-blue-600 hover:underline">Quên mật khẩu</a>
+                        <div class="signin-form">
+                            <h2 class="form-title">Login</h2>
+                            <form method="post" action="LoginServlet" class="register-form"
+                                  id="login-form">
+                                <div class="form-group">
+                                    <label for="username"><i
+                                            class="zmdi zmdi-account material-icons-name"></i></label> <input
+                                        type="text" name="username" id="username"
+                                        placeholder="Your Email" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="password"><i class="zmdi zmdi-lock"></i></label> <input
+                                        type="password" name="password" id="password"
+                                        placeholder="Password" />
+                                </div>
+                                <div class="form-group">
+                                    <input type="checkbox" name="remember-me" id="remember-me"
+                                           class="agree-term" /> <label for="remember-me"
+                                           class="label-agree-term"><span><span></span></span>Remember me</label>
+                                </div>
+                                <div class="form-group form-button">
+                                    <input type="submit" name="signin" id="signin"
+                                           class="form-submit" value="Log in" />
+                                </div>
+                            </form>
+                            <div class="social-login">
+                                <span class="social-label">Or login with</span>
+                                <ul class="socials">
+                                    <li><a href="#"><i
+                                                class="display-flex-center zmdi zmdi-facebook"></i></a></li>
+                                    <li><a href="#"><i
+                                                class="display-flex-center zmdi zmdi-twitter"></i></a></li>
+                                    <li><a href="#"><i
+                                                class="display-flex-center zmdi zmdi-google"></i></a></li>
+                                </ul>
                             </div>
                         </div>
-                    <div>
-                        <button type="submit" id="loginButton"
-                                class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-700 hover:bg-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">Login</button>
-                    </div>  
-                    <!-- Hiển thị thông báo lỗi nếu có -->
-                    <div class="text-red-500 text-sm mt-2 text-center">
-                        <c:if test="${not empty ERROR}">
-                            ${ERROR}
-                        </c:if>
                     </div>
-                </form>
-                <p class="mt-4 text-center text-gray-600">Chưa có tài khoản? <a href="Register.jsp"
-                                                                                class="text-blue-600 hover:underline">Đăng ký ngay</a></p>
-            </div>
+                </div>
+            </section>
+
         </div>
 
-
-
-
+        <!-- JS -->
+        <script src="vendor/jquery/jquery.min.js"></script>
+        <script src="js/main.js"></script>
+        <script src ="http://inpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <link rel ="stylesheet" href="alert/dist/sweetalert.css">
+        
+        <script type="text/javascript">
+            var status = document.getElementById("status").value;
+            if(status == "failed"){
+                swal("Sorry", "Wrong Username or Password","error");
+            }
+            
+        </script>
     </body>
-
+    <!-- This templates was made by Colorlib (https://colorlib.com) -->
 </html>
