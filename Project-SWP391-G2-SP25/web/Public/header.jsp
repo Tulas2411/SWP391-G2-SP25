@@ -177,7 +177,7 @@
                         </a>
                     </li>
                     <li class="header__navbar-items header__navbar-items-vertical header__navbar-has-child">
-                        <a href="#" class="header__navbar-link">
+                        <a href="productsList" class="header__navbar-link">
                             Sản phẩm
                             <div class=" icon-none">
                                 <i class="fa-solid fa-angle-down"></i>

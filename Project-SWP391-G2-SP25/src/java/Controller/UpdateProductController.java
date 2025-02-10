@@ -101,7 +101,8 @@ public class UpdateProductController extends HttpServlet {
             String productProvider = jsonObject.getString("productProvider");
 
             // Tạo đối tượng Product để cập nhật
-            Products product = pDAO.GetProductbyID(productId);
+            Products product = pDAO.getProductByID(productId);
+
             product.setImageLink(productImg);
             product.setIsPromoted(productPro);
             product.setProductName(productName);

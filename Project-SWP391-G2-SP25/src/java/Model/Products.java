@@ -24,12 +24,13 @@ public class Products {
     private int amount;
     private String imageLink;
     private Boolean isPromoted;
-    private Date createAt;
+    private String createAt;
+    private Date CreateAt;
 
     public Products() {
     }
 
-    public Products(int productID, String categoryID, String productName, String description, String provider, float price, float oldprice, String warrantyPeriod, int amount, String imageLink, Boolean isPromoted, Date createAt) {
+    public Products(int productID, String categoryID, String productName, String description, String provider, float price, float oldprice, String warrantyPeriod, int amount, String imageLink, Boolean isPromoted, String createAt, Date CreateAt) {
         this.productID = productID;
         this.categoryID = categoryID;
         this.productName = productName;
@@ -42,7 +43,10 @@ public class Products {
         this.imageLink = imageLink;
         this.isPromoted = isPromoted;
         this.createAt = createAt;
+        this.CreateAt = CreateAt;
     }
+
+
 
     public int getProductID() {
         return productID;
@@ -84,13 +88,7 @@ public class Products {
         this.provider = provider;
     }
 
-    public String getPrice() {
-        NumberFormat currencyFormat = NumberFormat.getInstance(new Locale("vi", "VN"));
-        String formattedPrice = currencyFormat.format(price) + "đ";
-        return formattedPrice;
-    }
-    
-    public float getPriceFloat() {
+    public float getPrice() {
         return price;
     }
 
@@ -98,19 +96,30 @@ public class Products {
         this.price = price;
     }
 
-    public String getOldPrice() {
-        NumberFormat currencyFormat = NumberFormat.getInstance(new Locale("vi", "VN"));
-        String formattedPrice = currencyFormat.format(oldprice) + "đ";
-        return formattedPrice;
-    }
-    
-    public float getOldPriceFloat() {
+    public float getOldprice() {
         return oldprice;
     }
 
     public void setOldprice(float oldprice) {
         this.oldprice = oldprice;
     }
+
+    public String getCreateAt() {
+        return createAt;
+    }
+
+    public void setCreateAt(String createAt) {
+        this.createAt = createAt;
+    }
+
+    public Date getCreateAtDate() {
+        return CreateAt;
+    }
+
+    public void setCreateAt(Date CreateAt) {
+        this.CreateAt = CreateAt;
+    }
+
 
     public String getWarrantyPeriod() {
         return warrantyPeriod;
@@ -143,14 +152,16 @@ public class Products {
     public void setIsPromoted(Boolean isPromoted) {
         this.isPromoted = isPromoted;
     }
-
-    public Date getCreateAt() {
-        return createAt;
-    }
-
-    public void setCreateAt(Date createAt) {
-        this.createAt = createAt;
+    public String getPriceFormat() {
+        NumberFormat currencyFormat = NumberFormat.getInstance(new Locale("vi", "VN"));
+        String formattedPrice = currencyFormat.format(price) + "đ";
+        return formattedPrice;
     }
     
+    public String getOldPriceFormat() {
+        NumberFormat currencyFormat = NumberFormat.getInstance(new Locale("vi", "VN"));
+        String formattedPrice = currencyFormat.format(oldprice) + "đ";
+        return formattedPrice;
+    }
     
 }
