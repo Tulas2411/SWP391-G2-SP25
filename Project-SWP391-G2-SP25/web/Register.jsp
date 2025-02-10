@@ -1,107 +1,112 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
-
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Register Page</title>
-        <script src="https://cdn.tailwindcss.com"></script>
-        <style>
-            .nav-link {
-                transition: all 0.3s ease;
-            }
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Register</title>
 
-            .nav-link:hover {
-                transform: translateY(-5px);
-                text-align: center;
-            }
-        </style>
+        <!-- Font Icon -->
+        <link rel="stylesheet"
+              href="fonts/material-icon/css/material-design-iconic-font.min.css">
 
+        <!-- Main css -->
+        <link rel="stylesheet" href="css/style.css">
     </head>
-
-    <body class="bg-gray-100">
+    <body>
         
+        <input type="hidden" id="status" value="<%= request.getAttribute("status")%>">
 
-            
+        <div class="main">
 
-            <!-- Register Form -->
-            <div class="flex flex-col items-center justify-center max-h-screen mt-10">
-                <h2 class="text-2xl font-bold mb-6 text-center">Register Account</h2>
-                <div class="w-full max-w-lg p-6 bg-white rounded-lg shadow-lg border-2 border-zinc-500">
-                    <form class="form-container" method="POST" action="MainController">
-                        <input type="hidden" name="action" value="Create">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                            <div>
-                                <label for="first-name" class="block text-sm font-medium text-zinc-700">First Name<span class="text-red-500">*</span></label>
-                                <input type="text" id="first-name" name="firstName"
-                                       class="mt-1 block w-full rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500" required>
-                            </div>
-                            <div>
-                                <label for="last-name" class="block text-sm font-medium text-zinc-700">Last Name <span class="text-red-500">*</span></label>
-                                <input type="text" id="last-name" name="lastName"
-                                       class="mt-1 block w-full rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500" required>
-                            </div>
-                        </div> 
-                        <div class="mb-4">
-                            <label for="user-name" class="block text-sm font-medium text-zinc-700">User Name <span class="text-red-500">*</span></label>
-                            <input type="text" id="user-name" name="userName"
-                                   class="mt-1 block w-full rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500" required>
+            <!-- Sign up form -->
+            <section class="signup">
+                <div class="container">
+                    <div class="signup-content">
+                        <div class="signup-form">
+                            <h2 class="form-title">Sign up</h2>
+
+                            <form method="post" action="RegisterServlet" class="register-form"
+                                  id="register-form">
+                                <div class="form-group">
+                                    <label for="firstname"><i
+                                            class="zmdi zmdi-account material-icons-name"></i></label> <input
+                                        type="text" name="firstname" id="firstname" placeholder="First Name" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="lastname"><i class="zmdi zmdi-account material-icons-name"></i></label> <input
+                                        type="text" name="lastname" id="lastname" placeholder="Last Name" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="DateOfBirth"><i class="zmdi zmdi-calendar-alt"></i></label> <input
+                                        type="date" name="DateOfBirth" id="DateOfBirth" placeholder="Date Of Birth" />
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="email"><i class="zmdi zmdi-email"></i></label> <input
+                                        type="email" name="email" id="email" placeholder="Your Email" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="pass"><i class="zmdi zmdi-lock"></i></label> <input
+                                        type="password" name="password" id="password" placeholder="Password" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="re-pass"><i class="zmdi zmdi-lock-outline"></i></label>
+                                    <input type="password" name="re_pass" id="re_pass"
+                                           placeholder="Repeat your password" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="contact"><i class="zmdi zmdi-phone"></i></label>
+                                    <input type="text" name="contact" id="contact"
+                                           placeholder="Phone Number" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="address"><i class="zmdi zmdi-pin"></i></label>
+                                    <input type="text" name="address" id="address"
+                                           placeholder="Address" />
+                                </div>
+                                <div class="form-group">
+                                    <input type="checkbox" name="agree-term" id="agree-term"
+                                           class="agree-term" /> <label for="agree-term"
+                                           class="label-agree-term"><span><span></span></span>I
+                                        agree all statements in <a href="#" class="term-service">Terms
+                                            of service</a></label>
+                                </div>
+                                <div class="form-group form-button">
+                                    <input type="submit" name="signup" id="signup"
+                                           class="form-submit" value="Register" />
+                                </div>
+                            </form>
                         </div>
-                        <div class="mb-4">
-                            <label for="email" class="block text-sm font-medium text-zinc-700">E Mail <span class="text-red-500">*</span></label>
-                            <input type="email" id="email" name="email"
-                                   class="mt-1 block w-full rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500" required>
+                        <div class="signup-image">
+                            <figure>
+                                <img src="images/ImageLogin.jpg" alt="sing up image">
+                            </figure>
+                            <a href="Login.jsp" class="signup-image-link">I am already
+                                member</a>
                         </div>
-                        <div class="mb-4">
-                            <label for="gender" class="block text-sm font-medium text-zinc-700">Gender <span class="text-red-500">*</span></label>
-                            <div class="mt-1">
-                                <input type="radio" id="male" name="gender" value="male" required>
-                                <label for="male" class="text-zinc-700">Male</label>
-                                <input type="radio" id="female" name="gender" value="female" class="ml-4" required>
-                                <label for="female" class="text-zinc-700">Female</label>
-                            </div>
-                        </div>
-                        <div class="mb-4">
-                            <label for="phone" class="block text-sm font-medium text-zinc-700">Phone Number <span class="text-red-500">*</span></label>
-                            <input type="number" id="phone" name="phone"
-                                   class="mt-1 block w-full rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="address" class="block text-sm font-medium text-zinc-700">Address <span class="text-red-500">*</span></label>
-                            <input type="text" id="address" name="address"
-                                   class="mt-1 block w-full rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="password" class="block text-sm font-medium text-zinc-700">Password <span class="text-red-500">*</span></label>
-                            <input type="password" id="password" name="password"
-                                   class="mt-1 block w-full rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500" required>
-                        </div>
-                        <div class="mb-6">
-                            <label for="confirm-password" class="block text-sm font-medium text-zinc-700">Confirm Password <span class="text-red-500">*</span></label>
-                            <input type="password" id="confirm-password" name="confirmPassword"
-                                   class="mt-1 block w-full rounded-md shadow-sm p-2 focus:ring-indigo-500 focus:border-indigo-500" required>
-                        </div>
-                        <div>
-                            <button type="submit"
-                                    class="w-full bg-red-700 text-white py-2 rounded-md hover:bg-red-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50">REGISTER</button>
-                        </div>
-                        <!-- Hiển thị thông báo lỗi nếu có -->
-                        <div class="text-red-500 text-sm mt-2 text-center">
-                        <c:if test="${not empty ERROR}">
-                            ${ERROR}
-                        </c:if>
                     </div>
-                    <p class="mt-4 text-center text-gray-600">Đã có tài khoản? <a href="Login.jsp" class="text-blue-600 hover:underline">Đăng nhập ngay</a></p>
-                </form>
+                </div>
+            </section>
 
-            </div>
+
         </div>
+        <!-- JS -->
+        <script src="vendor/jquery/jquery.min.js"></script>
+        <script src="js/main.js"></script>
+        <script src ="http://inpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <link rel ="stylesheet" href="alert/dist/sweetalert.css">
+        
+        <script type="text/javascript">
+            var status = document.getElementById("status").value;
+            if(status == "success"){
+                swal("Congrats", "Account Created Successfully","success");
+            }
+            
+        </script>
 
 
 
     </body>
-    
-
+    <!-- This templates was made by Colorlib (https://colorlib.com) -->
 </html>
