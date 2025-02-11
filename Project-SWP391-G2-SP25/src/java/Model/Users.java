@@ -22,6 +22,7 @@ public class Users {
     private String email;
     private String phoneNumber;
     private String address;
+    private boolean status;
 
     public Users() {
     }
@@ -126,6 +127,14 @@ public class Users {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
     
 }
