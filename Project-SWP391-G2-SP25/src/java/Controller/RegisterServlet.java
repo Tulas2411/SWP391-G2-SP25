@@ -74,6 +74,10 @@ public class RegisterServlet extends HttpServlet {
             throws ServletException, IOException {
         String FirstName = request.getParameter("firstname");
         String LastName = request.getParameter("lastname");
+
+        String UserName = request.getParameter("username");
+        String Gender = request.getParameter("gender");
+
         String DateOfBirth = request.getParameter("DateOfBirth");
         String Email = request.getParameter("email");
         String Password = request.getParameter("password");
@@ -84,14 +88,18 @@ public class RegisterServlet extends HttpServlet {
 
         try {
             con = makeConnection(); // Use the makeConnection method for connection
-            PreparedStatement pst = con.prepareStatement("insert into Users(FirstName, LastName, DateOfBirth, Email, Password, PhoneNumber, Address) values(?, ?, ?, ?, ?, ?, ?) ");
+
+            PreparedStatement pst = con.prepareStatement("insert into Users(FirstName, LastName, UserName, Gender, DateOfBirth, Email, Password, Role, PhoneNumber, Address) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ");
             pst.setString(1, FirstName);
             pst.setString(2, LastName);
-            pst.setString(3, DateOfBirth);
-            pst.setString(4, Email);
-            pst.setString(5, Password);
-            pst.setString(6, PhoneNumber);
-            pst.setString(7, Address);
+            pst.setString(3, UserName);
+            pst.setString(4, Gender);
+            pst.setString(5, DateOfBirth);
+            pst.setString(6, Email);
+            pst.setString(7, Password);
+            pst.setString(8, "Customer");
+            pst.setString(9, PhoneNumber);
+            pst.setString(10, Address);
             
             int rowCount = pst.executeUpdate();
             dispatcher = request.getRequestDispatcher("Register.jsp");
@@ -138,4 +146,6 @@ public class RegisterServlet extends HttpServlet {
         return conn;
     }
 
+
 }
+

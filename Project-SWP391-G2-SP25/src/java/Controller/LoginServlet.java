@@ -56,7 +56,9 @@ public class LoginServlet extends HttpServlet {
             ResultSet rs = pst.executeQuery();
             if(rs.next()){
                 session.setAttribute("name", rs.getString("username"));
-                dispatcher = request.getRequestDispatcher("HomePage.jsp");
+
+                dispatcher = request.getRequestDispatcher("home");
+
             } else {
                 request.setAttribute("status", "failed");
                 dispatcher = request.getRequestDispatcher("Login.jsp");
@@ -86,4 +88,6 @@ public class LoginServlet extends HttpServlet {
         }
         return conn;
     }
+
 }
+
