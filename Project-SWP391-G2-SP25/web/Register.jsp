@@ -38,6 +38,7 @@
                                         type="text" name="lastname" id="lastname" placeholder="Last Name" />
                                 </div>
                                 <div class="form-group">
+
                                     <label for="username"><i class="zmdi zmdi-account material-icons-name"></i></label> <input
                                         type="text" name="username" id="username" placeholder="User Name" />
                                 </div>
@@ -48,7 +49,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="DateOfBirth"><i class="zmdi zmdi-calendar-alt"></i></label> <input
+                     <label for="DateOfBirth"><i class="zmdi zmdi-calendar-alt"></i></label> <input
                                         type="date" name="DateOfBirth" id="DateOfBirth" placeholder="Date Of Birth" />
                                 </div>
                                 

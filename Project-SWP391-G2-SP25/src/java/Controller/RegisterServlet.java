@@ -74,8 +74,10 @@ public class RegisterServlet extends HttpServlet {
             throws ServletException, IOException {
         String FirstName = request.getParameter("firstname");
         String LastName = request.getParameter("lastname");
+
         String UserName = request.getParameter("username");
         String Gender = request.getParameter("gender");
+
         String DateOfBirth = request.getParameter("DateOfBirth");
         String Email = request.getParameter("email");
         String Password = request.getParameter("password");
@@ -86,6 +88,7 @@ public class RegisterServlet extends HttpServlet {
 
         try {
             con = makeConnection(); // Use the makeConnection method for connection
+
             PreparedStatement pst = con.prepareStatement("insert into Users(FirstName, LastName, UserName, Gender, DateOfBirth, Email, Password, Role, PhoneNumber, Address) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ");
             pst.setString(1, FirstName);
             pst.setString(2, LastName);
@@ -143,4 +146,6 @@ public class RegisterServlet extends HttpServlet {
         return conn;
     }
 
+
 }
+
