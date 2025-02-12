@@ -207,7 +207,7 @@
                                 <li><a href="#" id="WarrantyPeriod"><%= p.getWarrantyPeriod() %></a></li>
                             </ul>
                             <ul class="product-links">
-                                <li>Thời gian bảo hành:</li>
+                                <li>Nhà cung cấp:</li>
                                 <li><a href="#" id="Provider"><%= p.getProvider() %></a></li>
                             </ul>
                             <button id="save-button" style="display:none;">Lưu</button>
