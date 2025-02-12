@@ -33,7 +33,7 @@
                         <a href="#"  class="header__introduce-account-link"> Chính sách bảo mật</a>
                     </li>
                     <li class="header__introduce-account-items">
-                        <a href="#"  class="header__introduce-account-link"> Đăng nhập</a>
+                        <a href="Login.jsp"  class="header__introduce-account-link"> Đăng nhập</a>
                     </li>
                 </ul>
             </div>
