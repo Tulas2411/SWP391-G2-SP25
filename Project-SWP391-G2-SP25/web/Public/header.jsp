@@ -30,10 +30,10 @@
                         <a href="#" class="header__introduce-account-link"> Tài khoản</a>
                     </li>
                     <li class="header__introduce-account-items header__introduce-account-items--vertical">
-                        <a href="#"  class="header__introduce-account-link"> Chính sách bảo mật</a>
+                        <a href="BaoMat.jsp"  class="header__introduce-account-link"> Chính sách bảo mật</a>
                     </li>
                     <li class="header__introduce-account-items">
-                        <a href="#"  class="header__introduce-account-link"> Đăng nhập</a>
+                        <a href="Login.jsp"  class="header__introduce-account-link"> Đăng nhập</a>
                     </li>
                 </ul>
             </div>
@@ -177,7 +177,7 @@
                         </a>
                     </li>
                     <li class="header__navbar-items header__navbar-items-vertical header__navbar-has-child">
-                        <a href="#" class="header__navbar-link">
+                        <a href="productsList" class="header__navbar-link">
                             Sản phẩm
                             <div class=" icon-none">
                                 <i class="fa-solid fa-angle-down"></i>

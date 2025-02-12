@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -160,6 +161,73 @@ public class ProductsDAO extends DBContext {
         }
     }
 
+    public List<Products> getProductsByPaging(int index, int pageSize, String name, List<String> categoryIds, String orderBy) {
+        List<Products> productList = new LinkedList<>();
+        String sql = "SELECT * FROM Products WHERE ProductName like ? ";
+        if (categoryIds.size() != 0) {
+            sql += " AND ";
+            String conditionCategory = "(";
+            for (String categoryId : categoryIds) {
+                conditionCategory += "CategoryID = ? OR ";
+            }
+            conditionCategory = conditionCategory.substring(0, conditionCategory.length() - 3) + ")";
+            sql += conditionCategory;
+        }
+        sql += " ORDER BY " + orderBy;
+        sql += " LIMIT ? OFFSET ? ";
+        System.out.println(sql);
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            int indexQuery = 1;
+            ps.setString(indexQuery++, "%" + name + "%");
+            if (categoryIds.size() != 0) {
+                for (String categoryId : categoryIds) {
+                    ps.setString(indexQuery++, categoryId);
+                }
+            }
+//            ps.setString(indexQuery++, orderBy);
+            ps.setInt(indexQuery++, pageSize);
+            ps.setInt(indexQuery++, (index - 1) * pageSize);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    productList.add(extractProductFromResultSet(rs));
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching products by category: " + e.getMessage());
+        }
+        return productList;
+    }
+
+    public int getTotalProducts(String name, List<String> categoryIds, String orderBy) {
+        String sql = "SELECT COUNT(*) FROM Products WHERE ProductName like ? ";
+        if (categoryIds.size() != 0) {
+            sql += " AND ";
+            String conditionCategory = "(";
+            for (String categoryId : categoryIds) {
+                conditionCategory += "CategoryID = ? OR ";
+            }
+            conditionCategory = conditionCategory.substring(0, conditionCategory.length() - 3) + ")";
+            sql += conditionCategory;
+        }
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            int indexQuery = 1;
+            ps.setString(indexQuery++, "%" + name + "%");
+            if (categoryIds.size() != 0) {
+                for (String categoryId : categoryIds) {
+                    ps.setString(indexQuery++, categoryId);
+                }
+            }
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching products by category: " + e.getMessage());
+        }
+        return 0;
+    }
+
     private Products extractProductFromResultSet(ResultSet rs) throws SQLException {
         Products product = new Products();
         product.setProductID(rs.getInt("ProductID"));
@@ -181,12 +249,12 @@ public class ProductsDAO extends DBContext {
         ps.setString(2, product.getProductName());
         ps.setString(3, product.getDescription());
         ps.setString(4, product.getProvider());
-        ps.setFloat(5, product.getPriceFloat());
+        ps.setFloat(5, product.getPrice());
         ps.setString(6, product.getWarrantyPeriod());
         ps.setInt(7, product.getAmount());
         ps.setString(8, product.getImageLink());
         ps.setBoolean(9, product.getIsPromoted());
-        ps.setFloat(10, product.getOldPriceFloat());
+        ps.setFloat(10, product.getOldprice());
     }
     
     public Products GetProductbyID(int id) {
@@ -225,12 +293,12 @@ public class ProductsDAO extends DBContext {
             pre.setString(2, product.getProductName());
             pre.setString(3, product.getDescription());
             pre.setString(4, product.getProvider());
-            pre.setFloat(5, product.getPriceFloat());
+            pre.setFloat(5, product.getPrice());
             pre.setString(6, product.getWarrantyPeriod());
             pre.setInt(7, product.getAmount());
             pre.setString(8, product.getImageLink());
             pre.setBoolean(9, product.getIsPromoted());
-            pre.setFloat(10, product.getOldPriceFloat());
+            pre.setFloat(10, product.getOldprice());
             pre.setInt(11, product.getProductID());
             
             
@@ -274,6 +342,7 @@ public class ProductsDAO extends DBContext {
         }
         return categories;
     }
+    
 
     public static void main(String[] args) {
         ProductsDAO p = new ProductsDAO();

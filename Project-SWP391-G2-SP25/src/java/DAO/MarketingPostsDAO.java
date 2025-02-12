@@ -14,23 +14,23 @@ import java.util.Map;
 import java.util.Vector;
 
 public class MarketingPostsDAO extends DBContext {
-//
-//    public List<MarketingPosts> getAllMarketingPosts() {
-//        List<MarketingPosts> postList = new ArrayList<>();
-//        String sql = "SELECT * FROM MarketingPosts";
-//
-//        try (Statement st = connection.createStatement(); ResultSet rs = st.executeQuery(sql)) {
-//            while (rs.next()) {
-//                // Sử dụng phương thức extractMarketingPostFromResultSet để tạo đối tượng từ ResultSet
-//                MarketingPosts post = extractMarketingPostFromResultSet(rs);
-//                postList.add(post); // Thêm đối tượng vào danh sách
-//            }
-//        } catch (SQLException e) {
-//            System.out.println("Error fetching marketing posts: " + e.getMessage());
-//        }
-//
-//        return postList; // Trả về danh sách các bài viết
-//    }
+
+    public List<MarketingPosts> getAllMarketingPosts() {
+        List<MarketingPosts> postList = new ArrayList<>();
+        String sql = "SELECT * FROM MarketingPosts";
+
+        try (Statement st = connection.createStatement(); ResultSet rs = st.executeQuery(sql)) {
+            while (rs.next()) {
+                // Sử dụng phương thức extractMarketingPostFromResultSet để tạo đối tượng từ ResultSet
+                MarketingPosts post = extractMarketingPostFromResultSet(rs);
+                postList.add(post); // Thêm đối tượng vào danh sách
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching marketing posts: " + e.getMessage());
+        }
+
+        return postList; // Trả về danh sách các bài viết
+    }
 
     public Map<Integer, MarketingPosts> getAllMarketingPostsAsMap() {
     Map<Integer, MarketingPosts> postMap = new HashMap<>();

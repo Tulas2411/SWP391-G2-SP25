@@ -298,6 +298,12 @@
     height: auto;
 }
 
+.main__left-search-box {
+    height: 32px;
+    outline: none;
+    border: 1px solid #dfdfdf;
+    padding-left: 10px;
+}
 /* Main Left Category */
 .main__left-category-list {
     background-color: #fff;
@@ -605,6 +611,21 @@
 .main__right-sensor-price {
     padding: 0 8px;
     color: #d10000;
+    font-size: 1.4rem;
+    font-weight: bold;
+}
+
+.main__right-sensor-price {
+    padding: 0 8px;
+    color: #d10000;
+    font-size: 1.4rem;
+    font-weight: bold;
+}
+
+.main__right-sensor-button {
+    padding: 0 8px;
+    color: #fff;
+    background-color: #EE4D2D;
     font-size: 1.4rem;
     font-weight: bold;
 }

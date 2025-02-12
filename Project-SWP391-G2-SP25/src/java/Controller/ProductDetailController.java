@@ -61,8 +61,9 @@ public class ProductDetailController extends HttpServlet {
         int id = Integer.parseInt(request.getParameter("id"));
         ProductsDAO pDAO = new ProductsDAO();
         ReviewsDAO r = new ReviewsDAO();
-        Products p = pDAO.GetProductbyID(id);
-        Map<Integer, Reviews> listr = r.getAllReviewsbyProductID(id);
+
+        Products p = pDAO.getProductByID(id);
+        Map<Integer, Reviews> listr = r.getAllReviewsByProductID(id);
         request.setAttribute("product", p);
         request.setAttribute("listr", listr);
         request.getRequestDispatcher("ProductDetail.jsp").forward(request, response);
