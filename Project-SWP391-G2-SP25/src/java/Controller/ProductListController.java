@@ -62,9 +62,6 @@ public class ProductListController extends HttpServlet {
             }
         }
 
-        if ((name != null && !name.isBlank()) || categoryIds.size() != 0) {
-            index = 1;
-        }
 
         int sizeList = dbProducts.getTotalProducts(name, categoryIds, orderBy);
         int total = (sizeList % PAGE_SIZE == 0) ? (sizeList / PAGE_SIZE) : ((sizeList / PAGE_SIZE) + 1);
@@ -77,6 +74,11 @@ public class ProductListController extends HttpServlet {
         List<Products> productses = dbProducts.getProductsByPaging(index, PAGE_SIZE, name, categoryIds, orderBy);
         request.setAttribute("products", dbProducts.getProductsByPaging(index, PAGE_SIZE, name, categoryIds, orderBy));
         request.setAttribute("orderByList", ProductOrderBy.values());
+        
+        request.setAttribute("name", name);
+        request.setAttribute("category", categoriesList);
+        request.setAttribute("orderBy", orderBy);
+        
         request.getRequestDispatcher("ProductsList.jsp").forward(request, response);
     }
 
