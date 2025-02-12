@@ -204,7 +204,7 @@
                         <div class="main__right-sensor-list">
                             <c:forEach var="product" items="${products}">
                                 <div class="main__right-sensor-items">
-                                    <a href="product-detail?id=${product.productID}" class="main__right-sensor-link">
+                                    <a href="ProductDetailController?id=${product.productID}" class="main__right-sensor-link">
                                         <img src="${product.imageLink}" height="200px" alt="${product.productName}" class="main__right-sensor-img" />
                                         <div class="main__right-sensor-title">${product.productName}</div>
                                     </a>
