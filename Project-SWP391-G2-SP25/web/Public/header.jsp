@@ -30,7 +30,7 @@
                         <a href="#" class="header__introduce-account-link"> Tài khoản</a>
                     </li>
                     <li class="header__introduce-account-items header__introduce-account-items--vertical">
-                        <a href="#"  class="header__introduce-account-link"> Chính sách bảo mật</a>
+                        <a href="BaoMat.jsp"  class="header__introduce-account-link"> Chính sách bảo mật</a>
                     </li>
                     <li class="header__introduce-account-items">
                         <a href="Login.jsp"  class="header__introduce-account-link"> Đăng nhập</a>

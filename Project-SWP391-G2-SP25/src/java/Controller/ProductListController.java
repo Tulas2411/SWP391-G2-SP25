@@ -6,7 +6,6 @@ package Controller;
 
 import DAO.CategoryDAO;
 import DAO.ProductsDAO;
-import Enum.ProductOrderBy;
 import Model.Category;
 import Model.Products;
 import java.io.IOException;
