@@ -4,6 +4,8 @@
  */
 package Model;
 
+import java.util.Date;
+
 /**
  *
  * @author Tùng Dương
@@ -13,14 +15,14 @@ public class MarketingPosts {
     private String title;
     private String content;
     private int author;
-    private String createDate;
+    private Date createDate;
     private String status;
     private String imageLink;
 
     public MarketingPosts() {
     }
 
-    public MarketingPosts(int postID, String title, String content, int author, String createDate, String status, String imageLink) {
+    public MarketingPosts(int postID, String title, String content, int author, Date createDate, String status, String imageLink) {
         this.postID = postID;
         this.title = title;
         this.content = content;
@@ -62,11 +64,11 @@ public class MarketingPosts {
         this.author = author;
     }
 
-    public String getCreateDate() {
+    public Date getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(String createDate) {
+    public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
 
@@ -97,5 +99,9 @@ public class MarketingPosts {
                ", status='" + status + '\'' +
                ", imageLink='" + imageLink + '\'' +
                '}';
+    }
+
+    public void setAuthor(String admin) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

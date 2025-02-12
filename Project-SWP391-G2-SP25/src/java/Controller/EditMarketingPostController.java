@@ -8,6 +8,7 @@ import DAO.*;
 import DAO.MarketingPostsDAO;
 import Model.MarketingPosts;
 import DAO.DBContext;
+import jakarta.servlet.RequestDispatcher;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -21,23 +22,17 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  *
  * @author Admin
  */
-@WebServlet(name = "MarketingPostController", urlPatterns = {"/PostList"})
-public class MarketingPostController extends HttpServlet {
+@WebServlet(name = "EditMarketingPostController", urlPatterns = {"/EditMarketingPostController"})
+public class EditMarketingPostController extends HttpServlet {
 
-    private MarketingPostsDAO postsDAO;
-
-    @Override
-    public void init() throws ServletException {
-        // Kết nối cơ sở dữ liệu và khởi tạo DAO
-        Connection connection = DBContext.makeConnection();
-//        MarketingPostsDAO = new MarketingPostsDAO(connection);
-    }
-
+      private MarketingPostsDAO dao = new MarketingPostsDAO();
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -55,60 +50,40 @@ public class MarketingPostController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet MarketingPostController</title>");
+            out.println("<title>Servlet EditMarketingPostController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet MarketingPostController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet EditMarketingPostController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        MarketingPostsDAO DAO = new MarketingPostsDAO();
-        Map<Integer, MarketingPosts> marketingPostMap = DAO.getAllMarketingPostsAsMap();
-        List<MarketingPosts> post = marketingPostMap.values().stream().toList();
-        request.setAttribute("posts", post);
-        request.getRequestDispatcher("PostList.jsp").forward(request, response);
-        processRequest(request, response);
-
+        int postID = Integer.parseInt(request.getParameter("postID"));
+        MarketingPosts post = dao.getMarketingPostByID(postID);
+        if(post != null){
+            request.setAttribute("post", post);
+            RequestDispatcher dispatcher = request.getRequestDispatcher("UpdateMarketingPost");
+            dispatcher.forward(request, response);
+        }else{
+            response.getWriter().println("Bai viet khong ton tai!");
+        }
+        
     }
 
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 
 }
