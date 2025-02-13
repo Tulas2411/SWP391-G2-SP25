@@ -32,7 +32,8 @@ import java.util.Date;
 @WebServlet(name = "EditMarketingPostController", urlPatterns = {"/EditMarketingPostController"})
 public class EditMarketingPostController extends HttpServlet {
 
-      private MarketingPostsDAO dao = new MarketingPostsDAO();
+    private MarketingPostsDAO dao = new MarketingPostsDAO();
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -44,35 +45,46 @@ public class EditMarketingPostController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet EditMarketingPostController</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet EditMarketingPostController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
+        try {
+            // Lấy dữ liệu từ form gửi lên
+            int postID = Integer.parseInt(request.getParameter("postID"));
+            String title = request.getParameter("title");
+            String content = request.getParameter("content");
+            int author = Integer.parseInt(request.getParameter("author"));
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm"); // Định dạng của input datetime-local
+            Date createDate = sdf.parse(request.getParameter("createDate"));
+            String status = request.getParameter("status");
+            String imageLink = request.getParameter("imageLink");
 
+            // Tạo đối tượng MarketingPosts
+            MarketingPosts post = new MarketingPosts(postID, title, content, author, createDate, status, imageLink);
+
+            // Gọi DAO để cập nhật dữ liệu
+            MarketingPostsDAO dao = new MarketingPostsDAO();
+            boolean isUpdate = dao.updateMarketingPost(post);
+
+            if (isUpdate) {
+                // Nếu cập nhật thành công, chuyển hướng về trang danh sách
+                response.sendRedirect("PostList?success=true");
+            } else {
+                // Nếu lỗi, quay lại form cập nhật với thông báo lỗi
+                request.setAttribute("errorMessage", "Cập nhật bài viết thất bại!");
+                request.getRequestDispatcher("PostList").forward(request, response);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("errorMessage", "Lỗi hệ thống: " + e.getMessage());
+            request.getRequestDispatcher("PostList").forward(request, response);
+        }
+
+        processRequest(request, response);
+
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int postID = Integer.parseInt(request.getParameter("postID"));
-        MarketingPosts post = dao.getMarketingPostByID(postID);
-        if(post != null){
-            request.setAttribute("post", post);
-            RequestDispatcher dispatcher = request.getRequestDispatcher("UpdateMarketingPost");
-            dispatcher.forward(request, response);
-        }else{
-            response.getWriter().println("Bai viet khong ton tai!");
-        }
-        
+
     }
 
     @Override

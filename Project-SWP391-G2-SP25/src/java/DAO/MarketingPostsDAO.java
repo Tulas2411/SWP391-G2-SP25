@@ -162,5 +162,9 @@ public class MarketingPostsDAO extends DBContext {
 //            System.out.println(o);
 //        }
 //    }
+
+    public boolean updateMarketingPost(int i, String title, String content, int author, java.util.Date createDate, String status, String imageLink) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
     }
 
