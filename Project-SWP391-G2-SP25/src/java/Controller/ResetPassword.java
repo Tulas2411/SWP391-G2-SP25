@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import java.time.Instant;
 import java.util.Properties;
 import java.util.Random;
 
@@ -52,6 +53,11 @@ public class ResetPassword extends HttpServlet {
 																									// password here
 				}
 			});
+                        
+                        // Lưu OTP và thời gian hiện tại vào session
+                    mySession.setAttribute("otp", otpvalue);
+                    mySession.setAttribute("otpGeneratedTime", Instant.now());  // Lưu thời gian tạo OTP
+                        
 			// compose message
 			try {
 				MimeMessage message = new MimeMessage(session);
