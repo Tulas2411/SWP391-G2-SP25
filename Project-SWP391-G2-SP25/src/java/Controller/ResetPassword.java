@@ -23,8 +23,8 @@ import javax.mail.internet.MimeMessage;
 /**
  * Servlet implementation class ForgotPassword
  */
-@WebServlet("/forgotPassword")
-public class ForgotPassword extends HttpServlet {
+@WebServlet("/ResetPassword")
+public class ResetPassword extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		String email = request.getParameter("email");

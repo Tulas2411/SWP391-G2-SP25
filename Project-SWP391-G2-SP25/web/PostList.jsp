@@ -26,12 +26,12 @@
                 font-family: 'Roboto', sans-serif;
             }
 
-            .container {
+/*            .container {
                 width: 75%;
                 margin: 0 auto;
                 padding-top: 20px;
                 max-width: 1100px;
-            }
+            }*/
 
             .contact-container {
                 display: flex;
@@ -47,7 +47,7 @@
                 padding-right: 50px;
             }
 
-         .contact-info {
+            .contact-info {
                 flex: 1;
                 max-width: 50%;
             }
@@ -289,7 +289,7 @@
                                     <img src="${o.imageLink}" alt="Image for Post Title 2" class="w-20 h-20 object-cover">
                                 </td>
                                 <td class="py-2 px-4 flex space-x-2">
-                                    <button class="bg-yellow-500 text-white px-4 py-2 rounded " onclick="openForm()">Sửa</button>
+                                    <button class="bg-yellow-500 text-white px-4 py-2 rounded " data-bs-toggle="modal" data-bs-target="#postModal"">Sửa</button>
 
                                     <a href="DeletePost?postID=${o.postID}" 
                                        class="bg-red-500 text-white px-4 py-2 rounded"

@@ -77,6 +77,11 @@ public class UpdateMarketingPostController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+     
+
         try {
             // Lấy dữ liệu từ form gửi lên
             int postID = Integer.parseInt(request.getParameter("postID"));
@@ -110,7 +115,6 @@ public class UpdateMarketingPostController extends HttpServlet {
         }
 
         processRequest(request, response);
-
     }
 
     @Override

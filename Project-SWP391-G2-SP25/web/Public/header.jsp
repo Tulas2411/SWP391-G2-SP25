@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
     <!-- HEADER -->
@@ -77,24 +78,14 @@
                             <i id="header__table-items2-icon" class="fa-solid fa-angle-down header__table-items2-icon"></i>
                             <!-- Đây là menu cấp 2 trong tablet và mobile -->
                             <ul id="header__table-list2" class="header__table-list2">
-                                <li class="header__table-items2">
-                                    <a href="#" class="header__table-link2">Thiết bị quạt</a>
-                                </li>
-                                <li class="header__table-items2">
-                                    <a href="#" class="header__table-link2">Thiết bị chiếu sáng</a>
-                                </li>
-                                <li class="header__table-items2">
-                                    <a href="#" class="header__table-link2">Công tắc điện</a>
-                                </li>
-                                <li class="header__table-items2">
-                                    <a href="#" class="header__table-link2">Thiết bị thông minh</a>
-                                </li>
-                                <li class="header__table-items2">
-                                    <a href="#" class="header__table-link2">Phụ kiện & linh kiện</a>
-                                </li>
-                                <li class="header__table-items2">
-                                    <a href="#" class="header__table-link2">Thiết bị sửa chữa và bảo trì</a>
-                                </li>
+
+                                <c:forEach var="cate" items="${categories}">
+                                    <li class="header__table-items2">
+                                        <a href="/Project-SWP391-G2-SP25/productsList?category=${cate.categoryID}" class="header__table-link2">${cate.categoryName}</a>
+                                    </li>
+                                </c:forEach>
+
+
                             </ul>
                         </li>
                         <li class="header__table-items header__table-items-underlined">
@@ -186,24 +177,11 @@
                         <!-- Header Navbar Navbar -->
                         <div class="header__navbar-nav">
                             <ul class="header__navbar-nav-list">
-                                <li class="header__navbar-nav-items">
-                                    <a href="#" class="header__navbar-nav-link">Thiết bị quạt</a>
-                                </li>
-                                <li class="header__navbar-nav-items">
-                                    <a href="#" class="header__navbar-nav-link">Thiết bị chiếu sáng</a>
-                                </li>
-                                <li class="header__navbar-nav-items">
-                                    <a href="#" class="header__navbar-nav-link">Công tắc điện</a>
-                                </li>
-                                <li class="header__navbar-nav-items">
-                                    <a href="#" class="header__navbar-nav-link">Thiết bị thông minh</a>
-                                </li>
-                                <li class="header__navbar-nav-items">
-                                    <a href="#" class="header__navbar-nav-link">Phụ kiện & linh kiện</a>
-                                </li>
-                                <li class="header__navbar-nav-items">
-                                    <a href="#" class="header__navbar-nav-link">Thiết bị sửa chữa và bảo trì</a>
-                                </li>
+                                <c:forEach var="cate" items="${categories}">
+                                    <li class="header__navbar-nav-items">
+                                        <a href="/Project-SWP391-G2-SP25/productsList?category=${cate.categoryID}" class="header__navbar-nav-link">${cate.categoryName}</a>
+                                    </li>
+                                </c:forEach>
                             </ul>
                         </div>
                     </li>

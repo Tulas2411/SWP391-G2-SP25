@@ -240,7 +240,6 @@ public class ProductsDAO extends DBContext {
         product.setAmount(rs.getInt("Amount"));
         product.setImageLink(rs.getString("ImageLink"));
         product.setIsPromoted(rs.getBoolean("IsPromoted"));
-        product.setOldprice(rs.getFloat("OldPrice"));
         return product;
     }
 
