@@ -17,30 +17,40 @@ public class ValidateOtp extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int value = Integer.parseInt(request.getParameter("otp"));
         HttpSession session = request.getSession();
-        int otp = (int) session.getAttribute("otp");
-        Instant otpGeneratedTime = (Instant) session.getAttribute("otpGeneratedTime"); // Lấy thời gian OTP được tạo
-        
+
+        // Lấy OTP và thời gian tạo OTP từ session
+        Integer otp = (Integer) session.getAttribute("otp");
+        Instant otpGeneratedTime = (Instant) session.getAttribute("otpGeneratedTime");
+
+        // Kiểm tra OTP từ người dùng
+        String otpValue = request.getParameter("otp");
         RequestDispatcher dispatcher = null;
+
+        // Kiểm tra nếu OTP hoặc thời gian tạo OTP là null
+        if (otp == null || otpGeneratedTime == null) {
+            request.setAttribute("message", "OTP has expired or is invalid. Please try again.");
+            dispatcher = request.getRequestDispatcher("Login.jsp");
+            dispatcher.forward(request, response);
+            return; // Kết thúc xử lý nếu OTP hoặc thời gian không hợp lệ
+        }
 
         // Kiểm tra xem OTP có hết hạn hay không
         Instant now = Instant.now();
         Duration timeElapsed = Duration.between(otpGeneratedTime, now);
 
+        // Nếu quá 1 phút, OTP hết hạn
         if (timeElapsed.toMinutes() >= 1) {
-            // Nếu quá 1 phút, OTP hết hạn
             request.setAttribute("message", "OTP has expired. Please try again.");
             dispatcher = request.getRequestDispatcher("Login.jsp");
             dispatcher.forward(request, response);
-        } else if (value == otp) {
-            // Nếu OTP hợp lệ trong thời gian cho phép
+        } // Nếu OTP hợp lệ trong thời gian cho phép
+        else if (otpValue != null && !otpValue.isEmpty() && Integer.parseInt(otpValue) == otp) {
             request.setAttribute("email", request.getParameter("email"));
-            request.setAttribute("status", "success");
             dispatcher = request.getRequestDispatcher("NewPassword.jsp");
             dispatcher.forward(request, response);
-        } else {
-            // Nếu OTP không hợp lệ
+        } // Nếu OTP không hợp lệ
+        else {
             request.setAttribute("message", "Wrong OTP. Please try again.");
             dispatcher = request.getRequestDispatcher("EnterOtp.jsp");
             dispatcher.forward(request, response);

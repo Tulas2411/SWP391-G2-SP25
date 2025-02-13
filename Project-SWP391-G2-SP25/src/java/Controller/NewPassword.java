@@ -12,43 +12,59 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 
-
 /**
  * Servlet implementation class NewPassword
  */
 @WebServlet("/NewPassword")
 public class NewPassword extends HttpServlet {
-	private static final long serialVersionUID = 1L;
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+    private static final long serialVersionUID = 1L;
 
-		HttpSession session = request.getSession();
-		String newPassword = request.getParameter("password");
-		String confPassword = request.getParameter("confPassword");
-		RequestDispatcher dispatcher = null;
-		if (newPassword != null && confPassword != null && newPassword.equals(confPassword)) {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-			try {
-				Class.forName("com.mysql.cj.jdbc.Driver");
-				Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/EcommerceDB", "root", "1234");
-				PreparedStatement pst = conn.prepareStatement("update users set Password = ? where Email = ? ");
-				pst.setString(1, newPassword);
-				pst.setString(2, (String) session.getAttribute("email"));
+        HttpSession session = request.getSession();
+        String newPassword = request.getParameter("password");
+        String confPassword = request.getParameter("confPassword");
+        RequestDispatcher dispatcher = null;
 
-				int rowCount = pst.executeUpdate();
-				if (rowCount > 0) {
-					request.setAttribute("status", "resetSuccess");
-					dispatcher = request.getRequestDispatcher("Login.jsp");
-				} else {
-					request.setAttribute("status", "resetFailed");
-					dispatcher = request.getRequestDispatcher("Login.jsp");
-				}
-				dispatcher.forward(request, response);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
+        // Kiểm tra xem mật khẩu mới và mật khẩu xác nhận có khớp nhau không
+        if (newPassword != null && confPassword != null && newPassword.equals(confPassword)) {
 
+            try {
+                // Kết nối đến cơ sở dữ liệu
+                Class.forName("com.mysql.cj.jdbc.Driver");
+                Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/EcommerceDB", "root", "1234");
+
+                // Thực hiện câu truy vấn cập nhật mật khẩu cho người dùng dựa trên email
+                PreparedStatement pst = conn.prepareStatement("UPDATE Users SET Password = ? WHERE Email = ?");
+                pst.setString(1, newPassword);
+                pst.setString(2, (String) session.getAttribute("email"));
+
+                // Kiểm tra xem có hàng nào được cập nhật không
+                int rowCount = pst.executeUpdate();
+                if (rowCount > 0) {
+                    // Gửi thông báo thành công qua session
+                    session.setAttribute("status", "Password reset Successfully!");
+                    response.sendRedirect("Login.jsp");  // Chuyển hướng về trang Login.jsp
+                } else {
+                    request.setAttribute("status", "Password reset Failed!");
+                    dispatcher = request.getRequestDispatcher("Login.jsp");
+                    dispatcher.forward(request, response);
+                }
+
+                // Chuyển hướng về trang đăng nhập
+                dispatcher = request.getRequestDispatcher("Login.jsp");
+                dispatcher.forward(request, response);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            // Nếu mật khẩu mới và mật khẩu xác nhận không khớp
+            request.setAttribute("status", "Passwords do not match!");
+            dispatcher = request.getRequestDispatcher("NewPassword.jsp");
+            dispatcher.forward(request, response);
+        }
+    }
 }
