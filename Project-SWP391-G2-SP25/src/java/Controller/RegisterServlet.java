@@ -82,7 +82,7 @@ public class RegisterServlet extends HttpServlet {
 
                     // Thực thi truy vấn
                     int rowCount = pst.executeUpdate();
-                    RequestDispatcher dispatcher = request.getRequestDispatcher("Register.jsp");
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("registerSuccess.jsp");
 
                     if (rowCount > 0) {
                         request.setAttribute("status", "success");

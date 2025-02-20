@@ -59,6 +59,11 @@
                                            class="form-submit" value="Log in" />
                                 </div>
                             </form>
+                            
+                            <% if ("true".equals(request.getParameter("error"))) { %>
+                            <p style="color: red;">Đăng nhập thất bại! Vui lòng thử lại.</p>
+                            <% } %>
+                            
                             <div class="social-login">
                                 <span class="social-label">Or login with</span>
                                 <ul class="socials">

@@ -55,6 +55,22 @@ public class UsersDAO extends DBContext {
         }
         return null;
     }
+    
+    // Lấy người dùng theo tên đăng nhập (UserName)
+    public Users getUserByUserName(String userName) {
+        String sql = "SELECT * FROM Users WHERE UserName = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, userName);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return extractUserFromResultSet(rs);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching user by UserName: " + e.getMessage());
+        }
+        return null;
+    }
 
     public boolean addUser(Users user) {
         String sql = "INSERT INTO Users (FirstName, LastName, Gender, DateOfBirth, UserName, Password, Role, Email, PhoneNumber, Address) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -82,6 +98,28 @@ public class UsersDAO extends DBContext {
             return false;
         }
     }
+    
+    // Cập nhật thông tin người dùng chỉ cho phép sửa username, firstname, lastname, gender, DateOfBirth, PhoneNumber, Address
+    public boolean updateUserProfile(Users user) {
+        String sql = "UPDATE Users SET UserName = ?, FirstName = ?, LastName = ?, Gender = ?, DateOfBirth = ?, PhoneNumber = ?, Address = ? WHERE UserID = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, user.getUserName());
+            ps.setString(2, user.getFirstName());
+            ps.setString(3, user.getLastName());
+            ps.setString(4, user.getGender());
+            ps.setString(5, user.getDateOfBirth());
+            ps.setString(6, user.getPhoneNumber());
+            ps.setString(7, user.getAddress());
+            ps.setInt(8, user.getUserID());
+            ps.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.out.println("Error updating user profile: " + e.getMessage());
+            return false;
+        }
+    }
+
 
     public boolean removeUser(int id) {
         String sql = "DELETE FROM Users WHERE UserID = ?";

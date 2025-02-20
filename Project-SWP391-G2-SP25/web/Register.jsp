@@ -103,7 +103,7 @@
                         </div>
                         <div class="form-group">
                             <label for="contact"><i class="zmdi zmdi-phone"></i></label>
-                            <input type="text" name="contact" id="contact" placeholder="Phone Number" required=""/>
+                            <input type="tel" name="contact" id="contact" placeholder="Phone Number" pattern="0[0-9]{9}" title="The phone number must have 10 digits and start with 0" required/>
                         </div>
                         <div class="form-group">
                             <label for="address"><i class="zmdi zmdi-pin"></i></label>

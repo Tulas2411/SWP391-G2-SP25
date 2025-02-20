@@ -27,16 +27,32 @@
             <div class="header__introduce-account">
                 <ul class="header__introduce-account-list">
                     <li class="header__introduce-account-items">
-                        <a href="#" class="header__introduce-account-link"> Tài khoản</a>
+                        <a href="UserProfile.jsp" class="header__introduce-account-link"> Tài khoản</a>
                     </li>
                     <li class="header__introduce-account-items header__introduce-account-items--vertical">
                         <a href="#"  class="header__introduce-account-link"> Chính sách bảo mật</a>
                     </li>
                     <li class="header__introduce-account-items">
-                        <a href="Login.jsp"  class="header__introduce-account-link"> Đăng nhập</a>
+                        <a href="Login.jsp"  class="header__introduce-account-link"></a>
+                        <%
+                    // Lấy thông tin username từ session
+                    String username = (String) session.getAttribute("username");
+        
+                    if (username != null) {
+                        // Nếu người dùng đã đăng nhập, hiển thị Hello, [Username] và nút Đăng xuất
+                        out.println("Hello, " + username + "!");
+                        out.println("<a href='LogoutController' class='header__introduce-account-link'>Đăng xuất</a>"); // Nút đăng xuất
+                    } else {
+                        // Nếu chưa đăng nhập, hiển thị Đăng Nhập
+                        out.println("<a href='Login.jsp' class='header__introduce-account-link'>Đăng nhập</a>");
+                    }
+                %>
                     </li>
                 </ul>
             </div>
+            
+
+
         </div>
         <!-- Header Shop -->
         <div class="header__shop">
