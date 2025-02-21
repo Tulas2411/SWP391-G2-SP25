@@ -14,8 +14,6 @@
         <link rel="stylesheet" href="css/style.css">
     </head>
     <body>
-        <input type="hidden" id="status" value="<%= request.getAttribute("status")%>">
-
         <div class="main">
 
             <!-- Sing in  Form -->
@@ -60,6 +58,11 @@
                                            class="form-submit" value="Log in" />
                                 </div>
                             </form>
+                            
+                            <% if ("true".equals(request.getParameter("error"))) { %>
+                            <p style="color: red;">Đăng nhập thất bại! Vui lòng thử lại.</p>
+                            <% } %>
+                            
                             <div class="social-login">
                                 <span class="social-label">Or login with</span>
                                 <ul class="socials">
@@ -78,6 +81,7 @@
 
         </div>
 
+
         <!-- JS -->
         <script src="vendor/jquery/jquery.min.js"></script>
         <script src="js/main.js"></script>
@@ -92,5 +96,5 @@
 
         </script>
     </body>
-    <!-- This templates was made by Colorlib (https://colorlib.com) -->
+    
 </html>
