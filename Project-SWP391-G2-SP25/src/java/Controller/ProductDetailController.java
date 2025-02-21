@@ -6,6 +6,8 @@
 package Controller;
 
 import DAO.*;
+import Model.Category;
+import Model.MarketingPosts;
 import Model.Products;
 import Model.Reviews;
 import java.io.IOException;
@@ -15,6 +17,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.Map;
 /**
  *
@@ -61,6 +64,49 @@ public class ProductDetailController extends HttpServlet {
         int id = Integer.parseInt(request.getParameter("id"));
         ProductsDAO pDAO = new ProductsDAO();
         ReviewsDAO r = new ReviewsDAO();
+         // Khởi tạo DAO
+        ProductsDAO productsDAO = new ProductsDAO();
+        CategoryDAO categoryDAO = new CategoryDAO();
+        MarketingPostsDAO marketingPostsDAO = new MarketingPostsDAO();
+
+        // Lấy danh sách danh mục sản phẩm từ database dưới dạng Map
+        Map<String, Category> categoryMap = categoryDAO.getAllCategories();
+        List<Category> categories = categoryMap.values().stream().toList(); // Chuyển từ Map sang List
+
+        // Lấy danh sách 5 sản phẩm khuyến mãi
+        List<Products> promotedProducts = productsDAO.getPromotedProducts();
+
+        // Lấy danh sách sản phẩm mới
+        List<Products> newProducts = productsDAO.getNewProducts();
+
+        // Lấy tất cả sản phẩm dưới dạng danh sách
+        List<Products> allProducts = productsDAO.getAllProductsAsVector();
+
+        // Lấy các bài viết mới nhất
+        List<MarketingPosts> latestPosts = marketingPostsDAO.getLatestPosts(4);
+
+        // Lấy sản phẩm thiết bị quạt
+        List<Products> fanProducts = productsDAO.getProductsByCategory("TBQ");
+
+        // Lấy sản phẩm thiết bị chiếu sáng
+        List<Products> lightingProducts = productsDAO.getProductsByCategory("TBCS");
+
+        // Lấy sản phẩm công tắc điện
+        List<Products> electricalSwitchProducts = productsDAO.getProductsByCategory("CTD");
+
+        // Lấy các sản phẩm thiết bị thông minh
+        List<Products> smartDevices = productsDAO.getProductsByCategory("TBTM");
+
+        // Đưa dữ liệu vào request để truyền sang JSP
+        request.setAttribute("categories", categories);
+        request.setAttribute("promotedProducts", promotedProducts);
+        request.setAttribute("newProducts", newProducts);
+        request.setAttribute("allProducts", allProducts);
+        request.setAttribute("latestPosts", latestPosts);
+        request.setAttribute("fanProducts", fanProducts);
+        request.setAttribute("lightingProducts", lightingProducts);
+        request.setAttribute("electricalSwitchProducts", electricalSwitchProducts);
+        request.setAttribute("smartDevices", smartDevices);
 
         Products p = pDAO.getProductByID(id);
         Map<Integer, Reviews> listr = r.getAllReviewsByProductID(id);

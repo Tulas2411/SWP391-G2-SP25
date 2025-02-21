@@ -34,8 +34,16 @@
                         <a href="BaoMat.jsp"  class="header__introduce-account-link"> Chính sách bảo mật</a>
                     </li>
                     <li class="header__introduce-account-items">
-                        <a href="Login.jsp"  class="header__introduce-account-link"> Đăng nhập</a>
+                        <c:if test="${not empty name}">
+                            <!-- Nếu tên không rỗng, hiển thị tên người dùng -->
+                            <a href="Login.jsp" class="header__introduce-account-link">Tên: ${name}</a>
+                        </c:if>
+                        <c:if test="${empty name}">
+                            <!-- Nếu tên rỗng (chưa đăng nhập), hiển thị "Đăng nhập" -->
+                            <a href="Login.jsp" class="header__introduce-account-link">Đăng nhập</a>
+                        </c:if>
                     </li>
+
                 </ul>
             </div>
         </div>
