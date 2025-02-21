@@ -56,7 +56,7 @@ public class LoginServlet extends HttpServlet {
             ResultSet rs = pst.executeQuery();
             if(rs.next()){
                 session.setAttribute("name", rs.getString("username"));
-
+                session.setAttribute("role", rs.getString("role"));
                 dispatcher = request.getRequestDispatcher("home");
 
             } else {
