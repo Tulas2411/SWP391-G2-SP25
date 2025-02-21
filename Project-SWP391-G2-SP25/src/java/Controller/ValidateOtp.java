@@ -8,9 +8,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
-import java.time.Instant;
-import java.time.Duration;
+import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.SQLException;
 
+/**
+ * Servlet implementation class ValidateOtp
+ */
 @WebServlet("/ValidateOtp")
 public class ValidateOtp extends HttpServlet {
 
@@ -18,6 +22,7 @@ public class ValidateOtp extends HttpServlet {
 
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
+
 
         // Lấy OTP và thời gian tạo OTP từ session
         Integer otp = (Integer) session.getAttribute("otp");
@@ -54,6 +59,9 @@ public class ValidateOtp extends HttpServlet {
             request.setAttribute("message", "Wrong OTP. Please try again.");
             dispatcher = request.getRequestDispatcher("EnterOtp.jsp");
             dispatcher.forward(request, response);
+
         }
+
     }
+
 }

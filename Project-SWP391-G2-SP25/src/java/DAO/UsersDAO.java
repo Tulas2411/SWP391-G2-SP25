@@ -1,57 +1,75 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package DAO;
 
 import Model.Users;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Vector;
 
-public class UsersDAO extends DBContext {
-
+/**
+ *
+ * @author admin
+ */
+public class UsersDAO extends DBContext{
     public Map<Integer, Users> getAllUsers() {
-        Map<Integer, Users> userList = new HashMap<>();
-        String sql = "SELECT * FROM Users";
-
-        try (Statement st = connection.createStatement(); ResultSet rs = st.executeQuery(sql)) {
+        Map<Integer, Users> list = new HashMap<>();
+        try {
+            String sql = "SELECT * FROM Users";
+            Statement st = connection.createStatement();
+            ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
-                Users user = extractUserFromResultSet(rs);
-                userList.put(user.getUserID(), user);
+                Users u = new Users();
+                u.setUserID(rs.getInt("UserID"));
+                u.setFirstName(rs.getString("FirstName"));
+                u.setLastName(rs.getString("LastName"));
+                u.setGender(rs.getString("Gender"));
+                u.setDateOfBirth(rs.getString("DateOfBirth"));
+                u.setUserName(rs.getString("UserName"));
+                u.setPassword(rs.getString("Password"));
+                u.setRole(rs.getString("Role"));
+                u.setEmail(rs.getString("Email"));
+                u.setPhoneNumber(rs.getString("PhoneNumber"));
+                u.setAddress(rs.getString("Address"));
+                
+                list.put(u.getUserID(), u);
             }
-        } catch (SQLException e) {
-            System.out.println("Error fetching users: " + e.getMessage());
+            rs.close();
+            st.close();
+        } catch (Exception e) {
+            e.printStackTrace();  // In lỗi ra console để kiểm tra
         }
-        return userList;
+        return list;
     }
-
-    public Vector<Users> getAllUsersAsVector() {
-        Vector<Users> users = new Vector<>();
-        String sql = "SELECT * FROM Users";
-
-        try (Statement st = connection.createStatement(); ResultSet rs = st.executeQuery(sql)) {
-            while (rs.next()) {
-                users.add(extractUserFromResultSet(rs));
-            }
-        } catch (SQLException e) {
-            System.out.println("Error fetching users as vector: " + e.getMessage());
-        }
-        return users;
-    }
-
     public Users getUserByID(int id) {
-        String sql = "SELECT * FROM Users WHERE UserID = ?";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, id);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return extractUserFromResultSet(rs);
-                }
+        try {
+            String strSQL = "select * from Users where UserID = ?";
+            PreparedStatement stm = connection.prepareStatement(strSQL);
+            stm.setInt(1, id);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+
+                Users u = new Users();
+                u.setUserID(rs.getInt("UserID"));
+                u.setFirstName(rs.getString("FirstName"));
+                u.setLastName(rs.getString("LastName"));
+                u.setGender(rs.getString("Gender"));
+                u.setDateOfBirth(rs.getString("DateOfBirth"));
+                u.setUserName(rs.getString("UserName"));
+                u.setPassword(rs.getString("Password"));
+                u.setRole(rs.getString("Role"));
+                u.setEmail(rs.getString("Email"));
+                u.setPhoneNumber(rs.getString("PhoneNumber"));
+                u.setAddress(rs.getString("Address"));
+                
+                return u;
             }
-        } catch (SQLException e) {
-            System.out.println("Error fetching user by ID: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("getUserByAcc: " + e.getMessage());
         }
         return null;
     }
@@ -132,34 +150,7 @@ public class UsersDAO extends DBContext {
             System.out.println("Error removing user: " + e.getMessage());
             return false;
         }
+        return null;
     }
-
-    private Users extractUserFromResultSet(ResultSet rs) throws SQLException {
-        Users user = new Users();
-        user.setUserID(rs.getInt("UserID"));
-        user.setFirstName(rs.getString("FirstName"));
-        user.setLastName(rs.getString("LastName"));
-        user.setGender(rs.getString("Gender"));
-        user.setDateOfBirth(rs.getString("DateOfBirth"));
-        user.setUserName(rs.getString("UserName"));
-        user.setPassword(rs.getString("Password"));
-        user.setRole(rs.getString("Role"));
-        user.setEmail(rs.getString("Email"));
-        user.setPhoneNumber(rs.getString("PhoneNumber"));
-        user.setAddress(rs.getString("Address"));
-        return user;
-    }
-
-    private void setUserPreparedStatement(PreparedStatement ps, Users user) throws SQLException {
-        ps.setString(1, user.getFirstName());
-        ps.setString(2, user.getLastName());
-        ps.setString(3, user.getGender());
-        ps.setString(4, user.getDateOfBirth());
-        ps.setString(5, user.getUserName());
-        ps.setString(6, user.getPassword());
-        ps.setString(7, user.getRole());
-        ps.setString(8, user.getEmail());
-        ps.setString(9, user.getPhoneNumber());
-        ps.setString(10, user.getAddress());
-    }
+   
 }

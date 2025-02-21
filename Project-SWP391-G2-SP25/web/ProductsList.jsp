@@ -9,6 +9,7 @@
 <%@page import="java.util.List"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -27,6 +28,119 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swapsubset=vietnamese" />
 
     </head>
+    <style>
+
+        .filter-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #d9232d;
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+
+        .filter-list {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0;
+        }
+
+        .filter-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 0;
+        }
+
+        .filter-checkbox {
+            width: 16px;
+            height: 16px;
+            accent-color: #d9232d;
+            cursor: pointer;
+        }
+
+        .filter-label {
+            font-size: 14px;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .filter-select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+            cursor: pointer;
+        }
+
+        .filter-button {
+            width: 100%;
+            background: #d9232d;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .filter-button:hover {
+            background: #b71c23;
+        }
+
+        /*Pagination*/
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+
+        .pagination-link {
+            display: inline-block;
+            text-decoration: none;
+            color: #333;
+            background: #f0f0f0;
+            padding: 8px 12px;
+            border-radius: 5px;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .pagination-link:hover {
+            background: #d9232d;
+            color: white;
+        }
+
+        .pagination-link.active {
+            background: #d9232d;
+            color: white;
+            font-weight: bold;
+        }
+
+        .pagination-dots {
+            color: #888;
+            font-size: 18px;
+        }
+
+        .pagination-arrow {
+            display: inline-block;
+            text-decoration: none;
+            color: #d9232d;
+            font-size: 18px;
+            padding: 6px 10px;
+            transition: color 0.3s;
+        }
+
+        .pagination-arrow:hover {
+            color: #b71c23;
+        }
+
+    </style>
     <body>
         <%@ include file="./Public/header.jsp" %>
 
@@ -37,34 +151,39 @@
                     <!-- Danh mục sản phẩm - Gom các sản phẩm thành các danh mục nhỏ - Hiển thị trên cùng bên trái main trang web -->
                     <form method="GET" action="productsList">
                         <h2 class="main__left-title" style="margin-top: 50px">Tìm kiếm</h2>
-                        <input type="text" class="main__left-search-box" name="name" placeholder="Bạn cần tìm gì?" />
-                        <h6>Danh mục</h6>
-                        <ul>
-                            <c:forEach var="category" items="${categories}">
-                                <li>
-                                    <input type="checkbox" name="category" value="${category.categoryID}"/>
-                                    ${category.categoryName}
+                        <input value="${name}" type="text" style="width: 100%" class="main__left-search-box" name="name" placeholder="Bạn cần tìm gì?" />
+                        <h6 class="filter-title">Danh mục</h6>
+
+                        <ul class="filter-list">
+                            <c:forEach var="cate" items="${categories}">
+                                <c:set var="isChecked" value="false"/>
+
+                                <c:forEach var="selected" items="${category}">
+                                    <c:if test="${selected eq cate.categoryID}">
+                                        <c:set var="isChecked" value="true"/>
+                                    </c:if>
+                                </c:forEach>
+                                
+                                <li class="filter-item">
+                                    <input type="checkbox" class="filter-checkbox" name="category" value="${cate.categoryID}"
+                                         <c:if test="${isChecked eq 'true'}">checked</c:if>  />
+                                    <label class="filter-label">${cate.categoryName}</label>
                                 </li>
                             </c:forEach>
+
                         </ul>
-                        <h6>Sắp xếp theo</h6>
-                        <select name="orderBy">
+
+                        <h6 class="filter-title">Sắp xếp theo</h6>
+                        <select class="filter-select" name="orderBy">
                             <c:forEach items="${orderByList}" var="order">
-                                <option value="${order.value}">${order.label}</option>
+                                <option value="${order.value}" <c:if test="${order.value == orderBy}">selected</c:if>>
+                                    ${order.label}
+                                </option>
                             </c:forEach>
                         </select>
 
-                        <button>Tìm kiếm</button>
+                        <button class="filter-button">Tìm kiếm</button>
 
-                        <!--<ul class="main__left-category-list">
-                        <c:forEach var="category" items="${categories}">
-                            <li class="main__left-category-items">
-                                <a href="Category.jsp?id=${category.categoryID}" class="main__left-category-link">
-                            ${category.categoryName}
-                        </a>
-                    </li>
-                        </c:forEach>
-                    </ul>-->
                         <input type="hidden" name="index" value="${index}"/>
                     </form>
                 </div>
@@ -85,7 +204,7 @@
                         <div class="main__right-sensor-list">
                             <c:forEach var="product" items="${products}">
                                 <div class="main__right-sensor-items">
-                                    <a href="product-detail?id=${product.productID}" class="main__right-sensor-link">
+                                    <a href="ProductDetailController?id=${product.productID}" class="main__right-sensor-link">
                                         <img src="${product.imageLink}" height="200px" alt="${product.productName}" class="main__right-sensor-img" />
                                         <div class="main__right-sensor-title">${product.productName}</div>
                                     </a>
@@ -98,52 +217,58 @@
                             </c:forEach>
 
                         </div>
-                        <div class="pagination" style="font-size: 2em">
-                            <a href="productsList?index=${index-1}">&laquo;</a>
+                        <c:set var="queryParams" value="name=${name}&orderBy=${orderBy}" />
+                        <c:forEach var="cat" items="${category}">
+                            <c:set var="queryParams" value="${queryParams}&category=${cat}" />
+                        </c:forEach>
+
+                        <div class="pagination">
+                            <a href="productsList?${queryParams}&index=${index-1}" class="pagination-arrow">&laquo;</a>
                             <c:choose>
                                 <c:when test="${index <= 4}">
                                     <c:choose>
                                         <c:when test="${total <= 5}">
                                             <c:forEach begin="1" end="${total}" step="1" var="i">
-                                                <a href="productsList?index=${i}" <c:if test="${i == index}"> class="active" </c:if> >
+                                                <a href="productsList?${queryParams}&index=${i}" class="pagination-link <c:if test='${i == index}'> active </c:if>">
                                                     ${i}
                                                 </a>
                                             </c:forEach>
                                         </c:when>
                                         <c:when test="${total > 5}">
-                                            <c:forEach begin="1" end="${5}" step="1" var="i">
-                                                <a href="productsList?index=${i}" <c:if test="${i == index}"> class="active" </c:if> >
+                                            <c:forEach begin="1" end="5" step="1" var="i">
+                                                <a href="productsList?${queryParams}&index=${i}" class="pagination-link <c:if test='${i == index}'> active </c:if>">
                                                     ${i}
                                                 </a>
                                             </c:forEach>
-                                            <a>...</a>
-                                            <a href="productsList?index=${total}">${total}</a>
+                                            <span class="pagination-dots">...</span>
+                                            <a href="productsList?${queryParams}&index=${total}" class="pagination-link">${total}</a>
                                         </c:when>
                                     </c:choose>
                                 </c:when>
                                 <c:when test="${total > 5 and index > 4 and index < (total-3)}">
-                                    <a href="productsList?index=${1}">${1}</a>
-                                    <a>...</a>
+                                    <a href="productsList?${queryParams}&index=1" class="pagination-link">1</a>
+                                    <span class="pagination-dots">...</span>
                                     <c:forEach begin="${index-2}" end="${index+2}" step="1" var="i">
-                                        <a href="productsList?index=${i}" <c:if test="${i == index}"> class="active" </c:if> >
+                                        <a href="productsList?${queryParams}&index=${i}" class="pagination-link <c:if test='${i == index}'> active </c:if>">
                                             ${i}
                                         </a>
                                     </c:forEach>
-                                    <a>...</a>
-                                    <a href="productsList?index=${total}">${total}</a>
+                                    <span class="pagination-dots">...</span>
+                                    <a href="productsList?${queryParams}&index=${total}" class="pagination-link">${total}</a>
                                 </c:when>
                                 <c:when test="${total > 5 and index >= (total-3)}">
-                                    <a href="productsList?index=${1}">${1}</a>
-                                    <a>...</a>
+                                    <a href="productsList?${queryParams}&index=1" class="pagination-link">1</a>
+                                    <span class="pagination-dots">...</span>
                                     <c:forEach begin="${total - 4}" end="${total}" step="1" var="i">
-                                        <a href="productsList?index=${i}" <c:if test="${i == index}"> class="active" </c:if> >
+                                        <a href="productsList?${queryParams}&index=${i}" class="pagination-link <c:if test='${i == index}'> active </c:if>">
                                             ${i}
                                         </a>
                                     </c:forEach>
                                 </c:when>
                             </c:choose>
-                            <a href="productsList?index=${index+1}">&raquo;</a>
+                            <a href="productsList?${queryParams}&index=${index+1}" class="pagination-arrow">&raquo;</a>
                         </div>
+
                     </div>
                 </div>
                 <div class="clear"></div>

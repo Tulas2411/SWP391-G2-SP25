@@ -1,6 +1,3 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -25,7 +22,9 @@
                     <div class="signin-content">
                         <div class="signin-image">
                             <figure>
-                                <img src="images/ImageLogin.jpg" alt="sing up image">
+                                <a href="${pageContext.request.contextPath}/home"> 
+                                    <img src="assets/img/S4EWhite.png" class="header__shop-logo-img" alt="Logo linh ki?n ?i?n t?" />
+                                </a>
                             </figure>
                             <a href="Register.jsp" class="signup-image-link">Create an
                                 account</a>
@@ -81,6 +80,21 @@
             </section>
 
         </div>
+
+
+        <!-- JS -->
+        <script src="vendor/jquery/jquery.min.js"></script>
+        <script src="js/main.js"></script>
+        <script src ="http://inpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <link rel ="stylesheet" href="alert/dist/sweetalert.css">
+
+        <script type="text/javascript">
+            var status = document.getElementById("status").value;
+            if (status == "failed") {
+                swal("Sorry", "Wrong Username or Password", "error");
+            }
+
+        </script>
     </body>
     
 </html>

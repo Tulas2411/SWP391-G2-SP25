@@ -2,6 +2,7 @@ package DAO;
 
 import Model.MarketingPosts;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,23 +14,23 @@ import java.util.Map;
 import java.util.Vector;
 
 public class MarketingPostsDAO extends DBContext {
-//
-//    public List<MarketingPosts> getAllMarketingPosts() {
-//        List<MarketingPosts> postList = new ArrayList<>();
-//        String sql = "SELECT * FROM MarketingPosts";
-//
-//        try (Statement st = connection.createStatement(); ResultSet rs = st.executeQuery(sql)) {
-//            while (rs.next()) {
-//                // Sử dụng phương thức extractMarketingPostFromResultSet để tạo đối tượng từ ResultSet
-//                MarketingPosts post = extractMarketingPostFromResultSet(rs);
-//                postList.add(post); // Thêm đối tượng vào danh sách
-//            }
-//        } catch (SQLException e) {
-//            System.out.println("Error fetching marketing posts: " + e.getMessage());
-//        }
-//
-//        return postList; // Trả về danh sách các bài viết
-//    }
+
+    public List<MarketingPosts> getAllMarketingPosts() {
+        List<MarketingPosts> postList = new ArrayList<>();
+        String sql = "SELECT * FROM MarketingPosts";
+
+        try (Statement st = connection.createStatement(); ResultSet rs = st.executeQuery(sql)) {
+            while (rs.next()) {
+                // Sử dụng phương thức extractMarketingPostFromResultSet để tạo đối tượng từ ResultSet
+                MarketingPosts post = extractMarketingPostFromResultSet(rs);
+                postList.add(post); // Thêm đối tượng vào danh sách
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching marketing posts: " + e.getMessage());
+        }
+
+        return postList; // Trả về danh sách các bài viết
+    }
 
     public Map<Integer, MarketingPosts> getAllMarketingPostsAsMap() {
     Map<Integer, MarketingPosts> postMap = new HashMap<>();
@@ -140,7 +141,7 @@ public class MarketingPostsDAO extends DBContext {
         post.setTitle(rs.getString("Title"));
         post.setContent(rs.getString("Content"));
         post.setAuthor(rs.getInt("Author"));
-        post.setCreateDate(rs.getString("CreateDate"));
+        post.setCreateDate(rs.getDate("CreateDate"));
         post.setStatus(rs.getString("Status"));
         post.setImageLink(rs.getString("ImageLink"));
         return post;
@@ -150,15 +151,20 @@ public class MarketingPostsDAO extends DBContext {
         ps.setString(1, post.getTitle());
         ps.setString(2, post.getContent());
         ps.setInt(3, post.getAuthor());
-        ps.setString(4, post.getCreateDate());
+        ps.setDate(4, (Date) post.getCreateDate());
         ps.setString(5, post.getStatus());
         ps.setString(6, post.getImageLink());
     }
 //public static void main(String[] args) {
 //        MarketingPostsDAO dao = new MarketingPostsDAO();
-//        List<MarketingPosts> list = dao.getAllMarketingPosts();
+//        List<MarketingPosts> list = dao.getAllMarketingPostsAsMap();
 //        for (MarketingPosts o : list) {
 //            System.out.println(o);
 //        }
 //    }
-}
+
+    public boolean updateMarketingPost(int i, String title, String content, int author, java.util.Date createDate, String status, String imageLink) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    }
+

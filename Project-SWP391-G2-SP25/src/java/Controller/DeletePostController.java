@@ -4,7 +4,6 @@
  */
 package Controller;
 
-import DAO.*;
 import DAO.MarketingPostsDAO;
 import Model.MarketingPosts;
 import DAO.DBContext;
@@ -26,8 +25,8 @@ import java.util.Map;
  *
  * @author Admin
  */
-@WebServlet(name = "MarketingPostController", urlPatterns = {"/PostList"})
-public class MarketingPostController extends HttpServlet {
+@WebServlet(name = "DeletePostController", urlPatterns = {"/DeletePost"})
+public class DeletePostController extends HttpServlet {
 
     private MarketingPostsDAO postsDAO;
 
@@ -37,6 +36,7 @@ public class MarketingPostController extends HttpServlet {
         Connection connection = DBContext.makeConnection();
 //        MarketingPostsDAO = new MarketingPostsDAO(connection);
     }
+    private static final long serialVersionUID = 1L;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -55,10 +55,10 @@ public class MarketingPostController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet MarketingPostController</title>");
+            out.println("<title>Servlet DeletePostController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet MarketingPostController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet DeletePostController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -75,16 +75,30 @@ public class MarketingPostController extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        MarketingPostsDAO DAO = new MarketingPostsDAO();
-        Map<Integer, MarketingPosts> marketingPostMap = DAO.getAllMarketingPostsAsMap();
-        List<MarketingPosts> post = marketingPostMap.values().stream().toList();
-        request.setAttribute("posts", post);
-        request.getRequestDispatcher("PostList.jsp").forward(request, response);
-        processRequest(request, response);
+        throws ServletException, IOException {
+    String postID = request.getParameter("postID");
 
+    if (postID != null && !postID.isEmpty()) {
+        try {
+            int postIdInt = Integer.parseInt(postID);
+            MarketingPostsDAO DAO = new MarketingPostsDAO();
+            boolean success = DAO.removeMarketingPost(postIdInt);
+
+            if (success) {
+                // Xóa thành công
+                response.sendRedirect("PostList?message=delete-success");
+            } else {
+                // Xóa thất bại
+                response.sendRedirect("PostList?message=delete-failure");
+            }
+        } catch (NumberFormatException e) {
+            response.getWriter().write("ID bài viết không hợp lệ.");
+        }
+    } else {
+        // Không có postID, chuyển hướng về danh sách bài viết
+        response.sendRedirect("PostList");
     }
-
+}
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -109,6 +123,5 @@ public class MarketingPostController extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 
 }

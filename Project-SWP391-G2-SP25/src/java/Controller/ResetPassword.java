@@ -14,7 +14,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Properties;
 import java.util.Random;
-
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
@@ -88,7 +87,6 @@ public class ResetPassword extends HttpServlet {
             mySession.setAttribute("otp", otpvalue);
             mySession.setAttribute("email", email);
             mySession.setAttribute("otpGeneratedTime", java.time.Instant.now()); // Thêm thời gian OTP được tạo
-
             dispatcher.forward(request, response);
         } else {
             // Nếu email không tồn tại, thông báo lỗi

@@ -43,6 +43,7 @@ public class RegisterServlet extends HttpServlet {
             String rePassword = request.getParameter("re_pass").trim();
             String phoneNumber = request.getParameter("contact").trim();
             String address = request.getParameter("address").trim();
+
             
             //Kiểm tra nếu bất kì trường nào là rỗng sau khi loại bỏ khoảng trắng
             if(firstName.isEmpty() || lastName.isEmpty() || userName.isEmpty() || gender.isEmpty() || email.isEmpty() || password.isEmpty() || rePassword.isEmpty() || phoneNumber.isEmpty() || address.isEmpty()){
@@ -119,8 +120,10 @@ public class RegisterServlet extends HttpServlet {
         return conn;
     }
 
+
     @Override
     public String getServletInfo() {
         return "Register Servlet to handle user registration.";
     }
 }
+

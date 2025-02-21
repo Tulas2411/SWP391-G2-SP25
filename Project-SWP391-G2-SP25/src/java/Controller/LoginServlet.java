@@ -48,6 +48,7 @@ public class LoginServlet extends HttpServlet {
         ResultSet rs = null;
 
         try {
+
             // Sử dụng phương thức makeConnection
             con = makeConnection();
             if (con != null) {
@@ -74,6 +75,7 @@ public class LoginServlet extends HttpServlet {
                     dispatcher = request.getRequestDispatcher("Login.jsp");
                     dispatcher.forward(request, response);
                 }
+
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -117,4 +119,6 @@ public class LoginServlet extends HttpServlet {
         }
         return conn;
     }
+
 }
+
