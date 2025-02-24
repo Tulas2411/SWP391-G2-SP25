@@ -5,12 +5,14 @@
 package DAO;
 
 import Model.Users;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Map;
-
+import java.util.Vector;
 /**
  *
  * @author admin
@@ -150,7 +152,36 @@ public class UsersDAO extends DBContext{
             System.out.println("Error removing user: " + e.getMessage());
             return false;
         }
-        return null;
     }
-   
+   private void setUserPreparedStatement(PreparedStatement ps, Users user) throws SQLException {
+        ps.setString(1, user.getFirstName());
+        ps.setString(2, user.getLastName());
+        ps.setString(3, user.getGender());
+        ps.setString(4, user.getDateOfBirth());
+        ps.setString(5, user.getUserName());
+        ps.setString(6, user.getPassword());
+        ps.setString(7, user.getRole());
+        ps.setString(8, user.getEmail());
+        ps.setString(9, user.getPhoneNumber());
+        ps.setString(10, user.getAddress());
+    }
+   private Users extractUserFromResultSet(ResultSet rs) throws SQLException {
+        Users user = new Users();
+        user.setUserID(rs.getInt("UserID"));
+        user.setFirstName(rs.getString("FirstName"));
+        user.setLastName(rs.getString("LastName"));
+        user.setGender(rs.getString("Gender"));
+        user.setDateOfBirth(rs.getString("DateOfBirth"));
+        user.setUserName(rs.getString("UserName"));
+        user.setPassword(rs.getString("Password"));
+        user.setRole(rs.getString("Role"));
+        user.setEmail(rs.getString("Email"));
+        user.setPhoneNumber(rs.getString("PhoneNumber"));
+        user.setAddress(rs.getString("Address"));
+        return user;
+    }
+    public static void main(String[] args) {
+        UsersDAO dao = new UsersDAO();
+        System.out.println(dao.getAllUsers());
+    }
 }
