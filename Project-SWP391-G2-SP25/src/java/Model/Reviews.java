@@ -17,6 +17,8 @@ public class Reviews {
     private int rating;
     private String comment;
     private Date reviewDate;
+    private String userName; // Thêm userName
+    private String productName; // Thêm productName
 
     public Reviews() {
     }
@@ -78,5 +80,22 @@ public class Reviews {
         this.reviewDate = reviewDate;
     }
     
+    // Getter và Setter cho các thuộc tính mới
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
     
 }

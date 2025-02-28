@@ -6,11 +6,82 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
 public class ReviewsDAO extends DBContext {
+    
+    public List<Reviews> getReviews(String productName, Integer rating, String search, String sortColumn, String sortOrder, int offset, int limit) {
+    List<Reviews> reviewsList = new ArrayList<>();
+    String sql = "SELECT r.*, u.UserName, p.ProductName " +
+                 "FROM Reviews r " +
+                 "JOIN Users u ON r.CustomerID = u.UserID " +
+                 "JOIN Products p ON r.ProductID = p.ProductID " +
+                 "WHERE 1=1";
+
+    // Thêm điều kiện lọc sản phẩm và rating
+    if (productName != null && !productName.isEmpty()) {
+        sql += " AND p.ProductName LIKE ?";
+    }
+    if (rating != null) {
+        sql += " AND r.Rating = ?";
+    }
+    
+    // Thêm điều kiện tìm kiếm theo userName hoặc feedback content
+    if (search != null && !search.isEmpty()) {
+        sql += " AND (u.UserName LIKE ? OR r.Comment LIKE ?)";
+    }
+
+    // Thêm điều kiện sắp xếp
+    if (sortColumn != null && sortOrder != null) {
+        sql += " ORDER BY " + sortColumn + " " + sortOrder;
+    } else {
+        sql += " ORDER BY r.ReviewDate DESC"; // Mặc định sắp xếp theo ngày review
+    }
+
+    // Thêm phân trang
+    sql += " LIMIT ? OFFSET ?";
+
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        int paramIndex = 1;
+        if (productName != null && !productName.isEmpty()) {
+            ps.setString(paramIndex++, "%" + productName + "%");
+        }
+        if (rating != null) {
+            ps.setInt(paramIndex++, rating);
+        }
+        if (search != null && !search.isEmpty()) {
+            ps.setString(paramIndex++, "%" + search + "%");
+            ps.setString(paramIndex++, "%" + search + "%");
+        }
+        ps.setInt(paramIndex++, limit);
+        ps.setInt(paramIndex, offset);
+
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Reviews review = new Reviews();
+                review.setReviewID(rs.getInt("ReviewID"));
+                review.setProductID(rs.getInt("ProductID"));
+                review.setCustomerID(rs.getInt("CustomerID"));
+                review.setRating(rs.getInt("Rating"));
+                review.setComment(rs.getString("Comment"));
+                review.setReviewDate(rs.getDate("ReviewDate"));
+                review.setUserName(rs.getString("UserName"));
+                review.setProductName(rs.getString("ProductName"));
+                reviewsList.add(review);
+            }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return reviewsList;
+}
+
+
+
 
     public Map<Integer, Reviews> getAllReviewsByProductID(int productID) {
         Map<Integer, Reviews> reviewList = new HashMap<>();
@@ -144,6 +215,7 @@ public class ReviewsDAO extends DBContext {
         }
         return list;
     }
+    
     public static void main(String[] args) {
         ReviewsDAO r = new ReviewsDAO();
         System.out.println(r.getAllReviewsbyProductID(1));
