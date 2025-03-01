@@ -6,9 +6,13 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@page import="DAO.*"%>
+<%@page import="Model.*"%>
+<%@page import="java.lang.*"%>
+<%@page import="java.util.*"%>
 <!DOCTYPE html>
 <html>
-    <!-- HEADER -->
+
     <header class="header">
         <!-- Header introduce -->
         <!-- Thông tin sđt và email -->
@@ -38,10 +42,10 @@
                         <%
                     // Lấy thông tin username từ session
                     String username = (String) session.getAttribute("username");
-        
+                    Users user = (Users) session.getAttribute("user");
                     if (username != null) {
                         // Nếu người dùng đã đăng nhập, hiển thị Hello, [Username] và nút Đăng xuất
-                        out.println("Hello, " + username + "!");
+                        out.println("Hello, " + username + "!" + user.getUserID());
                         out.println("<a href='LogoutController' class='header__introduce-account-link'>Đăng xuất</a>"); // Nút đăng xuất
                     } else {
                         // Nếu chưa đăng nhập, hiển thị Đăng Nhập
@@ -136,7 +140,7 @@
                 <div class="header__cart">
                     <ul class="header__cart-list">
                         <li class="header__cart-items">
-                            <a href="#" class="header__cart-link">
+                            <a href="/Project-SWP391-G2-SP25/Cart" class="header__cart-link">
                                 <div class="icon">
                                     <i class="icon-i fa-solid fa-cart-shopping"></i>
                                 </div>
