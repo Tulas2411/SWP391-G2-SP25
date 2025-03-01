@@ -5,11 +5,9 @@
 package Controller;
 
 import DAO.UsersDAO;
-import com.mysql.cj.xdevapi.PreparableStatement;
-import com.sun.jdi.connect.spi.Connection;
+import Model.Users;
 import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -36,6 +34,8 @@ public class LoginServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    UsersDAO userDAO = new UsersDAO();
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -43,13 +43,11 @@ public class LoginServlet extends HttpServlet {
         String password = request.getParameter("password");
         HttpSession session = request.getSession();
         RequestDispatcher dispatcher = null;
-        UsersDAO uDao = new UsersDAO();
         java.sql.Connection con = null;
         PreparedStatement pst = null;
         ResultSet rs = null;
 
         try {
-
             // Sử dụng phương thức makeConnection
             con = makeConnection();
             if (con != null) {
@@ -64,19 +62,27 @@ public class LoginServlet extends HttpServlet {
                     // Lấy email từ kết quả truy vấn
                     String emailFromDB = rs.getString("Email");
 
-                    // Thêm username vào session
+                    // Thêm username và email vào session
                     session.setAttribute("username", username);
-                    // Thêm email vào session
                     session.setAttribute("email", emailFromDB);
-                    session.setAttribute("user", uDao.getUserByUserName(username));
-                    // Chuyển hướng người dùng đến trang HomePage sau khi đăng nhập thành công
-                    response.sendRedirect("/Project-SWP391-G2-SP25/home");
+
+                    Users u = userDAO.getUserByEmail(email);
+                    if (u.getStatus().equalsIgnoreCase("Deactive")) {
+                        session.setAttribute("notificationErr", "Tài khoản của bạn đã bị vô hiệu hóa!");
+                        response.sendRedirect("Login.jsp");
+                        return;
+                    }
+                    if (u.getRole().equalsIgnoreCase("Admin")) {
+                        response.sendRedirect("admin/dashboard");
+                    } else {
+                        // Chuyển hướng người dùng đến trang HomePage sau khi đăng nhập thành công
+                        response.sendRedirect("/Project-SWP391-G2-SP25/home");
+                    }
                 } else {
                     request.setAttribute("status", "failed");
                     dispatcher = request.getRequestDispatcher("Login.jsp");
                     dispatcher.forward(request, response);
                 }
-
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -108,7 +114,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
+    }
 
     public static java.sql.Connection makeConnection() {
         java.sql.Connection conn = null;
@@ -120,6 +126,4 @@ public class LoginServlet extends HttpServlet {
         }
         return conn;
     }
-
 }
-
