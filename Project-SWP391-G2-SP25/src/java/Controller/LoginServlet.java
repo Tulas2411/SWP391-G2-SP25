@@ -43,13 +43,11 @@ public class LoginServlet extends HttpServlet {
         String password = request.getParameter("password");
         HttpSession session = request.getSession();
         RequestDispatcher dispatcher = null;
-
         java.sql.Connection con = null;
         PreparedStatement pst = null;
         ResultSet rs = null;
 
         try {
-
             // Sử dụng phương thức makeConnection
             con = makeConnection();
             if (con != null) {
@@ -64,9 +62,8 @@ public class LoginServlet extends HttpServlet {
                     // Lấy email từ kết quả truy vấn
                     String emailFromDB = rs.getString("Email");
 
-                    // Thêm username vào session
+                    // Thêm username và email vào session
                     session.setAttribute("username", username);
-                    // Thêm email vào session
                     session.setAttribute("email", emailFromDB);
 
                     Users u = userDAO.getUserByEmail(email);
@@ -79,15 +76,13 @@ public class LoginServlet extends HttpServlet {
                         response.sendRedirect("admin/dashboard");
                     } else {
                         // Chuyển hướng người dùng đến trang HomePage sau khi đăng nhập thành công
-                        response.sendRedirect("home");
+                        response.sendRedirect("/Project-SWP391-G2-SP25/home");
                     }
-
                 } else {
                     request.setAttribute("status", "failed");
                     dispatcher = request.getRequestDispatcher("Login.jsp");
                     dispatcher.forward(request, response);
                 }
-
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -119,7 +114,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
+    }
 
     public static java.sql.Connection makeConnection() {
         java.sql.Connection conn = null;
@@ -131,5 +126,4 @@ public class LoginServlet extends HttpServlet {
         }
         return conn;
     }
-
 }

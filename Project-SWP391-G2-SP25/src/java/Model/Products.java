@@ -163,5 +163,10 @@ public class Products {
         String formattedPrice = currencyFormat.format(oldprice) + "đ";
         return formattedPrice;
     }
+
+    @Override
+    public String toString() {
+        return "Products{" + "productID=" + productID + ", categoryID=" + categoryID + ", productName=" + productName + ", description=" + description + ", provider=" + provider + ", price=" + price + ", oldprice=" + oldprice + ", warrantyPeriod=" + warrantyPeriod + ", amount=" + amount + ", imageLink=" + imageLink + ", isPromoted=" + isPromoted + ", createAt=" + createAt + ", CreateAt=" + CreateAt + '}';
+    }
     
 }
