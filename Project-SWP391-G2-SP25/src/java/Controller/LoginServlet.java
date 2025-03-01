@@ -4,11 +4,10 @@
  */
 package Controller;
 
-import com.mysql.cj.xdevapi.PreparableStatement;
-import com.sun.jdi.connect.spi.Connection;
+import DAO.UsersDAO;
+import Model.Users;
 import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -35,6 +34,8 @@ public class LoginServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    UsersDAO userDAO = new UsersDAO();
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -68,8 +69,19 @@ public class LoginServlet extends HttpServlet {
                     // Thêm email vào session
                     session.setAttribute("email", emailFromDB);
 
-                    // Chuyển hướng người dùng đến trang HomePage sau khi đăng nhập thành công
-                    response.sendRedirect("HomePage.jsp");
+                    Users u = userDAO.getUserByEmail(email);
+                    if (u.getStatus().equalsIgnoreCase("Deactive")) {
+                        session.setAttribute("notificationErr", "Tài khoản của bạn đã bị vô hiệu hóa!");
+                        response.sendRedirect("Login.jsp");
+                        return;
+                    }
+                    if (u.getRole().equalsIgnoreCase("Admin")) {
+                        response.sendRedirect("admin/dashboard");
+                    } else {
+                        // Chuyển hướng người dùng đến trang HomePage sau khi đăng nhập thành công
+                        response.sendRedirect("home");
+                    }
+
                 } else {
                     request.setAttribute("status", "failed");
                     dispatcher = request.getRequestDispatcher("Login.jsp");
@@ -121,4 +133,3 @@ public class LoginServlet extends HttpServlet {
     }
 
 }
-
