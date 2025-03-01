@@ -4,6 +4,7 @@
  */
 package Controller;
 
+import DAO.UsersDAO;
 import com.mysql.cj.xdevapi.PreparableStatement;
 import com.sun.jdi.connect.spi.Connection;
 import jakarta.servlet.RequestDispatcher;
@@ -42,7 +43,7 @@ public class LoginServlet extends HttpServlet {
         String password = request.getParameter("password");
         HttpSession session = request.getSession();
         RequestDispatcher dispatcher = null;
-
+        UsersDAO uDao = new UsersDAO();
         java.sql.Connection con = null;
         PreparedStatement pst = null;
         ResultSet rs = null;
@@ -67,9 +68,9 @@ public class LoginServlet extends HttpServlet {
                     session.setAttribute("username", username);
                     // Thêm email vào session
                     session.setAttribute("email", emailFromDB);
-
+                    session.setAttribute("user", uDao.getUserByUserName(username));
                     // Chuyển hướng người dùng đến trang HomePage sau khi đăng nhập thành công
-                    response.sendRedirect("HomePage.jsp");
+                    response.sendRedirect("/Project-SWP391-G2-SP25/home");
                 } else {
                     request.setAttribute("status", "failed");
                     dispatcher = request.getRequestDispatcher("Login.jsp");

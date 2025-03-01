@@ -66,7 +66,7 @@
             <div class="success-icon">✔️</div>
             <h2>Register Successfully!</h2>
             <p>Your account has been successfully created, go to the homepage to continue shopping!</p>
-            <a href="HomePage.jsp">Go to Home</a>
+            <a href="/Project-SWP391-G2-SP25/home">Go to Home</a>
         </div>
     </body>
 </html>

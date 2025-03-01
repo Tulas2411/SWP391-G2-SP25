@@ -5,9 +5,7 @@
 
 package Controller;
 
-import DAO.*;
-import Model.Products;
-import Model.Reviews;
+import DAO.CartItemsDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -15,13 +13,12 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.Map;
 /**
  *
  * @author admin
  */
-@WebServlet(name="ProductDetailController", urlPatterns={"/ProductDetailController"})
-public class ProductDetailController extends HttpServlet {
+@WebServlet(name="UpdateCartController", urlPatterns={"/UpdateCartController"})
+public class UpdateCartController extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -38,10 +35,10 @@ public class ProductDetailController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ProductDetailController</title>");  
+            out.println("<title>Servlet UpdateCartController</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ProductDetailController at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet UpdateCartController at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -58,15 +55,7 @@ public class ProductDetailController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
-        ProductsDAO pDAO = new ProductsDAO();
-        ReviewsDAO r = new ReviewsDAO();
-
-        Products p = pDAO.getProductByID(id);
-        Map<Integer, Reviews> listr = r.getAllReviewsByProductID(id);
-        request.setAttribute("product", p);
-        request.setAttribute("listr", listr);
-        request.getRequestDispatcher("ProductDetail.jsp").forward(request, response);
+        processRequest(request, response);
     } 
 
     /** 
@@ -78,8 +67,20 @@ public class ProductDetailController extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        processRequest(request, response);
+            throws ServletException, IOException {
+        // Lấy dữ liệu từ request
+        int cartItemId = Integer.parseInt(request.getParameter("cartItemId"));
+        int quantity = Integer.parseInt(request.getParameter("quantity"));
+        CartItemsDAO ciDAO = new CartItemsDAO();
+        // Cập nhật số lượng trong database
+        boolean isUpdated = ciDAO.updateQuantityCartItem(quantity, cartItemId);
+
+        // Gửi phản hồi về client
+        if (isUpdated) {
+            response.getWriter().write("success");
+        } else {
+            response.getWriter().write("error");
+        }
     }
 
     /** 
