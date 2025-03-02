@@ -249,9 +249,23 @@ public class UsersDAO extends DBContext {
 
         }
     }
-
+    // Lấy người dùng theo tên đăng nhập (UserName)
+    public Users getUserByUserName(String userName) {
+        String sql = "SELECT * FROM Users WHERE UserName = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, userName);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return extractUserFromResultSet(rs);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching user by UserName: " + e.getMessage());
+        }
+        return null;
+    }
     public static void main(String[] args) {
         UsersDAO dao = new UsersDAO();
-        System.out.println(dao.getAllUsers());
+        System.out.println(dao.getUserByEmail("tuanminh2424@gmail.com"));
     }
 }

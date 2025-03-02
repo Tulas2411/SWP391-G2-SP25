@@ -15,6 +15,61 @@
     <!-- Main css -->
     <link rel="stylesheet" href="css/style.css">
 </head>
+<script>
+            // Hàm kiểm tra email
+            function validateEmail() {
+                const emailInput = document.querySelector('input[name="email"]');
+                const email = emailInput.value;
+                const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                const emailMessageDiv = document.getElementById('error-email-message');
+
+                if (!emailRegex.test(email)) {
+                    emailMessageDiv.textContent = 'Email không đúng định dạng!';
+                    emailMessageDiv.style.color = 'red';
+                } else {
+                    emailMessageDiv.textContent = '';
+                }
+            }
+
+            // Hàm kiểm tra mật khẩu
+            function validatePassword() {
+                const passwordInput = document.querySelector('input[name="password"]');
+                const password = passwordInput.value;
+                const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).{8,}$/;
+                const passwordMessageDiv = document.getElementById('error-password-message');
+
+                if (!passwordRegex.test(password)) {
+                    passwordMessageDiv.textContent = 'Mật khẩu phải có ít nhất 8 ký tự, chứa ít nhất 1 chữ hoa, 1 chữ thường và 1 chữ số.';
+                    passwordMessageDiv.style.color = 'red';
+                } else {
+                    passwordMessageDiv.textContent = '';
+                }
+            }
+            function validatePhone() {
+                const phoneInput = document.querySelector('input[name="contact"]');
+                const phone = phoneInput.value;
+                const phoneMessageDiv = document.getElementById('error-phone-message');
+                
+                if(phone.length!==10){
+                    phoneMessageDiv.textContent = 'Sai định dạng số điện thoại!';
+                    phoneMessageDiv.style.color = 'red';
+                }else{
+                    phoneMessageDiv.textContent = '';
+                }
+            }
+
+            // Gán sự kiện cho các trường input khi người dùng nhập liệu
+            window.onload = function() {
+                const emailInput = document.querySelector('input[name="email"]');
+                const passwordInput = document.querySelector('input[name="password"]');
+                const phoneInput = document.querySelector('input[name="contact"]');
+
+                // Gán sự kiện cho email và mật khẩu để kiểm tra khi người dùng nhập liệu
+                emailInput.addEventListener('input', validateEmail);
+                passwordInput.addEventListener('input', validatePassword);
+                phoneInput.addEventListener('input', validatePhone);
+            }
+        </script>
 <body>
     
     <!-- Lấy giá trị của status từ Servlet -->
@@ -93,10 +148,12 @@
                             <label for="email"><i class="zmdi zmdi-email"></i></label>
                             <input type="email" name="email" id="email" placeholder="Your Email" required=""/>
                         </div>
+                        <div id="error-email-message" style="font-size: 10px; color: red;"></div>
                         <div class="form-group">
                             <label for="pass"><i class="zmdi zmdi-lock"></i></label>
                             <input type="password" name="password" id="password" placeholder="Password" required=""/>
                         </div>
+                        <div id="error-password-message" style="font-size: 10px; color: red;"></div>
                         <div class="form-group">
                             <label for="re-pass"><i class="zmdi zmdi-lock-outline"></i></label>
                             <input type="password" name="re_pass" id="re_pass" placeholder="Repeat your password" required=""/>
@@ -105,6 +162,7 @@
                             <label for="contact"><i class="zmdi zmdi-phone"></i></label>
                             <input type="tel" name="contact" id="contact" placeholder="Phone Number" pattern="0[0-9]{9}" title="The phone number must have 10 digits and start with 0" required/>
                         </div>
+                        <div id="error-phone-message" style="font-size: 10px; color: red;"></div>
                         <div class="form-group">
                             <label for="address"><i class="zmdi zmdi-pin"></i></label>
                             <input type="text" name="address" id="address" placeholder="Address" required=""/>
@@ -123,7 +181,7 @@
                 </div>
                 <div class="signup-image">
                     <figure>
-                        <img src="images/ImageLogin.jpg" alt="sing up image">
+                        <a href="/Project-SWP391-G2-SP25/home"><img src="assets/img/S4EWhite.png" class="header__shop-logo-img" alt="Logo linh ki?n ?i?n t?"/></a>
                     </figure>
                     <a href="Login.jsp" class="signup-image-link">I am already member</a>
                 </div>

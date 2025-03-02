@@ -146,7 +146,7 @@ public class CartItemsDAO extends DBContext {
     }
     public static void main(String[] args) {
         CartItemsDAO cDAO = new CartItemsDAO();
-        System.out.println(cDAO.updateQuantityCartItem(2, 1));
+        System.out.println(cDAO.getCartItemsByCartIDasMap(1));
     }
     public boolean updateQuantityCartItem(int quantity, int id) {
         String sql = "UPDATE CartItems SET Quantity = ? WHERE CartItemID = ?";
