@@ -84,223 +84,227 @@ Purchase Premium Metronic Admin Theme: http://themeforest.net/item/metronic-resp
     <body class="ecommerce">
         <%@ include file="./Public/header.jsp" %>
         <div class="main">
-      <div class="container">
-        <ul class="breadcrumb">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="">Store</a></li>
-            <li class="active">Checkout</li>
-        </ul>
-        <!-- BEGIN SIDEBAR & CONTENT -->
-        
-        <div class="row margin-bottom-40">
-          <!-- BEGIN CONTENT -->
-          <div class="col-md-12 col-sm-12">
-            <h1>Checkout</h1>
-            <!-- BEGIN CHECKOUT PAGE -->
-            <div class="panel-group checkout-page accordion scrollable" id="checkout-page">
+            <div class="container">
+                <ul class="breadcrumb">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="">Store</a></li>
+                    <li class="active">Checkout</li>
+                </ul>
+                <!-- BEGIN SIDEBAR & CONTENT -->
 
-              <!-- BEGIN SHIPPING ADDRESS -->
-              <div id="shipping-address" class="panel panel-default">
-                <div class="panel-heading">
-                  <h2 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#checkout-page" href="#shipping-address-content" class="accordion-toggle">
-                      Step 1: Delivery Details
-                    </a>
-                  </h2>
-                </div>
-                <div id="shipping-address-content" class="panel-collapse collapse">
-                  <div class="panel-body row">
-                    <div class="col-md-6 col-sm-6">
-                      <div class="form-group">
-                        <label for="firstname-dd">First Name <span class="require">*</span></label>
-                        <input type="text" id="firstname-dd" class="form-control" value="<%=user.getFirstName()%>">
-                      </div>
-                      <div class="form-group">
-                        <label for="lastname-dd">Last Name <span class="require">*</span></label>
-                        <input type="text" id="lastname-dd" class="form-control" value="<%=user.getLastName()%>">
-                      </div>
-                      <div class="form-group">
-                        <label for="email-dd">E-Mail <span class="require">*</span></label>
-                        <input type="text" id="email-dd" class="form-control" value="<%=user.getEmail()%>">
-                      </div>
+                <div class="row margin-bottom-40">
+                    <!-- BEGIN CONTENT -->
+                    <div class="col-md-12 col-sm-12">
+                        <h1>Checkout</h1>
+                        <!-- BEGIN CHECKOUT PAGE -->
+                        <div class="panel-group checkout-page accordion scrollable" id="checkout-page">
+
+                            <!-- BEGIN SHIPPING ADDRESS -->
+                            <div id="shipping-address" class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h2 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#checkout-page" href="#shipping-address-content" class="accordion-toggle">
+                                            Step 1: Delivery Details
+                                        </a>
+                                    </h2>
+                                </div>
+                                <div id="shipping-address-content" class="panel-collapse collapse">
+                                    <div class="panel-body row">
+                                        <div class="col-md-6 col-sm-6">
+                                            <div class="form-group">
+                                                <label for="firstname-dd">First Name <span class="require">*</span></label>
+                                                <input type="text" id="firstname-dd" class="form-control" value="<%= (user != null) ? user.getFirstName() : "" %>">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="lastname-dd">Last Name <span class="require">*</span></label>
+                                                <input type="text" id="lastname-dd" class="form-control" value="<%= (user != null) ? user.getLastName() : "" %>">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="email-dd">E-Mail <span class="require">*</span></label>
+                                                <input type="text" id="email-dd" class="form-control" value="<%= (user != null) ? user.getEmail() : "" %>">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6 col-sm-6">
+                                            <div class="form-group">
+                                                <label for="address1-dd">Address</label>
+                                                <input type="text" id="address-dd" class="form-control" value="<%= (user != null) ? user.getAddress() : "" %>">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="post-code-dd">Giới tính <span class="require">*</span></label>
+                                                <input type="text" id="gender-dd" class="form-control" value="<%= (user != null) ? user.getGender() : "" %>">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="telephone-dd">Telephone <span class="require">*</span></label>
+                                                <input type="text" id="phone-dd" class="form-control" value="<%= (user != null) ? user.getPhoneNumber() : "" %>">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <button class="btn btn-primary  pull-right" type="submit" id="button-shipping-address" data-toggle="collapse" data-parent="#checkout-page" data-target="#shipping-method-content">Continue</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END SHIPPING ADDRESS -->
+
+                            <!-- BEGIN PAYMENT METHOD -->
+                            <div id="payment-method" class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h2 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#checkout-page" href="#payment-method-content" class="accordion-toggle">
+                                            Step 2: Payment Method
+                                        </a>
+                                    </h2>
+                                </div>
+                                <div id="payment-method-content" class="panel-collapse collapse">
+                                    <div class="panel-body row">
+                                        <div class="col-md-12">
+                                            <p>Please select the preferred payment method to use on this order.</p>
+                                            <div class="radio-list">
+                                                <label>
+                                                    <input type="radio" name="CashOnDelivery" value="CashOnDelivery" id="payment-dd"> Cash On Delivery
+                                                </label>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="delivery-payment-method">Add Comments About Your Order</label>
+                                                <textarea id="delivery-payment-method" rows="8" class="form-control" id="comment-dd"></textarea>
+                                            </div>
+                                            <button class="btn btn-primary  pull-right" type="submit" id="button-payment-method" data-toggle="collapse" data-parent="#checkout-page" data-target="#confirm-content">Continue</button>
+                                            <div class="checkbox pull-right">
+                                                <label>
+                                                    <input type="checkbox"> I have read and agree to the <a title="Terms & Conditions" href="javascript:;">Terms & Conditions </a> &nbsp;&nbsp;&nbsp; 
+                                                </label>
+                                            </div>  
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END PAYMENT METHOD -->
+
+                            <!-- BEGIN CONFIRM -->
+                            <div id="confirm" class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h2 class="panel-title">
+                                        <a data-toggle="collapse" data-parent="#checkout-page" href="#confirm-content" class="accordion-toggle">
+                                            Step 3: Confirm Order
+                                        </a>
+                                    </h2>
+                                </div>
+                                <div id="confirm-content" class="panel-collapse collapse">
+                                    <div class="panel-body row">
+                                        <div class="col-md-12 clearfix">
+                                            <div class="table-wrapper-responsive">
+                                                <table>
+                                                    <tr>
+                                                        <th class="checkout-image">Image</th>
+                                                        <th class="checkout-description">Description</th>
+                                                        <th class="checkout-model">Model</th>
+                                                        <th class="checkout-quantity">Quantity</th>
+                                                        <th class="checkout-price">Price</th>
+                                                        <th class="checkout-total">Total</th>
+                                                    </tr>
+                                                    <%
+                                                            // Lấy danh sách các sản phẩm đã chọn từ session
+                                                            ProductsDAO pDAO = new ProductsDAO();
+                                                            CartItemsDAO ciDAO = new CartItemsDAO();
+                                                            List<Map<String, Object>> selectedItems = (List<Map<String, Object>>) request.getAttribute("selectedItems");
+
+                                                            // Kiểm tra nếu danh sách không rỗng
+                                                            if (selectedItems != null) {
+                                                            for (Map<String, Object> item : selectedItems) {
+                                                                // Lấy giá trị productID và quantity
+                                                                Object productIDObj = item.get("productID");
+                                                                Object quantityObj = item.get("quantity");
+
+                                                                // Kiểm tra kiểu dữ liệu và xử lý phù hợp
+                                                                int productID = 0;
+                                                                int quantity = 0;
+
+                                                                if (productIDObj instanceof Double) {
+                                                                    productID = ((Double) productIDObj).intValue(); // Chuyển Double sang int
+                                                                } else if (productIDObj instanceof String) {
+                                                                    productID = Integer.parseInt((String) productIDObj); // Chuyển String sang int
+                                                                }
+
+                                                                if (quantityObj instanceof Double) {
+                                                                    quantity = ((Double) quantityObj).intValue(); // Chuyển Double sang int
+                                                                } else if (quantityObj instanceof String) {
+                                                                    quantity = Integer.parseInt((String) quantityObj); // Chuyển String sang int
+                                                                }
+                                                                
+                                                                Products p = pDAO.getProductByID(ciDAO.getCartItemByID(productID).getProductID());
+                                                                // Lấy đối tượng NumberFormat cho định dạng tiền Việt Nam
+                                                                NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+
+                                                                // Tính tổng giá tiền
+                                                                double totalPrice = p.getPrice() * quantity;
+                                                                String formattedTotalPrice = currencyFormat.format(totalPrice);
+                                                    %>
+                                                    <tr>
+                                                        <td class="checkout-image">
+                                                            <img src="<%=p.getImageLink()%>"></a>
+                                                        </td>
+                                                        <td class="checkout-description">
+                                                            <h3><a href="javascript:;">Cool green dress with red bell</a></h3>
+                                                            <p><strong><%=p.getProductName()%></strong></p>
+                                                            <em><%=p.getDescription()%></em>
+                                                        </td>
+                                                        <td class="checkout-model"><%=p.getDescription()%></td>
+                                                        <td class="checkout-quantity">
+                                                            <input type="number" class="product-quantity" data-product-id="<%=productID%>" value="<%=quantity%>" min="1" readonly>
+                                                        </td>
+                                                        <td class="checkout-price"><strong><%=p.getPriceFormat()%></strong></td>
+                                                        <td class="checkout-total"><strong><%=formattedTotalPrice%></strong></td>
+                                                    </tr>
+                                                    <%
+                                                            }
+                                                        } else {
+                                                    %>
+                                                    <p>No items selected.</p>
+                                                    <%
+                                                        }
+                                                    %>
+                                                </table>
+                                            </div>
+                                            <div class="checkout-total-block">
+                                                <ul>
+                                                    <li>
+                                                        <em>Sub total</em>
+                                                        <strong class="price"><span>$</span>47.00</strong>
+                                                    </li>
+                                                    <li>
+                                                        <em>Shipping cost</em>
+                                                        <strong class="price"><span>$</span>3.00</strong>
+                                                    </li>
+                                                    <li>
+                                                        <em>Eco Tax (-2.00)</em>
+                                                        <strong class="price"><span>$</span>3.00</strong>
+                                                    </li>
+                                                    <li>
+                                                        <em>VAT (17.5%)</em>
+                                                        <strong class="price"><span>$</span>3.00</strong>
+                                                    </li>
+                                                    <li class="checkout-total-price">
+                                                        <em>Total</em>
+                                                        <strong class="price"><span>$</span>56.00</strong>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="clearfix"></div>
+                                            <button class="btn btn-primary pull-right" type="submit" id="button-confirm">Confirm Order</button>
+                                            <button type="button" class="btn btn-default pull-right margin-right-20">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END CONFIRM -->
+                        </div>
+                        <!-- END CHECKOUT PAGE -->
                     </div>
-                    <div class="col-md-6 col-sm-6">
-                      <div class="form-group">
-                        <label for="address1-dd">Address</label>
-                        <input type="text" id="address1-dd" class="form-control" value="<%=user.getAddress()%>">
-                      </div>
-                      <div class="form-group">
-                        <label for="post-code-dd">Giới tính <span class="require">*</span></label>
-                        <input type="text" id="post-code-dd" class="form-control" value="<%=user.getGender()%>">
-                      </div>
-                      <div class="form-group">
-                        <label for="telephone-dd">Telephone <span class="require">*</span></label>
-                        <input type="text" id="telephone-dd" class="form-control" value="<%=user.getPhoneNumber()%>">
-                      </div>
-                    </div>
-                    <div class="col-md-12">
-                      <button class="btn btn-primary  pull-right" type="submit" id="button-shipping-address" data-toggle="collapse" data-parent="#checkout-page" data-target="#shipping-method-content">Continue</button>
-                    </div>
-                  </div>
+                    <!-- END CONTENT -->
                 </div>
-              </div>
-              <!-- END SHIPPING ADDRESS -->
-
-              <!-- BEGIN PAYMENT METHOD -->
-              <div id="payment-method" class="panel panel-default">
-                <div class="panel-heading">
-                  <h2 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#checkout-page" href="#payment-method-content" class="accordion-toggle">
-                      Step 2: Payment Method
-                    </a>
-                  </h2>
-                </div>
-                <div id="payment-method-content" class="panel-collapse collapse">
-                  <div class="panel-body row">
-                    <div class="col-md-12">
-                      <p>Please select the preferred payment method to use on this order.</p>
-                      <div class="radio-list">
-                        <label>
-                          <input type="radio" name="CashOnDelivery" value="CashOnDelivery"> Cash On Delivery
-                        </label>
-                      </div>
-                      <div class="form-group">
-                        <label for="delivery-payment-method">Add Comments About Your Order</label>
-                        <textarea id="delivery-payment-method" rows="8" class="form-control"></textarea>
-                      </div>
-                      <button class="btn btn-primary  pull-right" type="submit" id="button-payment-method" data-toggle="collapse" data-parent="#checkout-page" data-target="#confirm-content">Continue</button>
-                      <div class="checkbox pull-right">
-                        <label>
-                          <input type="checkbox"> I have read and agree to the <a title="Terms & Conditions" href="javascript:;">Terms & Conditions </a> &nbsp;&nbsp;&nbsp; 
-                        </label>
-                      </div>  
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- END PAYMENT METHOD -->
-
-              <!-- BEGIN CONFIRM -->
-              <div id="confirm" class="panel panel-default">
-                <div class="panel-heading">
-                  <h2 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#checkout-page" href="#confirm-content" class="accordion-toggle">
-                      Step 3: Confirm Order
-                    </a>
-                  </h2>
-                </div>
-                <div id="confirm-content" class="panel-collapse collapse">
-                  <div class="panel-body row">
-                    <div class="col-md-12 clearfix">
-                      <div class="table-wrapper-responsive">
-                      <table>
-                        <tr>
-                          <th class="checkout-image">Image</th>
-                          <th class="checkout-description">Description</th>
-                          <th class="checkout-model">Model</th>
-                          <th class="checkout-quantity">Quantity</th>
-                          <th class="checkout-price">Price</th>
-                          <th class="checkout-total">Total</th>
-                        </tr>
-                        <%
-                                // Lấy danh sách các sản phẩm đã chọn từ session
-                                ProductsDAO pDAO = new ProductsDAO();
-                                List<Map<String, Object>> selectedItems = (List<Map<String, Object>>) request.getAttribute("selectedItems");
-
-                                // Kiểm tra nếu danh sách không rỗng
-                                if (selectedItems != null) {
-                                for (Map<String, Object> item : selectedItems) {
-                                    // Lấy giá trị productID và quantity
-                                    Object productIDObj = item.get("productID");
-                                    Object quantityObj = item.get("quantity");
-
-                                    // Kiểm tra kiểu dữ liệu và xử lý phù hợp
-                                    int productID = 0;
-                                    int quantity = 0;
-
-                                    if (productIDObj instanceof Double) {
-                                        productID = ((Double) productIDObj).intValue(); // Chuyển Double sang int
-                                    } else if (productIDObj instanceof String) {
-                                        productID = Integer.parseInt((String) productIDObj); // Chuyển String sang int
-                                    }
-
-                                    if (quantityObj instanceof Double) {
-                                        quantity = ((Double) quantityObj).intValue(); // Chuyển Double sang int
-                                    } else if (quantityObj instanceof String) {
-                                        quantity = Integer.parseInt((String) quantityObj); // Chuyển String sang int
-                                    }
-                                    Products p = pDAO.getProductByID(productID);
-                                    // Lấy đối tượng NumberFormat cho định dạng tiền Việt Nam
-                                    NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
-
-                                    // Tính tổng giá tiền
-                                    double totalPrice = p.getPrice() * quantity;
-                                    String formattedTotalPrice = currencyFormat.format(totalPrice);
-                        %>
-                        <tr>
-                          <td class="checkout-image">
-                            <img src="<%=p.getImageLink()%>"></a>
-                          </td>
-                          <td class="checkout-description">
-                            <h3><a href="javascript:;">Cool green dress with red bell</a></h3>
-                            <p><strong><%=p.getProductName()%></strong></p>
-                            <em><%=p.getDescription()%></em>
-                          </td>
-                          <td class="checkout-model"><%=p.getDescription()%></td>
-                          <td class="checkout-quantity"><%=quantity%></td>
-                          <td class="checkout-price"><strong><%=p.getPriceFormat()%></strong></td>
-                          <td class="checkout-total"><strong><%=formattedTotalPrice%></strong></td>
-                        </tr>
-                        <%
-                                }
-                            } else {
-                        %>
-                                <p>No items selected.</p>
-                        <%
-                            }
-                        %>
-                      </table>
-                      </div>
-                      <div class="checkout-total-block">
-                        <ul>
-                          <li>
-                            <em>Sub total</em>
-                            <strong class="price"><span>$</span>47.00</strong>
-                          </li>
-                          <li>
-                            <em>Shipping cost</em>
-                            <strong class="price"><span>$</span>3.00</strong>
-                          </li>
-                          <li>
-                            <em>Eco Tax (-2.00)</em>
-                            <strong class="price"><span>$</span>3.00</strong>
-                          </li>
-                          <li>
-                            <em>VAT (17.5%)</em>
-                            <strong class="price"><span>$</span>3.00</strong>
-                          </li>
-                          <li class="checkout-total-price">
-                            <em>Total</em>
-                            <strong class="price"><span>$</span>56.00</strong>
-                          </li>
-                        </ul>
-                      </div>
-                      <div class="clearfix"></div>
-                      <button class="btn btn-primary pull-right" type="submit" id="button-confirm">Confirm Order</button>
-                      <button type="button" class="btn btn-default pull-right margin-right-20">Cancel</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- END CONFIRM -->
+                <!-- END SIDEBAR & CONTENT -->
             </div>
-            <!-- END CHECKOUT PAGE -->
-          </div>
-          <!-- END CONTENT -->
         </div>
-        <!-- END SIDEBAR & CONTENT -->
-      </div>
-    </div>
         <%@ include file="./Public/footer.jsp" %>
 
         <!-- Load javascripts at bottom, this will reduce page load time -->
@@ -345,6 +349,79 @@ Purchase Premium Metronic Admin Theme: http://themeforest.net/item/metronic-resp
             });
         </script>
         
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Xử lý sự kiện khi nhấn nút "Confirm Order"
+        $('#button-confirm').on('click', function() {
+            // Thu thập dữ liệu từ form
+            var firstname = $('#firstname-dd').val();
+            var lastname = $('#lastname-dd').val();
+            var email = $('#email-dd').val();
+            var phone = $('#phone-dd').val();
+            var gender = $('#gender-dd').val();
+            var address = $('#address-dd').val();
+            var comment = $('#comment-dd').val();
+            var paymentMethod = $('input[name="CashOnDelivery"]:checked').val();
+
+            // Thu thập thông tin sản phẩm từ bảng
+            var products = [];
+            $('table tr').each(function() {
+                var productId = $(this).find('.product-quantity').data('product-id');
+                var quantity = $(this).find('.product-quantity').val();
+                if (productId && quantity) {
+                    products.push({
+                        productId: parseInt(productId), // Chuyển sang số
+                        quantity: parseInt(quantity)   // Chuyển sang số
+                    });
+                }
+            });
+            
+            // Tạo đối tượng dữ liệu để gửi đi
+            var data = {
+                firstname: firstname,
+                lastname: lastname,
+                email: email,
+                phone: phone,
+                gender: gender,
+                address: address,
+                comment: comment,
+                paymentMethod: paymentMethod,
+                products: products
+            };
+
+            // Gửi dữ liệu bằng AJAX
+            console.log(JSON.stringify(data)); // Kiểm tra dữ liệu trước khi gửi
+
+            $.ajax({
+                url: '<%=request.getContextPath()%>/ConfirmOrder',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function(response) {
+                    console.log(response); // In phản hồi từ server
+                    try {
+                        var jsonResponse = JSON.parse(response); // Phân tích JSON
+                        if (jsonResponse.success) {
+                            alert(jsonResponse.message);
+                            window.location.href = '/order-success-page';
+                        } else {
+                            alert(jsonResponse.message);
+                        }
+                    } catch (e) {
+                        console.error("Invalid JSON response:", response); // In lỗi nếu JSON không hợp lệ
+                        alert('Invalid response from server.');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error(error); // In lỗi chi tiết
+                    alert('An error occurred while processing your request: ' + error);
+                }
+            });
+        });
+    });
+</script>
+
         <!-- END PAGE LEVEL JAVASCRIPTS -->
     </body>
     <!-- END BODY -->

@@ -171,9 +171,22 @@ public class OrdersDAO extends DBContext {
         }
         return null;
     }
+    
+    public Orders getLatestOrder() {
+    String sql = "SELECT * FROM Orders ORDER BY OrderID DESC LIMIT 1"; // Sắp xếp giảm dần và lấy 1 bản ghi đầu tiên
+    try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+        if (rs.next()) {
+            return extractOrderFromResultSet(rs); // Trả về Order mới nhất
+        }
+    } catch (SQLException e) {
+        System.out.println("Error fetching the latest order: " + e.getMessage());
+    }
+    return null; // Trả về null nếu không tìm thấy
+}
+    
     public static void main(String[] args) {
         OrdersDAO oDAO = new OrdersDAO();
         Orders order = new Orders(6, null, null, "Pending", 0, null);
-        System.out.println(oDAO.addOrder(order));
+        System.out.println(oDAO.getLatestOrder().getOrderDate());
     }
 }

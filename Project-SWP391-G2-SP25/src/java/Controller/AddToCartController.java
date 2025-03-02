@@ -100,6 +100,7 @@ public class AddToCartController extends HttpServlet {
             if(user!=null){
             Map<Integer, CartItems> list = ciDAO.getCartItemsByCartIDasMap(cDAO.getCartByCustomerID(user.getUserID()).getCartID());
             // Thêm sản phẩm vào giỏ hàng
+            if(list.size() !=0 ){
             for (int id : list.keySet()) {
                 // Nếu sản phẩm đã có trong giỏ hàng, cộng thêm số lượng
                CartItems ci = list.get(id);
@@ -111,6 +112,9 @@ public class AddToCartController extends HttpServlet {
                    ciDAO.addCartItem(new CartItems(cDAO.getCartByCustomerID(user.getUserID()).getCartID(), productId, quantity));
                    break;
                }
+            }
+            }else{
+                ciDAO.addCartItem(new CartItems(cDAO.getCartByCustomerID(user.getUserID()).getCartID(), productId, quantity));
             }
                 
             } else {

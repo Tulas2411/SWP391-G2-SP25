@@ -121,7 +121,7 @@
                    %>     
                   <tr>
                     <td class="goods-page-image">
-                        <input type="checkbox" name="selectedItems" value="<%=ci.getProductID()%>" checked />
+                        <input type="checkbox" name="selectedItems" value="<%=id%>" checked />
                     </td>
                     <td class="goods-page-image">
                         <a href="/Project-SWP391-G2-SP25/ProductDetailController?id=<%=p.getProductID()%>"><img src="<%=p.getImageLink()%>"></a>
