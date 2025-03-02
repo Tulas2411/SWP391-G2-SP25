@@ -78,6 +78,8 @@ public class AddToCartController extends HttpServlet {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         JSONObject jsonResponse = new JSONObject();
+        CartItemsDAO ciDAO = new CartItemsDAO();
+        CartsDAO cDAO = new CartsDAO();
 
         try {
             // Lấy dữ liệu từ request
@@ -94,22 +96,38 @@ public class AddToCartController extends HttpServlet {
 
             // Lấy giỏ hàng từ session
             HttpSession session = request.getSession();
-            Map<Integer, Integer> cart = (Map<Integer, Integer>) session.getAttribute("cart");
-
-            // Nếu giỏ hàng chưa tồn tại, tạo mới
-            if (cart == null) {
+            Users user = (Users) session.getAttribute("user");
+            if(user!=null){
+            Map<Integer, CartItems> list = ciDAO.getCartItemsByCartIDasMap(cDAO.getCartByCustomerID(user.getUserID()).getCartID());
+            // Thêm sản phẩm vào giỏ hàng
+            for (int id : list.keySet()) {
+                // Nếu sản phẩm đã có trong giỏ hàng, cộng thêm số lượng
+               CartItems ci = list.get(id);
+               if(ci.getProductID() == productId){
+                   int old = ciDAO.getCartItemByID(id).getQuantity();
+                   ciDAO.updateQuantityCartItem(old + quantity, id);
+                   break;
+               }else{
+                   ciDAO.addCartItem(new CartItems(cDAO.getCartByCustomerID(user.getUserID()).getCartID(), productId, quantity));
+                   break;
+               }
+            }
+                
+            } else {
+                Map<Integer, Integer> cart = (Map<Integer, Integer>) session.getAttribute("cart");
+                if (cart == null) {
                 cart = new HashMap<>();
                 session.setAttribute("cart", cart); // Lưu giỏ hàng vào session
-            }
-
-            // Thêm sản phẩm vào giỏ hàng
-            if (cart.containsKey(productId)) {
+                }  
+                if (cart.containsKey(productId)) {
                 // Nếu sản phẩm đã có trong giỏ hàng, cộng thêm số lượng
                 cart.put(productId, cart.get(productId) + quantity);
             } else {
                 // Nếu sản phẩm chưa có trong giỏ hàng, thêm mới
                 cart.put(productId, quantity);
             }
+            }
+            
 
             // Trả về kết quả thành công
             jsonResponse.put("success", true);
