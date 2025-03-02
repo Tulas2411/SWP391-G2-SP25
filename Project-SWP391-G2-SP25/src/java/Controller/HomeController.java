@@ -38,6 +38,9 @@ public class HomeController extends HttpServlet {
         // Lấy danh sách 5 sản phẩm khuyến mãi
         List<Products> promotedProducts = productsDAO.getPromotedProducts();
 
+        for (Products pro : promotedProducts) {
+            System.out.println("AAAAAAAAAA" + pro);
+        }
         // Lấy danh sách sản phẩm mới
         List<Products> newProducts = productsDAO.getNewProducts();
 

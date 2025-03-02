@@ -1,3 +1,6 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -9,7 +12,7 @@
         <!-- Font Icon -->
         <link rel="stylesheet"
               href="fonts/material-icon/css/material-design-iconic-font.min.css">
-
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <!-- Main css -->
         <link rel="stylesheet" href="css/style.css">
     </head>
@@ -31,6 +34,24 @@
                         </div>
 
                         <div class="signin-form">
+                            <c:if test="${not empty sessionScope.notification}">
+                                <div class="alert alert-success alert-dismissible fade show" role="alert" style="text-align: center">
+                                    ${sessionScope.notification}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                                <%
+                                    session.removeAttribute("notification");
+                                %>
+                            </c:if>
+                            <c:if test="${not empty sessionScope.notificationErr}">
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert" style="text-align: center">
+                                    ${sessionScope.notificationErr}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                                <%
+                                    session.removeAttribute("notificationErr");
+                                %>
+                            </c:if>
                             <h2 class="form-title">Login</h2>
                             <form method="post" action="LoginServlet" class="register-form"
                                   id="login-form">
@@ -58,11 +79,12 @@
                                            class="form-submit" value="Log in" />
                                 </div>
                             </form>
-                            
+
                             <% if ("true".equals(request.getParameter("error"))) { %>
-                            <p style="color: red;">Đăng nhập thất bại! Vui lòng thử lại.</p>
+                            <p style="color: red;">Đăng nhập thất bại. Vui lòng thử lại sau.</p>
                             <% } %>
-                            
+
+
                             <div class="social-login">
                                 <span class="social-label">Or login with</span>
                                 <ul class="socials">
@@ -87,7 +109,7 @@
         <script src="js/main.js"></script>
         <script src ="http://inpkg.com/sweetalert/dist/sweetalert.min.js"></script>
         <link rel ="stylesheet" href="alert/dist/sweetalert.css">
-
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script type="text/javascript">
             var status = document.getElementById("status").value;
             if (status == "failed") {
@@ -96,5 +118,5 @@
 
         </script>
     </body>
-    
+
 </html>
