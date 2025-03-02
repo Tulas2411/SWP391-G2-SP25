@@ -102,6 +102,7 @@
                 <div class="table-wrapper-responsive">
                 <table summary="Shopping cart">
                   <tr>
+                    <th class="goods-page-image">Chọn</th> <!-- Thêm cột checkbox -->
                     <th class="goods-page-image">Hình ảnh</th>
                     <th class="goods-page-description">Mô tả sản phẩm</th>
                     <th class="goods-page-ref-no">Ref No</th>
@@ -120,6 +121,9 @@
                    %>     
                   <tr>
                     <td class="goods-page-image">
+                        <input type="checkbox" name="selectedItems" value="<%=ci.getProductID()%>" checked />
+                    </td>
+                    <td class="goods-page-image">
                         <a href="/Project-SWP391-G2-SP25/ProductDetailController?id=<%=p.getProductID()%>"><img src="<%=p.getImageLink()%>"></a>
                     </td>
                     <td class="goods-page-description">
@@ -134,6 +138,7 @@
                         <div class="product-quantity">
                           <button class="btn btn-decrease" data-cart-item-id="<%=ci.getCartItemID()%>">-</button>
                           <input id="product-quantity-<%=ci.getCartItemID()%>" type="text" value="<%=ci.getQuantity()%>" class="form-control input-sm quantity-input" readonly>
+                          <input id="product-quantity-<%=ci.getProductID()%>" value="<%=ci.getQuantity()%>" hidden>
                           <button class="btn btn-increase" data-cart-item-id="<%=ci.getCartItemID()%>">+</button>
                         </div>
                     </td>
@@ -154,6 +159,9 @@
                             Products p = pDAO.getProductByID(id);
                   %>
                   <tr>
+                    <td class="goods-page-image">
+                        <input type="checkbox" name="selectedItems" value="<%=id%>" checked />
+                    </td>
                     <td class="goods-page-image">
                         <a href="/Project-SWP391-G2-SP25/ProductDetailController?id=<%=p.getProductID()%>"><img src="<%=p.getImageLink()%>"></a>
                     </td>
@@ -210,7 +218,10 @@
                 </div>
               </div>
                 <a href="/Project-SWP391-G2-SP25/home"><button class="btn btn-default" type="submit">Continue shopping <i class="fa fa-shopping-cart"></i></button></a>
-                <a href="/Project-SWP391-G2-SP25/home"><button class="btn btn-primary" type="submit">Checkout <i class="fa fa-check"></i></button></a>
+                <form id="checkoutForm" action="CartContact" method="POST">
+                <input type="hidden" name="selectedItems" id="selectedItemsInput" />
+                <button class="btn btn-primary" id="checkoutButton">Checkout <i class="fa fa-check"></i></button>
+                </form>
             </div>
           </div>
           <!-- END CONTENT -->
@@ -350,6 +361,37 @@
         });
     </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        $('#checkoutButton').on('click', function() {
+            var selectedItems = []; // Mảng để lưu các sản phẩm đã chọn
+
+            // Lặp qua các sản phẩm đã chọn
+            $('input[name="selectedItems"]:checked').each(function() {
+                var productID = $(this).val(); // Lấy productID
+                var quantity = parseInt($('#product-quantity-' + productID).val()); // Lấy số lượng
+
+                // Thêm sản phẩm vào mảng
+                selectedItems.push({
+                    productID: productID,
+                    quantity: quantity
+                });
+            });
+
+            // Kiểm tra nếu có ít nhất một sản phẩm được chọn
+            if (selectedItems.length > 0) {
+                // Chuyển đổi mảng thành JSON và gán vào input hidden
+                $('#selectedItemsInput').val(JSON.stringify(selectedItems));
+
+                // Gửi form
+                console.log(productID);
+                $('#checkoutForm').submit();
+            } else {
+                alert('Vui lòng chọn ít nhất một sản phẩm.');
+            }
+        });
+    });
+    </script>
 <script>
     $(document).ready(function() {
     // Hàm chuyển đổi chuỗi tiền tệ thành số
@@ -369,14 +411,6 @@
         $(this).text(formatCurrency(totalPrice));
     });
 
-    // Định dạng tổng giá trị giỏ hàng ban đầu
-    var totalb = 0;
-        $('span[id^="product-total-"]').each(function() { // Sửa selector để lấy đúng phần tử
-            var totalText = $(this).text(); // Lấy giá trị tổng của từng sản phẩm
-            var totalPrice = parseCurrency(totalText); // Chuyển đổi thành số
-            totalb += totalPrice; // Cộng dồn vào tổng giá trị giỏ hàng
-        });
-        $('#cart-total').text(formatCurrency(totalb)); // Cập nhật tổng giá trị giỏ hàng lên giao diện
 
     // Hàm cập nhật giá tổng của sản phẩm
     function updateProductTotal(cartItemId) {
@@ -390,13 +424,22 @@
     // Hàm cập nhật tổng giá trị giỏ hàng
     function updateCartTotal() {
         var total = 0;
-        $('span[id^="product-total-"]').each(function() { // Sửa selector để lấy đúng phần tử
-            var totalText = $(this).text(); // Lấy giá trị tổng của từng sản phẩm
-            var totalPrice = parseCurrency(totalText); // Chuyển đổi thành số
+        $('input[name="selectedItems"]:checked').each(function() {
+            var cartItemId = $(this).val(); // Lấy cartItemID của sản phẩm được checked
+            var totalText = $('#product-total-' + cartItemId).text(); // Lấy giá tổng của sản phẩm
+            var totalPrice = parseCurrency(totalText); // Chuyển đổi giá tổng thành số
             total += totalPrice; // Cộng dồn vào tổng giá trị giỏ hàng
         });
         $('#cart-total').text(formatCurrency(total)); // Cập nhật tổng giá trị giỏ hàng lên giao diện
     }
+
+    // Cập nhật tổng giá trị giỏ hàng khi checkbox thay đổi
+    $('input[name="selectedItems"]').on('change', function() {
+        updateCartTotal();
+    });
+
+    // Cập nhật tổng giá trị giỏ hàng ban đầu
+    updateCartTotal();
 
     // Xử lý nút tăng số lượng
     $('.btn-increase').on('click', function() {
