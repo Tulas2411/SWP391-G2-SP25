@@ -82,7 +82,7 @@ public class CartContactController extends HttpServlet {
             throws ServletException, IOException {
         // Lấy tổng giá trị giỏ hàng
         //double totalPrice = Double.parseDouble(request.getParameter("totalPrice"));
-
+        OrderDetailsDAO odDAO = new OrderDetailsDAO();
         // Lấy danh sách sản phẩm đã chọn
         List<Map<String, Object>> selectedItems = new ArrayList<>();
         int index = 0;
@@ -105,46 +105,17 @@ public class CartContactController extends HttpServlet {
             index++;
         }
 
-        // Xử lý đơn hàng
-        HttpSession session = request.getSession();
-        OrdersDAO oDAO = new OrdersDAO();
-        OrderDetailsDAO odDAO = new OrderDetailsDAO();
-        Users user = (Users) session.getAttribute("user");
-
-        if (user == null) {
-            response.sendRedirect("Login.jsp");
-            return;
-        }
-
-        Orders order = oDAO.getOrderPendingByID(user.getUserID());
-        if (order == null) {
-            order = new Orders(user.getUserID(), null, null, "Pending", 0, null);
-            boolean isAdded = oDAO.addOrder(order);
-            if (!isAdded) {
-                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Không thể tạo đơn hàng mới.");
-                return;
-            }
-            order = oDAO.getOrderPendingByID(user.getUserID());
-        }
-
-        if (order == null) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Không thể lấy thông tin đơn hàng.");
-            return;
-        }
-
-        int orderID = order.getOrderID();
-
+        Map<Integer, Integer> order = new HashMap<>();
         // Thêm các sản phẩm vào đơn hàng
         for (Map<String, Object> item : selectedItems) {
             int productID = (int) item.get("productID");
             int quantity = (int) item.get("quantity");
             double price = (double) item.get("price");
-            odDAO.addOrderDetail(new OrderDetails(orderID, productID, quantity, (float) price));
+            order.put(productID, quantity);
         }
 
         // Chuyển hướng đến trang CartContact.jsp
-        Map<Integer, OrderDetails> list = odDAO.getOrderDetailsByOrderIDasMap(orderID);
-        request.setAttribute("list", list);
+        request.setAttribute("list", order);
         request.getRequestDispatcher("CartContact.jsp").forward(request, response);
     }
 
@@ -163,14 +134,58 @@ public class CartContactController extends HttpServlet {
 
         // Chuyển đổi JSON thành List<Map<String, Object>>
         Gson gson = new Gson();
-        Type type = new TypeToken<List<Map<String, Object>>>(){}.getType();
+        Type type = new TypeToken<List<Map<String, Object>>>() {
+        }.getType();
         List<Map<String, Object>> selectedItems = gson.fromJson(selectedItemsJson, type);
 
-        // Lưu vào session
-        HttpSession session = request.getSession();
-        request.setAttribute("selectedItems", selectedItems);
+        Map<Integer, Integer> order = new HashMap<>();
+        // Thêm các sản phẩm vào đơn hàng
+        for (Map<String, Object> item : selectedItems) {
+            Object productIDObj = item.get("productID");
+            Object quantityObj = item.get("quantity");
 
-        // Chuyển hướng đến trang thanh toán
+            int productID = 0;
+            int quantity = 0;
+
+            // Kiểm tra và chuyển đổi productID
+            if (productIDObj instanceof Integer) {
+                productID = (Integer) productIDObj;
+            } else if (productIDObj instanceof String) {
+                productID = Integer.parseInt((String) productIDObj);
+            }
+
+            // Kiểm tra và chuyển đổi quantity
+            if (quantityObj instanceof Integer) {
+                quantity = (Integer) quantityObj;
+            } else if (quantityObj instanceof Double) {
+                double quantityDouble = (Double) quantityObj;
+                if (quantityDouble % 1 == 0) { // Kiểm tra xem có phần thập phân không
+                    quantity = (int) quantityDouble; // Chuyển đổi Double sang Integer
+                } else {
+                    System.err.println("Quantity has decimal places. Truncating to integer: " + quantityDouble);
+                    quantity = (int) quantityDouble; // Làm tròn xuống
+                }
+            } else if (quantityObj instanceof String) {
+                try {
+                    double quantityDouble = Double.parseDouble((String) quantityObj);
+                    if (quantityDouble % 1 == 0) { // Kiểm tra xem có phần thập phân không
+                        quantity = (int) quantityDouble; // Chuyển đổi Double sang Integer
+                    } else {
+                        System.err.println("Quantity has decimal places. Truncating to integer: " + quantityDouble);
+                        quantity = (int) quantityDouble; // Làm tròn xuống
+                    }
+                } catch (NumberFormatException e) {
+                    System.err.println("Error converting quantity to Double: " + e.getMessage());
+                }
+            } else if (quantityObj == null) {
+                System.err.println("Quantity is null. Using default value 0.");
+            }
+
+            order.put(productID, quantity);
+        }
+
+        // Chuyển hướng đến trang CartContact.jsp
+        request.setAttribute("list", order);
         request.getRequestDispatcher("CartContact.jsp").forward(request, response);
     }
 

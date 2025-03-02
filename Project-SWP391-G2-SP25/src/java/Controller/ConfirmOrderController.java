@@ -182,6 +182,7 @@ public class ConfirmOrderController extends HttpServlet {
                 if (!isUserAdded) {
                     throw new Exception("Failed to add user.");
                 }
+                session.setAttribute("user", u);
 
                 // Thêm đơn hàng mới
                 boolean isOrderAdded = oDAO.addOrder(new Orders(u.getUserID(), null, u.getAddress(), "Submitted", total, comment));
