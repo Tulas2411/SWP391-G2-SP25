@@ -9,6 +9,7 @@
 <%@page import="Model.*"%>
 <%@page import="java.lang.*"%>
 <%@page import="java.util.*"%>
+<%@page import="java.text.*"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -73,12 +74,24 @@
           <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
           <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->
+        <script type="text/javascript">
+            function doDelete(id) {
+                if (confirm("Bạn có chắc chắn muốn xóa ?")) {
+                    window.location = 'DeleteCartItem?id=' + id;
+                }
+            }
+        </script>
 </head>
     
     <body class="ecommerce">
     <%@ include file="./Public/header.jsp" %>
     <div class="main">
       <div class="container">
+          <%
+                // Định dạng tiền tệ Việt Nam
+                NumberFormat vnCurrencyFormat = NumberFormat.getInstance(new Locale("vi", "VN"));
+                vnCurrencyFormat.setMaximumFractionDigits(0); // Không hiển thị phần thập phân
+          %>
         <!-- BEGIN SIDEBAR & CONTENT -->
         <div class="row margin-bottom-40">
           <!-- BEGIN CONTENT -->
@@ -98,6 +111,7 @@
                   </tr>
                   <%
                       Map<Integer, CartItems> list = (Map<Integer, CartItems>) request.getAttribute("list");
+                      Map<Integer, Integer> cart = (Map<Integer, Integer>) session.getAttribute("cart");
                       ProductsDAO pDAO = new ProductsDAO();
                       if(list!=null){
                         for (int id : list.keySet()) {
@@ -130,12 +144,50 @@
                         <strong><span id="product-total-<%=ci.getCartItemID()%>"><%=p.getPrice() * ci.getQuantity()%></span></strong>
                     </td>
                     <td class="del-goods-col">
-                      <a class="del-goods" href="javascript:;">&nbsp;</a>
+                      <a class="del-goods" onclick="doDelete('<%=ci.getCartItemID()%>')">&nbsp;</a>
                     </td>
                   </tr>
                   <%
                         }
-                      }
+                      }else if(cart!=null){
+                        for (int id : cart.keySet()) {
+                            Products p = pDAO.getProductByID(id);
+                  %>
+                  <tr>
+                    <td class="goods-page-image">
+                        <a href="/Project-SWP391-G2-SP25/ProductDetailController?id=<%=p.getProductID()%>"><img src="<%=p.getImageLink()%>"></a>
+                    </td>
+                    <td class="goods-page-description">
+                      <h3><a href="javascript:;">Cool green dress with red bell</a></h3>
+                      <p><strong><%=p.getProductName()%></strong></p>
+                      <em><%=p.getDescription()%></em>
+                    </td>
+                    <td class="goods-page-ref-no">
+                      javc2133
+                    </td>
+                    <td class="goods-page-quantity">
+                        <div class="product-quantity">
+                          <button class="btn btn-decrease" data-cart-item-id="<%=id%>">-</button>
+                          <input id="product-quantity-<%=id%>" type="text" value="<%=cart.get(id)%>" class="form-control input-sm quantity-input" readonly>
+                          <button class="btn btn-increase" data-cart-item-id="<%=id%>">+</button>
+                        </div>
+                    </td>
+                    <td class="goods-page-price">
+                        <strong><span id="product-price-<%=id%>"><%=p.getPriceFormat()%></span></strong>
+                      </td>
+                      <td class="goods-page-total">
+                        <strong><span id="product-total-<%=id%>"><%=p.getPrice() * cart.get(id)%></span></strong>
+                    </td>
+                    <td class="del-goods-col">
+                      <a class="del-goods" href="javascript:;">&nbsp;</a>
+                    </td>
+                  </tr>
+                  <%
+
+                       }}else{
+                            cart = new HashMap<>();
+                            session.setAttribute("cart", cart); // Lưu giỏ hàng vào session
+                        }
                   %>
                 </table>
                 </div>
@@ -144,7 +196,7 @@
                     <ul>
                       <li>
                         <em>Sub total</em>
-                        <strong class="price"><span>$</span><span id="cart-total">47.00</span></strong>
+                        <strong class="price"><span id="cart-total"></span></strong>
                       </li>
                       <li>
                         <em>Shipping cost</em>
@@ -157,7 +209,7 @@
                     </ul>
                 </div>
               </div>
-              <button class="btn btn-default" type="submit">Continue shopping <i class="fa fa-shopping-cart"></i></button>
+                <a href="/Project-SWP391-G2-SP25/home"><button class="btn btn-default" type="submit">Continue shopping <i class="fa fa-shopping-cart"></i></button></a>
               <button class="btn btn-primary" type="submit">Checkout <i class="fa fa-check"></i></button>
             </div>
           </div>
@@ -299,15 +351,62 @@
     </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-$(document).ready(function() {
+    $(document).ready(function() {
+    // Hàm chuyển đổi chuỗi tiền tệ thành số
+    function parseCurrency(currencyString) {
+        return parseFloat(currencyString.replace(/[^0-9]/g, ""));
+    }
+
+    // Hàm định dạng số thành chuỗi tiền tệ Việt Nam
+    function formatCurrency(amount) {
+        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+    }
+    
+    // Định dạng giá tổng ban đầu
+    $('span[id^="product-total-"]').each(function() {
+        var totalText = $(this).text();
+        var totalPrice = parseFloat(totalText.replace(/[^0-9.-]+/g, ""));
+        $(this).text(formatCurrency(totalPrice));
+    });
+
+    // Định dạng tổng giá trị giỏ hàng ban đầu
+    var totalb = 0;
+        $('span[id^="product-total-"]').each(function() { // Sửa selector để lấy đúng phần tử
+            var totalText = $(this).text(); // Lấy giá trị tổng của từng sản phẩm
+            var totalPrice = parseCurrency(totalText); // Chuyển đổi thành số
+            totalb += totalPrice; // Cộng dồn vào tổng giá trị giỏ hàng
+        });
+        $('#cart-total').text(formatCurrency(totalb)); // Cập nhật tổng giá trị giỏ hàng lên giao diện
+
+    // Hàm cập nhật giá tổng của sản phẩm
+    function updateProductTotal(cartItemId) {
+        var quantity = parseInt($('#product-quantity-' + cartItemId).val());
+        var priceText = $('#product-price-' + cartItemId).text();
+        var price = parseCurrency(priceText);
+        var totalPrice = price * quantity;
+        $('#product-total-' + cartItemId).text(formatCurrency(totalPrice));
+    }
+
+    // Hàm cập nhật tổng giá trị giỏ hàng
+    function updateCartTotal() {
+        var total = 0;
+        $('span[id^="product-total-"]').each(function() { // Sửa selector để lấy đúng phần tử
+            var totalText = $(this).text(); // Lấy giá trị tổng của từng sản phẩm
+            var totalPrice = parseCurrency(totalText); // Chuyển đổi thành số
+            total += totalPrice; // Cộng dồn vào tổng giá trị giỏ hàng
+        });
+        $('#cart-total').text(formatCurrency(total)); // Cập nhật tổng giá trị giỏ hàng lên giao diện
+    }
+
     // Xử lý nút tăng số lượng
     $('.btn-increase').on('click', function() {
         var cartItemId = $(this).data('cart-item-id');
         var quantityInput = $('#product-quantity-' + cartItemId);
         var currentQuantity = parseInt(quantityInput.val());
-        quantityInput.val(currentQuantity + 1); // Tăng số lượng
-        updateProductTotal(cartItemId); // Cập nhật giá tổng của sản phẩm
-        updateCartTotal(); // Cập nhật tổng giá trị giỏ hàng
+        quantityInput.val(currentQuantity + 1);
+        updateProductTotal(cartItemId);
+        updateCartTotal();
+        updateCartOnServer(cartItemId, currentQuantity + 1); // Gửi giá trị mới đến backend
     });
 
     // Xử lý nút giảm số lượng
@@ -316,37 +415,17 @@ $(document).ready(function() {
         var quantityInput = $('#product-quantity-' + cartItemId);
         var currentQuantity = parseInt(quantityInput.val());
         if (currentQuantity > 1) {
-            quantityInput.val(currentQuantity - 1); // Giảm số lượng
-            updateProductTotal(cartItemId); // Cập nhật giá tổng của sản phẩm
-            updateCartTotal(); // Cập nhật tổng giá trị giỏ hàng
+            quantityInput.val(currentQuantity - 1);
+            updateProductTotal(cartItemId);
+            updateCartTotal();
+            if (currentQuantity > 1) {
+            quantityInput.val(currentQuantity - 1); // Cập nhật giá trị mới
+            updateCartOnServer(cartItemId, currentQuantity - 1); // Gửi giá trị mới đến backend
+            }
         }
     });
-    $('.btn-increase, .btn-decrease').on('click', function() {
-    var cartItemId = $(this).data('cart-item-id'); // Lấy cartItemID từ thuộc tính data
-    var quantity = parseInt($('#product-quantity-' + cartItemId).val()); // Lấy số lượng mới
-    updateCartOnServer(cartItemId, quantity); // Gọi API cập nhật
-    });
-
-    // Hàm cập nhật giá tổng của sản phẩm
-    function updateProductTotal(cartItemId) {
-        var quantity = parseInt($('#product-quantity-' + cartItemId).val()); // Lấy số lượng mới
-        var priceText = $('#product-price-' + cartItemId).text(); // Lấy giá sản phẩm
-        var price = parseFloat(priceText.replace('$', '').trim()); // Chuyển giá thành số
-        var totalPrice = price * quantity; // Tính giá tổng
-        $('#product-total-' + cartItemId).text('$' + totalPrice.toFixed(2)); // Cập nhật giá tổng lên giao diện
-    }
-
-    // Hàm cập nhật tổng giá trị giỏ hàng
-    function updateCartTotal() {
-        var total = 0;
-        $('td[id^="product-total-"]').each(function() {
-            var totalText = $(this).text(); // Lấy giá tổng của từng sản phẩm
-            var totalPrice = parseFloat(totalText.replace('$', '').trim()); // Chuyển thành số
-            total += totalPrice; // Cộng dồn vào tổng giá trị giỏ hàng
-        });
-        $('#cart-total').text('$' + total.toFixed(2)); // Cập nhật tổng giá trị giỏ hàng lên giao diện
-    }
 });
+
 
 
 </script>
