@@ -76,6 +76,7 @@ public class LoginServlet extends HttpServlet {
                         response.sendRedirect("admin/dashboard");
                     } else {
                         // Chuyển hướng người dùng đến trang HomePage sau khi đăng nhập thành công
+                        session.setAttribute("user", userDAO.getUserByUserName(username));
                         response.sendRedirect("/Project-SWP391-G2-SP25/home");
                     }
                 } else {

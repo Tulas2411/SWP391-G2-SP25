@@ -1,0 +1,351 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@page import="DAO.*"%>
+<%@page import="Model.*"%>
+<%@page import="java.lang.*"%>
+<%@page import="java.util.*"%>
+<%@page import="java.text.NumberFormat"%>
+<!DOCTYPE html>
+<!--
+Template: Metronic Frontend Freebie - Responsive HTML Template Based On Twitter Bootstrap 3.3.4
+Version: 1.0.0
+Author: KeenThemes
+Website: http://www.keenthemes.com/
+Contact: support@keenthemes.com
+Follow: www.twitter.com/keenthemes
+Like: www.facebook.com/keenthemes
+Purchase Premium Metronic Admin Theme: http://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes
+-->
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+    <!--<![endif]-->
+
+    <!-- Head BEGIN -->
+    <head>
+        <meta charset="utf-8">
+        <title>Checkout | Metronic Shop UI</title>
+
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+        <meta content="Metronic Shop UI description" name="description">
+        <meta content="Metronic Shop UI keywords" name="keywords">
+        <meta content="keenthemes" name="author">
+
+        <meta property="og:site_name" content="-CUSTOMER VALUE-">
+        <meta property="og:title" content="-CUSTOMER VALUE-">
+        <meta property="og:description" content="-CUSTOMER VALUE-">
+        <meta property="og:type" content="website">
+        <meta property="og:image" content="-CUSTOMER VALUE-"><!-- link to image for socio -->
+        <meta property="og:url" content="-CUSTOMER VALUE-">
+
+        <link rel="shortcut icon" href="favicon.ico">
+
+        <!-- Fonts START -->
+
+        <!-- Fonts END -->
+
+        <!-- Global styles START -->          
+        <link href="TulasCSS/assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+        <link href="TulasCSS/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <!-- Global styles END --> 
+
+        <!-- Page level plugin styles START -->
+        <link href="TulasCSS/assets/plugins/fancybox/source/jquery.fancybox.css" rel="stylesheet">
+        <link href="TulasCSS/assets/plugins/owl.carousel/assets/owl.carousel.css" rel="stylesheet">
+        <link href="TulasCSS/assets/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css">
+        <link href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css"><!-- for slider-range -->
+        <link href="TulasCSS/assets/plugins/rateit/src/rateit.css" rel="stylesheet" type="text/css">
+        <!-- Page level plugin styles END -->
+
+        <!-- Theme styles START -->
+        <link href="TulasCSS/assets/corporate/css/style.css" rel="stylesheet">
+        <link href="TulasCSS/assets/pages/css/style-shop.css" rel="stylesheet" type="text/css">
+        <link href="TulasCSS/assets/corporate/css/style-responsive.css" rel="stylesheet">
+        <link href="TulasCSS/assets/corporate/css/themes/red.css" rel="stylesheet" id="style-color">
+        <link href="TulasCSS/assets/corporate/css/custom.css" rel="stylesheet">
+        <!-- Theme styles END -->
+        <link rel="shortcut icon" href="assets/img/S4EWhite.PNG" type="image/x-icon" />
+        <link rel="stylesheet" href="assets/css/reset.css" />
+        <link rel="stylesheet" href="assets/css/base.css" />
+        <link rel="stylesheet" href="assets/css/main_PC.css" />
+        <link rel="stylesheet" href="assets/css/main_Tablet.css" />
+        <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+        <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css" />
+        <link rel="stylesheet" href="assets/fonts/fontawesome-free-6.0.0-web/css/all.css" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swapsubset=vietnamese" />
+
+    </head>
+    <!-- Head END -->
+
+    <!-- Body BEGIN -->
+    <body class="ecommerce">
+        <%@ include file="./Public/header.jsp" %>
+        <div class="main">
+      <div class="container">
+        <ul class="breadcrumb">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="">Store</a></li>
+            <li class="active">Checkout</li>
+        </ul>
+        <!-- BEGIN SIDEBAR & CONTENT -->
+        
+        <div class="row margin-bottom-40">
+          <!-- BEGIN CONTENT -->
+          <div class="col-md-12 col-sm-12">
+            <h1>Checkout</h1>
+            <!-- BEGIN CHECKOUT PAGE -->
+            <div class="panel-group checkout-page accordion scrollable" id="checkout-page">
+
+              <!-- BEGIN SHIPPING ADDRESS -->
+              <div id="shipping-address" class="panel panel-default">
+                <div class="panel-heading">
+                  <h2 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#checkout-page" href="#shipping-address-content" class="accordion-toggle">
+                      Step 1: Delivery Details
+                    </a>
+                  </h2>
+                </div>
+                <div id="shipping-address-content" class="panel-collapse collapse">
+                  <div class="panel-body row">
+                    <div class="col-md-6 col-sm-6">
+                      <div class="form-group">
+                        <label for="firstname-dd">First Name <span class="require">*</span></label>
+                        <input type="text" id="firstname-dd" class="form-control" value="<%=user.getFirstName()%>">
+                      </div>
+                      <div class="form-group">
+                        <label for="lastname-dd">Last Name <span class="require">*</span></label>
+                        <input type="text" id="lastname-dd" class="form-control" value="<%=user.getLastName()%>">
+                      </div>
+                      <div class="form-group">
+                        <label for="email-dd">E-Mail <span class="require">*</span></label>
+                        <input type="text" id="email-dd" class="form-control" value="<%=user.getEmail()%>">
+                      </div>
+                    </div>
+                    <div class="col-md-6 col-sm-6">
+                      <div class="form-group">
+                        <label for="address1-dd">Address</label>
+                        <input type="text" id="address1-dd" class="form-control" value="<%=user.getAddress()%>">
+                      </div>
+                      <div class="form-group">
+                        <label for="post-code-dd">Giới tính <span class="require">*</span></label>
+                        <input type="text" id="post-code-dd" class="form-control" value="<%=user.getGender()%>">
+                      </div>
+                      <div class="form-group">
+                        <label for="telephone-dd">Telephone <span class="require">*</span></label>
+                        <input type="text" id="telephone-dd" class="form-control" value="<%=user.getPhoneNumber()%>">
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      <button class="btn btn-primary  pull-right" type="submit" id="button-shipping-address" data-toggle="collapse" data-parent="#checkout-page" data-target="#shipping-method-content">Continue</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- END SHIPPING ADDRESS -->
+
+              <!-- BEGIN PAYMENT METHOD -->
+              <div id="payment-method" class="panel panel-default">
+                <div class="panel-heading">
+                  <h2 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#checkout-page" href="#payment-method-content" class="accordion-toggle">
+                      Step 2: Payment Method
+                    </a>
+                  </h2>
+                </div>
+                <div id="payment-method-content" class="panel-collapse collapse">
+                  <div class="panel-body row">
+                    <div class="col-md-12">
+                      <p>Please select the preferred payment method to use on this order.</p>
+                      <div class="radio-list">
+                        <label>
+                          <input type="radio" name="CashOnDelivery" value="CashOnDelivery"> Cash On Delivery
+                        </label>
+                      </div>
+                      <div class="form-group">
+                        <label for="delivery-payment-method">Add Comments About Your Order</label>
+                        <textarea id="delivery-payment-method" rows="8" class="form-control"></textarea>
+                      </div>
+                      <button class="btn btn-primary  pull-right" type="submit" id="button-payment-method" data-toggle="collapse" data-parent="#checkout-page" data-target="#confirm-content">Continue</button>
+                      <div class="checkbox pull-right">
+                        <label>
+                          <input type="checkbox"> I have read and agree to the <a title="Terms & Conditions" href="javascript:;">Terms & Conditions </a> &nbsp;&nbsp;&nbsp; 
+                        </label>
+                      </div>  
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- END PAYMENT METHOD -->
+
+              <!-- BEGIN CONFIRM -->
+              <div id="confirm" class="panel panel-default">
+                <div class="panel-heading">
+                  <h2 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#checkout-page" href="#confirm-content" class="accordion-toggle">
+                      Step 3: Confirm Order
+                    </a>
+                  </h2>
+                </div>
+                <div id="confirm-content" class="panel-collapse collapse">
+                  <div class="panel-body row">
+                    <div class="col-md-12 clearfix">
+                      <div class="table-wrapper-responsive">
+                      <table>
+                        <tr>
+                          <th class="checkout-image">Image</th>
+                          <th class="checkout-description">Description</th>
+                          <th class="checkout-model">Model</th>
+                          <th class="checkout-quantity">Quantity</th>
+                          <th class="checkout-price">Price</th>
+                          <th class="checkout-total">Total</th>
+                        </tr>
+                        <%
+                                // Lấy danh sách các sản phẩm đã chọn từ session
+                                ProductsDAO pDAO = new ProductsDAO();
+                                List<Map<String, Object>> selectedItems = (List<Map<String, Object>>) request.getAttribute("selectedItems");
+
+                                // Kiểm tra nếu danh sách không rỗng
+                                if (selectedItems != null) {
+                                for (Map<String, Object> item : selectedItems) {
+                                    // Lấy giá trị productID và quantity
+                                    Object productIDObj = item.get("productID");
+                                    Object quantityObj = item.get("quantity");
+
+                                    // Kiểm tra kiểu dữ liệu và xử lý phù hợp
+                                    int productID = 0;
+                                    int quantity = 0;
+
+                                    if (productIDObj instanceof Double) {
+                                        productID = ((Double) productIDObj).intValue(); // Chuyển Double sang int
+                                    } else if (productIDObj instanceof String) {
+                                        productID = Integer.parseInt((String) productIDObj); // Chuyển String sang int
+                                    }
+
+                                    if (quantityObj instanceof Double) {
+                                        quantity = ((Double) quantityObj).intValue(); // Chuyển Double sang int
+                                    } else if (quantityObj instanceof String) {
+                                        quantity = Integer.parseInt((String) quantityObj); // Chuyển String sang int
+                                    }
+                                    Products p = pDAO.getProductByID(productID);
+                                    // Lấy đối tượng NumberFormat cho định dạng tiền Việt Nam
+                                    NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+
+                                    // Tính tổng giá tiền
+                                    double totalPrice = p.getPrice() * quantity;
+                                    String formattedTotalPrice = currencyFormat.format(totalPrice);
+                        %>
+                        <tr>
+                          <td class="checkout-image">
+                            <img src="<%=p.getImageLink()%>"></a>
+                          </td>
+                          <td class="checkout-description">
+                            <h3><a href="javascript:;">Cool green dress with red bell</a></h3>
+                            <p><strong><%=p.getProductName()%></strong></p>
+                            <em><%=p.getDescription()%></em>
+                          </td>
+                          <td class="checkout-model"><%=p.getDescription()%></td>
+                          <td class="checkout-quantity"><%=quantity%></td>
+                          <td class="checkout-price"><strong><%=p.getPriceFormat()%></strong></td>
+                          <td class="checkout-total"><strong><%=formattedTotalPrice%></strong></td>
+                        </tr>
+                        <%
+                                }
+                            } else {
+                        %>
+                                <p>No items selected.</p>
+                        <%
+                            }
+                        %>
+                      </table>
+                      </div>
+                      <div class="checkout-total-block">
+                        <ul>
+                          <li>
+                            <em>Sub total</em>
+                            <strong class="price"><span>$</span>47.00</strong>
+                          </li>
+                          <li>
+                            <em>Shipping cost</em>
+                            <strong class="price"><span>$</span>3.00</strong>
+                          </li>
+                          <li>
+                            <em>Eco Tax (-2.00)</em>
+                            <strong class="price"><span>$</span>3.00</strong>
+                          </li>
+                          <li>
+                            <em>VAT (17.5%)</em>
+                            <strong class="price"><span>$</span>3.00</strong>
+                          </li>
+                          <li class="checkout-total-price">
+                            <em>Total</em>
+                            <strong class="price"><span>$</span>56.00</strong>
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="clearfix"></div>
+                      <button class="btn btn-primary pull-right" type="submit" id="button-confirm">Confirm Order</button>
+                      <button type="button" class="btn btn-default pull-right margin-right-20">Cancel</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- END CONFIRM -->
+            </div>
+            <!-- END CHECKOUT PAGE -->
+          </div>
+          <!-- END CONTENT -->
+        </div>
+        <!-- END SIDEBAR & CONTENT -->
+      </div>
+    </div>
+        <%@ include file="./Public/footer.jsp" %>
+
+        <!-- Load javascripts at bottom, this will reduce page load time -->
+        <!-- BEGIN CORE PLUGINS(REQUIRED FOR ALL PAGES) -->
+        <!--[if lt IE 9]>
+        <script src="assets/plugins/respond.min.js"></script>  
+        <![endif]-->  
+        <script src="TulasCSS/assets/plugins/jquery.min.js" type="text/javascript"></script>
+        <script src="TulasCSS/assets/plugins/jquery-migrate.min.js" type="text/javascript"></script>
+        <script src="TulasCSS/assets/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>      
+        <script src="TulasCSS/assets/corporate/scripts/back-to-top.js" type="text/javascript"></script>
+        <script src="TulasCSS/assets/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
+        <!-- END CORE PLUGINS -->
+
+        <!-- BEGIN PAGE LEVEL JAVASCRIPTS (REQUIRED ONLY FOR CURRENT PAGE) -->
+        <script src="TulasCSS/assets/plugins/fancybox/source/jquery.fancybox.pack.js" type="text/javascript"></script><!-- pop up -->
+        <script src="TulasCSS/assets/plugins/owl.carousel/owl.carousel.min.js" type="text/javascript"></script><!-- slider for products -->
+        <script src='TulasCSS/assets/plugins/zoom/jquery.zoom.min.js' type="text/javascript"></script><!-- product zoom -->
+        <script src="TulasCSS/assets/plugins/bootstrap-touchspin/bootstrap.touchspin.js" type="text/javascript"></script><!-- Quantity -->
+        <script src="TulasCSS/assets/plugins/uniform/jquery.uniform.min.js" type="text/javascript"></script>
+        <script src="TulasCSS/assets/plugins/rateit/src/jquery.rateit.js" type="text/javascript"></script>
+        <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js" type="text/javascript"></script><!-- for slider-range -->
+
+        <script src="TulasCSS/assets/corporate/scripts/layout.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            jQuery(document).ready(function () {
+                Layout.init();
+                Layout.initOWL();
+                Layout.initTwitter();
+                Layout.initImageZoom();
+                Layout.initTouchspin();
+                Layout.initUniform();
+                Layout.initSliderRange();
+                // Kiểm tra nếu user đã đăng nhập
+            <c:if test="${user != null}">
+                // Vô hiệu hóa Step 1
+                $('#step1-toggle').attr('data-toggle', '').removeAttr('href');
+                $('#step1-toggle').css('pointer-events', 'none'); // Ngăn chặn click
+                $('#step1-toggle').css('color', '#ccc'); // Làm mờ liên kết
+                $('#step1-toggle').css('cursor', 'not-allowed'); // Thay đổi con trỏ chuột
+            </c:if>
+            });
+        </script>
+        
+        <!-- END PAGE LEVEL JAVASCRIPTS -->
+    </body>
+    <!-- END BODY -->
+</html>

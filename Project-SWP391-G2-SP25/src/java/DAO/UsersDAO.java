@@ -266,6 +266,6 @@ public class UsersDAO extends DBContext {
     }
     public static void main(String[] args) {
         UsersDAO dao = new UsersDAO();
-        System.out.println(dao.getAllUsers());
+        System.out.println(dao.getUserByEmail("tuanminh2424@gmail.com"));
     }
 }
