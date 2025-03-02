@@ -15,6 +15,6 @@ public class LogoutController extends HttpServlet {
         session.invalidate();
 
         // Redirect về trang home chưa đăng nhập
-        response.sendRedirect("${pageContext.request.contextPath}/home");
+        response.sendRedirect("home");
     }
 }
