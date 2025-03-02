@@ -59,20 +59,14 @@ public class ListSliders extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
- protected void doGet(HttpServletRequest request, HttpServletResponse response)
+protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
     SlidersDAO sliderDAO = new SlidersDAO();
     List<Sliders> sliders = sliderDAO.getAllSliders(); 
-    
-   
-    System.out.println("Số lượng sliders lấy được: " + sliders.size());
-    for (Sliders slider : sliders) {
-        System.out.println("Slider: " + slider.getSliderID() + " - " + slider.getTitle());
-    }
-
     request.setAttribute("sliders", sliders); 
     request.getRequestDispatcher("SliderList.jsp").forward(request, response);
 }
+
 
 
     /**

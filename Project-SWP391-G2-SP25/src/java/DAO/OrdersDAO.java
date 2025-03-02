@@ -6,7 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -20,6 +22,21 @@ public class OrdersDAO extends DBContext {
             while (rs.next()) {
                 Orders order = extractOrderFromResultSet(rs);
                 orderList.put(order.getOrderID(), order);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching orders: " + e.getMessage());
+        }
+        return orderList;
+    }
+
+    public List<Orders> getAllOrders1() {
+        List<Orders> orderList = new ArrayList<>();
+        String sql = "SELECT * FROM Orders";
+
+        try (Statement st = connection.createStatement(); ResultSet rs = st.executeQuery(sql)) {
+            while (rs.next()) {
+                Orders order = extractOrderFromResultSet(rs);
+                orderList.add(order);
             }
         } catch (SQLException e) {
             System.out.println("Error fetching orders: " + e.getMessage());

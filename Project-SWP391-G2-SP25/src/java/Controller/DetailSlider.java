@@ -63,8 +63,6 @@ public class DetailSlider extends HttpServlet {
         SlidersDAO sliderDAO = new SlidersDAO();
 
        int sliderID = Integer.parseInt(request.getParameter("sliderID"));
-
-        
         Sliders slider = sliderDAO.getSliderById(sliderID);
 
         if (slider != null) {

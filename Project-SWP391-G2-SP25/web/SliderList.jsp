@@ -138,8 +138,8 @@
                         <tr>
 
                             <td>${slider.getSliderID()}</td>
-                            <td><img src="${slider.getImage()}" width="100"></td>
-                            <td>${slider.getTitle()}</td>
+                            <td><img src="${slider.image}" width="100"></td>
+                            <td>${slider.title}</td>
                             <td><a href="${slider.backlink}">${slider.backlink}</a></td>
                             <td>${slider.status}</td>
                             <td>
