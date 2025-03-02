@@ -595,5 +595,6 @@ VALUES
 ('PMKT3', 'Quạt và điều hòa'),
 ('PMKT4', 'Ổ cắm điện cao cấp');
 
-ALTER TABLE users add column status varchar(12) default 'Active'
-
+ALTER TABLE users add column status varchar(12) default 'Active';
+ALTER TABLE products add column status varchar(12) default 'Active';
+select * from products

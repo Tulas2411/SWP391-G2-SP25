@@ -26,6 +26,8 @@ public class Products {
     private Boolean isPromoted;
     private String createAt;
     private Date CreateAt;
+    private String status;
+    private Category category;
 
     public Products() {
     }
@@ -168,5 +170,22 @@ public class Products {
     public String toString() {
         return "Products{" + "productID=" + productID + ", categoryID=" + categoryID + ", productName=" + productName + ", description=" + description + ", provider=" + provider + ", price=" + price + ", oldprice=" + oldprice + ", warrantyPeriod=" + warrantyPeriod + ", amount=" + amount + ", imageLink=" + imageLink + ", isPromoted=" + isPromoted + ", createAt=" + createAt + ", CreateAt=" + CreateAt + '}';
     }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+    
     
 }
