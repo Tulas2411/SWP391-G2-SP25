@@ -121,7 +121,7 @@
                    %>     
                   <tr>
                     <td class="goods-page-image">
-                        <input type="checkbox" name="selectedItems" value="<%=id%>" checked />
+                        <input type="checkbox" name="selectedItems" value="<%=p.getProductID()%>" checked />
                     </td>
                     <td class="goods-page-image">
                         <a href="/Project-SWP391-G2-SP25/ProductDetailController?id=<%=p.getProductID()%>"><img src="<%=p.getImageLink()%>"></a>
@@ -138,7 +138,7 @@
                         <div class="product-quantity">
                           <button class="btn btn-decrease" data-cart-item-id="<%=ci.getCartItemID()%>">-</button>
                           <input id="product-quantity-<%=ci.getCartItemID()%>" type="text" value="<%=ci.getQuantity()%>" class="form-control input-sm quantity-input" readonly>
-                          <input id="product-quantity-<%=ci.getProductID()%>" value="<%=ci.getQuantity()%>" hidden>
+                          <input id="product-quantity1-<%=ci.getProductID()%>" value="<%=ci.getQuantity()%>" hidden>
                           <button class="btn btn-increase" data-cart-item-id="<%=ci.getCartItemID()%>">+</button>
                         </div>
                     </td>
@@ -369,7 +369,7 @@
             // Lặp qua các sản phẩm đã chọn
             $('input[name="selectedItems"]:checked').each(function() {
                 var productID = $(this).val(); // Lấy productID
-                var quantity = parseInt($('#product-quantity-' + productID).val()); // Lấy số lượng
+                var quantity = parseInt($('#product-quantity1-' + productID).val()); // Lấy số lượng
 
                 // Thêm sản phẩm vào mảng
                 selectedItems.push({

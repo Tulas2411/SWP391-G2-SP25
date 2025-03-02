@@ -206,42 +206,20 @@ Purchase Premium Metronic Admin Theme: http://themeforest.net/item/metronic-resp
                                                             // Lấy danh sách các sản phẩm đã chọn từ session
                                                             ProductsDAO pDAO = new ProductsDAO();
                                                             CartItemsDAO ciDAO = new CartItemsDAO();
-                                                            List<Map<String, Object>> selectedItems = (List<Map<String, Object>>) request.getAttribute("selectedItems");
-
-                                                            // Kiểm tra nếu danh sách không rỗng
-                                                            if (selectedItems != null) {
-                                                            for (Map<String, Object> item : selectedItems) {
-                                                                // Lấy giá trị productID và quantity
-                                                                Object productIDObj = item.get("productID");
-                                                                Object quantityObj = item.get("quantity");
-
-                                                                // Kiểm tra kiểu dữ liệu và xử lý phù hợp
-                                                                int productID = 0;
-                                                                int quantity = 0;
-
-                                                                if (productIDObj instanceof Double) {
-                                                                    productID = ((Double) productIDObj).intValue(); // Chuyển Double sang int
-                                                                } else if (productIDObj instanceof String) {
-                                                                    productID = Integer.parseInt((String) productIDObj); // Chuyển String sang int
-                                                                }
-
-                                                                if (quantityObj instanceof Double) {
-                                                                    quantity = ((Double) quantityObj).intValue(); // Chuyển Double sang int
-                                                                } else if (quantityObj instanceof String) {
-                                                                    quantity = Integer.parseInt((String) quantityObj); // Chuyển String sang int
-                                                                }
-                                                                
-                                                                Products p = pDAO.getProductByID(ciDAO.getCartItemByID(productID).getProductID());
-                                                                // Lấy đối tượng NumberFormat cho định dạng tiền Việt Nam
-                                                                NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
-
+                                                            Map<Integer, Integer> list = (Map<Integer, Integer>) request.getAttribute("list");
+                                                            // Lấy đối tượng NumberFormat cho định dạng tiền Việt Nam
+                                                            NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+                                                            if (list != null) {
+                                                                for(int id : list.keySet()){
+                                                                Products p = pDAO.getProductByID(id);
+                                                                int quantity = list.get(id);
                                                                 // Tính tổng giá tiền
                                                                 double totalPrice = p.getPrice() * quantity;
                                                                 String formattedTotalPrice = currencyFormat.format(totalPrice);
                                                     %>
                                                     <tr>
                                                         <td class="checkout-image">
-                                                            <img src="<%=p.getImageLink()%>"></a>
+                                                            <img src="<%=p.getImageLink()%>">
                                                         </td>
                                                         <td class="checkout-description">
                                                             <h3><a href="javascript:;">Cool green dress with red bell</a></h3>
@@ -249,8 +227,8 @@ Purchase Premium Metronic Admin Theme: http://themeforest.net/item/metronic-resp
                                                             <em><%=p.getDescription()%></em>
                                                         </td>
                                                         <td class="checkout-model"><%=p.getDescription()%></td>
-                                                        <td class="checkout-quantity">
-                                                            <input type="number" class="product-quantity" data-product-id="<%=productID%>" value="<%=quantity%>" min="1" readonly>
+                                                        <td class="checkout-quantity"><%=quantity%>
+                                                            <input type="number" class="product-quantity" data-product-id="<%=id%>" value="<%=quantity%>" min="1" readonly hidden>
                                                         </td>
                                                         <td class="checkout-price"><strong><%=p.getPriceFormat()%></strong></td>
                                                         <td class="checkout-total"><strong><%=formattedTotalPrice%></strong></td>
@@ -400,18 +378,7 @@ Purchase Premium Metronic Admin Theme: http://themeforest.net/item/metronic-resp
                 data: JSON.stringify(data),
                 success: function(response) {
                     console.log(response); // In phản hồi từ server
-                    try {
-                        var jsonResponse = JSON.parse(response); // Phân tích JSON
-                        if (jsonResponse.success) {
-                            alert(jsonResponse.message);
-                            window.location.href = '/order-success-page';
-                        } else {
-                            alert(jsonResponse.message);
-                        }
-                    } catch (e) {
-                        console.error("Invalid JSON response:", response); // In lỗi nếu JSON không hợp lệ
-                        alert('Invalid response from server.');
-                    }
+                    window.location.href = '<%=request.getContextPath()%>/CartCompletion';
                 },
                 error: function(xhr, status, error) {
                     console.error(error); // In lỗi chi tiết
