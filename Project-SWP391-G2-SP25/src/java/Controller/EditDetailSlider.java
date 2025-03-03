@@ -4,9 +4,9 @@
  */
 package Controller;
 
-import DAO.*;
-import Model.Products;
-import Model.Reviews;
+
+import DAO.SlidersDAO;
+import Model.Sliders;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,14 +14,16 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.Map;
+import jakarta.servlet.http.Part;
+import java.io.File;
+import java.util.List;
 
 /**
  *
- * @author admin
+ * @author manh
  */
-@WebServlet(name = "ProductDetailController", urlPatterns = {"/ProductDetailController"})
-public class ProductDetailController extends HttpServlet {
+@WebServlet(name = "DetailSlider", urlPatterns = {"/DetailSlider"})
+public class EditDetailSlider extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,10 +42,10 @@ public class ProductDetailController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ProductDetailController</title>");
+            out.println("<title>Servlet EditDetailSlider</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ProductDetailController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet EditDetailSlider at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -61,22 +63,7 @@ public class ProductDetailController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
-        HttpSession session = request.getSession();
-        String role = (String) session.getAttribute("role");
-        ProductsDAO pDAO = new ProductsDAO();
-        ReviewsDAO r = new ReviewsDAO();
-        Products p = pDAO.getProductByID(id);
-        Map<Integer, Reviews> listr = r.getAllReviewsByProductID(id);
-        request.setAttribute("product", p);
-        request.setAttribute("listr", listr);
-        
-        if(!role.equals("Customer")) {
-            request.getRequestDispatcher("ProductDetail.jsp").forward(request, response);
-        } else {
-            request.getRequestDispatcher("ProductDetailCustomer.jsp").forward(request, response);
-        }
-
+        processRequest(request, response);
     }
 
     /**
@@ -88,10 +75,46 @@ public class ProductDetailController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+   protected void doPost(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+    
+    Part filePart = request.getPart("newImage"); // Lấy file ảnh mới
+    String fileName = filePart.getSubmittedFileName(); // Lấy tên file
+    String uploadPath = getServletContext().getRealPath("") + "uploads"; // Thư mục lưu ảnh
+
+    // Tạo thư mục nếu chưa tồn tại
+    File uploadDir = new File(uploadPath);
+    if (!uploadDir.exists()) {
+        uploadDir.mkdir();
     }
+
+    String imagePath = null;
+    if (fileName != null && !fileName.isEmpty()) {
+        imagePath = "uploads/" + fileName;
+        filePart.write(uploadPath + File.separator + fileName); // Lưu ảnh vào thư mục server
+    } else {
+        imagePath = request.getParameter("currentImage"); // Nếu không upload ảnh mới, giữ ảnh cũ
+    }
+
+
+    int sliderID = Integer.parseInt(request.getParameter("sliderID"));
+    String title = request.getParameter("title");
+    String backlink = request.getParameter("backlink");
+    String status = request.getParameter("status");
+
+    Sliders slider = new Sliders();
+    slider.setSliderID(sliderID);
+    slider.setTitle(title);
+    slider.setImage(imagePath);
+    slider.setBacklink(backlink);
+    slider.setStatus(status);
+
+    SlidersDAO slidersDAO = new SlidersDAO();
+    slidersDAO.updateSlider(slider);
+
+    response.sendRedirect("ListSlider");
+}
+
 
     /**
      * Returns a short description of the servlet.

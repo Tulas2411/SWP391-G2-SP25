@@ -4,9 +4,9 @@
  */
 package Controller;
 
-import DAO.*;
-import Model.Products;
-import Model.Reviews;
+import DAO.SlidersDAO;
+import Model.Sliders;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,14 +14,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.Map;
+import java.util.List;
 
 /**
  *
- * @author admin
+ * @author manh
  */
-@WebServlet(name = "ProductDetailController", urlPatterns = {"/ProductDetailController"})
-public class ProductDetailController extends HttpServlet {
+@WebServlet(name = "ListSliders", urlPatterns = {"/ListSliders"})
+public class ListSliders extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,10 +40,10 @@ public class ProductDetailController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ProductDetailController</title>");
+            out.println("<title>Servlet EditSliders</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ProductDetailController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet EditSlider at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -59,25 +59,15 @@ public class ProductDetailController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
-        HttpSession session = request.getSession();
-        String role = (String) session.getAttribute("role");
-        ProductsDAO pDAO = new ProductsDAO();
-        ReviewsDAO r = new ReviewsDAO();
-        Products p = pDAO.getProductByID(id);
-        Map<Integer, Reviews> listr = r.getAllReviewsByProductID(id);
-        request.setAttribute("product", p);
-        request.setAttribute("listr", listr);
-        
-        if(!role.equals("Customer")) {
-            request.getRequestDispatcher("ProductDetail.jsp").forward(request, response);
-        } else {
-            request.getRequestDispatcher("ProductDetailCustomer.jsp").forward(request, response);
-        }
+protected void doGet(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+    SlidersDAO sliderDAO = new SlidersDAO();
+    List<Sliders> sliders = sliderDAO.getAllSliders(); 
+    request.setAttribute("sliders", sliders);
+    request.getRequestDispatcher("SliderList.jsp").forward(request, response);
+}
 
-    }
+
 
     /**
      * Handles the HTTP <code>POST</code> method.

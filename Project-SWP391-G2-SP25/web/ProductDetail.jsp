@@ -69,18 +69,6 @@
             Products p = (Products) request.getAttribute("product");
             Map<Integer, Reviews> listr = (Map<Integer, Reviews>)request.getAttribute("listr");
         %>
-        <!-- SECTION -->
-        <div class="section">
-            <!-- container -->
-            <div class="container">
-                <!-- row -->
-                <div class="row">
-                    <!-- Product main img -->
-                    <div class="col-md-5 col-md-push-2">
-                        <div id="product-main-img">
-                            <div class="product-preview">
-                                <img src="<%= p.getImageLink() %>" alt="">
-                            </div>
 
                             <div class="product-preview">
                                 <img src="<%= p.getImageLink() %>" alt="">
