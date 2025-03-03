@@ -96,13 +96,12 @@ public class EditDetailSlider extends HttpServlet {
         imagePath = request.getParameter("currentImage"); // Nếu không upload ảnh mới, giữ ảnh cũ
     }
 
-    // Lấy dữ liệu từ form
+
     int sliderID = Integer.parseInt(request.getParameter("sliderID"));
     String title = request.getParameter("title");
     String backlink = request.getParameter("backlink");
     String status = request.getParameter("status");
 
-    // Cập nhật slider
     Sliders slider = new Sliders();
     slider.setSliderID(sliderID);
     slider.setTitle(title);
@@ -113,7 +112,6 @@ public class EditDetailSlider extends HttpServlet {
     SlidersDAO slidersDAO = new SlidersDAO();
     slidersDAO.updateSlider(slider);
 
-    // Quay lại danh sách sliders
     response.sendRedirect("ListSlider");
 }
 

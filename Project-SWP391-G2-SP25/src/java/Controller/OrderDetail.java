@@ -4,9 +4,10 @@
  */
 package Controller;
 
+import DAO.OrdersDAO;
 import DAO.SlidersDAO;
+import Model.Orders;
 import Model.Sliders;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,14 +15,16 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
+import java.io.File;
 import java.util.List;
 
 /**
  *
  * @author manh
  */
-@WebServlet(name = "ListSliders", urlPatterns = {"/ListSliders"})
-public class ListSliders extends HttpServlet {
+@WebServlet(name = "OrderDetail", urlPatterns = {"/OrderDetail"})
+public class OrderDetail extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,10 +43,10 @@ public class ListSliders extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet EditSliders</title>");
+            out.println("<title>Servlet OrdersList</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet EditSlider at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet OrdersList at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -59,15 +62,19 @@ public class ListSliders extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-protected void doGet(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-    SlidersDAO sliderDAO = new SlidersDAO();
-    List<Sliders> sliders = sliderDAO.getAllSliders(); 
-    request.setAttribute("sliders", sliders);
-    request.getRequestDispatcher("SliderList.jsp").forward(request, response);
-}
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+    int id = Integer.parseInt(request.getParameter("id"));
+    OrdersDAO ordersDAO = new OrdersDAO();
+    Orders orders = ordersDAO.getOrderByID(id);
+    
+    
+    
 
-
+    
+    request.setAttribute("orders", orders); 
+    request.getRequestDispatcher("OrderDetail.jsp").forward(request, response);
+    }
 
     /**
      * Handles the HTTP <code>POST</code> method.

@@ -88,32 +88,25 @@ public class SlidersDAO extends DBContext {
 //        return false;
 //    }
 
-    // Cập nhật slider
-//    public boolean updateSlider(Sliders slider) {
-//        String sql = "UPDATE Sliders SET Title = ?, Image = ?, Backlink = ?, Status = ?, BlogID = ?, ProductID = ? WHERE SliderID = ?";
-//        try (PreparedStatement stm = connection.prepareStatement(sql)) {
-//            stm.setString(1, slider.getTitle());
-//            stm.setString(2, slider.getImage());
-//            stm.setString(3, slider.getBacklink());
-//            stm.setString(4, slider.getStatus());
-//            if (slider.getBlogID() != null) {
-//                stm.setInt(5, slider.getBlogID());
-//            } else {
-//                stm.setNull(5, java.sql.Types.INTEGER);
-//            }
-//            if (slider.getProductID() != null) {
-//                stm.setInt(6, slider.getProductID());
-//            } else {
-//                stm.setNull(6, java.sql.Types.INTEGER);
-//            }
-//            stm.setInt(7, slider.getSliderID());
-//
-//            return stm.executeUpdate() > 0;
-//        } catch (Exception e) {
-//            System.out.println("updateSlider: " + e.getMessage());
-//        }
-//        return false;
-//    }
+
+  public int updateSlider(Sliders slider) {
+    String sql = "UPDATE Sliders SET Title = ?, Image = ?, Backlink = ?, Status = ?, BlogID = ?, ProductID = ? WHERE SliderID = ?";
+    try (PreparedStatement stm = connection.prepareStatement(sql)) {
+        stm.setString(1, slider.getTitle());
+        stm.setString(2, slider.getImage());
+        stm.setString(3, slider.getBacklink());
+        stm.setString(4, slider.getStatus());
+        
+         
+        stm.setInt(7, slider.getSliderID());
+
+        return stm.executeUpdate(); // Trả về số dòng bị ảnh hưởng
+    } catch (Exception e) {
+        System.out.println("updateSlider: " + e.getMessage());
+    }
+    return 0; // Nếu lỗi, trả về 0 (nghĩa là không có dòng nào được cập nhật)
+}
+
 
     // Xóa slider theo ID
     public boolean deleteSlider(int id) {

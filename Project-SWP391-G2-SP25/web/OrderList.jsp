@@ -129,14 +129,14 @@
             <tbody>
                 <c:forEach var="order" items="${orders}">
                     <tr>
-                        <td><a href="OrderDetailController?id=${order.orderID}">${order.orderID}</a></td>
+                        <td><a href="OrderDetail?id=${order.orderID}">${order.orderID}</a></td>
                         <td>${order.orderDate}</td>
                         <td>${order.customerID}</td>
                         <td>${order.deliveryAddress}</td>
                         <td>${order.totalAmount}</td>
                         <td>${order.status}</td>
                         <td>
-                            <a href="EditOrderController?id=${order.orderID}">Edit</a>
+                            <a href="OrderDetail?id=${order.orderID}">Edit</a>
                         </td>
                     </tr>
                 </c:forEach>
