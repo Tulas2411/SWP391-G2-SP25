@@ -23,6 +23,11 @@ public class Carts {
         this.status = status;
     }
 
+    public Carts(int customerID, String status) {
+        this.customerID = customerID;
+        this.status = status;
+    }
+    
     public int getCartID() {
         return cartID;
     }

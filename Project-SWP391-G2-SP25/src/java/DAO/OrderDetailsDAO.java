@@ -129,4 +129,25 @@ public class OrderDetailsDAO extends DBContext {
         ps.setInt(3, orderDetail.getQuantity());
         ps.setDouble(4, orderDetail.getPrice());
     }
+    public Map<Integer, OrderDetails> getOrderDetailsByOrderIDasMap(int orderID) {
+        Map<Integer, OrderDetails> orderDetailList = new HashMap<>();
+        String sql = "SELECT * FROM OrderDetails WHERE OrderID = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, orderID);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    OrderDetails orderDetail = extractOrderDetailFromResultSet(rs);
+                    orderDetailList.put(orderDetail.getOrderDetailID(), orderDetail);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching order details by OrderID: " + e.getMessage());
+        }
+        return orderDetailList;
+    }
+    public static void main(String[] args) {
+        OrderDetailsDAO odDAO = new OrderDetailsDAO();
+        System.out.println(odDAO.getOrderDetailsByOrderIDasMap(6));
+    }
 }

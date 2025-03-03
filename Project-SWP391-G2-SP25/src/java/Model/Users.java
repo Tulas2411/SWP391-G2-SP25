@@ -22,8 +22,8 @@ public class Users {
     private String email;
     private String phoneNumber;
     private String address;
-    private boolean status;
-
+    private String status;
+   
     public Users() {
     }
 
@@ -129,11 +129,11 @@ public class Users {
         this.address = address;
     }
 
-    public boolean isStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(String status) {
         this.status = status;
     }
     

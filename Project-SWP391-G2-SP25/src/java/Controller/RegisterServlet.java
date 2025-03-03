@@ -1,5 +1,8 @@
 package Controller;
 
+import DAO.CartsDAO;
+import DAO.UsersDAO;
+import Model.Carts;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -31,7 +34,9 @@ public class RegisterServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-
+            CartsDAO cDAO = new CartsDAO();
+            UsersDAO uDAO = new UsersDAO();
+            
             // Lấy các giá trị từ form
             String firstName = request.getParameter("firstname").trim();
             String lastName = request.getParameter("lastname").trim();
@@ -87,6 +92,7 @@ public class RegisterServlet extends HttpServlet {
 
                     if (rowCount > 0) {
                         request.setAttribute("status", "success");
+                        cDAO.addCart(new Carts(uDAO.getUserByUserName(userName).getUserID(), "Normal"));
                     } else {
                         request.setAttribute("status", "failed");
                     }
