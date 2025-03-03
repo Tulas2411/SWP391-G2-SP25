@@ -11,25 +11,21 @@
                 ${sessionScope.notification}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-            <%
-                session.removeAttribute("notification");
-            %>
+            <% session.removeAttribute("notification"); %>
         </c:if>
         <c:if test="${not empty sessionScope.notificationErr}">
             <div class="alert alert-danger alert-dismissible fade show" role="alert" style="text-align: center">
                 ${sessionScope.notificationErr}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-            <%
-                session.removeAttribute("notificationErr");
-            %>
+            <% session.removeAttribute("notificationErr");%>
         </c:if>
         <div class="card mb-4">
             <div class="card-body">
                 <table id="datatablesSimple">
                     <div class="container mb-4">
                         <div class="row">
-                            <div class="col md-4">
+                            <div class="col-md-4">
                                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addUserModal">
                                     Thêm mới
                                 </button>
@@ -55,15 +51,14 @@
                                     </select>
                                 </div>
                                 <div class="col-md-3">
-                                    <label for="statusFillter" class="form-label">Trạng Thái</label>
-                                    <select name="gender" id="genderFilter" class="form-select" onchange="this.form.submit()">
+                                    <label for="statusFilter" class="form-label">Trạng thái</label>
+                                    <select name="status" id="statusFilter" class="form-select" onchange="this.form.submit()">
                                         <option value="" ${empty param.status ? 'selected' : ''}>Tất cả</option>
                                         <option value="Active" ${param.status eq 'Active' ? 'selected' : ''}>Hoạt động</option>
                                         <option value="Deactive" ${param.status eq 'Deactive' ? 'selected' : ''}>Không hoạt động</option>
                                     </select>
                                 </div>
                             </form>
-
                         </div>
                     </div>
                     <thead>
