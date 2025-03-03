@@ -2,14 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-
 package Controller;
 
-import com.mysql.cj.xdevapi.PreparableStatement;
-import com.sun.jdi.connect.spi.Connection;
+import DAO.UsersDAO;
+import Model.Users;
 import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -24,53 +22,101 @@ import java.sql.ResultSet;
  *
  * @author luuth
  */
-@WebServlet(name="LoginServlet", urlPatterns={"/LoginServlet"})
+@WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
 public class LoginServlet extends HttpServlet {
-   
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-    }
+    UsersDAO userDAO = new UsersDAO();
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        String Email = request.getParameter("username");
-        String Password = request.getParameter("password");
+            throws ServletException, IOException {
+        String email = request.getParameter("username");
+        String password = request.getParameter("password");
         HttpSession session = request.getSession();
         RequestDispatcher dispatcher = null;
-        
-        java.sql.Connection con = null;
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/EcommerceDB", "root", "1234");
-            PreparedStatement pst = con.prepareStatement("select * from Users where Email = ? and Password = ?");
-            pst.setString(1, Email);
-            pst.setString(2, Password);
-            
-            ResultSet rs = pst.executeQuery();
-            if(rs.next()){
-                session.setAttribute("name", rs.getString("username"));
-                session.setAttribute("role", rs.getString("role"));
-                dispatcher = request.getRequestDispatcher("home");
 
-            } else {
-                request.setAttribute("status", "failed");
-                dispatcher = request.getRequestDispatcher("Login.jsp");
+        java.sql.Connection con = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+
+        try {
+
+            // Sử dụng phương thức makeConnection
+            con = makeConnection();
+            if (con != null) {
+                pst = con.prepareStatement("SELECT * FROM Users WHERE Email = ? AND Password = ?");
+                pst.setString(1, email);
+                pst.setString(2, password); // Lưu ý: nên mã hóa mật khẩu trước khi lưu và kiểm tra
+                rs = pst.executeQuery();
+
+                if (rs.next()) {
+                    // Lấy tên người dùng từ kết quả truy vấn
+                    String username = rs.getString("username");
+                    // Lấy email từ kết quả truy vấn
+                    String emailFromDB = rs.getString("Email");
+
+                    // Thêm username vào session
+                    session.setAttribute("username", username);
+                    // Thêm email vào session
+                    session.setAttribute("email", emailFromDB);
+
+                    Users u = userDAO.getUserByEmail(email);
+                    if (u.getStatus().equalsIgnoreCase("Deactive")) {
+                        session.setAttribute("notificationErr", "Tài khoản của bạn đã bị vô hiệu hóa!");
+                        response.sendRedirect("Login.jsp");
+                        return;
+                    }
+                    if (u.getRole().equalsIgnoreCase("Admin")) {
+                        response.sendRedirect("admin/dashboard");
+                    } else if (u.getRole().equalsIgnoreCase("marketing")) {
+                        response.sendRedirect("marketing/dashboard");
+                    }  else {
+                        // Chuyển hướng người dùng đến trang HomePage sau khi đăng nhập thành công
+                        session.setAttribute("user", userDAO.getUserByUserName(username));
+                        response.sendRedirect("/Project-SWP391-G2-SP25/home");
+                    }
+
+                } else {
+                    request.setAttribute("status", "failed");
+                    dispatcher = request.getRequestDispatcher("Login.jsp");
+                    dispatcher.forward(request, response);
+                }
+
             }
-            dispatcher.forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
+            // Xử lý lỗi bằng cách chuyển hướng đến trang lỗi hoặc hiển thị thông báo lỗi
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Đã xảy ra lỗi trong quá trình đăng nhập.");
+        } finally {
+            // Đảm bảo đóng các tài nguyên đúng cách
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (pst != null) {
+                    pst.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    /** 
+    /**
      * Returns a short description of the servlet.
+     *
      * @return a String containing servlet description
      */
     @Override
@@ -90,4 +136,3 @@ public class LoginServlet extends HttpServlet {
     }
 
 }
-

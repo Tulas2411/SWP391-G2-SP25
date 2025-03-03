@@ -1,140 +1,120 @@
 package Controller;
 
+import DAO.CartsDAO;
+import DAO.UsersDAO;
+import Model.Carts;
 import jakarta.servlet.RequestDispatcher;
-import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.sql.SQLException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
- *
- * @author luuth
+ * Servlet implementation class RegisterServlet
  */
-@WebServlet(name = "RegisterServlet", urlPatterns = {"/RegisterServlet"})
+@WebServlet("/RegisterServlet")
 public class RegisterServlet extends HttpServlet {
 
+    private static final long serialVersionUID = 1L;
+
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
+     * @see HttpServlet#HttpServlet()
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    public RegisterServlet() {
+        super();
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet RegisterServlet</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet RegisterServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String FirstName = request.getParameter("firstname");
-        String LastName = request.getParameter("lastname");
-
-        String UserName = request.getParameter("username");
-        String Gender = request.getParameter("gender");
-
-        String DateOfBirth = request.getParameter("DateOfBirth");
-        String Email = request.getParameter("email");
-        String Password = request.getParameter("password");
-        String PhoneNumber = request.getParameter("contact");
-        String Address = request.getParameter("address");
-        RequestDispatcher dispatcher = null;
-        Connection con = null;
-
-        try {
-            con = makeConnection(); // Use the makeConnection method for connection
-
-            PreparedStatement pst = con.prepareStatement("insert into Users(FirstName, LastName, UserName, Gender, DateOfBirth, Email, Password, Role, PhoneNumber, Address) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ");
-            pst.setString(1, FirstName);
-            pst.setString(2, LastName);
-            pst.setString(3, UserName);
-            pst.setString(4, Gender);
-            pst.setString(5, DateOfBirth);
-            pst.setString(6, Email);
-            pst.setString(7, Password);
-            pst.setString(8, "Customer");
-            pst.setString(9, PhoneNumber);
-            pst.setString(10, Address);
+            CartsDAO cDAO = new CartsDAO();
+            UsersDAO uDAO = new UsersDAO();
             
-            int rowCount = pst.executeUpdate();
-            dispatcher = request.getRequestDispatcher("Register.jsp");
-                    
-            if(rowCount > 0){
-                request.setAttribute("status", "success");
-                
-            } else {
-                request.setAttribute("status", "failed");
+            // Lấy các giá trị từ form
+            String firstName = request.getParameter("firstname").trim();
+            String lastName = request.getParameter("lastname").trim();
+            String userName = request.getParameter("username").trim();
+            String gender = request.getParameter("gender").trim();
+            String dateOfBirth = request.getParameter("DateOfBirth").trim();
+            String email = request.getParameter("email").trim();
+            String password = request.getParameter("password").trim();
+            String rePassword = request.getParameter("re_pass").trim();
+            String phoneNumber = request.getParameter("contact").trim();
+            String address = request.getParameter("address").trim();
+
+            
+            //Kiểm tra nếu bất kì trường nào là rỗng sau khi loại bỏ khoảng trắng
+            if(firstName.isEmpty() || lastName.isEmpty() || userName.isEmpty() || gender.isEmpty() || email.isEmpty() || password.isEmpty() || rePassword.isEmpty() || phoneNumber.isEmpty() || address.isEmpty()){
+                request.setAttribute("status", "empty_fields");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("Register.jsp");
+                dispatcher.forward(request, response);
+                return;
             }
-            dispatcher.forward(request, response);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (con != null) {
-                try {
-                    con.close();  // Properly close connection
-                } catch (SQLException e) {
-                    e.printStackTrace();
+
+            // Kiểm tra mật khẩu và nhắc lại mật khẩu có khớp hay không
+            if (!password.equals(rePassword)) {
+                request.setAttribute("status", "password_mismatch");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("Register.jsp");
+                dispatcher.forward(request, response);
+                return;
+            }
+
+            // Tạo kết nối tới cơ sở dữ liệu
+            Connection con = null;
+            try {
+                con = makeConnection();
+                if (con != null) {
+                    // Chuẩn bị truy vấn SQL để thêm người dùng mới
+                    String query = "INSERT INTO Users(FirstName, LastName, UserName, Gender, DateOfBirth, Email, Password, Role, PhoneNumber, Address) "
+                            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    PreparedStatement pst = con.prepareStatement(query);
+                    pst.setString(1, firstName);
+                    pst.setString(2, lastName);
+                    pst.setString(3, userName);
+                    pst.setString(4, gender);
+                    pst.setString(5, dateOfBirth);
+                    pst.setString(6, email);
+                    pst.setString(7, password);
+                    pst.setString(8, "Customer");
+                    pst.setString(9, phoneNumber);
+                    pst.setString(10, address);
+
+                    // Thực thi truy vấn
+                    int rowCount = pst.executeUpdate();
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("registerSuccess.jsp");
+
+                    if (rowCount > 0) {
+                        request.setAttribute("status", "success");
+                        cDAO.addCart(new Carts(uDAO.getUserByUserName(userName).getUserID(), "Normal"));
+                    } else {
+                        request.setAttribute("status", "failed");
+                    }
+
+                    dispatcher.forward(request, response);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                // Đóng kết nối cơ sở dữ liệu
+                if (con != null) {
+                    try {
+                        con.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
-    // Moved connection logic into the reusable method makeConnection
+    // Kết nối đến cơ sở dữ liệu
     public static Connection makeConnection() {
         Connection conn = null;
         try {
@@ -147,5 +127,9 @@ public class RegisterServlet extends HttpServlet {
     }
 
 
+    @Override
+    public String getServletInfo() {
+        return "Register Servlet to handle user registration.";
+    }
 }
 
