@@ -56,7 +56,10 @@
                                 <div class="sb-nav-link-icon"><i class="fa fa-gauge-simple-high"></i></div>
                                 Quản lý sản phẩm
                             </a>
-                              
+                            <a class="nav-link" href="${contextPath}/marketing/customer-management">
+                                <div class="sb-nav-link-icon"><i class="fa fa-user"></i></div>
+                                Quản lý khách hàng
+                            </a>  
                         </div>
                     </div>
                 </nav>

@@ -173,22 +173,13 @@ public class ProductsDAO extends DBContext {
     }
 
     public boolean updateProducts(Products product) {
-        String sql = "UPDATE Products SET CategoryID = ?, ProductName = ?, Description = ?, Provider = ?, Price = ?, WarrantyPeriod = ?, Amount = ?, ImageLink = ?, IsPromoted = ? WHERE ProductID = ?";
+        String sql = "UPDATE Products SET CategoryID = ?, ProductName = ?, Description = ?, Provider = ?, Price = ?, WarrantyPeriod = ?, Amount = ?, ImageLink = ?, IsPromoted = ?, OldPrice = ? WHERE ProductID = ?";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             setProductPreparedStatement(ps, product);
-            ps.setString(1, product.getCategoryID());
-            ps.setString(2, product.getProductName());
-            ps.setString(3, product.getDescription());
-            ps.setString(4, product.getProvider());
-            ps.setFloat(5, product.getPrice());
-            ps.setString(6, product.getWarrantyPeriod());
-            ps.setInt(7, product.getAmount());
-            ps.setString(8, product.getImageLink());
-            ps.setBoolean(9, true);
-            ps.setInt(10, product.getProductID());
-            ps.executeUpdate();
-            return true;
+            ps.setInt(11, product.getProductID());
+            int affectedRows = ps.executeUpdate();
+            return affectedRows > 0;
         } catch (SQLException e) {
             System.out.println("Error updating product: " + e.getMessage());
             return false;
@@ -283,6 +274,7 @@ public class ProductsDAO extends DBContext {
         product.setDescription(rs.getString("Description"));
         product.setProvider(rs.getString("Provider"));
         product.setPrice(rs.getFloat("Price"));
+        product.setOldprice(rs.getFloat("OldPrice"));
         product.setWarrantyPeriod(rs.getString("WarrantyPeriod"));
         product.setAmount(rs.getInt("Amount"));
         product.setImageLink(rs.getString("ImageLink"));
@@ -322,7 +314,7 @@ public class ProductsDAO extends DBContext {
                 b.setImageLink(rs.getString("ImageLink"));
                 b.setIsPromoted(rs.getBoolean("IsPromoted"));
                 b.setCreateAt(rs.getDate("CreateAt"));
-                b.setOldprice(rs.getInt("OldPrice"));
+                b.setOldprice(rs.getFloat("OldPrice"));
                 b.setStatus(rs.getString("status"));
                 return b;
             }
@@ -420,6 +412,7 @@ public class ProductsDAO extends DBContext {
                     product.setDescription(rs.getString("Description"));
                     product.setProvider(rs.getString("Provider"));
                     product.setPrice(rs.getFloat("Price"));
+                    product.setOldprice(rs.getFloat("OldPrice"));
                     product.setWarrantyPeriod(rs.getString("WarrantyPeriod"));
                     product.setAmount(rs.getInt("Amount"));
                     product.setImageLink(rs.getString("ImageLink"));

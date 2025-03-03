@@ -79,18 +79,19 @@ public class ProductManagementController extends HttpServlet {
                 String description = request.getParameter("description");
                 String provider = request.getParameter("provider");
                 String priceStr = request.getParameter("price");
+                String oldpriceStr = request.getParameter("oldprice");
                 String warrantyPeriod = request.getParameter("warrantyPeriod");
                 String amountStr = request.getParameter("amount");
-
-                Part filePart = request.getPart("imageFile"); // Ảnh mới nếu có
+                Part filePart = request.getPart("imageFile");
 
                 if (productIdStr == null || productIdStr.trim().isEmpty()
                         || productName == null || productName.trim().isEmpty()
                         || categoryID == null || categoryID.trim().isEmpty()
                         || provider == null || provider.trim().isEmpty()
                         || priceStr == null || !priceStr.matches("\\d+(\\.\\d+)?")
+                        || oldpriceStr == null || !oldpriceStr.matches("\\d+(\\.\\d+)?")
+                        || warrantyPeriod == null || warrantyPeriod.trim().isEmpty()
                         || amountStr == null || !amountStr.matches("\\d+")) {
-
                     session.setAttribute("notificationErr", "Vui lòng nhập đầy đủ thông tin hợp lệ.");
                     response.sendRedirect(request.getContextPath() + "/marketing/product-management");
                     return;
@@ -98,9 +99,9 @@ public class ProductManagementController extends HttpServlet {
 
                 int productID = Integer.parseInt(productIdStr);
                 float price = Float.parseFloat(priceStr);
+                float oldprice = Float.parseFloat(oldpriceStr);
                 int amount = Integer.parseInt(amountStr);
 
-                // Lấy sản phẩm từ DB
                 Products product = productDAO.getProductByID(productID);
                 if (product == null) {
                     session.setAttribute("notificationErr", "Sản phẩm không tồn tại.");
@@ -108,27 +109,24 @@ public class ProductManagementController extends HttpServlet {
                     return;
                 }
 
-                // Cập nhật thông tin sản phẩm
                 product.setProductName(productName);
                 product.setCategoryID(categoryID);
                 product.setDescription(description);
                 product.setProvider(provider);
                 product.setPrice(price);
+                product.setOldprice(oldprice);
                 product.setWarrantyPeriod(warrantyPeriod + " năm");
                 product.setAmount(amount);
 
-                // Nếu có ảnh mới, cập nhật đường dẫn ảnh
                 if (filePart != null && filePart.getSize() > 0) {
                     String uploadDir = getServletContext().getRealPath("/") + "assets/img/";
                     File uploadDirFile = new File(uploadDir);
                     if (!uploadDirFile.exists()) {
                         uploadDirFile.mkdir();
                     }
-
                     String fileName = UUID.randomUUID().toString() + "-" + filePart.getSubmittedFileName();
                     String filePath = uploadDir + fileName;
                     filePart.write(filePath);
-
                     product.setImageLink("assets/img/" + fileName);
                 }
 
@@ -137,7 +135,7 @@ public class ProductManagementController extends HttpServlet {
                 if (updated) {
                     session.setAttribute("notification", "Cập nhật sản phẩm thành công!");
                 } else {
-                    session.setAttribute("notificationErr", "Cập nhật sản phẩm thất bại.");
+                    session.setAttribute("notificationErr", "Cập nhật sản phẩm thất bại. Vui lòng kiểm tra lại.");
                 }
             } else if ("add".equals(action)) {
                 String productName = request.getParameter("productName");
@@ -145,6 +143,7 @@ public class ProductManagementController extends HttpServlet {
                 String description = request.getParameter("description");
                 String provider = request.getParameter("provider");
                 String priceStr = request.getParameter("price");
+                String oldpriceStr = request.getParameter("oldprice");
                 String warrantyPeriod = request.getParameter("warrantyPeriod");
                 String amountStr = request.getParameter("amount");
 
@@ -155,6 +154,7 @@ public class ProductManagementController extends HttpServlet {
                         || categoryID == null || categoryID.trim().isEmpty()
                         || provider == null || provider.trim().isEmpty()
                         || priceStr == null || !priceStr.matches("\\d+(\\.\\d+)?")
+                        || oldpriceStr == null || !oldpriceStr.matches("\\d+(\\.\\d+)?")
                         || amountStr == null || !amountStr.matches("\\d+")) {
 
                     session.setAttribute("notificationErr", "Vui lòng điền đầy đủ thông tin hợp lệ.");
@@ -163,6 +163,7 @@ public class ProductManagementController extends HttpServlet {
                 }
 
                 float price = Float.parseFloat(priceStr);
+                float oldprice = Float.parseFloat(oldpriceStr);
                 int amount = Integer.parseInt(amountStr);
 
                 // Handle file upload
@@ -186,6 +187,7 @@ public class ProductManagementController extends HttpServlet {
                 product.setDescription(description);
                 product.setProvider(provider);
                 product.setPrice(price);
+                product.setOldprice(oldprice);
                 product.setWarrantyPeriod(warrantyPeriod + " năm");
                 product.setAmount(amount);
                 product.setImageLink("assets/img/" + fileName); // Save relative path
@@ -226,13 +228,10 @@ public class ProductManagementController extends HttpServlet {
                 }
 
             }
-
             response.sendRedirect(request.getContextPath() + "/marketing/product-management");
-
         } else {
             session.setAttribute("notificationErr", "Bạn không có quyền truy cập vào trang này");
             response.sendRedirect(request.getContextPath() + "/Login.jsp");
         }
     }
-
 }
