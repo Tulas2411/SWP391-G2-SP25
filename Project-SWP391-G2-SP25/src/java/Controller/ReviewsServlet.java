@@ -13,20 +13,22 @@ import java.util.List;
 
 @WebServlet("/reviews")
 public class ReviewsServlet extends HttpServlet {
+
     private ReviewsDAO reviewsDAO = new ReviewsDAO();
-    
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String productName = request.getParameter("productName");
         String ratingStr = request.getParameter("rating");
         String search = request.getParameter("search");
+        String status = request.getParameter("status");
         String sortColumn = request.getParameter("sortColumn");
         String sortOrder = request.getParameter("sortOrder");
 
         // Xử lý phân trang
         int page = 1;
-        int limit = 10; // Số lượng feedback mỗi trang
+        int limit = 10; 
         if (request.getParameter("page") != null) {
             page = Integer.parseInt(request.getParameter("page"));
         }
@@ -36,8 +38,8 @@ public class ReviewsServlet extends HttpServlet {
         Integer rating = (ratingStr != null && !ratingStr.isEmpty()) ? Integer.parseInt(ratingStr) : null;
 
         // Lấy danh sách reviews với phân trang, lọc, tìm kiếm, và sắp xếp
-        List<Reviews> reviewsList = reviewsDAO.getReviews(productName, rating, search, sortColumn, sortOrder, offset, limit);
-        
+        List<Reviews> reviewsList = reviewsDAO.getReviews(productName, rating, search, status ,sortColumn, sortOrder, offset, limit);
+
         request.setAttribute("reviewsList", reviewsList);
         request.setAttribute("currentPage", page);
         request.setAttribute("limit", limit);
