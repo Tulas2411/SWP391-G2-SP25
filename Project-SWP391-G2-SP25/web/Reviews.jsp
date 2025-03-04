@@ -62,6 +62,7 @@
                         <th>Comment</th>
                         <th>Review Date</th>
                         <th>Status</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -73,6 +74,9 @@
                             <td>${review.comment}</td>
                             <td>${review.reviewDate}</td>  
                             <td>${review.status}</td>
+                            <td>
+                                <a href="feedbackDetail?reviewID=${review.reviewID}" class="btn btn-info btn-sm">View</a>
+                            </td>
                         </tr>
                     </c:forEach>
                 </tbody>

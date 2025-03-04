@@ -1,3 +1,4 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <html>
     <head>
 
@@ -57,7 +58,36 @@ if(request.getAttribute("message")!=null)
                                                    class="btn btn-lg btn-primary btn-block"
                                                    value="Reset Password" type="submit">
                                         </div>
+                                        </div>
+                                        <div id="countdown" style="font-weight:bold; color: red; margin-top: 20px;"></div>
+                                        <p>OTP will expire in 60 seconds.</p>
+                                        <script>
+                // Hàm khởi tạo bộ đếm ngược 60 giây
+                function startCountdown() {
+                    var timeLeft = 60; // Số giây đếm ngược
+                    var countdownElement = document.getElementById("countdown");
 
+                    // Cập nhật mỗi giây
+                var countdownTimer = setInterval(function () {
+                    if (timeLeft <= 0) {
+                        clearInterval(countdownTimer);
+                        countdownElement.innerHTML = "OTP has expired. Redirecting to Login...";
+                        setTimeout(function () {
+                            // Chuyển hướng sau khi OTP hết hạn
+                            window.location.href = "Login.jsp";
+                        }, 2000); // Chờ 2 giây trước khi chuyển hướng
+                    } else {
+                        countdownElement.innerHTML = "Time left: " + timeLeft + " seconds";
+                    }
+                    timeLeft -= 1;
+                }, 1000);
+            }
+
+            // Gọi hàm khi trang tải xong
+            window.onload = function () {
+                startCountdown();
+            };
+                                        </script>
                                         <input type="hidden" class="hide" name="token" id="token"
                                                value="">
                                     </form>
