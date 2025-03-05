@@ -127,4 +127,38 @@ public class CartItemsDAO extends DBContext {
         ps.setInt(2, cartItem.getProductID());
         ps.setInt(3, cartItem.getQuantity());
     }
+    public Map<Integer, CartItems> getCartItemsByCartIDasMap(int cartID) {
+        Map<Integer, CartItems> cartItemList = new HashMap<>();
+        String sql = "SELECT * FROM CartItems WHERE CartID = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, cartID);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                CartItems cartItem = extractCartItemFromResultSet(rs);
+                cartItemList.put(cartItem.getCartItemID(), cartItem);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching cart items by CartID: " + e.getMessage());
+        }
+        return cartItemList;
+    }
+    public static void main(String[] args) {
+        CartItemsDAO cDAO = new CartItemsDAO();
+        System.out.println(cDAO.getCartItemsByCartIDasMap(1));
+    }
+    public boolean updateQuantityCartItem(int quantity, int id) {
+        String sql = "UPDATE CartItems SET Quantity = ? WHERE CartItemID = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, quantity);
+            ps.setInt(2, id);
+            ps.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.out.println("Error updating cart item: " + e.getMessage());
+            return false;
+        }
+    }
 }

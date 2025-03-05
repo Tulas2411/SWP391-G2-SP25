@@ -30,6 +30,23 @@ public class Orders {
         this.billOfLading = billOfLading;
     }
 
+    public Orders(String orderDate, String deliveryAddress, String status, double totalAmount, String billOfLading) {
+        this.orderDate = orderDate;
+        this.deliveryAddress = deliveryAddress;
+        this.status = status;
+        this.totalAmount = totalAmount;
+        this.billOfLading = billOfLading;
+    }
+
+    public Orders(int customerID, String orderDate, String deliveryAddress, String status, double totalAmount, String billOfLading) {
+        this.customerID = customerID;
+        this.orderDate = orderDate;
+        this.deliveryAddress = deliveryAddress;
+        this.status = status;
+        this.totalAmount = totalAmount;
+        this.billOfLading = billOfLading;
+    }
+
     public int getOrderID() {
         return orderID;
     }

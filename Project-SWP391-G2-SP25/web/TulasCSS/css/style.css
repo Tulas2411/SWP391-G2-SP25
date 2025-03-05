@@ -2277,4 +2277,30 @@ input:checked + .slider {
 input:checked + .slider:before {
     transform: translateX(26px);
 }
+.product-quantity {
+  display: flex;
+  align-items: center;
+}
 
+.product-quantity .btn {
+  width: 30px;
+  height: 30px;
+  border: 1px solid #ccc;
+  background-color: #f8f8f8;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-quantity .btn:hover {
+  background-color: #e0e0e0;
+}
+
+.product-quantity .quantity-input {
+  width: 50px;
+  text-align: center;
+  margin: 0 5px;
+  border: 1px solid #ccc;
+}

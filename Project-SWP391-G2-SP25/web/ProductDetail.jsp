@@ -69,18 +69,6 @@
             Products p = (Products) request.getAttribute("product");
             Map<Integer, Reviews> listr = (Map<Integer, Reviews>)request.getAttribute("listr");
         %>
-        <!-- SECTION -->
-        <div class="section">
-            <!-- container -->
-            <div class="container">
-                <!-- row -->
-                <div class="row">
-                    <!-- Product main img -->
-                    <div class="col-md-5 col-md-push-2">
-                        <div id="product-main-img">
-                            <div class="product-preview">
-                                <img src="<%= p.getImageLink() %>" alt="">
-                            </div>
 
                             <div class="product-preview">
                                 <img src="<%= p.getImageLink() %>" alt="">
@@ -182,12 +170,14 @@
                                 <div class="qty-label">
                                     Số lượng đặt
                                     <div class="input-number">
-                                        <input type="number" value="1">
+                                        <input type="number" id="quantity-input" value="1" min="1">
                                         <span class="qty-up">+</span>
                                         <span class="qty-down">-</span>
                                     </div>
                                 </div>
-                                <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+                                <button class="add-to-cart-btn" id="add-to-cart-btn">
+                                    <i class="fa fa-shopping-cart"></i> Add to cart
+                                </button>
                             </div>
 
                             <ul class="product-btns">
@@ -632,6 +622,42 @@
         <script src="TulasCSS/js/main.js"></script>
 
     </body>
+    
+    <script>
+       document.getElementById('add-to-cart-btn').addEventListener('click', function () {
+    // Lấy productId và số lượng
+    const productId = document.getElementById('product-id').value;
+    const quantity = document.getElementById('quantity-input').value;
+
+    // Kiểm tra số lượng hợp lệ
+    if (quantity < 1) {
+        alert('Số lượng phải lớn hơn 0');
+        return;
+    }
+
+    // Gửi dữ liệu lên server bằng AJAX
+    $.ajax({
+        url: '<%=request.getContextPath()%>/add-to-cart',
+        method: 'POST',
+        data: {
+            productId: productId,
+            quantity: quantity
+        },
+        success: function (data) {
+            if (data.success) {
+                alert('Đã thêm sản phẩm vào giỏ hàng!');
+            } else {
+                alert('Lỗi: ' + data.error);
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('AJAX Error:', error);
+            alert('Có lỗi xảy ra khi thêm vào giỏ hàng');
+        }
+    });
+}); 
+    </script>
+    
     <script>
     document.getElementById('save-button').addEventListener('click', function() {
     var newProductId = document.getElementById('product-id').value;
