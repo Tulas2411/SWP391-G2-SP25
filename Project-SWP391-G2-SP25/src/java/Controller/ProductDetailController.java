@@ -72,11 +72,11 @@ public class ProductDetailController extends HttpServlet {
         request.setAttribute("product", p);
         request.setAttribute("listr", listr);
         
-        if(!role.equals("Customer")) {
+//        if(!role.equals("Customer")) {
             request.getRequestDispatcher("ProductDetail.jsp").forward(request, response);
-        } else {
-            request.getRequestDispatcher("ProductDetailCustomer.jsp").forward(request, response);
-        }
+//        } else {
+//            request.getRequestDispatcher("ProductDetailCustomer.jsp").forward(request, response);
+//        }
 
     }
 

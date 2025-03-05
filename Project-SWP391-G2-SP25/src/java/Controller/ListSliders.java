@@ -59,13 +59,42 @@ public class ListSliders extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
+
 protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
+    // Lấy tham số tìm kiếm và trạng thái từ request
+    String search = request.getParameter("search");
+    String status = request.getParameter("status");
+
+    // Lấy trang hiện tại từ request, mặc định là trang 1
+    int currentPage = 1;
+    String pageParam = request.getParameter("page");
+    if (pageParam != null && !pageParam.isEmpty()) {
+        currentPage = Integer.parseInt(pageParam);
+    }
+
+    // Số bản ghi mỗi trang
+    int pageSize = 10;
+
+    // Tạo DAO và tính toán số lượng bản ghi
     SlidersDAO sliderDAO = new SlidersDAO();
-    List<Sliders> sliders = sliderDAO.getAllSliders(); 
+    int totalRecords = sliderDAO.countSliders(search, status);  // Phương thức đếm số bản ghi
+    int totalPages = (int) Math.ceil((double) totalRecords / pageSize);  // Tính số trang
+
+    // Lấy danh sách slider cho trang hiện tại
+    List<Sliders> sliders = sliderDAO.getSlidersByPage(search, status, currentPage, pageSize);
+
+    // Đưa các giá trị vào request
     request.setAttribute("sliders", sliders);
+    request.setAttribute("currentPage", currentPage);
+    request.setAttribute("totalPages", totalPages);
+    request.setAttribute("search", search);
+    request.setAttribute("status", status);
+
+    // Chuyển tiếp đến trang JSP để hiển thị
     request.getRequestDispatcher("SliderList.jsp").forward(request, response);
 }
+
 
 
 
@@ -80,22 +109,18 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
-    // Lấy giá trị từ form
+    
     String search = request.getParameter("search");
     String status = request.getParameter("status");
     
-    // Tạo DAO để làm việc với database
     SlidersDAO sliderDAO = new SlidersDAO();
     
-    // Gọi phương thức tìm kiếm từ DAO
     List<Sliders> sliders = sliderDAO.searchSliders(search, status);
-    
-    // Đưa danh sách kết quả vào request
+
     request.setAttribute("sliders", sliders);
     request.setAttribute("search", search);
     request.setAttribute("status", status);
     
-    // Chuyển hướng về trang JSP hiển thị danh sách slider
     request.getRequestDispatcher("SliderList.jsp").forward(request, response);
 }
 

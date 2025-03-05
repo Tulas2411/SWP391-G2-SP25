@@ -87,7 +87,104 @@ public class SlidersDAO extends DBContext {
 
         return list;
     }
+    public int countSliders(String search, String status) {
+        int count = 0;
+        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM Sliders WHERE 1=1");
 
+        // Nếu có tiêu chí tìm kiếm theo title hoặc backlink
+        if (search != null && !search.trim().isEmpty()) {
+            sql.append(" AND (Title LIKE ? OR Backlink LIKE ?)");
+        }
+
+        // Nếu có tiêu chí tìm kiếm theo status
+        if (status != null && !status.isEmpty()) {
+            sql.append(" AND Status = ?");
+        }
+
+        try ( 
+             PreparedStatement ps = connection.prepareStatement(sql.toString())) {
+
+            int paramIndex = 1;
+
+            // Thêm tham số tìm kiếm theo title hoặc backlink
+            if (search != null && !search.trim().isEmpty()) {
+                ps.setString(paramIndex++, "%" + search + "%");
+                ps.setString(paramIndex++, "%" + search + "%");
+            }
+
+            // Thêm tham số tìm kiếm theo status
+            if (status != null && !status.isEmpty()) {
+                ps.setString(paramIndex++, status);
+            }
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    count = rs.getInt(1);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return count;
+    }
+
+    // Phương thức lấy slider theo trang
+    public List<Sliders> getSlidersByPage(String search, String status, int page, int pageSize) {
+        List<Sliders> list = new ArrayList<>();
+        StringBuilder sql = new StringBuilder("SELECT * FROM Sliders WHERE 1=1");
+
+        // Thêm điều kiện tìm kiếm
+        if (search != null && !search.trim().isEmpty()) {
+            sql.append(" AND (Title LIKE ? OR Backlink LIKE ?)");
+        }
+
+        if (status != null && !status.isEmpty()) {
+            sql.append(" AND Status = ?");
+        }
+
+        // Phân trang: dùng LIMIT và OFFSET
+        sql.append(" LIMIT ? OFFSET ?");
+
+        try (
+             PreparedStatement ps = connection.prepareStatement(sql.toString())) {
+
+            int paramIndex = 1;
+
+            // Thêm tham số tìm kiếm
+            if (search != null && !search.trim().isEmpty()) {
+                ps.setString(paramIndex++, "%" + search + "%");
+                ps.setString(paramIndex++, "%" + search + "%");
+            }
+
+            if (status != null && !status.isEmpty()) {
+                ps.setString(paramIndex++, status);
+            }
+
+            // Thêm tham số phân trang
+            ps.setInt(paramIndex++, pageSize);
+            ps.setInt(paramIndex++, (page - 1) * pageSize);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Sliders slider = new Sliders();
+                    slider.setSliderID(rs.getInt("SliderID"));
+                    slider.setTitle(rs.getString("Title"));
+                    slider.setImage(rs.getString("Image"));
+                    slider.setBacklink(rs.getString("Backlink"));
+                    slider.setStatus(rs.getString("Status"));
+                    slider.setBlogID(rs.getInt("BlogID"));
+                    slider.setProductID(rs.getInt("ProductID"));
+
+                    list.add(slider);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
     // Lấy slider theo ID
     public Sliders getSliderById(int id) {
         String sql = "SELECT * FROM Sliders WHERE SliderID = ?";

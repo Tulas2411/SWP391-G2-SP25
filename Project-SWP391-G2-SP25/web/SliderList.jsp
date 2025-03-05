@@ -108,7 +108,7 @@
 
 
         <main class="container">
-            <h2>Sliders List aa</h2>
+
 
             <!-- Filter and Search -->
             <form method="post" action="ListSliders">
@@ -143,7 +143,7 @@
                             <td><a href="${slider.backlink}">${slider.backlink}</a></td>
                             <td>${slider.status}</td>
                             <td>
-                             
+
                                 <form action="DetailSlider" method="get">
                                     <input type="hidden" name="sliderID" value="${slider.sliderID}">
                                     <button type="submit">Edit</button>
@@ -158,22 +158,23 @@
 
                             </td>
                         </tr>
+                      
                     </c:forEach>
                 </tbody>
             </table>
 
-             Pagination 
             <div class="pagination">
-            <c:if test="${currentPage > 1}">
-                <a href="SlidersListController?page=${currentPage - 1}&search=${param.search}&status=${param.status}">Previous</a>
-            </c:if>
-            Page ${currentPage} of ${totalPages}
-            <c:if test="${currentPage < totalPages}">
-                <a href="SlidersListController?page=${currentPage + 1}&search=${param.search}&status=${param.status}">Next</a>
-            </c:if>
-        </div>
-        </main>
+                <c:if test="${currentPage > 1}">
+                    <a href="ListSliders?page=${currentPage - 1}&search=${param.search}&status=${param.status}">Previous</a>
+                </c:if>
+                Page ${currentPage} of ${totalPages}
+                <c:if test="${currentPage < totalPages}">
+                    <a href="ListSliders?page=${currentPage + 1}&search=${param.search}&status=${param.status}">Next</a>
+                </c:if>
+            </div>
 
-        <%@ include file="./Public/footer.jsp" %>
-    </body>
+    </main>
+
+    <%@ include file="./Public/footer.jsp" %>
+</body>
 </html>

@@ -81,8 +81,8 @@
                             <div class="product-preview">
                                 <img src="<%= p.getImageLink() %>" alt="">
                             </div>
-                        </div>
-                    </div>
+                  
+                   
                     <!-- /Product main img -->
 
                     <!-- Product thumb imgs -->
