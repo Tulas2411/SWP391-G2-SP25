@@ -4,9 +4,9 @@
  */
 package Controller;
 
-import DAO.*;
-import Model.Products;
-import Model.Reviews;
+import DAO.OrdersDAO;
+import Model.Orders;
+import Model.Users;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -15,14 +15,14 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.util.Map;
+import java.util.*;
 
 /**
  *
- * @author admin
+ * @author daoducdanh
  */
-@WebServlet(name = "ProductDetailController", urlPatterns = {"/ProductDetailController"})
-public class ProductDetailController extends HttpServlet {
+@WebServlet(name = "MyOrderController", urlPatterns = {"/my-order"})
+public class MyOrderController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,10 +41,10 @@ public class ProductDetailController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ProductDetailController</title>");
+            out.println("<title>Servlet MyOrderController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ProductDetailController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet MyOrderController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -62,22 +62,35 @@ public class ProductDetailController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
+
         HttpSession session = request.getSession();
-        String role = (String) session.getAttribute("role");
-        ProductsDAO pDAO = new ProductsDAO();
-        ReviewsDAO r = new ReviewsDAO();
-        Products p = pDAO.getProductByID(id);
-        Map<Integer, Reviews> listr = r.getAllReviewsByProductID(id);
-        request.setAttribute("product", p);
-        request.setAttribute("listr", listr);
-        
-        if(!role.equals("Customer")) {
-            request.getRequestDispatcher("ProductDetail.jsp").forward(request, response);
-        } else {
-            request.getRequestDispatcher("ProductDetailCustomer.jsp").forward(request, response);
+        Users user = (Users) session.getAttribute("user");
+        OrdersDAO ordersDAO = new OrdersDAO();
+
+        int limit = 4; 
+        int page = 1; 
+
+   
+        String pageParam = request.getParameter("page");
+        if (pageParam != null) {
+            try {
+                page = Integer.parseInt(pageParam);
+            } catch (NumberFormatException e) {
+                page = 1;
+            }
         }
 
+        int totalOrders = ordersDAO.getTotalOrdersByUser(user.getUserID());
+        int totalPages = (int) Math.ceil((double) totalOrders / limit);
+
+        List<Orders> orderses = ordersDAO.getAllOrderByUser(user.getUserID(), page, limit);
+
+        request.setAttribute("ordersList", orderses);
+        request.setAttribute("currentPage", page);
+        request.setAttribute("totalPages", totalPages);
+        request.setAttribute("limit", limit);
+
+        request.getRequestDispatcher("MyOrder.jsp").forward(request, response);
     }
 
     /**

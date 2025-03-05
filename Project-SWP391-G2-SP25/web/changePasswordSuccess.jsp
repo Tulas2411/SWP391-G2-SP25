@@ -1,4 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -66,7 +67,7 @@
             <div class="success-icon">✔️</div>
             <h2>Password Changed Successfully!</h2>
             <p>Your password has been updated successfully. You can now return to the homepage.</p>
-            <a href="HomePage.jsp">Go to Home</a>
+            <a href="${pageContext.request.contextPath}/home">Go to Home</a>
         </div>
     </body>
 </html>
