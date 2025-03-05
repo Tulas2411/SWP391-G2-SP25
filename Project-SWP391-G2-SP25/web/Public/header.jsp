@@ -45,7 +45,7 @@
                     Users user = (Users) session.getAttribute("user");
                     if (username != null) {
                         // Nếu người dùng đã đăng nhập, hiển thị Hello, [Username] và nút Đăng xuất
-                        out.println("Hello, " + username + "!" + user.getUserID());
+                        out.println("Hello, " + username + "!");
                         out.println("<a href='LogoutController' class='header__introduce-account-link'>Đăng xuất</a>"); // Nút đăng xuất
                     } else {
                         // Nếu chưa đăng nhập, hiển thị Đăng Nhập

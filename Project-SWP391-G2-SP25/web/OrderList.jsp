@@ -136,7 +136,7 @@
                         <td>${order.totalAmount}</td>
                         <td>${order.status}</td>
                         <td>
-                            <a href="OrderDetail?id=${order.orderID}">Edit</a>
+                            <a href="OrderDetail?id=${order.orderID}">Chi tiết</a>
                         </td>
                     </tr>
                 </c:forEach>
