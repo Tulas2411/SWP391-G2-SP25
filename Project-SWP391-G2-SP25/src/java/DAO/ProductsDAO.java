@@ -39,7 +39,7 @@ public class ProductsDAO extends DBContext {
                 b.setImageLink(rs.getString("ImageLink"));
                 b.setIsPromoted(rs.getBoolean("IsPromoted"));
                 b.setCreateAt(rs.getDate("CreateAt"));
-                b.setOldprice(rs.getInt("OldPrice"));
+                b.setOldprice(rs.getFloat("OldPrice"));
                 list.put(b.getProductID(), b);
             }
             rs.close();
