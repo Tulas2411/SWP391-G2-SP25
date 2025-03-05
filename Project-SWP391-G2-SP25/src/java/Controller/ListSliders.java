@@ -79,9 +79,26 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
+        throws ServletException, IOException {
+    // Lấy giá trị từ form
+    String search = request.getParameter("search");
+    String status = request.getParameter("status");
+    
+    // Tạo DAO để làm việc với database
+    SlidersDAO sliderDAO = new SlidersDAO();
+    
+    // Gọi phương thức tìm kiếm từ DAO
+    List<Sliders> sliders = sliderDAO.searchSliders(search, status);
+    
+    // Đưa danh sách kết quả vào request
+    request.setAttribute("sliders", sliders);
+    request.setAttribute("search", search);
+    request.setAttribute("status", status);
+    
+    // Chuyển hướng về trang JSP hiển thị danh sách slider
+    request.getRequestDispatcher("SliderList.jsp").forward(request, response);
+}
+
 
     /**
      * Returns a short description of the servlet.

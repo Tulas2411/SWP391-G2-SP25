@@ -111,7 +111,7 @@
             <h2>Sliders List aa</h2>
 
             <!-- Filter and Search -->
-            <form method="GET" action="SlidersListController">
+            <form method="post" action="ListSliders">
                 <input type="text" name="search" placeholder="Search by title or backlink" value="${param.search}">
                 <select name="status">
                     <option value="">All Status</option>
@@ -162,8 +162,8 @@
                 </tbody>
             </table>
 
-            <!-- Pagination -->
-            <!--        <div class="pagination">
+             Pagination 
+            <div class="pagination">
             <c:if test="${currentPage > 1}">
                 <a href="SlidersListController?page=${currentPage - 1}&search=${param.search}&status=${param.status}">Previous</a>
             </c:if>
@@ -171,7 +171,7 @@
             <c:if test="${currentPage < totalPages}">
                 <a href="SlidersListController?page=${currentPage + 1}&search=${param.search}&status=${param.status}">Next</a>
             </c:if>
-        </div>-->
+        </div>
         </main>
 
         <%@ include file="./Public/footer.jsp" %>
