@@ -180,7 +180,7 @@ public class UsersDAO extends DBContext {
         user.setEmail(rs.getString("Email"));
         user.setPhoneNumber(rs.getString("PhoneNumber"));
         user.setAddress(rs.getString("Address"));
-//        user.setStatus(res.getString("Status"));
+        user.setStatus(rs.getString("Status"));
         return user;
     }
 

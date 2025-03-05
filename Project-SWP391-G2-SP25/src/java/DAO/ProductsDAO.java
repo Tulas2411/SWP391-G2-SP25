@@ -274,12 +274,12 @@ public class ProductsDAO extends DBContext {
         product.setDescription(rs.getString("Description"));
         product.setProvider(rs.getString("Provider"));
         product.setPrice(rs.getFloat("Price"));
-//        product.setOldprice(rs.getFloat("OldPrice"));
+        product.setOldprice(rs.getFloat("OldPrice"));
         product.setWarrantyPeriod(rs.getString("WarrantyPeriod"));
         product.setAmount(rs.getInt("Amount"));
         product.setImageLink(rs.getString("ImageLink"));
         product.setIsPromoted(rs.getBoolean("IsPromoted"));
-//        product.setStatus(rs.getString("status"));
+        product.setStatus(rs.getString("status"));
         return product;
     }
 
