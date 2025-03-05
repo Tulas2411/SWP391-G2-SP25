@@ -68,13 +68,16 @@ public class LoginServlet extends HttpServlet {
                     session.setAttribute("username", username);
                     // Thêm email vào session
                     session.setAttribute("email", emailFromDB);
+                    session.setAttribute("role", rs.getString("Role"));
+                            
 
                     Users u = userDAO.getUserByEmail(email);
-                    if (u.getStatus().equalsIgnoreCase("Deactive")) {
-                        session.setAttribute("notificationErr", "Tài khoản của bạn đã bị vô hiệu hóa!");
-                        response.sendRedirect("Login.jsp");
-                        return;
-                    }
+                    
+//                    if (u.getStatus().equalsIgnoreCase("Deactive")) {
+//                        session.setAttribute("notificationErr", "Tài khoản của bạn đã bị vô hiệu hóa!");
+//                        response.sendRedirect("Login.jsp");
+//                        return;
+//                    }
                     if (u.getRole().equalsIgnoreCase("Admin")) {
                         response.sendRedirect("admin/dashboard");
                     } else if (u.getRole().equalsIgnoreCase("marketing")) {

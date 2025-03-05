@@ -12,7 +12,7 @@ public class DBContext {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/EcommerceDB", "springstudent", "springstudent");
+					"jdbc:mysql://localhost:3306/EcommerceDB", "root", "1234");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

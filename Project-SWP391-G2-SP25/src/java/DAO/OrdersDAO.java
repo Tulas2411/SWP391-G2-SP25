@@ -73,6 +73,42 @@ public class OrdersDAO extends DBContext {
         return null;
     }
 
+    public List<Orders> getAllOrderByUser(int customerID, int page, int limit) {
+        List<Orders> orderses = new ArrayList<>();
+        String sql = "SELECT * FROM Orders WHERE CustomerID = ? LIMIT ? OFFSET ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, customerID);
+            ps.setInt(2, limit);
+            ps.setInt(3, (page - 1) * limit);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    orderses.add(extractOrderFromResultSet(rs));
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching paginated orders by CustomerID: " + e.getMessage());
+        }
+        return orderses;
+    }
+
+    public int getTotalOrdersByUser(int customerID) {
+        String sql = "SELECT COUNT(*) FROM Orders WHERE CustomerID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, customerID);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error counting total orders: " + e.getMessage());
+        }
+        return 0;
+    }
+
+    
     public Vector<Orders> getOrdersByCustomerID(int customerID) {
         Vector<Orders> ordersList = new Vector<>();
         String sql = "SELECT * FROM Orders WHERE CustomerID = ?";
@@ -154,7 +190,7 @@ public class OrdersDAO extends DBContext {
         ps.setDouble(5, order.getTotalAmount());
         ps.setString(6, order.getBillOfLading());
     }
-    
+
     public Map<Integer, Orders> getOrdersByCustomerIDasMap(int customerID) {
         Map<Integer, Orders> orderList = new HashMap<>();
         String sql = "SELECT * FROM Orders WHERE CustomerID = ?";
@@ -172,10 +208,10 @@ public class OrdersDAO extends DBContext {
         }
         return orderList;
     }
-    
+
     public Orders getOrderPendingByID(int orderID) {
         String status = "Pending";
-        String sql = "SELECT * FROM Orders WHERE CustomerID = ? AND Status = 'Pending'" ;
+        String sql = "SELECT * FROM Orders WHERE CustomerID = ? AND Status = 'Pending'";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, orderID);
             try (ResultSet rs = ps.executeQuery()) {
@@ -188,19 +224,19 @@ public class OrdersDAO extends DBContext {
         }
         return null;
     }
-    
+
     public Orders getLatestOrder() {
-    String sql = "SELECT * FROM Orders ORDER BY OrderID DESC LIMIT 1"; // Sắp xếp giảm dần và lấy 1 bản ghi đầu tiên
-    try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
-        if (rs.next()) {
-            return extractOrderFromResultSet(rs); // Trả về Order mới nhất
+        String sql = "SELECT * FROM Orders ORDER BY OrderID DESC LIMIT 1"; // Sắp xếp giảm dần và lấy 1 bản ghi đầu tiên
+        try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return extractOrderFromResultSet(rs); // Trả về Order mới nhất
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching the latest order: " + e.getMessage());
         }
-    } catch (SQLException e) {
-        System.out.println("Error fetching the latest order: " + e.getMessage());
+        return null; // Trả về null nếu không tìm thấy
     }
-    return null; // Trả về null nếu không tìm thấy
-}
-    
+
     public static void main(String[] args) {
         OrdersDAO oDAO = new OrdersDAO();
         Orders order = new Orders(6, null, null, "Pending", 0, null);
