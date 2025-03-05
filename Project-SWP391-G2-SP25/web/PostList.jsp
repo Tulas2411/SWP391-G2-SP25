@@ -26,12 +26,12 @@
                 font-family: 'Roboto', sans-serif;
             }
 
-/*            .container {
-                width: 75%;
-                margin: 0 auto;
-                padding-top: 20px;
-                max-width: 1100px;
-            }*/
+            /*            .container {
+                            width: 75%;
+                            margin: 0 auto;
+                            padding-top: 20px;
+                            max-width: 1100px;
+                        }*/
 
             .contact-container {
                 display: flex;
@@ -304,9 +304,11 @@
                 </table>
             </div>
 
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#postModal">
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#postModal" 
+                    style="display: block; margin: 20px auto; padding: 12px 25px; background-color: #28a745; color: white; border: none; border-radius: 5px; font-size: 16px; text-align: center; cursor: pointer; transition: background-color 0.3s ease;">
                 Tạo bài viết mới
             </button>
+
 
             <!-- Popup Modal -->
             <div class="modal fade" id="postModal" tabindex="-1" aria-labelledby="postModalLabel" aria-hidden="true">
@@ -364,6 +366,24 @@
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <div style="display: flex; justify-content: center; align-items: center; gap: 15px; margin-top: 30px;">
+                <c:if test="${currentPage > 1}">
+                    <a href="PostList?page=${currentPage - 1}" 
+                       style="padding: 10px 15px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px; font-size: 16px; transition: background-color 0.3s ease;">
+                        « Trang trước
+                    </a>
+                </c:if>
+
+                <span style="font-size: 16px; color: #666; margin: 0 10px;">Trang ${currentPage} / ${totalPages}</span>
+
+                <c:if test="${currentPage < totalPages}">
+                    <a href="PostList?page=${currentPage + 1}" 
+                       style="padding: 10px 15px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px; font-size: 16px; transition: background-color 0.3s ease;">
+                        Trang tiếp theo »
+                    </a>
+                </c:if>
             </div>
 
     </body>

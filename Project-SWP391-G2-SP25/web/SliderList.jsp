@@ -149,32 +149,27 @@
                                     <button type="submit">Edit</button>
                                 </form>
 
-                                <form action="ToggleSliderStatusController" method="post">
-                                    <input type="hidden" name="id" value="${slider.sliderID}">
-                                    <button type="submit">
-                                        ${slider.status == 'active' ? 'Hide' : 'Show'}
-                                    </button>
-                                </form>
+
 
                             </td>
                         </tr>
-                      
+
                     </c:forEach>
                 </tbody>
             </table>
 
             <div class="pagination">
                 <c:if test="${currentPage > 1}">
-                    <a href="ListSliders?page=${currentPage - 1}&search=${param.search}&status=${param.status}">Previous</a>
+                    <a href="?page=${currentPage - 1}&search=${param.search}&status=${param.status}">Previous</a>
                 </c:if>
                 Page ${currentPage} of ${totalPages}
                 <c:if test="${currentPage < totalPages}">
-                    <a href="ListSliders?page=${currentPage + 1}&search=${param.search}&status=${param.status}">Next</a>
+                    <a href="?page=${currentPage + 1}&search=${param.search}&status=${param.status}">Next</a>
                 </c:if>
             </div>
 
-    </main>
+        </main>
 
-    <%@ include file="./Public/footer.jsp" %>
-</body>
+        <%@ include file="./Public/footer.jsp" %>
+    </body>
 </html>

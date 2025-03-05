@@ -25,7 +25,7 @@ import java.util.List;
  */
 @WebServlet(name = "OrdersList", urlPatterns = {"/OrdersList"})
 public class OrdersList extends HttpServlet {
-    private static final int PAGE_SIZE = 10;  // Đảm bảo giá trị của PAGE_SIZE là số nguyên hợp lệ
+    private static final int PAGE_SIZE = 3;  
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>

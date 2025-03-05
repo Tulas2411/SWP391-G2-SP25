@@ -148,11 +148,11 @@
         <!-- Pagination -->
         <div class="pagination">
             <c:if test="${currentPage > 1}">
-                <a href="OrdersListController?page=${currentPage - 1}&search=${param.search}&fromDate=${param.fromDate}&toDate=${param.toDate}&saleName=${param.saleName}&status=${param.status}">Previous</a>
+                <a href="OrdersList?page=${currentPage - 1}&search=${param.search}&fromDate=${param.fromDate}&toDate=${param.toDate}&saleName=${param.saleName}&status=${param.status}">Previous</a>
             </c:if>
             Page ${currentPage} of ${totalPages}
             <c:if test="${currentPage < totalPages}">
-                <a href="OrdersListController?page=${currentPage + 1}&search=${param.search}&fromDate=${param.fromDate}&toDate=${param.toDate}&saleName=${param.saleName}&status=${param.status}">Next</a>
+                <a href="OrdersList?page=${currentPage + 1}&search=${param.search}&fromDate=${param.fromDate}&toDate=${param.toDate}&saleName=${param.saleName}&status=${param.status}">Next</a>
             </c:if>
         </div>
     </main>

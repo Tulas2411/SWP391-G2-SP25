@@ -51,7 +51,7 @@ public class SlidersDAO extends DBContext {
         }
 
         try (// Lấy kết nối từ DBContext
-                 PreparedStatement ps = connection.prepareStatement(sql.toString())) {
+                PreparedStatement ps = connection.prepareStatement(sql.toString())) {
 
             int paramIndex = 1;
 
@@ -87,6 +87,7 @@ public class SlidersDAO extends DBContext {
 
         return list;
     }
+
     public int countSliders(String search, String status) {
         int count = 0;
         StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM Sliders WHERE 1=1");
@@ -101,8 +102,8 @@ public class SlidersDAO extends DBContext {
             sql.append(" AND Status = ?");
         }
 
-        try ( 
-             PreparedStatement ps = connection.prepareStatement(sql.toString())) {
+        try (
+                PreparedStatement ps = connection.prepareStatement(sql.toString())) {
 
             int paramIndex = 1;
 
@@ -147,7 +148,7 @@ public class SlidersDAO extends DBContext {
         sql.append(" LIMIT ? OFFSET ?");
 
         try (
-             PreparedStatement ps = connection.prepareStatement(sql.toString())) {
+                PreparedStatement ps = connection.prepareStatement(sql.toString())) {
 
             int paramIndex = 1;
 
@@ -185,6 +186,7 @@ public class SlidersDAO extends DBContext {
 
         return list;
     }
+
     // Lấy slider theo ID
     public Sliders getSliderById(int id) {
         String sql = "SELECT * FROM Sliders WHERE SliderID = ?";
@@ -236,20 +238,19 @@ public class SlidersDAO extends DBContext {
 //        return false;
 //    }
     public int updateSlider(Sliders slider) {
-        String sql = "UPDATE Sliders SET Title = ?, Image = ?, Backlink = ?, Status = ?, BlogID = ?, ProductID = ? WHERE SliderID = ?";
+        String sql = "UPDATE Sliders SET Title = ?, Image = ?, Backlink = ?, Status = ? WHERE SliderID = ?";
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
-            stm.setString(1, slider.getTitle());
-            stm.setString(2, slider.getImage());
-            stm.setString(3, slider.getBacklink());
-            stm.setString(4, slider.getStatus());
+            stm.setString(1, slider.getTitle());      // Cập nhật title
+            stm.setString(2, slider.getImage());      // Cập nhật image (URL mới)
+            stm.setString(3, slider.getBacklink());  // Cập nhật backlink
+            stm.setString(4, slider.getStatus());    // Cập nhật status
+            stm.setInt(5, slider.getSliderID());     // Điều kiện WHERE SliderID = ?
 
-            stm.setInt(7, slider.getSliderID());
-
-            return stm.executeUpdate(); // Trả về số dòng bị ảnh hưởng
+            return stm.executeUpdate();  // Trả về số dòng bị ảnh hưởng
         } catch (Exception e) {
-            System.out.println("updateSlider: " + e.getMessage());
+            System.out.println("updateSlider: " + e.getMessage());  // In ra lỗi nếu có
         }
-        return 0; // Nếu lỗi, trả về 0 (nghĩa là không có dòng nào được cập nhật)
+        return 0;  // Nếu không có dòng nào được cập nhật, trả về 0
     }
 
     // Xóa slider theo ID

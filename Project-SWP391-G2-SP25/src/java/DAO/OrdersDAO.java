@@ -28,7 +28,26 @@ public class OrdersDAO extends DBContext {
         }
         return orderList;
     }
+    public boolean updateOrderStatus(int orderId, String status) {
+        boolean isUpdated = false;
+        String query = "UPDATE Orders SET Status = ? WHERE OrderID = ?";
 
+        try (// Lấy kết nối
+             PreparedStatement ps = connection.prepareStatement(query)) {
+
+            ps.setString(1, status); // Set giá trị trạng thái mới
+            ps.setInt(2, orderId);   // Set OrderID
+
+            int rowsUpdated = ps.executeUpdate();
+            if (rowsUpdated > 0) {
+                isUpdated = true; // Nếu có bản ghi được cập nhật
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return isUpdated;
+    }
     public List<Orders> searchOrders(String search, String fromDate, String toDate, String saleName, String status) {
         List<Orders> orderList = new ArrayList<>();
         StringBuilder sql = new StringBuilder("SELECT * FROM Orders WHERE 1=1");
@@ -137,6 +156,7 @@ public class OrdersDAO extends DBContext {
         }
         return orderList;
     }
+    
     public int getTotalOrders(String search, String fromDate, String toDate, String saleName, String status) {
     StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM Orders WHERE 1=1");
 

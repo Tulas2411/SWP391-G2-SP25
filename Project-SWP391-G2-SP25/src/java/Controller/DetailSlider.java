@@ -87,7 +87,32 @@ public class DetailSlider extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+         // Lấy các tham số từ form
+        int sliderID = Integer.parseInt(request.getParameter("sliderID"));
+        String title = request.getParameter("title");
+        String backlink = request.getParameter("backlink");
+        String status = request.getParameter("status");
+
+        // Lấy link ảnh mới từ form
+        String newImageLink = request.getParameter("newImageURL");
+
+        // Kiểm tra nếu không có link ảnh mới, thì giữ nguyên ảnh cũ
+        String imagePath = (newImageLink != null && !newImageLink.isEmpty()) ? newImageLink : request.getParameter("currentImage");
+
+        // Tạo đối tượng Slider để lưu dữ liệu
+        Sliders slider = new Sliders();
+        slider.setSliderID(sliderID);
+        slider.setTitle(title);
+        slider.setImage(imagePath); // Cập nhật hình ảnh
+        slider.setBacklink(backlink);
+        slider.setStatus(status);
+
+        // Sử dụng DAO để cập nhật Slider trong cơ sở dữ liệu
+        SlidersDAO slidersDAO = new SlidersDAO();
+        slidersDAO.updateSlider(slider); // Cập nhật thông tin Slider
+
+        // Chuyển hướng về trang chi tiết slider
+        response.sendRedirect("DetailSlider?sliderID=" + sliderID);
     }
 
     /**

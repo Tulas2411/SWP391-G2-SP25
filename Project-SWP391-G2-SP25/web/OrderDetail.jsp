@@ -240,9 +240,9 @@
 
         <section>
             <h3>Manage Order</h3>
-            <form method="POST" action="UpStatus">
+            <form method="POST" action="OrderDetail">
               
-                <input type="text" name="orderId" value="${orders.orderID}">
+                <input type="hidden" name="orderId" value="${orders.orderID}">
 
                 <label for="status">Status:</label>
                 <select name="status">
@@ -257,17 +257,17 @@
             </form>
 
 
-            <form method="POST" action="UpdateSaleNotesController">
+<!--            <form method="POST" action="UpdateSaleNotesController">
                 <input type="hidden" name="orderId" value="${orders.orderID}">
                 <label for="notes">Sale Notes:</label>
                 <textarea name="notes"></textarea>
                 <button type="submit">Save Notes</button>
-            </form>
+            </form>-->
         </section>
 
 
         <!-- Assign Order (for Sale Manager) -->
-        <c:if test="${user.role == 'Sale Manager'}">
+        <c:if test="${user.role == 'Manager'}">
             <section>
                 <h3>Assign Order</h3>
                 <form method="POST" action="AssignOrderController">

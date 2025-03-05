@@ -77,18 +77,15 @@
 
 
             <c:if test="${not empty slider}">
-                <form action="EditDetailSlider" method="post" enctype="multipart/form-data" class="slider-form">
+                <form action="DetailSlider" method="post" class="slider-form">
                     <input type="hidden" name="sliderID" value="${slider.getSliderID()}">
-                    <input type="hidden" name="currentImage" value="${slider.getImage()}"> <!-- Ảnh cũ -->
+                    <input type="hidden" name="currentImage" value="${slider.getImage()}"> 
 
                     <label for="title"><strong>Title:</strong></label>
                     <input type="text" id="title" name="title" value="${slider.title}" required>
 
-                    <label for="image"><strong>Current Image:</strong></label>
-                    <img src="${slider.getImage()}" width="300">
-
-                    <label for="newImage"><strong>Upload New Image:</strong></label>
-                    <input type="file" id="newImage" name="newImage">
+                    <label for="newImageURL"><strong>Image URL:</strong></label>
+                    <input type="text" id="newImageURL" name="newImageURL" value="${slider.getImage()}" placeholder="Enter image URL" required>
 
                     <label for="backlink"><strong>Backlink:</strong></label>
                     <input type="text" id="backlink" name="backlink" value="${slider.backlink}" required>
@@ -98,16 +95,18 @@
                         <option value="active" ${slider.status == 'active' ? 'selected' : ''}>Active</option>
                         <option value="inactive" ${slider.status == 'inactive' ? 'selected' : ''}>Inactive</option>
                     </select>
+
                     <button type="submit" class="button save-btn">Save Changes</button>
                 </form>
-                        
+
+
+
             </c:if>
 
             <c:if test="${empty slider}">
                 <p class="error-message">Slider not found.</p>
             </c:if>
 
-            <a href="SlidersListController" class="back-button">Back to List</a>
         </main>
 
 
