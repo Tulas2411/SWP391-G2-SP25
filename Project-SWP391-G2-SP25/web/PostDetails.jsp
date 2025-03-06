@@ -41,13 +41,10 @@
             <% } else {%>
             <div class="post-container" style="margin-top: 10px;">
                 <!-- Nút chuyển đổi chế độ chỉnh sửa -->
-                <div class="switch-container">
-                    <label class="switch">
-                        <input type="checkbox" id="edit-toggle">
-                        <span class="slider"></span>
-                    </label>
-                    <span class="switch-label">Chế độ chỉnh sửa</span>
-                </div>
+                <label class="switch">
+                                <input type="checkbox" id="edit-toggle">
+                                <span class="slider"></span>
+                </label>
 
                 <div class="post-header">
                     <!-- Tiêu đề bài viết -->

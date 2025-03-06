@@ -1000,6 +1000,93 @@
     .table-icon {
         display: none;
     }
+.edit-toggle {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 24px;
+        }
+        #edit-section {
+            display: none;
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            background: #f9f9f9;
+        }
+/* Style cho input khi ở chế độ chỉnh sửa */
+.edit-mode-input {
+    font-size: 18px; /* Kích thước font giống h2 */
+    font-weight: 700; /* Độ đậm giống h2 */
+    font-family: 'Montserrat', sans-serif; /* Font chữ giống h2 */
+    color: #333; /* Màu chữ giống h2 */
+    width: 60%; /* Chiều rộng đầy đủ */
+    padding: 8px 8px; /* Padding để trông đẹp hơn */
+    border: 2px solid #4CAF50; /* Viền xanh lá */
+    border-radius: 4px; /* Bo góc */
+    transition: all 0.3s ease; /* Hiệu ứng mượt mà */
+    margin: 8px 0; /* Khoảng cách với các phần tử khác */
+    box-sizing: border-box; /* Đảm bảo padding không làm thay đổi kích thước */
+    background-color: transparent; /* Nền trong suốt */
+}
 
+.edit-mode-input:focus {
+    outline: none; /* Loại bỏ viền mặc định khi focus */
+    border-color: #45a049; /* Đổi màu viền khi focus */
+    box-shadow: 0 0 8px rgba(76, 175, 80, 0.2); /* Hiệu ứng shadow khi focus */
+}
+
+/* Style cho toggle switch */
+.switch-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #4CAF50;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
 
 }
