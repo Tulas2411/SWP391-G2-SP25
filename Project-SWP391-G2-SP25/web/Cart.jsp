@@ -177,6 +177,7 @@
                         <div class="product-quantity">
                           <button class="btn btn-decrease" data-cart-item-id="<%=id%>">-</button>
                           <input id="product-quantity-<%=id%>" type="text" value="<%=cart.get(id)%>" class="form-control input-sm quantity-input" readonly>
+                          <input id="product-quantity1-<%=id%>" type="text" value="<%=cart.get(id)%>" hidden>
                           <button class="btn btn-increase" data-cart-item-id="<%=id%>">+</button>
                         </div>
                     </td>

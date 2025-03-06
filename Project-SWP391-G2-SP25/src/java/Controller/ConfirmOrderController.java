@@ -135,7 +135,32 @@ public class ConfirmOrderController extends HttpServlet {
                 total += price;
             }
 
-            if (user != null) {
+            if (user == null) {
+                System.out.println("Entering else block to create new user...");
+                // Tạo người dùng mới (khách)
+                Users u = new Users();
+                u.setFirstName(firstname);
+                u.setLastName(lastname);
+                u.setEmail(email);
+                u.setPhoneNumber(phone);
+                u.setGender(gender);
+                u.setAddress(address);
+                u.setRole("Guest");
+                boolean isUserAdded = uDAO.addUser(u);
+                if (!isUserAdded) {
+                    System.out.println("Failed to add user.");
+                    throw new Exception("Failed to add user.");
+                }
+                session.setAttribute("user", u);
+                System.out.println("New user created and added to session: " + u.getEmail());
+
+                // Thêm đơn hàng mới
+                boolean isOrderAdded = oDAO.addOrder(new Orders(u.getUserID(), null, u.getAddress(), "Submitted", total, comment));
+                if (!isOrderAdded) {
+                    throw new Exception("Failed to add order.");
+                }
+                
+            } else {
                 // Cập nhật thông tin người dùng
                 user.setFirstName(firstname);
                 user.setLastName(lastname);
@@ -167,27 +192,6 @@ public class ConfirmOrderController extends HttpServlet {
                         throw new Exception("Failed to add order details.");
                     }
                     ciDAO.removeCartItem(cartitid);
-                }
-            } else {
-                // Tạo người dùng mới (khách)
-                Users u = new Users();
-                u.setFirstName(firstname);
-                u.setLastName(lastname);
-                u.setEmail(email);
-                u.setPhoneNumber(phone);
-                u.setGender(gender);
-                u.setAddress(address);
-                u.setRole("Guest");
-                boolean isUserAdded = uDAO.addUser(u);
-                if (!isUserAdded) {
-                    throw new Exception("Failed to add user.");
-                }
-                session.setAttribute("user", u);
-
-                // Thêm đơn hàng mới
-                boolean isOrderAdded = oDAO.addOrder(new Orders(u.getUserID(), null, u.getAddress(), "Submitted", total, comment));
-                if (!isOrderAdded) {
-                    throw new Exception("Failed to add order.");
                 }
             }
 
