@@ -4,10 +4,8 @@
  */
 package Controller;
 
-import DAO.*;
-import Model.Products;
-import Model.Reviews;
-import Model.Users;
+import DAO.SlidersDAO;
+import Model.Sliders;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -15,15 +13,16 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import java.util.Map;
+import jakarta.servlet.http.Part;
+import java.io.File;
+import java.util.List;
 
 /**
  *
- * @author admin
+ * @author manh
  */
-@WebServlet(name = "ProductDetailController", urlPatterns = {"/ProductDetailController"})
-public class ProductDetailController extends HttpServlet {
+@WebServlet(name = "EditDetailSlider", urlPatterns = {"/EditDetailSlider"})
+public class EditDetailSlider extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,10 +41,10 @@ public class ProductDetailController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ProductDetailController</title>");
+            out.println("<title>Servlet EditDetailSlider</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ProductDetailController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet EditDetailSlider at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -61,24 +60,9 @@ public class ProductDetailController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-       protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
-        HttpSession session = request.getSession();
-        String role = (String) session.getAttribute("role");
-        ProductsDAO pDAO = new ProductsDAO();
-        ReviewsDAO r = new ReviewsDAO();
-        Products p = pDAO.getProductByID(id);
-        Map<Integer, Reviews> listr = r.getAllReviewsByProductID(id);
-        request.setAttribute("product", p);
-        request.setAttribute("listr", listr);
-        
-//        if(!role.equals("Customer")) {
-            request.getRequestDispatcher("ProductDetail.jsp").forward(request, response);
-//        } else {
-//            request.getRequestDispatcher("ProductDetailCustomer.jsp").forward(request, response);
-//        }
-
+        processRequest(request, response);
     }
 
     /**
@@ -92,7 +76,33 @@ public class ProductDetailController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+
+        // Lấy các tham số từ form
+        int sliderID = Integer.parseInt(request.getParameter("sliderID"));
+        String title = request.getParameter("title");
+        String backlink = request.getParameter("backlink");
+        String status = request.getParameter("status");
+
+        // Lấy link ảnh mới từ form
+        String newImageLink = request.getParameter("newImageURL");
+
+        // Kiểm tra nếu không có link ảnh mới, thì giữ nguyên ảnh cũ
+        String imagePath = (newImageLink != null && !newImageLink.isEmpty()) ? newImageLink : request.getParameter("currentImage");
+
+        // Tạo đối tượng Slider để lưu dữ liệu
+        Sliders slider = new Sliders();
+        slider.setSliderID(sliderID);
+        slider.setTitle(title);
+        slider.setImage(imagePath); // Cập nhật hình ảnh
+        slider.setBacklink(backlink);
+        slider.setStatus(status);
+
+        // Sử dụng DAO để cập nhật Slider trong cơ sở dữ liệu
+        SlidersDAO slidersDAO = new SlidersDAO();
+        slidersDAO.updateSlider(slider); // Cập nhật thông tin Slider
+
+        // Chuyển hướng về trang chi tiết slider
+        response.sendRedirect("DetailSlider?sliderID=" + sliderID);
     }
 
     /**

@@ -37,6 +37,16 @@
                 <div class="main__left">
                     <!-- Danh mục sản phẩm - Gom các sản phẩm thành các danh mục nhỏ - Hiển thị trên cùng bên trái main trang web -->
                     <h2 class="main__left-title">DANH MỤC SẢN PHẨM</h2>
+
+                    <button onclick="location.href = 'ListSliders'">
+                        Slider
+                    </button>
+                    ---
+                    <button onclick="location.href = 'OrdersList'">
+                        Order
+                    </button>
+
+
                     <ul class="main__left-category-list">
                         <c:forEach var="categoryID" items="${['TBQ', 'TBCS', 'CTD', 'TBTM', 'TBSCBT']}">
                             <c:forEach var="category" items="${categories}">

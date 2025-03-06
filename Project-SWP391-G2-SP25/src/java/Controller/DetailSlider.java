@@ -4,10 +4,8 @@
  */
 package Controller;
 
-import DAO.*;
-import Model.Products;
-import Model.Reviews;
-import Model.Users;
+import DAO.SlidersDAO;
+import Model.Sliders;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -15,15 +13,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import java.util.Map;
+import java.util.List;
 
 /**
  *
- * @author admin
+ * @author mạnh
  */
-@WebServlet(name = "ProductDetailController", urlPatterns = {"/ProductDetailController"})
-public class ProductDetailController extends HttpServlet {
+@WebServlet(name = "DetailSlider", urlPatterns = {"/DetailSlider"})
+public class DetailSlider extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,10 +39,10 @@ public class ProductDetailController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ProductDetailController</title>");
+            out.println("<title>Servlet DetailSilder</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ProductDetailController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet DetailSilder at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -61,23 +58,21 @@ public class ProductDetailController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-       protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
-        HttpSession session = request.getSession();
-        String role = (String) session.getAttribute("role");
-        ProductsDAO pDAO = new ProductsDAO();
-        ReviewsDAO r = new ReviewsDAO();
-        Products p = pDAO.getProductByID(id);
-        Map<Integer, Reviews> listr = r.getAllReviewsByProductID(id);
-        request.setAttribute("product", p);
-        request.setAttribute("listr", listr);
-        
-//        if(!role.equals("Customer")) {
-            request.getRequestDispatcher("ProductDetail.jsp").forward(request, response);
-//        } else {
-//            request.getRequestDispatcher("ProductDetailCustomer.jsp").forward(request, response);
-//        }
+        SlidersDAO sliderDAO = new SlidersDAO();
+
+       int sliderID = Integer.parseInt(request.getParameter("sliderID"));
+        Sliders slider = sliderDAO.getSliderById(sliderID);
+
+        if (slider != null) {
+            request.setAttribute("slider", slider);
+            request.getRequestDispatcher("SliderListDetail.jsp").forward(request, response);
+        } else {
+            request.setAttribute("error", "Không tìm thấy slider với ID: " + sliderID);
+            request.getRequestDispatcher("ErrorPage.jsp").forward(request, response);
+            request.getRequestDispatcher("HomePage.jsp").forward(request, response);
+        }
 
     }
 
@@ -92,7 +87,31 @@ public class ProductDetailController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+      
+        int sliderID = Integer.parseInt(request.getParameter("sliderID"));
+        String title = request.getParameter("title");
+        String backlink = request.getParameter("backlink");
+        String status = request.getParameter("status");
+
+    
+        String newImageLink = request.getParameter("newImageURL");
+
+        
+        String imagePath = (newImageLink != null && !newImageLink.isEmpty()) ? newImageLink : request.getParameter("currentImage");
+
+      
+        Sliders slider = new Sliders();
+        slider.setSliderID(sliderID);
+        slider.setTitle(title);
+        slider.setImage(imagePath); 
+        slider.setBacklink(backlink);
+        slider.setStatus(status);
+
+        SlidersDAO slidersDAO = new SlidersDAO();
+        slidersDAO.updateSlider(slider); 
+
+  
+        response.sendRedirect("DetailSlider?sliderID=" + sliderID);
     }
 
     /**

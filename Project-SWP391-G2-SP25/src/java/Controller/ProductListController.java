@@ -25,7 +25,7 @@ import java.util.Map;
  *
  * @author Legion
  */
-@WebServlet(name = "ProductListController", urlPatterns = {"/productsList"})
+    @WebServlet(name = "ProductListController", urlPatterns = {"/productsList"})
 public class ProductListController extends HttpServlet {
 
     final ProductsDAO dbProducts = new ProductsDAO();

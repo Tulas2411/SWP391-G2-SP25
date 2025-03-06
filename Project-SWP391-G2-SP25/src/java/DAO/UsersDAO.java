@@ -93,12 +93,13 @@ public class UsersDAO extends DBContext {
     }
 
     public boolean addUser(Users user) {
-        String sql = "INSERT INTO Users (FirstName, LastName, Gender, DateOfBirth, UserName, Password, Role, Email, PhoneNumber, Address) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Users (FirstName, LastName, Gender, DateOfBirth, UserName, Password, Role, Email, PhoneNumber, Address, Status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             setUserPreparedStatement(ps, user);
-            ps.executeUpdate();
-            return true;
+            ps.setString(11, user.getStatus()); // Thêm Status
+            int affectedRows = ps.executeUpdate();
+            return affectedRows > 0;
         } catch (SQLException e) {
             System.out.println("Error adding user: " + e.getMessage());
             return false;
@@ -194,7 +195,7 @@ public class UsersDAO extends DBContext {
                 params.add(role);
             }
             if (status != null && !status.trim().isEmpty()) {
-                query.append(" AND Role = ? ");
+                query.append(" AND Status = ? "); // Sửa từ Role thành Status
                 params.add(status);
             }
             if (gender != null && !gender.trim().isEmpty()) {
@@ -249,6 +250,7 @@ public class UsersDAO extends DBContext {
 
         }
     }
+
     // Lấy người dùng theo tên đăng nhập (UserName)
     public Users getUserByUserName(String userName) {
         String sql = "SELECT * FROM Users WHERE UserName = ?";
@@ -264,6 +266,7 @@ public class UsersDAO extends DBContext {
         }
         return null;
     }
+
     public static void main(String[] args) {
         UsersDAO dao = new UsersDAO();
         Users u = new Users();

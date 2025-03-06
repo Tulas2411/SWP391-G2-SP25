@@ -4,10 +4,10 @@
  */
 package Controller;
 
-import DAO.*;
-import Model.Products;
-import Model.Reviews;
-import Model.Users;
+import DAO.OrdersDAO;
+import DAO.SlidersDAO;
+import Model.Orders;
+import Model.Sliders;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -15,15 +15,17 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import java.util.Map;
+import jakarta.servlet.http.Part;
+import java.io.File;
+import java.util.List;
 
 /**
  *
- * @author admin
+ * @author manh
  */
-@WebServlet(name = "ProductDetailController", urlPatterns = {"/ProductDetailController"})
-public class ProductDetailController extends HttpServlet {
+@WebServlet(name = "OrdersList", urlPatterns = {"/OrdersList"})
+public class OrdersList extends HttpServlet {
+    private static final int PAGE_SIZE = 3;  
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,10 +44,10 @@ public class ProductDetailController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ProductDetailController</title>");
+            out.println("<title>Servlet OrdersList</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ProductDetailController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet OrdersList at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,26 +62,45 @@ public class ProductDetailController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    @Override
-       protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
-        HttpSession session = request.getSession();
-        String role = (String) session.getAttribute("role");
-        ProductsDAO pDAO = new ProductsDAO();
-        ReviewsDAO r = new ReviewsDAO();
-        Products p = pDAO.getProductByID(id);
-        Map<Integer, Reviews> listr = r.getAllReviewsByProductID(id);
-        request.setAttribute("product", p);
-        request.setAttribute("listr", listr);
-        
-//        if(!role.equals("Customer")) {
-            request.getRequestDispatcher("ProductDetail.jsp").forward(request, response);
-//        } else {
-//            request.getRequestDispatcher("ProductDetailCustomer.jsp").forward(request, response);
-//        }
 
+  @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        
+        // Lấy các tham số tìm kiếm từ request
+        String search = request.getParameter("search");
+        String fromDate = request.getParameter("fromDate");
+        String toDate = request.getParameter("toDate");
+        String saleName = request.getParameter("saleName");
+        String status = request.getParameter("status");
+        
+        int currentPage = 1;
+        if (request.getParameter("page") != null) {
+            currentPage = Integer.parseInt(request.getParameter("page"));
+        }
+        
+        OrdersDAO ordersDAO = new OrdersDAO();
+        
+        List<Orders> orders = ordersDAO.getOrdersPaginated(search, fromDate, toDate, saleName, status, currentPage, PAGE_SIZE);
+        
+         int totalOrders = ordersDAO.getTotalOrders(search, fromDate, toDate, saleName, status);
+        int totalPages = (int) Math.ceil((double) totalOrders / PAGE_SIZE);
+        
+        // Lưu các giá trị cần thiết vào request để hiển thị phân trang trong JSP
+        request.setAttribute("orders", orders);
+        request.setAttribute("currentPage", currentPage);
+        request.setAttribute("totalPages", totalPages);
+        request.setAttribute("search", search);
+        request.setAttribute("fromDate", fromDate);
+        request.setAttribute("toDate", toDate);
+        request.setAttribute("saleName", saleName);
+        request.setAttribute("status", status);
+        
+        // Chuyển tiếp đến trang JSP
+        request.getRequestDispatcher("OrderList.jsp").forward(request, response);
     }
+
+
 
     /**
      * Handles the HTTP <code>POST</code> method.

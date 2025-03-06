@@ -68,45 +68,47 @@ public class UserManagementController extends HttpServlet {
 
         if (currentUser != null && currentUser.getRole().equalsIgnoreCase("Admin")) {
             String action = request.getParameter("action");
-            if (action.equals("edit")) {
-
+            if ("edit".equals(action)) {
                 try {
                     int userID = Integer.parseInt(request.getParameter("id"));
                     String newRole = request.getParameter("role");
 
+                    if (newRole == null || newRole.trim().isEmpty()) {
+                        session.setAttribute("notificationErr", "Vai trò không được để trống.");
+                        response.sendRedirect(request.getContextPath() + "/admin/user-management");
+                        return;
+                    }
+
                     boolean updated = userDAO.updateUserRole(userID, newRole);
                     if (updated) {
-                        session.setAttribute("notification", "Cập nhật thành công");
+                        session.setAttribute("notification", "Cập nhật vai trò thành công");
                     } else {
-                        session.setAttribute("notificationErr", "Cập nhật thất bại.");
+                        session.setAttribute("notificationErr", "Cập nhật vai trò thất bại. Người dùng không tồn tại.");
                     }
                 } catch (NumberFormatException e) {
-                    session.setAttribute("notificationError", "Invalid user ID provided.");
+                    session.setAttribute("notificationErr", "ID người dùng không hợp lệ.");
                 }
-            } else if (action.equals("toggle")) {
-
+            } else if ("toggle".equals(action)) {
                 try {
                     int userID = Integer.parseInt(request.getParameter("id"));
-                    String newStatus;
                     Users userTogger = userDAO.getUserByID(userID);
-                    
-                    if (userTogger.getStatus().equalsIgnoreCase("Active")) {
-                        newStatus = "Deactive";
-                    }else{
-                        newStatus = "Active";
+                    if (userTogger == null) {
+                        session.setAttribute("notificationErr", "Người dùng không tồn tại.");
+                        response.sendRedirect(request.getContextPath() + "/admin/user-management");
+                        return;
                     }
 
+                    String newStatus = userTogger.getStatus().equalsIgnoreCase("Active") ? "Deactive" : "Active";
                     boolean updated = userDAO.updateStatus(userID, newStatus);
                     if (updated) {
-                        session.setAttribute("notification", "Cập nhật thành công");
+                        session.setAttribute("notification", "Cập nhật trạng thái thành công");
                     } else {
-                        session.setAttribute("notificationErr", "Cập nhật thất bại.");
+                        session.setAttribute("notificationErr", "Cập nhật trạng thái thất bại.");
                     }
                 } catch (NumberFormatException e) {
-                    session.setAttribute("notificationError", "Invalid user ID provided.");
+                    session.setAttribute("notificationErr", "ID người dùng không hợp lệ.");
                 }
             } else if ("add".equals(action)) {
-                // Retrieve form parameters
                 String firstName = request.getParameter("firstName");
                 String lastName = request.getParameter("lastName");
                 String email = request.getParameter("email");
@@ -116,10 +118,20 @@ public class UserManagementController extends HttpServlet {
                 String dateOfBirth = request.getParameter("dateOfBirth");
                 String address = request.getParameter("address");
 
-                Users user = userDAO.getUserByEmail(email);
-                if (user != null) {
-                    session.setAttribute("notificationErr", "Email đã tồn tại trong hệ thống, vui lòng thử lại với email khác");
-                    response.sendRedirect("user-management");
+                if (firstName == null || lastName == null || email == null || phoneNumber == null
+                        || gender == null || role == null || dateOfBirth == null || address == null
+                        || firstName.trim().isEmpty() || lastName.trim().isEmpty() || email.trim().isEmpty()
+                        || phoneNumber.trim().isEmpty() || gender.trim().isEmpty() || role.trim().isEmpty()
+                        || dateOfBirth.trim().isEmpty() || address.trim().isEmpty()) {
+                    session.setAttribute("notificationErr", "Vui lòng điền đầy đủ thông tin.");
+                    response.sendRedirect(request.getContextPath() + "/admin/user-management");
+                    return;
+                }
+
+                Users existingUser = userDAO.getUserByEmail(email);
+                if (existingUser != null) {
+                    session.setAttribute("notificationErr", "Email đã tồn tại trong hệ thống.");
+                    response.sendRedirect(request.getContextPath() + "/admin/user-management");
                     return;
                 }
                 // Generate a random password
@@ -142,19 +154,18 @@ public class UserManagementController extends HttpServlet {
                     newUser.setUserName(firstName.toLowerCase() + lastName.toLowerCase());
                 }
                 newUser.setPassword(randomPassword);
-
+                newUser.setStatus("Active");
                 // Save the new user
                 boolean added = userDAO.addUser(newUser);
                 if (added) {
-                    // Send the random password to the new user's email
                     boolean emailSent = sendEmail(email, randomPassword);
                     if (emailSent) {
-                        session.setAttribute("notification", "Thêm người dùng thành công");
+                        session.setAttribute("notification", "Thêm người dùng thành công và email đã được gửi.");
                     } else {
-                        session.setAttribute("notification", "User added successfully, but failed to send email.");
+                        session.setAttribute("notification", "Thêm người dùng thành công nhưng gửi email thất bại.");
                     }
                 } else {
-                    session.setAttribute("notificationErr", "Failed to add new user.");
+                    session.setAttribute("notificationErr", "Thêm người dùng thất bại.");
                 }
             }
             response.sendRedirect(request.getContextPath() + "/admin/user-management");

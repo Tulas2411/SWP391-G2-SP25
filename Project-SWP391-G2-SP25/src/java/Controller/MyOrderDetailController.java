@@ -4,9 +4,13 @@
  */
 package Controller;
 
-import DAO.*;
+import DAO.OrderDetailsDAO;
+import DAO.OrdersDAO;
+import DAO.ProductsDAO;
+import Model.OrderDetailWithProduct;
+import Model.OrderDetails;
+import Model.Orders;
 import Model.Products;
-import Model.Reviews;
 import Model.Users;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -16,14 +20,17 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 /**
  *
- * @author admin
+ * @author daoducdanh
  */
-@WebServlet(name = "ProductDetailController", urlPatterns = {"/ProductDetailController"})
-public class ProductDetailController extends HttpServlet {
+@WebServlet(name = "MyOrderDetailController", urlPatterns = {"/my-order-detail"})
+public class MyOrderDetailController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,10 +49,10 @@ public class ProductDetailController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ProductDetailController</title>");
+            out.println("<title>Servlet MyOrderDetailController</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ProductDetailController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet MyOrderDetailController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -61,24 +68,33 @@ public class ProductDetailController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-       protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
-        HttpSession session = request.getSession();
-        String role = (String) session.getAttribute("role");
-        ProductsDAO pDAO = new ProductsDAO();
-        ReviewsDAO r = new ReviewsDAO();
-        Products p = pDAO.getProductByID(id);
-        Map<Integer, Reviews> listr = r.getAllReviewsByProductID(id);
-        request.setAttribute("product", p);
-        request.setAttribute("listr", listr);
+        int orderId = Integer.parseInt(request.getParameter("orderId"));
+        OrderDetailsDAO orderDetailsDAO = new OrderDetailsDAO();
+        OrdersDAO ordersDAO = new OrdersDAO();
+        ProductsDAO productsDAO = new ProductsDAO();
         
-//        if(!role.equals("Customer")) {
-            request.getRequestDispatcher("ProductDetail.jsp").forward(request, response);
-//        } else {
-//            request.getRequestDispatcher("ProductDetailCustomer.jsp").forward(request, response);
-//        }
-
+        HttpSession session = request.getSession();
+        Users users = (Users) session.getAttribute("user");
+        
+        Vector<OrderDetails> orderDetailses = orderDetailsDAO.getOrderDetailsByOrderID(orderId);
+        
+        List<OrderDetailWithProduct> list = new ArrayList<>();
+        
+        for(OrderDetails details : orderDetailses){
+            Products products = productsDAO.getProductByID(details.getProductID());
+            list.add(new OrderDetailWithProduct(details, products));
+        }
+        Orders orders = ordersDAO.getOrderByID(orderId);
+       
+        
+        request.setAttribute("user", users);
+        request.setAttribute("order", orders);
+        request.setAttribute("list", list);
+        
+        request.getRequestDispatcher("MyOrderDetail.jsp").forward(request, response);
+        
     }
 
     /**
