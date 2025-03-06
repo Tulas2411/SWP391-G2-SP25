@@ -59,15 +59,42 @@ public class ListSliders extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-protected void doGet(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-    SlidersDAO sliderDAO = new SlidersDAO();
-    List<Sliders> sliders = sliderDAO.getAllSliders(); 
-    request.setAttribute("sliders", sliders);
-    request.getRequestDispatcher("SliderList.jsp").forward(request, response);
-}
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+    
+        String search = request.getParameter("search");
+        String status = request.getParameter("status");
 
 
+        int currentPage = 1;
+        String pageParam = request.getParameter("page");
+        if (pageParam != null && !pageParam.isEmpty()) {
+            try {
+                currentPage = Integer.parseInt(pageParam);
+            } catch (NumberFormatException e) {
+                currentPage = 1; 
+            }
+        }
+
+        int pageSize = 5;
+
+
+        SlidersDAO slidersDAO = new SlidersDAO();
+        int totalRecords = slidersDAO.countSliders(search, status);  
+        int totalPages = (int) Math.ceil((double) totalRecords / pageSize); 
+
+      
+        List<Sliders> sliders = slidersDAO.getSlidersByPage(search, status, currentPage, pageSize);
+
+        request.setAttribute("sliders", sliders);
+        request.setAttribute("currentPage", currentPage);
+        request.setAttribute("totalPages", totalPages);
+        request.setAttribute("search", search);
+        request.setAttribute("status", status);
+
+        request.getRequestDispatcher("SliderList.jsp").forward(request, response);
+    }
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -80,7 +107,19 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+
+        String search = request.getParameter("search");
+        String status = request.getParameter("status");
+
+        SlidersDAO sliderDAO = new SlidersDAO();
+
+        List<Sliders> sliders = sliderDAO.searchSliders(search, status);
+
+        request.setAttribute("sliders", sliders);
+        request.setAttribute("search", search);
+        request.setAttribute("status", status);
+
+        request.getRequestDispatcher("SliderList.jsp").forward(request, response);
     }
 
     /**

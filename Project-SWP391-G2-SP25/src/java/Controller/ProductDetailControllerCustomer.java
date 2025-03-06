@@ -115,7 +115,7 @@ public class ProductDetailControllerCustomer extends HttpServlet {
         Map<Integer, Reviews> listr = r.getAllReviewsByProductID(id);
         request.setAttribute("product", p);
         request.setAttribute("listr", listr);
-        request.getRequestDispatcher("ProductDetail.jsp").forward(request, response);
+        request.getRequestDispatcher("ProductDetailCustomer.jsp").forward(request, response);
     } 
 
     /** 

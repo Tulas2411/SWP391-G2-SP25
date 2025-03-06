@@ -108,10 +108,10 @@
 
 
         <main class="container">
-            <h2>Sliders List aa</h2>
+
 
             <!-- Filter and Search -->
-            <form method="GET" action="SlidersListController">
+            <form method="post" action="ListSliders">
                 <input type="text" name="search" placeholder="Search by title or backlink" value="${param.search}">
                 <select name="status">
                     <option value="">All Status</option>
@@ -143,35 +143,42 @@
                             <td><a href="${slider.backlink}">${slider.backlink}</a></td>
                             <td>${slider.status}</td>
                             <td>
-                             
+
                                 <form action="DetailSlider" method="get">
                                     <input type="hidden" name="sliderID" value="${slider.sliderID}">
                                     <button type="submit">Edit</button>
                                 </form>
-
-                                <form action="ToggleSliderStatusController" method="post">
-                                    <input type="hidden" name="id" value="${slider.sliderID}">
-                                    <button type="submit">
-                                        ${slider.status == 'active' ? 'Hide' : 'Show'}
-                                    </button>
+                                <form action="ShowDetailSlider" method="get">
+                                    <input type="hidden" name="sliderID" value="${slider.sliderID}">
+                                    <button type="submit">Show detail</button>
                                 </form>
+
+
 
                             </td>
                         </tr>
+
                     </c:forEach>
                 </tbody>
             </table>
 
-            <!-- Pagination -->
-            <!--        <div class="pagination">
-            <c:if test="${currentPage > 1}">
-                <a href="SlidersListController?page=${currentPage - 1}&search=${param.search}&status=${param.status}">Previous</a>
-            </c:if>
-            Page ${currentPage} of ${totalPages}
-            <c:if test="${currentPage < totalPages}">
-                <a href="SlidersListController?page=${currentPage + 1}&search=${param.search}&status=${param.status}">Next</a>
-            </c:if>
-        </div>-->
+            <div class="pagination" style="text-align: center; margin: 20px 0;">
+                <c:if test="${currentPage > 1}">
+                    <a href="ListSliders?page=${currentPage - 1}&search=${param.search}&status=${param.status}" 
+                       style="display: inline-block; padding: 10px 20px; margin: 0 10px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px; font-size: 16px; cursor: pointer; transition: background-color 0.3s ease;">
+                        Previous
+                    </a>
+                </c:if>
+                Page ${currentPage} of ${totalPages}
+                <c:if test="${currentPage < totalPages}">
+                    <a href="ListSliders?page=${currentPage + 1}&search=${param.search}&status=${param.status}" 
+                       style="display: inline-block; padding: 10px 20px; margin: 0 10px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px; font-size: 16px; cursor: pointer; transition: background-color 0.3s ease;">
+                        Next
+                    </a>
+                </c:if>
+            </div>
+
+
         </main>
 
         <%@ include file="./Public/footer.jsp" %>

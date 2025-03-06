@@ -13,16 +13,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.Part;
-import java.io.File;
 import java.util.List;
 
 /**
  *
- * @author manh
+ * @author mạnh
  */
-@WebServlet(name = "EditDetailSlider", urlPatterns = {"/EditDetailSlider"})
-public class EditDetailSlider extends HttpServlet {
+@WebServlet(name = "ShowDetailSlider", urlPatterns = {"/ShowDetailSlider"})
+public class ShowDetailSlider extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,10 +39,10 @@ public class EditDetailSlider extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet EditDetailSlider</title>");
+            out.println("<title>Servlet DetailSilder</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet EditDetailSlider at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet DetailSilder at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -62,7 +60,20 @@ public class EditDetailSlider extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        SlidersDAO sliderDAO = new SlidersDAO();
+
+       int sliderID = Integer.parseInt(request.getParameter("sliderID"));
+        Sliders slider = sliderDAO.getSliderById(sliderID);
+
+        if (slider != null) {
+            request.setAttribute("slider", slider);
+            request.getRequestDispatcher("ShowDetailSlider.jsp").forward(request, response);
+        } else {
+            request.setAttribute("error", "Không tìm thấy slider với ID: " + sliderID);
+            request.getRequestDispatcher("ErrorPage.jsp").forward(request, response);
+            request.getRequestDispatcher("HomePage.jsp").forward(request, response);
+        }
+
     }
 
     /**
@@ -76,33 +87,8 @@ public class EditDetailSlider extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        // Lấy các tham số từ form
-        int sliderID = Integer.parseInt(request.getParameter("sliderID"));
-        String title = request.getParameter("title");
-        String backlink = request.getParameter("backlink");
-        String status = request.getParameter("status");
-
-        // Lấy link ảnh mới từ form
-        String newImageLink = request.getParameter("newImageURL");
-
-        // Kiểm tra nếu không có link ảnh mới, thì giữ nguyên ảnh cũ
-        String imagePath = (newImageLink != null && !newImageLink.isEmpty()) ? newImageLink : request.getParameter("currentImage");
-
-        // Tạo đối tượng Slider để lưu dữ liệu
-        Sliders slider = new Sliders();
-        slider.setSliderID(sliderID);
-        slider.setTitle(title);
-        slider.setImage(imagePath); // Cập nhật hình ảnh
-        slider.setBacklink(backlink);
-        slider.setStatus(status);
-
-        // Sử dụng DAO để cập nhật Slider trong cơ sở dữ liệu
-        SlidersDAO slidersDAO = new SlidersDAO();
-        slidersDAO.updateSlider(slider); // Cập nhật thông tin Slider
-
-        // Chuyển hướng về trang chi tiết slider
-        response.sendRedirect("DetailSlider?sliderID=" + sliderID);
+      
+     
     }
 
     /**

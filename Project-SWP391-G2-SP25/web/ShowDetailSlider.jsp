@@ -18,55 +18,98 @@
         <link rel="stylesheet" href="assets/fonts/fontawesome-free-6.0.0-web/css/all.css" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swapsubset=vietnamese" />
         <style>
+            body {
+                font-family: 'Roboto', sans-serif;
+                background-color: #f4f7fc;
+                margin: 0;
+                padding: 0;
+            }
+
+            .container {
+                max-width: 1200px;
+                margin: 40px auto;
+                padding: 20px;
+            }
+
             .slider-form {
                 display: flex;
                 flex-direction: column;
                 gap: 15px;
-                max-width: 500px;
+                max-width: 600px;
                 margin: 0 auto;
-                padding: 20px;
-                background: white;
-                border-radius: 10px;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                padding: 30px;
+                background: #fff;
+                border-radius: 12px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                transition: box-shadow 0.3s ease;
+            }
+
+            .slider-form:hover {
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
             }
 
             .slider-form label {
-                font-weight: bold;
+                font-weight: 600;
                 margin-bottom: 5px;
+                color: #333;
             }
 
-            .slider-form input, .slider-form select {
+            .slider-form p {
+                font-size: 16px;
+                color: #555;
+                background: #f9f9f9;
+                padding: 10px;
+                border-radius: 5px;
+                border: 1px solid #ddd;
+                cursor: not-allowed;
+            }
+
+            .slider-form select, .slider-form input[type="text"] {
                 width: 100%;
-                padding: 8px;
+                padding: 12px;
                 border: 1px solid #ccc;
                 border-radius: 5px;
+                font-size: 14px;
+                background: #f9f9f9;
+                color: #333;
+                transition: border 0.3s ease;
             }
 
-            .slider-form input[type="file"] {
-                border: none;
+            .slider-form select:focus, .slider-form input[type="text"]:focus {
+                border: 1px solid #3498db;
+                outline: none;
+                background: #fff;
             }
 
-            .slider-form img {
-                display: block;
-                margin: 10px auto;
-                border-radius: 5px;
+            .readonly {
+                background-color: #f9f9f9;
                 border: 1px solid #ccc;
+                cursor: not-allowed;
             }
 
             .save-btn {
                 background-color: #3498db;
                 color: white;
-                padding: 10px;
+                padding: 12px 20px;
                 border: none;
                 border-radius: 5px;
-                cursor: pointer;
+                cursor: not-allowed;
+                font-size: 16px;
+                font-weight: bold;
                 transition: background 0.3s ease;
+                margin-top: 20px;
             }
 
             .save-btn:hover {
                 background-color: #2980b9;
             }
 
+            .error-message {
+                color: red;
+                font-size: 16px;
+                text-align: center;
+                margin-top: 20px;
+            }
         </style>
     </head>
     <body>
@@ -75,33 +118,26 @@
 
         <main class="container">
 
-
             <c:if test="${not empty slider}">
-                <form action="DetailSlider" method="post" class="slider-form">
+                <form class="slider-form">
                     <input type="hidden" name="sliderID" value="${slider.getSliderID()}">
                     <input type="hidden" name="currentImage" value="${slider.getImage()}"> 
 
                     <label for="title"><strong>Title:</strong></label>
-                    <input type="text" id="title" name="title" value="${slider.title}" required>
+                    <p>${slider.title}</p> <!-- Use <p> to display the title -->
 
-                    <label for="newImageURL"><strong>Image URL:</strong></label>
-                    <input type="text" id="newImageURL" name="newImageURL" value="${slider.getImage()}" placeholder="Enter image URL" required>
+                    <label for="newImageURL"><strong>Image:</strong></label>
+                    <img src="${slider.getImage()}" alt="Slider Image" style="max-width: 100%; height: auto; border-radius: 8px; margin-top: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);" />
 
                     <label for="backlink"><strong>Backlink:</strong></label>
-                    <input type="text" id="backlink" name="backlink" value="${slider.backlink}" required>
+                    <p>${slider.backlink}</p> <!-- Use <p> to display the backlink -->
 
                     <label for="status"><strong>Status:</strong></label>
-                    <select id="status" name="status">
-                        <option value="active" ${slider.status == 'active' ? 'selected' : ''}>Active</option>
-                        <option value="inactive" ${slider.status == 'inactive' ? 'selected' : ''}>Inactive</option>
-                    </select>
+                    <p>${slider.status == 'active' ? 'Active' : 'Inactive'}</p> <!-- Use <p> to display the status -->
 
-                    <button type="submit" class="button save-btn">Save Changes</button>
-                     <button type="button" class="save-btn" onclick="window.location.href='ListSliders';">Back to List</button>
+                   <button type="button" class="save-btn" onclick="window.location.href='ListSliders';">Back to List</button>
+
                 </form>
-
-
-
             </c:if>
 
             <c:if test="${empty slider}">
@@ -109,7 +145,6 @@
             </c:if>
 
         </main>
-
 
         <%@ include file="./Public/footer.jsp" %>
 

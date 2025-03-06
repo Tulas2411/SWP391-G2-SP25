@@ -4,10 +4,17 @@
  */
 package Controller;
 
+import DAO.CartItemsDAO;
+import DAO.CartsDAO;
+import DAO.OrderDetailsDAO;
 import DAO.OrdersDAO;
 import DAO.SlidersDAO;
+import DAO.UsersDAO;
+import Model.CartItems;
+import Model.OrderDetails;
 import Model.Orders;
 import Model.Sliders;
+import Model.Users;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -43,7 +50,7 @@ public class OrderDetail extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet OrdersList</title>");            
+            out.println("<title>Servlet OrdersList</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet OrdersList at " + request.getContextPath() + "</h1>");
@@ -64,16 +71,51 @@ public class OrderDetail extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    int id = Integer.parseInt(request.getParameter("id"));
-    OrdersDAO ordersDAO = new OrdersDAO();
-    Orders orders = ordersDAO.getOrderByID(id);
-    
-    
-    
+        // Lấy tham số id từ request
+        int id = Integer.parseInt(request.getParameter("id"));
 
-    
-    request.setAttribute("orders", orders); 
-    request.getRequestDispatcher("OrderDetail.jsp").forward(request, response);
+        // Tạo đối tượng DAO để truy xuất dữ liệu
+        OrderDetailsDAO orderDetailsDAO = new OrderDetailsDAO();
+
+        // Lấy thông tin chi tiết đơn hàng theo id
+        OrderDetails orderDetails = orderDetailsDAO.getOrderDetailByID(id);
+
+        // Kiểm tra xem orderDetails có null không, nếu có thể xử lý lỗi (ví dụ: không tìm thấy đơn hàng)
+        if (orderDetails == null) {
+            request.setAttribute("errorMessage", "Order detail not found");
+            request.getRequestDispatcher("OrderDetailError.jsp").forward(request, response); // Chuyển đến trang lỗi nếu không tìm thấy đơn hàng
+            return; // Dừng lại để không tiếp tục xử lý
+        }
+
+        // Tiếp tục nếu orderDetails không null
+        OrdersDAO ordersDAO = new OrdersDAO();
+        UsersDAO usersDAO = new UsersDAO();
+
+        // Lấy orderID từ orderDetails để truy vấn thông tin đơn hàng
+        int orderid = orderDetails.getOrderID();
+
+        // Lấy thông tin đơn hàng tương ứng với orderID
+        Orders orders = ordersDAO.getOrderByID(orderid);
+        int customerid = orders.getCustomerID();
+        Users users = usersDAO.getUserByID(customerid);
+
+        // Kiểm tra xem orders có null không
+        if (orders == null) {
+            request.setAttribute("errorMessage", "Order not found for the given order ID");
+            request.getRequestDispatcher("OrderDetailError.jsp").forward(request, response); // Chuyển đến trang lỗi nếu không tìm thấy đơn hàng
+            return; // Dừng lại để không tiếp tục xử lý
+        }
+        CartItemsDAO CartItemsDAO = new CartItemsDAO();
+        List<CartItems> cartItems = CartItemsDAO.getCartItemsByCustomerID(customerid);
+
+        // Đưa thông tin vào request để chuyển tiếp đến JSP
+        request.setAttribute("cartItems", cartItems);
+        request.setAttribute("users", users);
+        request.setAttribute("orders", orders);
+        request.setAttribute("orderDetails", orderDetails);
+
+        // Chuyển tiếp đến trang OrderDetail.jsp để hiển thị thông tin chi tiết đơn hàng
+        request.getRequestDispatcher("OrderDetail.jsp").forward(request, response);
     }
 
     /**
@@ -85,11 +127,69 @@ public class OrderDetail extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+   protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
-    }
+        int id = Integer.parseInt(request.getParameter("orderId"));
+        String status = request.getParameter("status");
 
+        // Tạo đối tượng DAO để cập nhật trạng thái
+        OrdersDAO ordersDAO = new OrdersDAO();
+
+        // Cập nhật trạng thái đơn hàng
+        boolean isUpdated = ordersDAO.updateOrderStatus(id , status);
+
+        // Tạo đối tượng DAO để truy xuất dữ liệu
+        OrderDetailsDAO orderDetailsDAO = new OrderDetailsDAO();
+
+        // Lấy thông tin chi tiết đơn hàng theo id
+        OrderDetails orderDetails = orderDetailsDAO.getOrderDetailByID(id);
+
+        // Kiểm tra xem orderDetails có null không, nếu có thể xử lý lỗi (ví dụ: không tìm thấy đơn hàng)
+        if (orderDetails == null) {
+            request.setAttribute("errorMessage", "Order detail not found");
+            request.getRequestDispatcher("OrderDetailError.jsp").forward(request, response); // Chuyển đến trang lỗi nếu không tìm thấy đơn hàng
+            return; // Dừng lại để không tiếp tục xử lý
+        }
+
+        // Tiếp tục nếu orderDetails không null
+        UsersDAO usersDAO = new UsersDAO();
+
+        // Lấy orderID từ orderDetails để truy vấn thông tin đơn hàng
+        int orderid = orderDetails.getOrderID();
+
+        // Lấy thông tin đơn hàng tương ứng với orderID
+        Orders orders = ordersDAO.getOrderByID(orderid);
+        int customerid = orders.getCustomerID();
+        Users users = usersDAO.getUserByID(customerid);
+
+        // Kiểm tra xem orders có null không
+        if (orders == null) {
+            request.setAttribute("errorMessage", "Order not found for the given order ID");
+            request.getRequestDispatcher("OrderDetailError.jsp").forward(request, response); // Chuyển đến trang lỗi nếu không tìm thấy đơn hàng
+            return; // Dừng lại để không tiếp tục xử lý
+        }
+
+        CartItemsDAO cartItemsDAO = new CartItemsDAO();
+        List<CartItems> cartItems = cartItemsDAO.getCartItemsByCustomerID(customerid);
+
+        // Đưa thông tin vào request để chuyển tiếp đến JSP
+        request.setAttribute("cartItems", cartItems);
+        request.setAttribute("users", users);
+        request.setAttribute("orders", orders);
+        request.setAttribute("orderDetails", orderDetails);
+
+        // Kiểm tra xem cập nhật có thành công không
+        if (isUpdated) {
+            // Chuyển đến trang chi tiết đơn hàng với thông báo thành công
+            request.setAttribute("successMessage", "Order status updated successfully!");
+            
+            // Dùng sendRedirect để chuyển hướng đến OrderDetail của đơn hàng hiện tại
+            response.sendRedirect("OrderDetail?id=" + id);
+        } else {
+            // Nếu có lỗi trong quá trình cập nhật
+            request.setAttribute("errorMessage", "Failed to update order status!");
+            request.getRequestDispatcher("OrderDetail?id=" + id).forward(request, response);
+        }}
     /**
      * Returns a short description of the servlet.
      *

@@ -99,58 +99,61 @@
         <h2>Orders List</h2>
         
         <!-- Filter and Search -->
-        <form method="GET" action="OrdersListController">
+        <form method="GET" action="OrdersList">
             <input type="text" name="search" placeholder="Search by Order ID or Customer Name" value="${param.search}">
             <input type="date" name="fromDate" value="${param.fromDate}">
             <input type="date" name="toDate" value="${param.toDate}">
-            <input type="text" name="saleName" placeholder="Sale Name" value="${param.saleName}">
+<!--            <input type="text" name="saleName" placeholder="Sale Name" value="${param.saleName}">-->
             <select name="status">
                 <option value="">All Status</option>
                 <option value="pending" ${param.status == 'pending' ? 'selected' : ''}>Pending</option>
-                <option value="completed" ${param.status == 'completed' ? 'selected' : ''}>Completed</option>
-                <option value="canceled" ${param.status == 'canceled' ? 'selected' : ''}>Canceled</option>
+                <option value="Cancelled" ${param.status == 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+                <option value="Shipped" ${param.status == 'Shipped' ? 'selected' : ''}>Shipped</option>
+                <option value="Delivered" ${param.status == 'Delivered' ? 'selected' : ''}>Delivered</option>
+                <option value="Processing" ${param.status == 'Processing' ? 'selected' : ''}>Processing</option>
             </select>
             <button type="submit">Filter</button>
         </form>
         
         <!-- Orders Table -->
-        <table border="1">
-            <thead>
-                <tr>
-                    <th><a href="?sort=id">ID</a></th>
-                    <th><a href="?sort=date">Ordered Date</a></th>
-                    <th><a href="?sort=customer">Customer Name</a></th>
-                    <th>Adress</th>
-                    <th><a href="?sort=total">Total Cost</a></th>
-                    <th><a href="?sort=status">Status</a></th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <c:forEach var="order" items="${orders}">
-                    <tr>
-                        <td><a href="OrderDetail?id=${order.orderID}">${order.orderID}</a></td>
-                        <td>${order.orderDate}</td>
-                        <td>${order.customerID}</td>
-                        <td>${order.deliveryAddress}</td>
-                        <td>${order.totalAmount}</td>
-                        <td>${order.status}</td>
-                        <td>
-                            <a href="OrderDetail?id=${order.orderID}">Edit</a>
-                        </td>
-                    </tr>
-                </c:forEach>
-            </tbody>
-        </table>
-        
+       <table border="1">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Ordered Date</th>
+            <th>Customer Name</th>
+            <th>Address</th>
+            
+            <th>Total Cost</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <c:forEach var="order" items="${orders}">
+            <tr>
+                <td><button onclick="window.location.href='OrderDetail?id=${order.orderID}'">${order.orderID}</button></td>
+                <td>${order.orderDate}</td>
+                <td>${order.customerFirstName} ${order.customerLastName}</td>
+                <td>${order.deliveryAddress}</td>
+                <td>${order.totalAmount}</td>
+                <td>${order.status}</td>
+                <td>
+                    <button onclick="window.location.href='OrderDetail?id=${order.orderID}'">Chi tiết</button>
+                </td>
+            </tr>
+        </c:forEach>
+    </tbody>
+</table>
+
         <!-- Pagination -->
         <div class="pagination">
             <c:if test="${currentPage > 1}">
-                <a href="OrdersListController?page=${currentPage - 1}&search=${param.search}&fromDate=${param.fromDate}&toDate=${param.toDate}&saleName=${param.saleName}&status=${param.status}">Previous</a>
+                <a href="OrdersList?page=${currentPage - 1}&search=${param.search}&fromDate=${param.fromDate}&toDate=${param.toDate}&saleName=${param.saleName}&status=${param.status}">Previous</a>
             </c:if>
             Page ${currentPage} of ${totalPages}
             <c:if test="${currentPage < totalPages}">
-                <a href="OrdersListController?page=${currentPage + 1}&search=${param.search}&fromDate=${param.fromDate}&toDate=${param.toDate}&saleName=${param.saleName}&status=${param.status}">Next</a>
+                <a href="OrdersList?page=${currentPage + 1}&search=${param.search}&fromDate=${param.fromDate}&toDate=${param.toDate}&saleName=${param.saleName}&status=${param.status}">Next</a>
             </c:if>
         </div>
     </main>
