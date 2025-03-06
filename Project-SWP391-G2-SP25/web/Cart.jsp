@@ -105,7 +105,6 @@
                     <th class="goods-page-image">Chọn</th> <!-- Thêm cột checkbox -->
                     <th class="goods-page-image">Hình ảnh</th>
                     <th class="goods-page-description">Mô tả sản phẩm</th>
-                    <th class="goods-page-ref-no">Ref No</th>
                     <th class="goods-page-quantity">Số lượng</th>
                     <th class="goods-page-price">Đơn giá</th>
                     <th class="goods-page-total" colspan="2">Thành giá</th>
@@ -130,9 +129,6 @@
                       <h3><a href="javascript:;">Cool green dress with red bell</a></h3>
                       <p><strong><%=p.getProductName()%></strong></p>
                       <em><%=p.getDescription()%></em>
-                    </td>
-                    <td class="goods-page-ref-no">
-                      javc2133
                     </td>
                     <td class="goods-page-quantity">
                         <div class="product-quantity">
@@ -170,13 +166,11 @@
                       <p><strong><%=p.getProductName()%></strong></p>
                       <em><%=p.getDescription()%></em>
                     </td>
-                    <td class="goods-page-ref-no">
-                      javc2133
-                    </td>
                     <td class="goods-page-quantity">
                         <div class="product-quantity">
                           <button class="btn btn-decrease" data-cart-item-id="<%=id%>">-</button>
                           <input id="product-quantity-<%=id%>" type="text" value="<%=cart.get(id)%>" class="form-control input-sm quantity-input" readonly>
+                          <input id="product-quantity1-<%=id%>" type="text" value="<%=cart.get(id)%>" hidden>
                           <button class="btn btn-increase" data-cart-item-id="<%=id%>">+</button>
                         </div>
                     </td>
@@ -187,7 +181,7 @@
                         <strong><span id="product-total-<%=id%>"><%=p.getPrice() * cart.get(id)%></span></strong>
                     </td>
                     <td class="del-goods-col">
-                      <a class="del-goods" href="javascript:;">&nbsp;</a>
+                        <a class="del-goods" onclick="doDelete('<%=id%>')">&nbsp;</a>
                     </td>
                   </tr>
                   <%
@@ -203,16 +197,8 @@
                 <div class="shopping-total">
                     <ul>
                       <li>
-                        <em>Sub total</em>
+                        <em>Tổng giá trị</em>
                         <strong class="price"><span id="cart-total"></span></strong>
-                      </li>
-                      <li>
-                        <em>Shipping cost</em>
-                        <strong class="price"><span>$</span>3.00</strong>
-                      </li>
-                      <li class="shopping-total-price">
-                        <em>Total</em>
-                        <strong class="price"><span>$</span>50.00</strong>
                       </li>
                     </ul>
                 </div>

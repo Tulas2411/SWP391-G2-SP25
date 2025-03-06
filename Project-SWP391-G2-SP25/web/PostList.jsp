@@ -26,12 +26,12 @@
                 font-family: 'Roboto', sans-serif;
             }
 
-/*            .container {
-                width: 75%;
-                margin: 0 auto;
-                padding-top: 20px;
-                max-width: 1100px;
-            }*/
+            /*            .container {
+                            width: 75%;
+                            margin: 0 auto;
+                            padding-top: 20px;
+                            max-width: 1100px;
+                        }*/
 
             .contact-container {
                 display: flex;
@@ -252,7 +252,29 @@
 
         <script src="https://cdn.tailwindcss.com"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+        <script>
+
+            function hidePost(button) {
+
+                var postID = button.getAttribute('data-id');
+
+
+                var confirmHide = confirm('Bạn có chắc chắn muốn ẩn bài viết này?');
+                if (confirmHide) {
+
+                    var row = button.closest('tr');
+
+
+                    row.style.display = 'none';
+
+                }
+            }
+
+
+        </script>
     </head>
+
+
 
 
     <body class="bg-gray-100 p-6">
@@ -277,7 +299,6 @@
                     </thead>
                     <tbody>
                         <c:forEach items="${posts}" var="o">
-
                             <tr class="border-b">
                                 <td class="py-2 px-4 border-r">${o.postID}</td>
                                 <td class="py-2 px-4 border-r">${o.title}</td>
@@ -286,27 +307,33 @@
                                 <td class="py-2 px-4 border-r">${o.createDate}</td>
                                 <td class="py-2 px-4 border-r">${o.status}</td>
                                 <td class="py-2 px-4 border-r">
-                                    <img src="${o.imageLink}" alt="Image for Post Title 2" class="w-20 h-20 object-cover">
+                                    <img src="${o.imageLink}" alt="Image for Post Title" class="w-20 h-20 object-cover">
                                 </td>
-                                <td class="py-2 px-4 flex space-x-2">
-                                    <button class="bg-yellow-500 text-white px-4 py-2 rounded " data-bs-toggle="modal" data-bs-target="#postModal"">Sửa</button>
+                                <td class="py-2 px-4 flex justify-start gap-3">
+                                   
+                                    <button class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition duration-300">Sửa</button>
 
-                                    <a href="DeletePost?postID=${o.postID}" 
-                                       class="bg-red-500 text-white px-4 py-2 rounded"
-                                       onclick="return confirm('Bạn có chắc chắn muốn xóa bài viết này?');">
-                                        Xóa
-                                    </a>
+                              
+                                    <a href="DeletePost?postID=${o.postID}" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition duration-300" onclick="return confirm('Bạn có chắc chắn muốn xóa bài viết này?');">Xóa</a>
+
+                                 
+                                    <button class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition duration-300 hide-post-btn" data-id="${o.postID}" onclick="hidePost(this)">Ẩn</button>
                                 </td>
                             </tr>
                         </c:forEach>
+
+
+
 
                     </tbody>
                 </table>
             </div>
 
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#postModal">
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#postModal" 
+                    style="display: block; margin: 20px auto; padding: 12px 25px; background-color: #28a745; color: white; border: none; border-radius: 5px; font-size: 16px; text-align: center; cursor: pointer; transition: background-color 0.3s ease;">
                 Tạo bài viết mới
             </button>
+
 
             <!-- Popup Modal -->
             <div class="modal fade" id="postModal" tabindex="-1" aria-labelledby="postModalLabel" aria-hidden="true">
@@ -366,12 +393,24 @@
                 </div>
             </div>
 
+            <div style="display: flex; justify-content: center; align-items: center; gap: 15px; margin-top: 30px;">
+                <c:if test="${currentPage > 1}">
+                    <a href="PostList?page=${currentPage - 1}" 
+                       style="padding: 10px 15px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px; font-size: 16px; transition: background-color 0.3s ease;">
+                        « Trang trước
+                    </a>
+                </c:if>
+
+                <span style="font-size: 16px; color: #666; margin: 0 10px;">Trang ${currentPage} / ${totalPages}</span>
+
+                <c:if test="${currentPage < totalPages}">
+                    <a href="PostList?page=${currentPage + 1}" 
+                       style="padding: 10px 15px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px; font-size: 16px; transition: background-color 0.3s ease;">
+                        Trang tiếp theo »
+                    </a>
+                </c:if>
+            </div>
+
     </body>
 </html>
 
-</div>
-
-
-
-</body>
-</html>

@@ -30,15 +30,23 @@
     </head>
     <body>
         <%@ include file="./Public/header.jsp" %>
-        
+
         <!-- MAIN -->
         <main class="main">
             <div class="main__gird gird"> <!-- Cái khung của trang web -->
                 <div class="main__left">
                     <!-- Danh mục sản phẩm - Gom các sản phẩm thành các danh mục nhỏ - Hiển thị trên cùng bên trái main trang web -->
                     <h2 class="main__left-title">DANH MỤC SẢN PHẨM</h2>
-                    <a href="ListSliders">ListSlider</a>
-                    <a href="ListSliders">ListSlider</a>
+
+                    <button onclick="location.href = 'ListSliders'">
+                        Slider
+                    </button>
+                    ---
+                    <button onclick="location.href = 'OrdersList'">
+                        Order
+                    </button>
+
+
                     <ul class="main__left-category-list">
                         <c:forEach var="categoryID" items="${['TBQ', 'TBCS', 'CTD', 'TBTM', 'TBSCBT']}">
                             <c:forEach var="category" items="${categories}">
@@ -60,7 +68,7 @@
                         <c:forEach var="product" items="${promotedProducts}" varStatus="status">
                             <c:if test="${status.index < 5}">  <%-- Chỉ hiển thị 5 sản phẩm đầu tiên --%>
                                 <li class="main__left-product-items main__left-product-items--vertical">
-                                    <a href="/Project-SWP391-G2-SP25/ProductDetailController?id=${product.productID}" class="main__left-product-link">
+                                    <a href="/Project-SWP391-G2-SP25/ProductDetailControllerCustomer?id=${product.productID}" class="main__left-product-link">
                                         <img src="${product.imageLink}" alt="${product.productName}" class="main__left-product-img" />
                                         <span class="main__left-product-title">${product.productName}</span>
                                     </a>
@@ -83,7 +91,7 @@
                         <c:forEach var="product" items="${newProducts}" varStatus="status">
                             <c:if test="${status.index < 5}">
                                 <li class="main__left-product-items main__left-product-items--vertical">
-                                    <a href="/Project-SWP391-G2-SP25/ProductDetailController?id=${product.productID}" class="main__left-product-link">
+                                    <a href="/Project-SWP391-G2-SP25/ProductDetailControllerCustomer?id=${product.productID}" class="main__left-product-link">
                                         <img src="${product.imageLink}" alt="${product.productName}" class="main__left-product-img" />
                                         <span class="main__left-product-title">${product.productName}</span>
                                     </a>
@@ -152,7 +160,7 @@
                         <div class="main__right-sensor-list">
                             <c:forEach var="product" items="${fanProducts}">
                                 <div class="main__right-sensor-items">
-                                    <a href="/Project-SWP391-G2-SP25/ProductDetailController?id=${product.productID}" class="main__right-sensor-link">
+                                    <a href="/Project-SWP391-G2-SP25/ProductDetailControllerCustomer?id=${product.productID}" class="main__right-sensor-link">
                                         <img src="${product.imageLink}" alt="${product.productName}" class="main__right-sensor-img" />
                                         <div class="main__right-sensor-title">${product.productName}</div>
                                     </a>
@@ -180,7 +188,7 @@
                                 <c:forEach var="product" items="${lightingProducts}">
                                     <div class="swiper-slide">
                                         <div class="main__right-sensor-item">
-                                            <a href="/Project-SWP391-G2-SP25/ProductDetailController?id=${product.productID}" class="main__right-sensor-link">
+                                            <a href="/Project-SWP391-G2-SP25/ProductDetailControllerCustomer?id=${product.productID}" class="main__right-sensor-link">
                                                 <img src="${product.imageLink}" alt="${product.productName}" class="main__right-sensor-img" />
                                                 <div class="main__right-sensor-title">${product.productName}</div>
                                             </a>
@@ -216,7 +224,7 @@
                                 <c:forEach var="product" items="${electricalSwitchProducts}">
                                     <div class="swiper-slide">
                                         <div class="main__right-sensor-item">
-                                            <a href="/Project-SWP391-G2-SP25/ProductDetailController?id=${product.productID}" class="main__right-sensor-link">
+                                            <a href="/Project-SWP391-G2-SP25/ProductDetailControllerCustomer?id=${product.productID}" class="main__right-sensor-link">
                                                 <img src="${product.imageLink}" alt="${product.productName}" class="main__right-sensor-img" />
                                                 <div class="main__right-sensor-title">${product.productName}</div>
                                             </a>
@@ -251,7 +259,7 @@
                         <div class="main__right-sensor-list">
                             <c:forEach var="product" items="${smartDevices}">
                                 <div class="main__right-sensor-items">
-                                    <a href="/Project-SWP391-G2-SP25/ProductDetailController?id=${product.productID}" class="main__right-sensor-link">
+                                    <a href="/Project-SWP391-G2-SP25/ProductDetailControllerCustomer?id=${product.productID}" class="main__right-sensor-link">
                                         <img src="${product.imageLink}" alt="${product.productName}" class="main__right-sensor-img" />
                                         <div class="main__right-sensor-title">${product.productName}</div>
                                     </a>

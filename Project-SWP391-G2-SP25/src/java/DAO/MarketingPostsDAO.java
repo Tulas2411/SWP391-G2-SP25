@@ -31,6 +31,39 @@ public class MarketingPostsDAO extends DBContext {
 
         return postList; // Trả về danh sách các bài viết
     }
+     public List<MarketingPosts> getMarketingPostsByPage(int start, int limit) {
+        List<MarketingPosts> posts = new ArrayList<>();
+        String sql = "SELECT * FROM MarketingPosts LIMIT ?, ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, start); // Vị trí bắt đầu (tính từ 0)
+            ps.setInt(2, limit); // Giới hạn số bài viết trên một trang
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                MarketingPosts post = extractMarketingPostFromResultSet(rs);
+                posts.add(post);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching marketing posts by page: " + e.getMessage());
+        }
+        return posts;
+    }
+
+    // Lấy tổng số bài viết (dùng để tính số trang)
+    public int getTotalMarketingPosts() {
+        int totalRecords = 0;
+        String sql = "SELECT COUNT(*) FROM MarketingPosts";
+
+        try (Statement st = connection.createStatement(); ResultSet rs = st.executeQuery(sql)) {
+            if (rs.next()) {
+                totalRecords = rs.getInt(1); // Số lượng bản ghi
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching total marketing posts: " + e.getMessage());
+        }
+        return totalRecords;
+    }
 
     public Map<Integer, MarketingPosts> getAllMarketingPostsAsMap() {
     Map<Integer, MarketingPosts> postMap = new HashMap<>();

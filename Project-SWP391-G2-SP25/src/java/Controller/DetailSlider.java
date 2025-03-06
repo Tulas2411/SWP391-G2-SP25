@@ -87,7 +87,31 @@ public class DetailSlider extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+      
+        int sliderID = Integer.parseInt(request.getParameter("sliderID"));
+        String title = request.getParameter("title");
+        String backlink = request.getParameter("backlink");
+        String status = request.getParameter("status");
+
+    
+        String newImageLink = request.getParameter("newImageURL");
+
+        
+        String imagePath = (newImageLink != null && !newImageLink.isEmpty()) ? newImageLink : request.getParameter("currentImage");
+
+      
+        Sliders slider = new Sliders();
+        slider.setSliderID(sliderID);
+        slider.setTitle(title);
+        slider.setImage(imagePath); 
+        slider.setBacklink(backlink);
+        slider.setStatus(status);
+
+        SlidersDAO slidersDAO = new SlidersDAO();
+        slidersDAO.updateSlider(slider); 
+
+  
+        response.sendRedirect("DetailSlider?sliderID=" + sliderID);
     }
 
     /**

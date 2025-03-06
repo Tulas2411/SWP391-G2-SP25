@@ -76,15 +76,31 @@ public class MarketingPostController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        int page = 1; 
+        int recordsPerPage = 2;  
+
+        
+        if (request.getParameter("page") != null) {
+            page = Integer.parseInt(request.getParameter("page"));
+        }
+
         MarketingPostsDAO DAO = new MarketingPostsDAO();
-        Map<Integer, MarketingPosts> marketingPostMap = DAO.getAllMarketingPostsAsMap();
-        List<MarketingPosts> post = marketingPostMap.values().stream().toList();
-        request.setAttribute("posts", post);
+ 
+        int totalRecords = DAO.getTotalMarketingPosts();
+
+ 
+        int start = (page - 1) * recordsPerPage;
+ 
+        List<MarketingPosts> posts = DAO.getMarketingPostsByPage(start, recordsPerPage);
+ 
+        int totalPages = (int) Math.ceil((double) totalRecords / recordsPerPage);
+ 
+        request.setAttribute("posts", posts);
+        request.setAttribute("currentPage", page);
+        request.setAttribute("totalPages", totalPages);
+ 
         request.getRequestDispatcher("PostList.jsp").forward(request, response);
-        processRequest(request, response);
-
     }
-
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -109,6 +125,5 @@ public class MarketingPostController extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 
 }

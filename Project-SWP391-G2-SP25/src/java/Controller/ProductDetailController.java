@@ -7,6 +7,7 @@ package Controller;
 import DAO.*;
 import Model.Products;
 import Model.Reviews;
+import Model.Users;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -60,7 +61,7 @@ public class ProductDetailController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+       protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
         HttpSession session = request.getSession();
@@ -72,11 +73,11 @@ public class ProductDetailController extends HttpServlet {
         request.setAttribute("product", p);
         request.setAttribute("listr", listr);
         
-        if(!role.equals("Customer")) {
+//        if(!role.equals("Customer")) {
             request.getRequestDispatcher("ProductDetail.jsp").forward(request, response);
-        } else {
-            request.getRequestDispatcher("ProductDetailCustomer.jsp").forward(request, response);
-        }
+//        } else {
+//            request.getRequestDispatcher("ProductDetailCustomer.jsp").forward(request, response);
+//        }
 
     }
 

@@ -91,14 +91,14 @@ public class CartCompletionController extends HttpServlet {
         props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.port", "465");
-        Session mysession = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
+        Session sessions = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication("luuthequangbkvip@gmail.com", "oouvorqzkguxbmez"); // Đặt email và mật khẩu của bạn
             }
         });
 
         try {
-            MimeMessage message = new MimeMessage(mysession);
+            MimeMessage message = new MimeMessage(sessions);
             message.setFrom(new InternetAddress(email)); // Đặt lại email gửi
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
             message.setSubject("Shop 4 Electrical");
@@ -154,13 +154,13 @@ public class CartCompletionController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         RequestDispatcher dispatcher = null;
-        HttpSession session = request.getSession();
+        HttpSession mySession = request.getSession();
         // Nếu email tồn tại, tiếp tục gửi OTP
         Orders o = (Orders) request.getAttribute("order");
         OrderDetailsDAO odDAO = new OrderDetailsDAO();
         ProductsDAO pDAO = new ProductsDAO();
         Random rand = new Random();
-        Users user = (Users) session.getAttribute("user");
+        Users user = (Users) mySession.getAttribute("user");
         String email = user.getEmail();
         // Thiết lập thông số email
         String to = email;
@@ -170,14 +170,14 @@ public class CartCompletionController extends HttpServlet {
         props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.port", "465");
-        Session mysession = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
+        Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication("luuthequangbkvip@gmail.com", "oouvorqzkguxbmez"); // Đặt email và mật khẩu của bạn
             }
         });
 
         try {
-            MimeMessage message = new MimeMessage(mysession);
+            MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress(email)); // Đặt lại email gửi
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
             message.setSubject("Shop 4 Electrical");
