@@ -267,6 +267,42 @@ public int getTotalOrders(String search, String fromDate, String toDate, String 
         return null;
     }
 
+    public List<Orders> getAllOrderByUser(int customerID, int page, int limit) {
+        List<Orders> orderses = new ArrayList<>();
+        String sql = "SELECT * FROM Orders WHERE CustomerID = ? LIMIT ? OFFSET ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, customerID);
+            ps.setInt(2, limit);
+            ps.setInt(3, (page - 1) * limit);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    orderses.add(extractOrderFromResultSet(rs));
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching paginated orders by CustomerID: " + e.getMessage());
+        }
+        return orderses;
+    }
+
+    public int getTotalOrdersByUser(int customerID) {
+        String sql = "SELECT COUNT(*) FROM Orders WHERE CustomerID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, customerID);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error counting total orders: " + e.getMessage());
+        }
+        return 0;
+    }
+
+    
     public Vector<Orders> getOrdersByCustomerID(int customerID) {
         Vector<Orders> ordersList = new Vector<>();
         String sql = "SELECT * FROM Orders WHERE CustomerID = ?";
