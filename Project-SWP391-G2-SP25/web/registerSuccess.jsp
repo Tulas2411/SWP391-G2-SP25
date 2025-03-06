@@ -4,7 +4,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Register Successfully</title>
+        <title>Đăng kí thành công</title>
         <style>
             body {
                 font-family: Arial, sans-serif;
@@ -64,9 +64,9 @@
     <body>
         <div class="container">
             <div class="success-icon">✔️</div>
-            <h2>Register Successfully!</h2>
-            <p>Your account has been successfully created, go to the homepage to continue shopping!</p>
-            <a href="/Project-SWP391-G2-SP25/home">Go to Home</a>
+            <h2>Đăng ký thành công!</h2>
+            <p>Tài khoản của bạn đã được tạo thành công, hãy quay lại trang chủ để tiếp tục mua sắm!</p>
+            <a href="/Project-SWP391-G2-SP25/home">Về Trang Chủ</a>
         </div>
     </body>
 </html>

@@ -15,35 +15,35 @@
     </head>
     <body>
         <div class="container mt-4">
-            <h2 class="mb-4">Feedback List</h2>
+            <h2 class="mb-4">Danh Sách Phản Hồi</h2>
             <!-- Form lọc và tìm kiếm -->
             <form method="get" action="reviews" class="form-inline mb-3">
                 <div class="form-group mr-2">
-                    <label for="productName" class="mr-2">Product Name:</label>
+                    <label for="productName" class="mr-2">Tên Sản Phẩm:</label>
                     <input type="text" name="productName" value="${param.productName}" class="form-control">
                 </div>
                 <div class="form-group mr-2">
-                    <label for="rating" class="mr-2">Rating:</label>
+                    <label for="rating" class="mr-2">Đánh Giá:</label>
                     <select name="rating" class="form-control">
-                        <option value="">All</option>
-                        <option value="5" ${param.rating == '5' ? 'selected' : ''}>5 stars</option>
-                        <option value="4" ${param.rating == '4' ? 'selected' : ''}>4 stars</option>
-                        <option value="3" ${param.rating == '3' ? 'selected' : ''}>3 stars</option>
-                        <option value="2" ${param.rating == '2' ? 'selected' : ''}>2 stars</option>
-                        <option value="1" ${param.rating == '1' ? 'selected' : ''}>1 star</option>
+                        <option value="">Tất Cả</option>
+                        <option value="5" ${param.rating == '5' ? 'selected' : ''}>5 Sao</option>
+                        <option value="4" ${param.rating == '4' ? 'selected' : ''}>4 Sao</option>
+                        <option value="3" ${param.rating == '3' ? 'selected' : ''}>3 Sao</option>
+                        <option value="2" ${param.rating == '2' ? 'selected' : ''}>2 Sao</option>
+                        <option value="1" ${param.rating == '1' ? 'selected' : ''}>1 Sao</option>
                     </select>
-                    <label for="status" class="mr-2">Status:</label>
+                    <label for="status" class="mr-2">Trạng Thái:</label>
                     <select name="status" class="form-control">
-                        <option value="">All</option>
-                        <option value="active" ${param.status == 'active' ? 'selected' : ''}>Active</option>
-                        <option value="inactive" ${param.status == 'inactive' ? 'selected' : ''}>Inactive</option>
+                        <option value="">Tất Cả</option>
+                        <option value="active" ${param.status == 'active' ? 'selected' : ''}>Hoạt Động</option>
+                        <option value="inactive" ${param.status == 'inactive' ? 'selected' : ''}>Không Hoạt Động</option>
                     </select>
                 </div>
                 <div class="form-group mr-2">
-                    <label for="search" class="mr-2">Search:</label>
+                    <label for="search" class="mr-2">Bình Luận:</label>
                     <input type="text" name="search" value="${param.search}" class="form-control">
                 </div>
-                <button type="submit" class="btn btn-primary">Filter</button>
+                <button type="submit" class="btn btn-primary">Lọc</button>
             </form>
 
             <!-- Bảng hiển thị danh sách feedbacks -->
@@ -51,18 +51,18 @@
                 <thead class="thead-dark">
                     <tr>
                         <th>
-                            <a href="?sortColumn=userName&sortOrder=${param.sortOrder == 'asc' ? 'desc' : 'asc'}" class="text-white">Full Name</a>
+                            <a href="?sortColumn=userName&sortOrder=${param.sortOrder == 'asc' ? 'desc' : 'asc'}" class="text-white">Họ Tên</a>
                         </th>
                         <th>
-                            <a href="?sortColumn=productName&sortOrder=${param.sortOrder == 'asc' ? 'desc' : 'asc'}" class="text-white">Product Name</a>
+                            <a href="?sortColumn=productName&sortOrder=${param.sortOrder == 'asc' ? 'desc' : 'asc'}" class="text-white">Tên Sản Phẩm</a>
                         </th>
                         <th>
-                            <a href="?sortColumn=rating&sortOrder=${param.sortOrder == 'asc' ? 'desc' : 'asc'}" class="text-white">Rating</a>
+                            <a href="?sortColumn=rating&sortOrder=${param.sortOrder == 'asc' ? 'desc' : 'asc'}" class="text-white">Đánh Giá</a>
                         </th>
-                        <th>Comment</th>
-                        <th>Review Date</th>
-                        <th>Status</th>
-                        <th>Action</th>
+                        <th>Bình Luận</th>
+                        <th>Ngày Đánh Giá</th>
+                        <th>Trạng Thái</th>
+                        <th>Hành Động</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -70,10 +70,22 @@
                         <tr>
                             <td>${review.userName}</td>
                             <td>${review.productName}</td>
-                            <td>${review.rating}</td>
+                            <td>${review.rating} Sao</td>
                             <td>${review.comment}</td>
                             <td>${review.reviewDate}</td>  
-                            <td>${review.status}</td>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${review.status == 'Active'}">
+                                        Hoạt động
+                                    </c:when>
+                                    <c:when test="${review.status == 'Inactive'}">
+                                        Không hoạt động
+                                    </c:when>
+                                    <c:otherwise>
+                                        ${review.status} 
+                                    </c:otherwise>
+                                </c:choose>
+                            </td>
                             <td>
                                 <button class="btn btn-info btn-sm view-detail" 
                                         data-reviewid="${review.reviewID}" 
@@ -84,7 +96,7 @@
                                         data-rating="${review.rating}" 
                                         data-comment="${review.comment}" 
                                         data-status="${review.status}">
-                                    View
+                                    Xem
                                 </button>
                             </td>
                         </tr>
@@ -146,28 +158,28 @@
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="feedbackDetailModalLabel">Feedback Details</h5>
+                            <h5 class="modal-title" id="feedbackDetailModalLabel">Chi Tiết Phản Hồi</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
-                            <p><strong>Full Name:</strong> <span id="modalUserName"></span></p>
+                            <p><strong>Họ Tên:</strong> <span id="modalUserName"></span></p>
                             <p><strong>Email:</strong> <span id="modalEmail"></span></p>
-                            <p><strong>Phone Number:</strong> <span id="modalPhoneNumber"></span></p>
-                            <p><strong>Product:</strong> <span id="modalProductName"></span></p>
-                            <p><strong>Rating:</strong> <span id="modalRating"></span></p>
-                            <p><strong>Feedback:</strong> <span id="modalComment"></span></p>
-                            <p><strong>Status:</strong> 
+                            <p><strong>Số Điện Thoại:</strong> <span id="modalPhoneNumber"></span></p>
+                            <p><strong>Sản Phẩm:</strong> <span id="modalProductName"></span></p>
+                            <p><strong>Đánh Giá:</strong> <span id="modalRating"></span></p>
+                            <p><strong>Bình Luận:</strong> <span id="modalComment"></span></p>
+                            <p><strong>Trạng Thái:</strong> 
                                 <select id="modalStatus" class="form-control">
-                                    <option value="Active">Active</option>
-                                    <option value="Inactive">Inactive</option>
+                                    <option value="Active">Hoạt Động</option>
+                                    <option value="Inactive">Không Hoạt Động</option>
                                 </select>
                             </p>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary" id="updateStatusBtn">Update Status</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                            <button type="button" class="btn btn-primary" id="updateStatusBtn">Cập Nhật Trạng Thái</button>
                         </div>
                     </div>
                 </div>
@@ -196,7 +208,7 @@
                         $('#modalEmail').text(email);
                         $('#modalPhoneNumber').text(phoneNumber);
                         $('#modalProductName').text(productName);
-                        $('#modalRating').text(rating + ' stars');
+                        $('#modalRating').text(rating + ' Sao');
                         $('#modalComment').text(comment);
                         $('#modalStatus').val(status); // Đặt giá trị cho dropdown status
 
@@ -217,12 +229,12 @@
                                 status: newStatus
                             },
                             success: function (response) {
-                                alert('Status updated successfully!');
+                                alert('Trạng thái đã được cập nhật thành công!');
                                 $('#feedbackDetailModal').modal('hide');
                                 location.reload(); // Tải lại trang để cập nhật danh sách
                             },
                             error: function (xhr, status, error) {
-                                alert('Failed to update status. Please try again.');
+                                alert('Không cập nhật được trạng thái. Vui lòng thử lại.');
                             }
                         });
                     });

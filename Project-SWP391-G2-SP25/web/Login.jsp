@@ -7,7 +7,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Login Page</title>
+        <title>Đăng Nhập</title>
 
         <!-- Font Icon -->
         <link rel="stylesheet"
@@ -29,8 +29,7 @@
                                     <img src="assets/img/S4EWhite.png" class="header__shop-logo-img" alt="Logo linh ki?n ?i?n t?" />
                                 </a>
                             </figure>
-                            <a href="Register.jsp" class="signup-image-link">Create an
-                                account</a>
+                            <a href="Register.jsp" class="signup-image-link">Tạo Tài Khoản</a>
                         </div>
 
                         <div class="signin-form">
@@ -52,31 +51,31 @@
                                     session.removeAttribute("notificationErr");
                                 %>
                             </c:if>
-                            <h2 class="form-title">Login</h2>
+                            <h2 class="form-title">Đăng Nhập</h2>
                             <form method="post" action="LoginServlet" class="register-form"
                                   id="login-form">
                                 <div class="form-group">
                                     <label for="username"><i
                                             class="zmdi zmdi-account material-icons-name"></i></label> <input
                                         type="text" name="username" id="username"
-                                        placeholder="Your Email" />
+                                        placeholder="Email Của Bạn" />
                                 </div>
                                 <div class="form-group">
                                     <label for="password"><i class="zmdi zmdi-lock"></i></label> <input
                                         type="password" name="password" id="password"
-                                        placeholder="Password" />
+                                        placeholder="Mật Khẩu" />
                                 </div>
                                 <div class="form-group">
-                                    <a href="ResetPassword.jsp"> Reset Password?</a>
+                                    <a href="ResetPassword.jsp"> Quên Mật Khẩu?</a>
                                 </div>
                                 <div class="form-group">
                                     <input type="checkbox" name="remember-me" id="remember-me"
                                            class="agree-term" /> <label for="remember-me"
-                                           class="label-agree-term"><span><span></span></span>Remember me</label>
+                                           class="label-agree-term"><span><span></span></span>Nhớ Mật Khẩu</label>
                                 </div>
                                 <div class="form-group form-button">
                                     <input type="submit" name="signin" id="signin"
-                                           class="form-submit" value="Log in" />
+                                           class="form-submit" value="Đăng Nhập" />
                                 </div>
                             </form>
 
@@ -86,7 +85,7 @@
 
 
                             <div class="social-login">
-                                <span class="social-label">Or login with</span>
+                                <span class="social-label">Hoặc Đăng Nhập Với</span>
                                 <ul class="socials">
                                     <li><a href="#"><i
                                                 class="display-flex-center zmdi zmdi-facebook"></i></a></li>
@@ -113,7 +112,7 @@
         <script type="text/javascript">
             var status = document.getElementById("status").value;
             if (status == "failed") {
-                swal("Sorry", "Wrong Username or Password", "error");
+                swal("Xin Lỗi", "Sai Email Hoặc Mật Khẩu", "error");
             }
 
         </script>

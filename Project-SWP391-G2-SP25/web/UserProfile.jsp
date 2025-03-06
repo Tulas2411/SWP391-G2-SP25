@@ -1,6 +1,7 @@
 <%@ page import="Model.Users" %>
 <%@ page import="DAO.UsersDAO" %>
 <%@ page session="true" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <%
     String userName = (String) session.getAttribute("username");
@@ -22,7 +23,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Edit Profile</title>
+        <title>Chỉnh Sửa Hồ Sơ</title>
         <style>
             body {
                 font-family: Arial, sans-serif;
@@ -116,41 +117,42 @@
     <body>
 
         <div class="container">
-            <h2>Edit Profile</h2>
+            <h2>Chỉnh Sửa Hồ Sơ</h2>
             <form action="UpdateProfileServlet" method="post">
                 <input type="hidden" name="userID" value="<%= user.getUserID() %>">
 
-                <label for="userName">User Name:</label>
+                <label for="userName">Tên Người Dùng:</label>
                 <input type="text" id="userName" name="userName" value="<%= user.getUserName() %>" readonly><br>
 
                 <label for="email">Email:</label>
                 <input type="text" id="email" name="email" value="<%= user.getEmail() %>" readonly><br>
 
-                <label for="firstName">First Name:</label>
+                <label for="firstName">Họ:</label>
                 <input type="text" id="firstName" name="firstName" value="<%= user.getFirstName() %>" required><br>
 
-                <label for="lastName">Last Name:</label>
+                <label for="lastName">Tên:</label>
                 <input type="text" id="lastName" name="lastName" value="<%= user.getLastName() %>" required><br>
 
-                <label for="gender">Gender:</label>
+                <label for="gender">Giới Tính:</label>
                 <select id="gender" name="gender">
-                    <option value="Male" <%= "Male".equals(user.getGender()) ? "selected" : "" %>>Male</option>
-                    <option value="Female" <%= "Female".equals(user.getGender()) ? "selected" : "" %>>Female</option>
+                    <option value="Male" <%= "Male".equals(user.getGender()) ? "selected" : "" %>>Nam</option>
+                    <option value="Female" <%= "Female".equals(user.getGender()) ? "selected" : "" %>>Nữ</option>
                 </select><br>
 
-                <label for="dateOfBirth">Date of Birth:</label>
+                <label for="dateOfBirth">Ngày Sinh:</label>
                 <input type="date" id="dateOfBirth" name="dateOfBirth" value="<%= user.getDateOfBirth() %>"><br>
 
-                <label for="phoneNumber">Phone Number:</label>
+                <label for="phoneNumber">Số Điện Thoại:</label>
                 <input type="tel" id="phoneNumber" name="phoneNumber" value="<%= user.getPhoneNumber() %>" pattern="0[0-9]{9}" title="The phone number must have 10 digits and start with 0" required><br>
-
-                <label for="address">Address:</label>
+                <div id="error-phone-message" style="font-size: 10px; color: red;"></div>
+                
+                <label for="address">Địa Chỉ:</label>
                 <input type="text" id="address" name="address" value="<%= user.getAddress() %>" required><br>
 
                 <div class="button-container">
-                    <input type="submit" value="Save Changes">
-                    <a href="ChangePassword.jsp" class="btn-back">ChangePassword</a>
-                    <a href="HomePage.jsp" class="btn-back">Back to Home</a>
+                    <input type="submit" value="Lưu Thay Đổi">
+                    <a href="ChangePassword.jsp" class="btn-back">Đổi Mật Khẩu</a>
+                    <a href="${pageContext.request.contextPath}/home" class="btn-back">Về Trang Chủ</a>
 
                 </div>
             </form>

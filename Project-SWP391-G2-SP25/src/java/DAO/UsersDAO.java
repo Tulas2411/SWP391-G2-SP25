@@ -308,7 +308,6 @@ public class UsersDAO extends DBContext {
         UsersDAO dao = new UsersDAO();
 
         Users u = new Users();
-        u.setFirstName("Tuan");
-        System.out.println(dao.addUser(u));
+        System.out.println(dao.getAllUsers());
     }
 }

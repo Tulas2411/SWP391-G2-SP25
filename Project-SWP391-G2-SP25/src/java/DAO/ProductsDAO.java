@@ -468,7 +468,7 @@ public class ProductsDAO extends DBContext {
         ProductsDAO p = new ProductsDAO();
         Products p1 = p.GetProductbyID(1);
         p1.setProductName("Quat dien aaa");
-        System.out.println(p.getAllCategories());
+        System.out.println(p.getAllProducts());
     }
 
 }
