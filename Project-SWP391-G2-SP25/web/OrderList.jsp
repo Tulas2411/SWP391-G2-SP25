@@ -123,6 +123,7 @@
             <th>Ordered Date</th>
             <th>Customer Name</th>
             <th>Address</th>
+            
             <th>Total Cost</th>
             <th>Status</th>
             <th>Actions</th>
@@ -133,7 +134,7 @@
             <tr>
                 <td><button onclick="window.location.href='OrderDetail?id=${order.orderID}'">${order.orderID}</button></td>
                 <td>${order.orderDate}</td>
-                <td>${order.customerID}</td>
+                <td>${order.customerFirstName} ${order.customerLastName}</td>
                 <td>${order.deliveryAddress}</td>
                 <td>${order.totalAmount}</td>
                 <td>${order.status}</td>

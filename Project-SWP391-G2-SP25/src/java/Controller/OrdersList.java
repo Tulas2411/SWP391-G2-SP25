@@ -74,7 +74,6 @@ public class OrdersList extends HttpServlet {
         String saleName = request.getParameter("saleName");
         String status = request.getParameter("status");
         
-        // Lấy số trang hiện tại từ request, mặc định là trang 1
         int currentPage = 1;
         if (request.getParameter("page") != null) {
             currentPage = Integer.parseInt(request.getParameter("page"));
@@ -82,11 +81,9 @@ public class OrdersList extends HttpServlet {
         
         OrdersDAO ordersDAO = new OrdersDAO();
         
-        // Lấy tất cả đơn hàng thỏa mãn điều kiện tìm kiếm
         List<Orders> orders = ordersDAO.getOrdersPaginated(search, fromDate, toDate, saleName, status, currentPage, PAGE_SIZE);
         
-        // Lấy tổng số đơn hàng để tính tổng số trang
-        int totalOrders = ordersDAO.getTotalOrders(search, fromDate, toDate, saleName, status);
+         int totalOrders = ordersDAO.getTotalOrders(search, fromDate, toDate, saleName, status);
         int totalPages = (int) Math.ceil((double) totalOrders / PAGE_SIZE);
         
         // Lưu các giá trị cần thiết vào request để hiển thị phân trang trong JSP

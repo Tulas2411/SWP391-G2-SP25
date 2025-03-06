@@ -148,6 +148,10 @@
                                     <input type="hidden" name="sliderID" value="${slider.sliderID}">
                                     <button type="submit">Edit</button>
                                 </form>
+                                <form action="ShowDetailSlider" method="get">
+                                    <input type="hidden" name="sliderID" value="${slider.sliderID}">
+                                    <button type="submit">Show detail</button>
+                                </form>
 
 
 
@@ -158,15 +162,22 @@
                 </tbody>
             </table>
 
-            <div class="pagination">
+            <div class="pagination" style="text-align: center; margin: 20px 0;">
                 <c:if test="${currentPage > 1}">
-                    <a href="?page=${currentPage - 1}&search=${param.search}&status=${param.status}">Previous</a>
+                    <a href="ListSliders?page=${currentPage - 1}&search=${param.search}&status=${param.status}" 
+                       style="display: inline-block; padding: 10px 20px; margin: 0 10px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px; font-size: 16px; cursor: pointer; transition: background-color 0.3s ease;">
+                        Previous
+                    </a>
                 </c:if>
                 Page ${currentPage} of ${totalPages}
                 <c:if test="${currentPage < totalPages}">
-                    <a href="?page=${currentPage + 1}&search=${param.search}&status=${param.status}">Next</a>
+                    <a href="ListSliders?page=${currentPage + 1}&search=${param.search}&status=${param.status}" 
+                       style="display: inline-block; padding: 10px 20px; margin: 0 10px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px; font-size: 16px; cursor: pointer; transition: background-color 0.3s ease;">
+                        Next
+                    </a>
                 </c:if>
             </div>
+
 
         </main>
 

@@ -92,28 +92,24 @@ public class SlidersDAO extends DBContext {
         int count = 0;
         StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM Sliders WHERE 1=1");
 
-        // Nếu có tiêu chí tìm kiếm theo title hoặc backlink
+        // Thêm điều kiện tìm kiếm
         if (search != null && !search.trim().isEmpty()) {
             sql.append(" AND (Title LIKE ? OR Backlink LIKE ?)");
         }
 
-        // Nếu có tiêu chí tìm kiếm theo status
         if (status != null && !status.isEmpty()) {
             sql.append(" AND Status = ?");
         }
 
-        try (
-                PreparedStatement ps = connection.prepareStatement(sql.toString())) {
-
+        try (PreparedStatement ps = connection.prepareStatement(sql.toString())) {
             int paramIndex = 1;
 
-            // Thêm tham số tìm kiếm theo title hoặc backlink
+            // Thêm tham số tìm kiếm
             if (search != null && !search.trim().isEmpty()) {
                 ps.setString(paramIndex++, "%" + search + "%");
                 ps.setString(paramIndex++, "%" + search + "%");
             }
 
-            // Thêm tham số tìm kiếm theo status
             if (status != null && !status.isEmpty()) {
                 ps.setString(paramIndex++, status);
             }
@@ -130,7 +126,6 @@ public class SlidersDAO extends DBContext {
         return count;
     }
 
-    // Phương thức lấy slider theo trang
     public List<Sliders> getSlidersByPage(String search, String status, int page, int pageSize) {
         List<Sliders> list = new ArrayList<>();
         StringBuilder sql = new StringBuilder("SELECT * FROM Sliders WHERE 1=1");
@@ -147,9 +142,7 @@ public class SlidersDAO extends DBContext {
         // Phân trang: dùng LIMIT và OFFSET
         sql.append(" LIMIT ? OFFSET ?");
 
-        try (
-                PreparedStatement ps = connection.prepareStatement(sql.toString())) {
-
+        try (PreparedStatement ps = connection.prepareStatement(sql.toString())) {
             int paramIndex = 1;
 
             // Thêm tham số tìm kiếm
@@ -176,7 +169,6 @@ public class SlidersDAO extends DBContext {
                     slider.setStatus(rs.getString("Status"));
                     slider.setBlogID(rs.getInt("BlogID"));
                     slider.setProductID(rs.getInt("ProductID"));
-
                     list.add(slider);
                 }
             }
