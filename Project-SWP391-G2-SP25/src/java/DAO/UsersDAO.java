@@ -5,6 +5,7 @@
 package DAO;
 
 import Model.Users;
+import com.sun.jdi.connect.spi.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -35,6 +36,7 @@ public class UsersDAO extends DBContext {
         }
         return userList;
     }
+    
 
     public Users getUserByID(int id) {
         String sql = "SELECT * FROM Users WHERE UserID = ?";
@@ -50,7 +52,7 @@ public class UsersDAO extends DBContext {
         }
         return null;
     }
-
+    
     public Users getUserByEmail(String email) {
         String sql = "SELECT * FROM Users WHERE Email = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -64,6 +66,41 @@ public class UsersDAO extends DBContext {
             System.out.println("Error fetching user by Email: " + e.getMessage());
         }
         return null;
+    }
+
+    public boolean isEmailExists(String email) {
+        String query = "SELECT * FROM Users WHERE Email = ?";
+        try (java.sql.Connection con = makeConnection(); PreparedStatement pst = con.prepareStatement(query)) {
+            pst.setString(1, email);
+            ResultSet rs = pst.executeQuery();
+            return rs.next(); // Trả về true nếu email đã tồn tại
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean isUsernameExists(String username) {
+        String query = "SELECT * FROM Users WHERE UserName = ?";
+        try (java.sql.Connection con = makeConnection(); PreparedStatement pst = con.prepareStatement(query)) {
+            pst.setString(1, username);
+            ResultSet rs = pst.executeQuery();
+            return rs.next(); // Trả về true nếu username đã tồn tại
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public boolean isPhoneNumberExists(String phoneNumber) {
+        String query = "SELECT * FROM Users WHERE PhoneNumber = ?";
+        try (java.sql.Connection con = makeConnection(); PreparedStatement pst = con.prepareStatement(query)) {
+            pst.setString(1, phoneNumber);
+            ResultSet rs = pst.executeQuery();
+            return rs.next(); // Trả về true nếu số điện thoại đã tồn tại
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public boolean updateUserRole(int userID, String role) {
@@ -269,6 +306,7 @@ public class UsersDAO extends DBContext {
 
     public static void main(String[] args) {
         UsersDAO dao = new UsersDAO();
+
         Users u = new Users();
         u.setFirstName("Tuan");
         System.out.println(dao.addUser(u));

@@ -1,6 +1,7 @@
 package Controller;
 
 import DAO.CartsDAO;
+import static DAO.DBContext.makeConnection;
 import DAO.UsersDAO;
 import Model.Carts;
 import jakarta.servlet.RequestDispatcher;
@@ -16,9 +17,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-/**
- * Servlet implementation class RegisterServlet
- */
+
 @WebServlet("/RegisterServlet")
 public class RegisterServlet extends HttpServlet {
 
@@ -36,7 +35,7 @@ public class RegisterServlet extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             CartsDAO cDAO = new CartsDAO();
             UsersDAO uDAO = new UsersDAO();
-            
+
             // Lấy các giá trị từ form
             String firstName = request.getParameter("firstname").trim();
             String lastName = request.getParameter("lastname").trim();
@@ -49,9 +48,8 @@ public class RegisterServlet extends HttpServlet {
             String phoneNumber = request.getParameter("contact").trim();
             String address = request.getParameter("address").trim();
 
-            
-            //Kiểm tra nếu bất kì trường nào là rỗng sau khi loại bỏ khoảng trắng
-            if(firstName.isEmpty() || lastName.isEmpty() || userName.isEmpty() || gender.isEmpty() || email.isEmpty() || password.isEmpty() || rePassword.isEmpty() || phoneNumber.isEmpty() || address.isEmpty()){
+            // Kiểm tra nếu bất kì trường nào là rỗng sau khi loại bỏ khoảng trắng
+            if (firstName.isEmpty() || lastName.isEmpty() || userName.isEmpty() || gender.isEmpty() || email.isEmpty() || password.isEmpty() || rePassword.isEmpty() || phoneNumber.isEmpty() || address.isEmpty()) {
                 request.setAttribute("status", "empty_fields");
                 RequestDispatcher dispatcher = request.getRequestDispatcher("Register.jsp");
                 dispatcher.forward(request, response);
@@ -61,6 +59,30 @@ public class RegisterServlet extends HttpServlet {
             // Kiểm tra mật khẩu và nhắc lại mật khẩu có khớp hay không
             if (!password.equals(rePassword)) {
                 request.setAttribute("status", "password_mismatch");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("Register.jsp");
+                dispatcher.forward(request, response);
+                return;
+            }
+
+            // Kiểm tra xem email đã tồn tại chưa
+            if (uDAO.isEmailExists(email)) {
+                request.setAttribute("status", "email_exists");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("Register.jsp");
+                dispatcher.forward(request, response);
+                return;
+            }
+
+            // Kiểm tra xem username đã tồn tại chưa
+            if (uDAO.isUsernameExists(userName)) {
+                request.setAttribute("status", "username_exists");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("Register.jsp");
+                dispatcher.forward(request, response);
+                return;
+            }
+            
+            // Kiểm tra xem số điện thoại đã tồn tại chưa
+            if (uDAO.isPhoneNumberExists(phoneNumber)) {
+                request.setAttribute("status", "phone_exists");
                 RequestDispatcher dispatcher = request.getRequestDispatcher("Register.jsp");
                 dispatcher.forward(request, response);
                 return;
@@ -113,23 +135,4 @@ public class RegisterServlet extends HttpServlet {
             }
         }
     }
-
-    // Kết nối đến cơ sở dữ liệu
-    public static Connection makeConnection() {
-        Connection conn = null;
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/EcommerceDB", "root", "1234");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return conn;
-    }
-
-
-    @Override
-    public String getServletInfo() {
-        return "Register Servlet to handle user registration.";
-    }
 }
-
