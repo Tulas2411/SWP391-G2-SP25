@@ -51,7 +51,7 @@
                 <thead class="thead-dark">
                     <tr>
                         <th>
-                            <a href="?sortColumn=userName&sortOrder=${param.sortOrder == 'asc' ? 'desc' : 'asc'}" class="text-white">User Name</a>
+                            <a href="?sortColumn=userName&sortOrder=${param.sortOrder == 'asc' ? 'desc' : 'asc'}" class="text-white">Full Name</a>
                         </th>
                         <th>
                             <a href="?sortColumn=productName&sortOrder=${param.sortOrder == 'asc' ? 'desc' : 'asc'}" class="text-white">Product Name</a>
@@ -75,13 +75,23 @@
                             <td>${review.reviewDate}</td>  
                             <td>${review.status}</td>
                             <td>
-                                <a href="feedbackDetail?reviewID=${review.reviewID}" class="btn btn-info btn-sm">View</a>
+                                <button class="btn btn-info btn-sm view-detail" 
+                                        data-reviewid="${review.reviewID}" 
+                                        data-username="${review.userName} "
+                                        data-email="${review.email}" 
+                                        data-phoneNumber="${review.phoneNumber}" 
+                                        data-productname="${review.productName}" 
+                                        data-rating="${review.rating}" 
+                                        data-comment="${review.comment}" 
+                                        data-status="${review.status}">
+                                    View
+                                </button>
                             </td>
                         </tr>
                     </c:forEach>
                 </tbody>
             </table>
-            
+
 
             <!-- Phân trang -->
             <div class="pagination-container">
@@ -131,6 +141,93 @@
                 }
             </style>
 
+            <!-- Modal -->
+            <div class="modal fade" id="feedbackDetailModal" tabindex="-1" aria-labelledby="feedbackDetailModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="feedbackDetailModalLabel">Feedback Details</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p><strong>Full Name:</strong> <span id="modalUserName"></span></p>
+                            <p><strong>Email:</strong> <span id="modalEmail"></span></p>
+                            <p><strong>Phone Number:</strong> <span id="modalPhoneNumber"></span></p>
+                            <p><strong>Product:</strong> <span id="modalProductName"></span></p>
+                            <p><strong>Rating:</strong> <span id="modalRating"></span></p>
+                            <p><strong>Feedback:</strong> <span id="modalComment"></span></p>
+                            <p><strong>Status:</strong> 
+                                <select id="modalStatus" class="form-control">
+                                    <option value="Active">Active</option>
+                                    <option value="Inactive">Inactive</option>
+                                </select>
+                            </p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" id="updateStatusBtn">Update Status</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Thêm thư viện jQuery và Bootstrap JS -->
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+            <script>
+                $(document).ready(function () {
+                    var currentReviewID; // Lưu trữ reviewID của feedback đang được xem
+
+                    // Xử lý sự kiện khi nhấn nút View
+                    $('.view-detail').on('click', function () {
+                        currentReviewID = $(this).data('reviewid'); // Lấy reviewID
+                        var fullName = $(this).data('username');
+                        var email = $(this).data('email');
+                        var phoneNumber = $(this).data('phonenumber');
+                        var productName = $(this).data('productname');
+                        var rating = $(this).data('rating');
+                        var comment = $(this).data('comment');
+                        var status = $(this).data('status');
+
+                        // Đặt dữ liệu vào modal
+                        $('#modalUserName').text(fullName);
+                        $('#modalEmail').text(email);
+                        $('#modalPhoneNumber').text(phoneNumber);
+                        $('#modalProductName').text(productName);
+                        $('#modalRating').text(rating + ' stars');
+                        $('#modalComment').text(comment);
+                        $('#modalStatus').val(status); // Đặt giá trị cho dropdown status
+
+                        // Mở modal
+                        $('#feedbackDetailModal').modal('show');
+                    });
+
+                    // Xử lý sự kiện khi nhấn nút Update Status
+                    $('#updateStatusBtn').on('click', function () {
+                        var newStatus = $('#modalStatus').val(); // Lấy giá trị status mới
+
+                        // Gửi yêu cầu cập nhật trạng thái đến server
+                        $.ajax({
+                            url: 'updateFeedbackStatus', // URL của servlet xử lý cập nhật
+                            type: 'POST',
+                            data: {
+                                reviewID: currentReviewID,
+                                status: newStatus
+                            },
+                            success: function (response) {
+                                alert('Status updated successfully!');
+                                $('#feedbackDetailModal').modal('hide');
+                                location.reload(); // Tải lại trang để cập nhật danh sách
+                            },
+                            error: function (xhr, status, error) {
+                                alert('Failed to update status. Please try again.');
+                            }
+                        });
+                    });
+                });
+            </script>
 
     </body>
 </html>

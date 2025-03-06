@@ -14,6 +14,8 @@ public class Reviews {
     private String status;
     private String userName; // Thêm userName
     private String productName; // Thêm productName
+    private String email;
+    private String phoneNumber;
 
     public Reviews() {
     }
@@ -103,6 +105,22 @@ public class Reviews {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
     
 
