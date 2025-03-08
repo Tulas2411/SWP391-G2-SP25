@@ -23,7 +23,7 @@ import java.util.List;
  *
  * @author manh
  */
-@WebServlet(name = "OrdersList", urlPatterns = {"/marketing/OrdersList"})
+@WebServlet(name = "OrdersList", urlPatterns = {"/sale/OrdersList"})
 public class OrdersList extends HttpServlet {
     private static final int PAGE_SIZE = 3;  
 

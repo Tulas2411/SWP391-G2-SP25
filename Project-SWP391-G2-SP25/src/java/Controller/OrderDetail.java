@@ -30,7 +30,7 @@ import java.util.List;
  *
  * @author manh
  */
-@WebServlet(name = "OrderDetail", urlPatterns = {"/marketing/OrderDetail"})
+@WebServlet(name = "OrderDetail", urlPatterns = {"/sale/OrderDetail"})
 public class OrderDetail extends HttpServlet {
 
     /**
