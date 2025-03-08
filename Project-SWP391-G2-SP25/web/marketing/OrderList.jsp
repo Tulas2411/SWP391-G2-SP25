@@ -93,7 +93,7 @@
     </style>
 </head>
 <body>
-    <%@ include file="./Public/header.jsp" %>
+    <jsp:include page="header.jsp"></jsp:include>
     
     <main class="container">
         <h2>Orders List</h2>
@@ -158,6 +158,6 @@
         </div>
     </main>
     
-    <%@ include file="./Public/footer.jsp" %>
+    <jsp:include page="footer.jsp"></jsp:include>
 </body>
 </html>

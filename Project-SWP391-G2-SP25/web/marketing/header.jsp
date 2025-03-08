@@ -60,6 +60,10 @@
                                 <div class="sb-nav-link-icon"><i class="fa fa-user"></i></div>
                                 Quản lý khách hàng
                             </a>  
+                                 <a class="nav-link" href="${contextPath}/marketing/OrdersList">
+                                <div class="sb-nav-link-icon"><i class="fa fa-user"></i></div>
+                                Orderlist
+                            </a>  
                         </div>
                     </div>
                 </nav>

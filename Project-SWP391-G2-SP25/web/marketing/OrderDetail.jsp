@@ -2,6 +2,8 @@
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<c:set var="contextPath" value="${pageContext.request.contextPath}" />
+
 <head>
     <meta charset="UTF-8">
     <title>Order Details</title>
@@ -151,7 +153,7 @@
 </head>
 
 <body>
-    <%@ include file="./Public/header.jsp" %>
+    <jsp:include page="header.jsp"></jsp:include>
 
     <main class="container">
         <h2>Order Details</h2>
@@ -284,6 +286,6 @@
         </c:if>
     </main>
 
-    <%@ include file="./Public/footer.jsp" %>
+    <jsp:include page="footer.jsp"></jsp:include>
 </body>
 </html>
