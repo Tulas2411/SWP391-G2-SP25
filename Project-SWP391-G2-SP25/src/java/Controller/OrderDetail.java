@@ -79,6 +79,13 @@ public class OrderDetail extends HttpServlet {
 
         // Lấy thông tin chi tiết đơn hàng theo id
         OrderDetails orderDetails = orderDetailsDAO.getOrderDetailByID(id);
+         List<OrderDetails> orderDetailsList = orderDetailsDAO.getOrderDetailsByOrderID1(id);
+        if (orderDetailsList == null) {
+            request.setAttribute("errorMessage", "Order detail not found");
+            request.getRequestDispatcher("OrderDetailError.jsp").forward(request, response); 
+            return; 
+        }
+
 
         // Kiểm tra xem orderDetails có null không, nếu có thể xử lý lỗi (ví dụ: không tìm thấy đơn hàng)
         if (orderDetails == null) {
@@ -113,6 +120,7 @@ public class OrderDetail extends HttpServlet {
         request.setAttribute("users", users);
         request.setAttribute("orders", orders);
         request.setAttribute("orderDetails", orderDetails);
+         request.setAttribute("orderDetailsList", orderDetailsList);
 
         // Chuyển tiếp đến trang OrderDetail.jsp để hiển thị thông tin chi tiết đơn hàng
         request.getRequestDispatcher("OrderDetail.jsp").forward(request, response);

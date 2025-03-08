@@ -14,6 +14,56 @@ public class OrderDetails {
     private int productID;
     private int quantity;
     private double price;
+    private double priceProduct;
+    private String imgProduct;
+    private String nameProduct;
+    private String desProduct;                                                                                                                                                                                        
+
+    public OrderDetails(int orderDetailID, int orderID, int productID, int quantity, double price, double priceProduct, String imgProduct, String nameProduct, String desProduct) {
+        this.orderDetailID = orderDetailID;
+        this.orderID = orderID;
+        this.productID = productID;
+        this.quantity = quantity;
+        this.price = price;
+        this.priceProduct = priceProduct;
+        this.imgProduct = imgProduct;
+        this.nameProduct = nameProduct;
+        this.desProduct = desProduct;
+    }
+
+    public double getPriceProduct() {
+        return priceProduct;
+    }
+
+    public void setPriceProduct(double priceProduct) {
+        this.priceProduct = priceProduct;
+    }
+
+    public String getImgProduct() {
+        return imgProduct;
+    }
+
+    public void setImgProduct(String imgProduct) {
+        this.imgProduct = imgProduct;
+    }
+
+    public String getNameProduct() {
+        return nameProduct;
+    }
+
+    public void setNameProduct(String nameProduct) {
+        this.nameProduct = nameProduct;
+    }
+
+    public String getDesProduct() {
+        return desProduct;
+    }
+
+    public void setDesProduct(String desProduct) {
+        this.desProduct = desProduct;
+    }
+    
+    
 
     public OrderDetails() {
     }

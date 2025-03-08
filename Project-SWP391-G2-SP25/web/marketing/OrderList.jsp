@@ -100,7 +100,7 @@
         
         <!-- Filter and Search -->
         <form method="GET" action="OrdersList">
-            <input type="text" name="search" placeholder="Search by Order ID or Customer Name" value="${param.search}">
+          
             <input type="date" name="fromDate" value="${param.fromDate}">
             <input type="date" name="toDate" value="${param.toDate}">
 <!--            <input type="text" name="saleName" placeholder="Sale Name" value="${param.saleName}">-->

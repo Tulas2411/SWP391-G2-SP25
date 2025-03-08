@@ -83,7 +83,10 @@
 
                     <label for="title"><strong>Title:</strong></label>
                     <input type="text" id="title" name="title" value="${slider.title}" required>
-
+                    
+                     <label for="newImage"><strong>Image URL:</strong></label>
+                     <img src=" ${slider.getImage()}"style="width : 400px ; height:200px;"> </img>
+                     
                     <label for="newImageURL"><strong>Image URL:</strong></label>
                     <input type="text" id="newImageURL" name="newImageURL" value="${slider.getImage()}" placeholder="Enter image URL" required>
 

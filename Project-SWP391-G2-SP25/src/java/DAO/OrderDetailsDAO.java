@@ -6,7 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -55,7 +57,42 @@ public class OrderDetailsDAO extends DBContext {
         }
         return null;
     }
+     public List<OrderDetails> getOrderDetailsByOrderID1(int orderID) {
+        List<OrderDetails> orderDetailsList = new ArrayList<>();
+        String sql = "SELECT "
+                + "    od.*, "
+                + "    p.ProductName as Name, "
+                + "    p.ImageLink as ImgProduct, "
+                + "    p.Price as PriceP, "
+                + "    p.Description "
+                + "FROM OrderDetails od "
+                + "LEFT JOIN Products p ON od.ProductID = p.ProductID "
+                + "WHERE od.OrderID = ?";
 
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, orderID);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    OrderDetails orderDetail = new OrderDetails();
+                    orderDetail.setOrderDetailID(rs.getInt("OrderDetailID"));
+                    orderDetail.setOrderID(rs.getInt("OrderID"));
+                    orderDetail.setProductID(rs.getInt("ProductID"));
+                    orderDetail.setQuantity(rs.getInt("Quantity"));
+                    orderDetail.setPrice(rs.getDouble("Price"));
+                    orderDetail.setPriceProduct(rs.getDouble("PriceP"));
+                    orderDetail.setImgProduct(rs.getString("ImgProduct"));
+                    orderDetail.setNameProduct(rs.getString("Name"));
+                    orderDetail.setDesProduct(rs.getString("Description"));
+                    orderDetailsList.add(orderDetail);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching order details by OrderID: " + e.getMessage());
+        }
+        return orderDetailsList;
+    }
+    
     public Vector<OrderDetails> getOrderDetailsByOrderID(int orderID) {
         Vector<OrderDetails> orderDetailsList = new Vector<>();
         String sql = "SELECT * FROM OrderDetails WHERE OrderID = ?";

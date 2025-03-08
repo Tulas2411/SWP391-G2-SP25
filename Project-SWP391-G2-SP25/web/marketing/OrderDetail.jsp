@@ -155,48 +155,53 @@
 <body>
     <jsp:include page="header.jsp"></jsp:include>
 
-    <main class="container">
-        <h2>Order Details</h2>
+        <main class="container">
+            <h2>Order Details</h2>
 
-        <!-- Basic Order Information -->
-        <section>
-            <h3>Order Information</h3>
+            <!-- Basic Order Information -->
+            <section>
+                <h3>Order Information</h3>
+            <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
             <div class="bill-table">
-                <table>
-                    <tr>
-                        <th>Order ID</th>
-                        <td>${orderDetails.orderDetailID}</td>
-                    </tr>
-                    <tr>
-                        <th>Order</th>
-                        <td>${orderDetails.orderID}</td>
-                    </tr>
-                    <tr>
-                        <th>Product</th>
-                        <td>${orderDetails.productID}</td>
-                    </tr>
-                    <tr>
-                        <th>Quantity</th>
-                        <td>${orderDetails.quantity}</td>
-                    </tr>
-                    <tr>
-                        <th>Order Date</th>
-                        <td>${orderDetails.price}</td>
-                    </tr>
-                    <tr>
-                        <th>Total Cost</th>
-                        <td>${orderDetails.productID}</td>
-                    </tr>
-                    <tr>
-                        <th>Sale Name</th>
-                        <td>${orderDetails.productID}</td>
-                    </tr>
-                    <tr>
-                        <th>Status</th>
-                        <td>${orderDetails.productID}</td>
-                    </tr>
+                <table border="1" cellspacing="0" cellpadding="8">
+                    <thead>
+                        <tr>
+                            <th>Order Detail ID</th>
+                           
+                            
+                            <th>Product Name</th>
+                            <th>Quantity</th>
+                            <th>Unit Price</th>
+                           
+                            <th>Original Price</th>
+                            <th>Image</th>
+                            <th>Status</th>
+                             <th>Total Cost</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach var="orderDetail" items="${orderDetailsList}">
+                            <tr>
+                                <td>${orderDetail.orderDetailID}</td>
+                              
+                                <td>${orderDetail.nameProduct}</td>
+                                <td>${orderDetail.quantity}</td>
+                                <td style="color: red";>${orderDetail.price}</td>
+                                
+                                <td style="color: gray; text-decoration: line-through;">${orderDetail.priceProduct}</td>
+
+                                <td>
+                                    <img src="${orderDetail.imgProduct}" alt="Product Image" width="100">
+                                </td>
+                                <td>${orderDetail.desProduct}</td>
+                                <td>${orderDetail.quantity * orderDetail.price}</td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
                 </table>
             </div>
+
         </section>
 
         <!-- Receiver Information -->
@@ -210,40 +215,16 @@
         </section>
 
         <!-- Ordered Products -->
-        <section>
-            <h3>Ordered Products</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Thumbnail</th>
-                        <th>cartItemID</th>
-                        <th>cartID</th>
-                        <th>productID</th>
-                        <th>Quantity</th>
-
-                    </tr>
-                </thead>
-                <tbody>
-                    <c:forEach var="item" items="${cartItems}">
-                        <tr>
-                            <td><img src="" width="50"></td>
-                            <td>${item.cartItemID}</td>
-                            <td>${item.cartID}</td>
-                            <td>$${item.productID}</td>
-                            <td>${item.quantity}</td>
-
-                        </tr>
-                    </c:forEach>
-                </tbody>
-            </table>
-        </section>
+        
+           
+          
 
         <!-- Order Management -->
 
         <section>
             <h3>Manage Order</h3>
             <form method="POST" action="OrderDetail">
-              
+
                 <input type="hidden" name="orderId" value="${orders.orderID}">
 
                 <label for="status">Status:</label>
@@ -259,12 +240,12 @@
             </form>
 
 
-<!--            <form method="POST" action="UpdateSaleNotesController">
-                <input type="hidden" name="orderId" value="${orders.orderID}">
-                <label for="notes">Sale Notes:</label>
-                <textarea name="notes"></textarea>
-                <button type="submit">Save Notes</button>
-            </form>-->
+            <!--            <form method="POST" action="UpdateSaleNotesController">
+                            <input type="hidden" name="orderId" value="${orders.orderID}">
+                            <label for="notes">Sale Notes:</label>
+                            <textarea name="notes"></textarea>
+                            <button type="submit">Save Notes</button>
+                        </form>-->
         </section>
 
 
