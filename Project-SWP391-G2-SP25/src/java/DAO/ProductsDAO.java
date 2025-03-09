@@ -381,6 +381,39 @@ public class ProductsDAO extends DBContext {
         }
         return categories;
     }
+    public List<Products> getAllProducts1() {
+    List<Products> products = new ArrayList<>();
+    try {
+        String query = "SELECT * FROM products ORDER BY ProductID DESC";
+        PreparedStatement st = connection.prepareStatement(query);
+
+        try (ResultSet rs = st.executeQuery()) {
+            CategoryDAO cdao = new CategoryDAO();
+            while (rs.next()) {
+                Products product = new Products();
+                product.setProductID(rs.getInt("ProductID"));
+                product.setCategoryID(rs.getString("CategoryID"));
+                product.setProductName(rs.getString("ProductName"));
+                product.setDescription(rs.getString("Description"));
+                product.setProvider(rs.getString("Provider"));
+                product.setPrice(rs.getFloat("Price"));
+                product.setOldprice(rs.getFloat("OldPrice"));
+                product.setWarrantyPeriod(rs.getString("WarrantyPeriod"));
+                product.setAmount(rs.getInt("Amount"));
+                product.setImageLink(rs.getString("ImageLink"));
+                product.setIsPromoted(rs.getBoolean("IsPromoted"));
+                product.setCreateAt(rs.getDate("CreateAt"));
+                Category c = cdao.getCategoryByID(rs.getString("CategoryID"));
+                product.setStatus(rs.getString("status"));
+                product.setCategory(c);
+                products.add(product);
+            }
+        }
+    } catch (SQLException e) {
+        System.err.println("Error in getAllProducts: " + e.getMessage());
+    }
+    return products;
+}
 
     public List<Products> getAllProduct(String search, String category) {
         List<Products> products = new ArrayList<>();
