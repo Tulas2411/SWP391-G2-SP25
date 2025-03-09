@@ -60,6 +60,10 @@
                                 <div class="sb-nav-link-icon"><i class="fa fa-user"></i></div>
                                 Quản lý khách hàng
                             </a>  
+                                <a class="nav-link" href="${contextPath}/reviews">
+                                <div class="sb-nav-link-icon"><i class="fa fa-comment"></i></div>
+                                Quản lí phản hồi
+                            </a>  
                         </div>
                     </div>
                 </nav>

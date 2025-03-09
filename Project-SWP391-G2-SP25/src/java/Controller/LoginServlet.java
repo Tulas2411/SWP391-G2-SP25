@@ -89,8 +89,8 @@ public class LoginServlet extends HttpServlet {
                     }
 
                 } else {
-                    request.setAttribute("status", "failed");
-                    dispatcher = request.getRequestDispatcher("Login.jsp");
+                    request.setAttribute("loginError", "Sai tài khoản hoặc mật khẩu");
+                    request.getRequestDispatcher("Login.jsp").forward(request, response);
                     dispatcher.forward(request, response);
                 }
 
