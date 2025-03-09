@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import javax.lang.model.util.Types;
 
 /**
  * DAO class for managing Sliders
@@ -203,6 +204,23 @@ public class SlidersDAO extends DBContext {
         }
         return null;
     }
+    public void addSlider(Sliders slider) {
+    String sql = "INSERT INTO Sliders (Title, Image, Backlink, Status, BlogID, ProductID) VALUES (?, ?, ?, ?, ?, ?)";
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setString(1, slider.getTitle());
+        ps.setString(2, slider.getImage());
+        ps.setString(3, slider.getBacklink());
+        ps.setString(4, slider.getStatus());
+
+        // Nếu BlogID hoặc ProductID <= 0 thì đặt NULL
+        ps.setObject(5, (slider.getBlogID() > 0) ? slider.getBlogID() : null);
+        ps.setObject(6, (slider.getProductID() > 0) ? slider.getProductID() : null);
+
+        ps.executeUpdate();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
 
     // Thêm slider mới
 //    public boolean insertSlider(Sliders slider) {

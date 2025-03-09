@@ -33,8 +33,8 @@ public class CartItemsDAO extends DBContext {
         String sql = "SELECT ci.CartItemID, ci.CartID, ci.ProductID, ci.Quantity, "
                 + "p.ProductName, p.Price "
                 + "FROM CartItems ci "
-                + "JOIN Carts c ON ci.CartID = c.CartID "
-                + "JOIN Products p ON ci.ProductID = p.ProductID "
+                + "Left JOIN Carts c ON ci.CartID = c.CartID "
+                + "left JOIN Products p ON ci.ProductID = p.ProductID "
                 + "WHERE c.CustomerID = ?";
 
         List<CartItems> cartItems = new ArrayList<>();

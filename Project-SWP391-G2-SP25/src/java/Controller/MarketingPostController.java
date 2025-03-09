@@ -26,7 +26,7 @@ import java.util.Map;
  *
  * @author Admin
  */
-@WebServlet(name = "MarketingPostController", urlPatterns = {"/PostList"})
+@WebServlet(name = "MarketingPostController", urlPatterns = {"/marketing/PostList"})
 public class MarketingPostController extends HttpServlet {
 
     private MarketingPostsDAO postsDAO;
@@ -77,7 +77,7 @@ public class MarketingPostController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int page = 1; 
-        int recordsPerPage = 2;  
+        int recordsPerPage = 5;  
 
         
         if (request.getParameter("page") != null) {

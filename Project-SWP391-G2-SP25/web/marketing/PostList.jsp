@@ -1,5 +1,10 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix ="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<c:set var="contextPath" value="${pageContext.request.contextPath}" />
+
+
 <!DOCTYPE html>
 <html lang="vi">
     <head>
@@ -243,7 +248,7 @@
 
         </style>
 
-        <%@ include file="./Public/header.jsp" %>
+       <jsp:include page="header.jsp"></jsp:include>
 
 
     <head>
@@ -290,7 +295,7 @@
                             <th class="py-2 px-4 border-r font-bold ">ID</th>
                             <th class="py-2 px-4 border-r font-bold">Tiêu đề</th>
                             <th class="py-2 px-4 border-r font-bold">Nội dung</th>
-                            <th class="py-2 px-4 border-r font-bold">Tác giả</th>
+                           
                             <th class="py-2 px-4 border-r font-bold">Ngày tạo</th>
                             <th class="py-2 px-4 border-r font-bold">Trạng thái</th>
                             <th class="py-2 px-4 border-r font-bold">Link hình ảnh</th>
@@ -303,7 +308,7 @@
                                 <td class="py-2 px-4 border-r">${o.postID}</td>
                                 <td class="py-2 px-4 border-r">${o.title}</td>
                                 <td class="py-2 px-4 border-r">${o.content}</td>
-                                <td class="py-2 px-4 border-r">${o.author}</td>
+                              
                                 <td class="py-2 px-4 border-r">${o.createDate}</td>
                                 <td class="py-2 px-4 border-r">${o.status}</td>
                                 <td class="py-2 px-4 border-r">
@@ -311,6 +316,7 @@
                                 </td>
                                 <td class="py-2 px-4 flex justify-start gap-3">
                                    
+                                    <a href="EditPost?postID=${o.postID}" >
                                     <button class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition duration-300">Sửa</button>
 
                               
@@ -413,4 +419,5 @@
 
     </body>
 </html>
+<jsp:include page="footer.jsp"></jsp:include>
 
