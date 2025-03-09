@@ -74,6 +74,7 @@ public class CartCompletionController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         RequestDispatcher dispatcher = null;
+        String email = null;
         HttpSession session = request.getSession();
         // Nếu email tồn tại, tiếp tục gửi OTP
         OrdersDAO oDAO = new OrdersDAO();
@@ -81,8 +82,19 @@ public class CartCompletionController extends HttpServlet {
         OrderDetailsDAO odDAO = new OrderDetailsDAO();
         ProductsDAO pDAO = new ProductsDAO();
         Random rand = new Random();
-        Users user = (Users) session.getAttribute("user");
-        String email = user.getEmail();
+        Users user = new Users();
+        
+        if(session.getAttribute("user")!=null){
+            user = (Users) session.getAttribute("user");
+            email = user.getEmail();
+        }else{
+            Guest guest = (Guest) session.getAttribute("guest");
+            user.setEmail(email);
+            user.setFirstName(guest.getFirstName());
+            user.setLastName(guest.getLastName());
+            user.setAddress(guest.getAddress());
+            email = guest.getEmail();
+        }
         // Thiết lập thông số email
         String to = email;
         Properties props = new Properties();

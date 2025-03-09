@@ -431,8 +431,10 @@
     $('.btn-increase').on('click', function() {
         var cartItemId = $(this).data('cart-item-id');
         var quantityInput = $('#product-quantity-' + cartItemId);
+        var hiddenQuantityInput = $('#product-quantity1-' + cartItemId); // Thẻ ẩn
         var currentQuantity = parseInt(quantityInput.val());
         quantityInput.val(currentQuantity + 1);
+        hiddenQuantityInput.val(currentQuantity + 1); // Đồng bộ giá trị thẻ ẩn
         updateProductTotal(cartItemId);
         updateCartTotal();
         updateCartOnServer(cartItemId, currentQuantity + 1); // Gửi giá trị mới đến backend
@@ -442,9 +444,11 @@
     $('.btn-decrease').on('click', function() {
         var cartItemId = $(this).data('cart-item-id');
         var quantityInput = $('#product-quantity-' + cartItemId);
+        var hiddenQuantityInput = $('#product-quantity1-' + cartItemId); // Thẻ ẩn
         var currentQuantity = parseInt(quantityInput.val());
         if (currentQuantity > 1) {
             quantityInput.val(currentQuantity - 1);
+            hiddenQuantityInput.val(currentQuantity - 1); // Đồng bộ giá trị thẻ ẩn
             updateProductTotal(cartItemId);
             updateCartTotal();
             if (currentQuantity > 1) {
