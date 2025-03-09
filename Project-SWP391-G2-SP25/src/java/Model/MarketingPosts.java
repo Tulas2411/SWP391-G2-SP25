@@ -31,6 +31,24 @@ public class MarketingPosts {
         this.status = status;
         this.imageLink = imageLink;
     }
+    public MarketingPosts( String title, String content, int author, Date createDate, String status, String imageLink) {
+      
+        this.title = title;
+        this.content = content;
+        this.author = author;
+        this.createDate = createDate;
+        this.status = status;
+        this.imageLink = imageLink;
+    }
+    public MarketingPosts( String title, String content,Date createDate, String status, String imageLink) {
+        
+        this.title = title;
+        this.content = content;
+      
+        this.createDate = createDate;
+        this.status = status;
+        this.imageLink = imageLink;
+    }
 
     public int getPostID() {
         return postID;
