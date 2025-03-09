@@ -4,11 +4,8 @@
  */
 package Controller;
 
-import DAO.*;
 import DAO.MarketingPostsDAO;
 import Model.MarketingPosts;
-import DAO.DBContext;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -16,27 +13,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
 
 /**
  *
  * @author Admin
  */
-@WebServlet(name = "MarketingPostController", urlPatterns = {"/marketing/PostList"})
-public class MarketingPostController extends HttpServlet {
-
-    private MarketingPostsDAO postsDAO;
-
-    @Override
-    public void init() throws ServletException {
-        // Kết nối cơ sở dữ liệu và khởi tạo DAO
-        Connection connection = DBContext.makeConnection();
-//        MarketingPostsDAO = new MarketingPostsDAO(connection);
-    }
+@WebServlet(name = "AddPost", urlPatterns = {"/marketing/AddPost"})
+public class AddPost extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -55,10 +39,10 @@ public class MarketingPostController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet MarketingPostController</title>");
+            out.println("<title>Servlet AddPost</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet MarketingPostController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet AddPost at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -76,30 +60,7 @@ public class MarketingPostController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int page = 1; 
-        int recordsPerPage = 5;  
-
-        
-        if (request.getParameter("page") != null) {
-            page = Integer.parseInt(request.getParameter("page"));
-        }
-
-        MarketingPostsDAO DAO = new MarketingPostsDAO();
- 
-        int totalRecords = DAO.getTotalMarketingPosts();
-
- 
-        int start = (page - 1) * recordsPerPage;
- 
-        List<MarketingPosts> posts = DAO.getMarketingPostsByPage(start, recordsPerPage);
- 
-        int totalPages = (int) Math.ceil((double) totalRecords / recordsPerPage);
- 
-        request.setAttribute("posts", posts);
-        request.setAttribute("currentPage", page);
-        request.setAttribute("totalPages", totalPages);
- 
-        request.getRequestDispatcher("PostList.jsp").forward(request, response);
+        processRequest(request, response);
     }
 
     /**
@@ -110,11 +71,41 @@ public class MarketingPostController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+  
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+protected void doPost(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+    try {
+        String title = request.getParameter("title");
+        String content = request.getParameter("content");
+
+
+        String createDateStr = request.getParameter("createDate");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
+        java.util.Date utilDate = sdf.parse(createDateStr);
+        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+
+        String status = request.getParameter("status");
+        String imageLink = request.getParameter("imageLink");
+
+        int author = 1;
+        MarketingPostsDAO dao = new MarketingPostsDAO();
+        MarketingPosts newPost = new MarketingPosts(title, content,author, sqlDate, status, imageLink);
+        boolean success = dao.addMarketingPost(newPost);
+
+        if (success) {
+            response.sendRedirect("PostList");
+        } else {
+           
+            request.getRequestDispatcher("PostListádfasdfasfd.jsp").forward(request, response);
+        }
+    } catch (Exception ex) {
+       
+       
+        request.getRequestDispatcher("addDFDAPost.jsp").forward(request, response);
     }
+}
+
 
     /**
      * Returns a short description of the servlet.
