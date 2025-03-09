@@ -51,6 +51,12 @@
                                     session.removeAttribute("notificationErr");
                                 %>
                             </c:if>
+                            <c:if test="${not empty requestScope.loginError}">
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert" style="text-align: center">
+                                    ${requestScope.loginError}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            </c:if>
                             <h2 class="form-title">Đăng Nhập</h2>
                             <form method="post" action="LoginServlet" class="register-form"
                                   id="login-form">
@@ -99,7 +105,6 @@
                     </div>
                 </div>
             </section>
-
         </div>
 
 
@@ -112,9 +117,32 @@
         <script type="text/javascript">
             var status = document.getElementById("status").value;
             if (status == "failed") {
-                swal("Xin Lỗi", "Sai Email Hoặc Mật Khẩu", "error");
+            swal("Xin Lỗi", "Sai Email Hoặc Mật Khẩu", "error");
             }
-
+            <style>
+        /* CSS cho thông báo lỗi */
+        .alert-danger {
+                    background - color: #ffebee; /* Màu nền nhạt */
+            border - color: #ffcdd2; /* Màu viền */
+            color: #c62828; /* Màu chữ */
+            padding: 15px; /* Khoảng cách bên trong */
+            border - radius: 4px; /* Bo góc */
+            margin - bottom: 20px; /* Khoảng cách phía dưới */
+            text - align: center; /* Căn giữa chữ */
+            font - size: 14px; /* Cỡ chữ */
+                    }
+                    
+                        .alert-danger .btn-close {
+                    position: absolute; /* Đặt nút đóng ở góc phải */
+            right: 10px;
+            top: 50 % ;
+            transform: translateY( - 50 % );
+                                    }
+                                    
+                                    .alert-danger strong {
+                    font - weight: bold; /* In đậm tiêu đề */
+                            }
+        </style>
         </script>
     </body>
 
