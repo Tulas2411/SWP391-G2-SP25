@@ -39,14 +39,14 @@ public class ChangePasswordServlet extends HttpServlet {
 
         // Kiểm tra mật khẩu mới và xác nhận có khớp không
         if (!newPassword.equals(confirmPassword)) {
-            request.setAttribute("errorMessage", "New password and confirm password do not match.");
+            request.setAttribute("errorMessage", "Mật khẩu mới và mật khẩu xác nhận không khớp.");
             request.getRequestDispatcher("ChangePassword.jsp").forward(request, response);
             return;
         }
         
         // Kiểm tra mật khẩu mới có chứa khoảng trắng không
         if (newPassword.contains(" ")) {
-            request.setAttribute("errorMessage", "New password should not contain spaces.");
+            request.setAttribute("errorMessage", "Mật khẩu mới không được chứa khoảng trắng.");
             request.getRequestDispatcher("ChangePassword.jsp").forward(request, response);
             return;
         }
@@ -73,13 +73,13 @@ public class ChangePasswordServlet extends HttpServlet {
                             response.sendRedirect("changePasswordSuccess.jsp");
                         } else {
                             // Không cập nhật được mật khẩu
-                            request.setAttribute("errorMessage", "Password change failed.");
+                            request.setAttribute("errorMessage", "Thay đổi mật khẩu không thành công.");
                             request.getRequestDispatcher("ChangePassword.jsp").forward(request, response);
                         }
                     }
                 } else {
                     // Mật khẩu hiện tại không đúng
-                    request.setAttribute("errorMessage", "Current password is incorrect.");
+                    request.setAttribute("errorMessage", "Mật khẩu hiện tại không đúng.");
                     request.getRequestDispatcher("ChangePassword.jsp").forward(request, response);
                 }
             }

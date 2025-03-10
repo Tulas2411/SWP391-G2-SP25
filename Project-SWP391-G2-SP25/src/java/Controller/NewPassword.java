@@ -45,10 +45,10 @@ public class NewPassword extends HttpServlet {
                 int rowCount = pst.executeUpdate();
                 if (rowCount > 0) {
                     // Gửi thông báo thành công qua session
-                    session.setAttribute("status", "Password reset Successfully!");
+                    session.setAttribute("status", "Đã đặt lại mật khẩu thành công!");
                     response.sendRedirect("Login.jsp");  // Chuyển hướng về trang Login.jsp
                 } else {
-                    request.setAttribute("status", "Password reset Failed!");
+                    request.setAttribute("status", "Đặt lại mật khẩu không thành công!");
                     dispatcher = request.getRequestDispatcher("Login.jsp");
                     dispatcher.forward(request, response);
                 }
@@ -62,7 +62,7 @@ public class NewPassword extends HttpServlet {
             }
         } else {
             // Nếu mật khẩu mới và mật khẩu xác nhận không khớp
-            request.setAttribute("status", "Passwords do not match!");
+            request.setAttribute("status", "Mật khẩu không khớp!");
             dispatcher = request.getRequestDispatcher("NewPassword.jsp");
             dispatcher.forward(request, response);
         }
