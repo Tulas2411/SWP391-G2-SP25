@@ -43,9 +43,9 @@ public class UpdateProfileServlet extends HttpServlet {
 
         // Xử lý kết quả cập nhật
         if (isUpdated) {
-            request.setAttribute("updateSuccess", "Profile updated successfully!");
+            request.setAttribute("updateSuccess", "Hồ sơ được cập nhật thành công!");
         } else {
-            request.setAttribute("updateError", "Error updating profile.");
+            request.setAttribute("updateError", "Lỗi khi cập nhật hồ sơ.");
         }
         request.getRequestDispatcher("UserProfile.jsp").forward(request, response);
     }

@@ -6,7 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -25,6 +27,36 @@ public class BlogDAO extends DBContext {
             System.out.println("Error fetching blogs: " + e.getMessage());
         }
         return blogList;
+    }
+    public List<Blog> getAllBlogs1() {
+        List<Blog> blogs = new ArrayList<>();
+        String query = "SELECT * FROM Blog ORDER BY CreateDate DESC"; 
+
+        try (PreparedStatement st = connection.prepareStatement(query);
+             ResultSet rs = st.executeQuery()) {
+
+            while (rs.next()) {
+                Blog blog = new Blog();
+                blog.setBlogID(rs.getInt("BlogID"));
+                blog.setCateID(rs.getString("CateID"));
+                blog.setTitle(rs.getString("Title"));
+                blog.setAuthor(rs.getInt("Author"));
+                blog.setImage(rs.getString("Image"));
+                blog.setBriefInfor(rs.getString("BriefInfor"));
+                blog.setCreateDate(rs.getTimestamp("CreateDate"));
+                blog.setBlogContent(rs.getString("BlogContent"));
+                blog.setStatus(rs.getString("Status"));
+                blog.setThumbnail(rs.getString("Thumbnail"));
+                blog.setFlag(rs.getBoolean("Flag"));
+                blog.setDateModified(rs.getTimestamp("DateModified"));
+                blog.setNumberOfAccess(rs.getInt("NumberOfAccess"));
+
+                blogs.add(blog);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return blogs;
     }
 
     public Vector<Blog> getAllBlogsAsVector() {

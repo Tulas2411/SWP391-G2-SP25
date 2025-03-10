@@ -16,7 +16,7 @@ public class ReviewsDAO extends DBContext {
 
     public List<Reviews> getReviews(String productName, Integer rating, String search, String status, String sortColumn, String sortOrder, int offset, int limit) {
         List<Reviews> reviewsList = new ArrayList<>();
-        String sql = "SELECT r.*, u.UserName, p.ProductName "
+        String sql = "SELECT r.*, u.FirstName, u.LastName, p.ProductName, u.Email, u.PhoneNumber "
                 + "FROM Reviews r "
                 + "JOIN Users u ON r.CustomerID = u.UserID "
                 + "JOIN Products p ON r.ProductID = p.ProductID "
@@ -76,9 +76,12 @@ public class ReviewsDAO extends DBContext {
                     review.setProductID(rs.getInt("ProductID"));
                     review.setCustomerID(rs.getInt("CustomerID"));
                     review.setRating(rs.getInt("Rating"));
+                    review.setEmail(rs.getString("Email"));
+                    review.setPhoneNumber(rs.getString("PhoneNumber")); 
                     review.setComment(rs.getString("Comment"));
                     review.setReviewDate(rs.getDate("ReviewDate"));
-                    review.setUserName(rs.getString("UserName"));
+                    String fullName = rs.getString("FirstName") + " " + rs.getString("LastName");
+                    review.setUserName(fullName); 
                     review.setProductName(rs.getString("ProductName"));
                     review.setStatus(rs.getString("Status"));
                     reviewsList.add(review);
@@ -88,6 +91,47 @@ public class ReviewsDAO extends DBContext {
             e.printStackTrace();
         }
         return reviewsList;
+    }
+    
+    public Reviews getReviewDetail(int reviewID) {
+        String sql = "SELECT r.*, u.UserName, u.Email, u.PhoneNumber, p.ProductName "
+                + "FROM Reviews r "
+                + "JOIN Users u ON r.CustomerID = u.UserID "
+                + "JOIN Products p ON r.ProductID = p.ProductID "
+                + "WHERE r.ReviewID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, reviewID);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Reviews review = new Reviews();
+                    review.setReviewID(rs.getInt("ReviewID"));
+                    review.setUserName(rs.getString("UserName"));
+                    review.setEmail(rs.getString("Email")); 
+                    review.setPhoneNumber(rs.getString("PhoneNumber")); 
+                    review.setProductName(rs.getString("ProductName"));
+                    review.setRating(rs.getInt("Rating"));
+                    review.setComment(rs.getString("Comment"));
+                    review.setStatus(rs.getString("Status"));
+                    return review;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    public boolean updateReviewStatus(int reviewID, String status) {
+        String sql = "UPDATE Reviews SET Status = ? WHERE ReviewID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, status);
+            ps.setInt(2, reviewID);
+            int rowsUpdated = ps.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
     
 

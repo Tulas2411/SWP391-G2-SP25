@@ -6,6 +6,7 @@
 package Controller;
 
 import DAO.CartItemsDAO;
+import Model.Users;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,6 +14,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.util.Map;
 /**
  *
  * @author admin
@@ -58,7 +61,14 @@ public class DeleteCartItem extends HttpServlet {
         try{
             int id = Integer.parseInt(request.getParameter("id"));
             CartItemsDAO ciDAO = new CartItemsDAO();
+            HttpSession session = request.getSession();
+            Users user = (Users) session.getAttribute("user");
+            if(user !=null){
             ciDAO.removeCartItem(id);
+            }else{
+            Map<Integer, Integer> cart = (Map<Integer, Integer>) session.getAttribute("cart");
+            cart.remove(id);
+            }
             response.sendRedirect("Cart");
         }catch(Exception e){
             System.out.println(e.getMessage());
