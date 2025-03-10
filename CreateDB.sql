@@ -597,4 +597,5 @@ VALUES
 
 ALTER TABLE users add column status varchar(12) default 'Active';
 ALTER TABLE products add column status varchar(12) default 'Active';
+ALTER TABLE reviews add column status varchar(12) default 'Active';
 select * from products
