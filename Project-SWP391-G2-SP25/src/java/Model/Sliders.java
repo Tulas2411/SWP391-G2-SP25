@@ -29,6 +29,15 @@ public class Sliders {
         this.blogID = blogID;
         this.productID = productID;
     }
+    public Sliders( String title, String image, String backlink, String status, int blogID, int productID) {
+        
+        this.title = title;
+        this.image = image;
+        this.backlink = backlink;
+        this.status = status;
+        this.blogID = blogID;
+        this.productID = productID;
+    }
 
     public int getSliderID() {
         return sliderID;

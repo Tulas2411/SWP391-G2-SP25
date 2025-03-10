@@ -4,7 +4,6 @@
  */
 package Controller;
 
-
 import DAO.SlidersDAO;
 import Model.Sliders;
 import java.io.IOException;
@@ -22,7 +21,7 @@ import java.util.List;
  *
  * @author manh
  */
-@WebServlet(name = "DetailSlider", urlPatterns = {"/DetailSlider"})
+@WebServlet(name = "EditDetailSlider", urlPatterns = {"/EditDetailSlider"})
 public class EditDetailSlider extends HttpServlet {
 
     /**
@@ -42,7 +41,7 @@ public class EditDetailSlider extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet EditDetailSlider</title>");            
+            out.println("<title>Servlet EditDetailSlider</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet EditDetailSlider at " + request.getContextPath() + "</h1>");
@@ -75,46 +74,36 @@ public class EditDetailSlider extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-   protected void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-    
-    Part filePart = request.getPart("newImage"); // Lấy file ảnh mới
-    String fileName = filePart.getSubmittedFileName(); // Lấy tên file
-    String uploadPath = getServletContext().getRealPath("") + "uploads"; // Thư mục lưu ảnh
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-    // Tạo thư mục nếu chưa tồn tại
-    File uploadDir = new File(uploadPath);
-    if (!uploadDir.exists()) {
-        uploadDir.mkdir();
+        // Lấy các tham số từ form
+        int sliderID = Integer.parseInt(request.getParameter("sliderID"));
+        String title = request.getParameter("title");
+        String backlink = request.getParameter("backlink");
+        String status = request.getParameter("status");
+
+        // Lấy link ảnh mới từ form
+        String newImageLink = request.getParameter("newImageURL");
+
+        // Kiểm tra nếu không có link ảnh mới, thì giữ nguyên ảnh cũ
+        String imagePath = (newImageLink != null && !newImageLink.isEmpty()) ? newImageLink : request.getParameter("currentImage");
+
+        // Tạo đối tượng Slider để lưu dữ liệu
+        Sliders slider = new Sliders();
+        slider.setSliderID(sliderID);
+        slider.setTitle(title);
+        slider.setImage(imagePath); // Cập nhật hình ảnh
+        slider.setBacklink(backlink);
+        slider.setStatus(status);
+
+        // Sử dụng DAO để cập nhật Slider trong cơ sở dữ liệu
+        SlidersDAO slidersDAO = new SlidersDAO();
+        slidersDAO.updateSlider(slider); // Cập nhật thông tin Slider
+
+        // Chuyển hướng về trang chi tiết slider
+        response.sendRedirect("DetailSlider?sliderID=" + sliderID);
     }
-
-    String imagePath = null;
-    if (fileName != null && !fileName.isEmpty()) {
-        imagePath = "uploads/" + fileName;
-        filePart.write(uploadPath + File.separator + fileName); // Lưu ảnh vào thư mục server
-    } else {
-        imagePath = request.getParameter("currentImage"); // Nếu không upload ảnh mới, giữ ảnh cũ
-    }
-
-
-    int sliderID = Integer.parseInt(request.getParameter("sliderID"));
-    String title = request.getParameter("title");
-    String backlink = request.getParameter("backlink");
-    String status = request.getParameter("status");
-
-    Sliders slider = new Sliders();
-    slider.setSliderID(sliderID);
-    slider.setTitle(title);
-    slider.setImage(imagePath);
-    slider.setBacklink(backlink);
-    slider.setStatus(status);
-
-    SlidersDAO slidersDAO = new SlidersDAO();
-    slidersDAO.updateSlider(slider);
-
-    response.sendRedirect("ListSlider");
-}
-
 
     /**
      * Returns a short description of the servlet.

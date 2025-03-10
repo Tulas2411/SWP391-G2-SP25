@@ -3,7 +3,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Change Password</title>
+        <title>Đổi Mật Khẩu</title>
         <style>
             /* Đặt các thuộc tính toàn cục */
             body {
@@ -121,7 +121,7 @@
     <body>
         <div class="modal">
             <div class="modal-content">
-                <h2>Change Password</h2>
+                <h2>Đổi Mật Khẩu</h2>
 
                 <form action="ChangePasswordServlet" method="POST">
                     <!-- Hiển thị thông báo lỗi nếu có -->
@@ -130,18 +130,18 @@
                     <div class="error-message"><%= errorMessage %></div>
                     <% } %>
 
-                    <label for="currentPassword">Current Password:</label>
-                    <input type="password" name="currentPassword" required placeholder="Enter Current Password">
+                    <label for="currentPassword">Mật Khẩu Cũ:</label>
+                    <input type="password" name="currentPassword" required ">
 
-                    <label for="newPassword">New Password:</label>
-                    <input type="password" name="newPassword" required placeholder="Enter New Password">
+                    <label for="newPassword">Mật Khẩu Mới:</label>
+                    <input type="password" name="newPassword" required ">
 
-                    <label for="confirmPassword">Confirm New Password:</label>
-                    <input type="password" name="confirmPassword" required placeholder="Confirm New Password">
+                    <label for="confirmPassword">Xác Nhận Mật Khẩu Mới:</label>
+                    <input type="password" name="confirmPassword" required ">
 
                     <div class="buttons">
-                        <input type="submit" value="Change Password">
-                        <button type="button" onclick="window.location.href = 'UserProfile.jsp'">Cancel</button>
+                        <input type="submit" value="Đổi Mật Khẩu">
+                        <button type="button" onclick="window.location.href = 'UserProfile.jsp'">Thoát</button>
                     </div>
                 </form>
             </div>

@@ -4745,7 +4745,7 @@ textarea.form-control-lg {
 }
 
 @keyframes progress-bar-stripes {
-  0% {
+0% {
     background-position-x: 1rem;
   }
 }

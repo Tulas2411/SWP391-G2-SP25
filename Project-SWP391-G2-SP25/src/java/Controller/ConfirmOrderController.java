@@ -89,8 +89,8 @@ public class ConfirmOrderController extends HttpServlet {
         OrderDetailsDAO odDAO = new OrderDetailsDAO();
         ProductsDAO pDAO = new ProductsDAO();
         UsersDAO uDAO = new UsersDAO();
+        GuestDAO gDAO = new GuestDAO();
         Users user = (Users) session.getAttribute("user");
-
         try {
             // Đọc dữ liệu JSON từ request
             BufferedReader reader = request.getReader();
@@ -125,17 +125,41 @@ public class ConfirmOrderController extends HttpServlet {
             String gender = orderData.get("gender").getAsString();
             String address = orderData.get("address").getAsString();
             JsonArray productsArray = orderData.get("products").getAsJsonArray();
-
+            
             // Xử lý danh sách sản phẩm
             for (int i = 0; i < productsArray.size(); i++) {
                 JsonObject product = productsArray.get(i).getAsJsonObject();
-                int cartitid = product.get("productId").getAsInt();
+                int productId = product.get("productId").getAsInt();
                 int quantity = product.get("quantity").getAsInt();
-                double price = pDAO.getProductByID(ciDAO.getCartItemByID(cartitid).getProductID()).getPrice() * quantity;
+                double price = pDAO.getProductByID(productId).getPrice() * quantity;
                 total += price;
             }
 
-            if (user != null) {
+            if (user == null) {
+                    System.out.println("Entering else block to create new user...");
+                    // Tạo người dùng mới (khách)
+                    Guest u = new Guest();
+                    u.setFirstName(firstname);
+                    u.setLastName(lastname);
+                    u.setEmail(email);
+                    u.setPhoneNumber(phone);
+                    u.setGender(gender);
+                    u.setAddress(address);
+                    boolean isGuestAdded = gDAO.addGuest(u);
+                    if (!isGuestAdded) {
+                        System.out.println("Failed to add user.");
+                        throw new Exception("Failed to add user.");
+                    }
+                    session.setAttribute("guest", u);
+                    System.out.println("New user created and added to session: " + u.getEmail());
+
+                    // Thêm đơn hàng mới
+                    boolean isOrderAdded = oDAO.addOrder(new Orders(null, u.getAddress(), email, total, null, gDAO.getLatestGuest().getGuestID()));
+                    if (!isOrderAdded) {
+                        throw new Exception("Failed to add order.");
+                    }
+
+            } else {
                 // Cập nhật thông tin người dùng
                 user.setFirstName(firstname);
                 user.setLastName(lastname);
@@ -167,27 +191,6 @@ public class ConfirmOrderController extends HttpServlet {
                         throw new Exception("Failed to add order details.");
                     }
                     ciDAO.removeCartItem(cartitid);
-                }
-            } else {
-                // Tạo người dùng mới (khách)
-                Users u = new Users();
-                u.setFirstName(firstname);
-                u.setLastName(lastname);
-                u.setEmail(email);
-                u.setPhoneNumber(phone);
-                u.setGender(gender);
-                u.setAddress(address);
-                u.setRole("Guest");
-                boolean isUserAdded = uDAO.addUser(u);
-                if (!isUserAdded) {
-                    throw new Exception("Failed to add user.");
-                }
-                session.setAttribute("user", u);
-
-                // Thêm đơn hàng mới
-                boolean isOrderAdded = oDAO.addOrder(new Orders(u.getUserID(), null, u.getAddress(), "Submitted", total, comment));
-                if (!isOrderAdded) {
-                    throw new Exception("Failed to add order.");
                 }
             }
 

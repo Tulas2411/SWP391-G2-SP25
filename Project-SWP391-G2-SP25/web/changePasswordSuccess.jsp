@@ -5,7 +5,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Password Changed Successfully</title>
+        <title>Đổi mật khẩu thành công</title>
         <style>
             body {
                 font-family: Arial, sans-serif;
@@ -65,9 +65,9 @@
     <body>
         <div class="container">
             <div class="success-icon">✔️</div>
-            <h2>Password Changed Successfully!</h2>
-            <p>Your password has been updated successfully. You can now return to the homepage.</p>
-            <a href="${pageContext.request.contextPath}/home">Go to Home</a>
+            <h2>Đã thay đổi mật khẩu thành công!</h2>
+            <p>Mật khẩu của bạn đã được cập nhật thành công. Bây giờ bạn có thể quay lại trang chủ.</p>
+            <a href="${pageContext.request.contextPath}/home">Về Trang Chủ</a>
         </div>
     </body>
 </html>

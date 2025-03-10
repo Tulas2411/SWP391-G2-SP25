@@ -25,7 +25,7 @@ import java.util.Map;
  *
  * @author Admin
  */
-@WebServlet(name = "DeletePostController", urlPatterns = {"/DeletePost"})
+@WebServlet(name = "DeletePostController", urlPatterns = {"/marketing/DeletePost"})
 public class DeletePostController extends HttpServlet {
 
     private MarketingPostsDAO postsDAO;

@@ -82,6 +82,8 @@ public class LoginServlet extends HttpServlet {
                         response.sendRedirect("admin/dashboard");
                     } else if (u.getRole().equalsIgnoreCase("marketing")) {
                         response.sendRedirect("marketing/dashboard");
+                          } else if (u.getRole().equalsIgnoreCase("sale")) {
+                        response.sendRedirect("sale/OrdersList");
                     }  else {
                         // Chuyển hướng người dùng đến trang HomePage sau khi đăng nhập thành công
                         session.setAttribute("user", userDAO.getUserByUserName(username));
@@ -89,8 +91,8 @@ public class LoginServlet extends HttpServlet {
                     }
 
                 } else {
-                    request.setAttribute("status", "failed");
-                    dispatcher = request.getRequestDispatcher("Login.jsp");
+                    request.setAttribute("loginError", "Sai tài khoản hoặc mật khẩu");
+                    request.getRequestDispatcher("Login.jsp").forward(request, response);
                     dispatcher.forward(request, response);
                 }
 

@@ -6,7 +6,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
@@ -25,6 +27,38 @@ public class CartItemsDAO extends DBContext {
             System.out.println("Error fetching cart items: " + e.getMessage());
         }
         return cartItemList;
+    }
+
+    public List<CartItems> getCartItemsByCustomerID(int customerID) {
+        String sql = "SELECT ci.CartItemID, ci.CartID, ci.ProductID, ci.Quantity, "
+                + "p.ProductName, p.Price "
+                + "FROM CartItems ci "
+                + "Left JOIN Carts c ON ci.CartID = c.CartID "
+                + "left JOIN Products p ON ci.ProductID = p.ProductID "
+                + "WHERE c.CustomerID = ?";
+
+        List<CartItems> cartItems = new ArrayList<>();
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, customerID);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    CartItems cartItem = new CartItems();
+                    cartItem.setCartItemID(rs.getInt("CartItemID"));
+                    cartItem.setCartID(rs.getInt("CartID"));
+                    cartItem.setProductID(rs.getInt("ProductID"));
+                    cartItem.setQuantity(rs.getInt("Quantity"));
+
+                    // Thêm dữ liệu từ bảng Products
+                    cartItem.setProductName(rs.getString("ProductName"));
+                    cartItem.setPrice(rs.getDouble("Price"));
+
+                    cartItems.add(cartItem);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching cart items by customer ID: " + e.getMessage());
+        }
+        return cartItems;
     }
 
     public Vector<CartItems> getAllCartItemsAsVector() {
@@ -127,6 +161,7 @@ public class CartItemsDAO extends DBContext {
         ps.setInt(2, cartItem.getProductID());
         ps.setInt(3, cartItem.getQuantity());
     }
+
     public Map<Integer, CartItems> getCartItemsByCartIDasMap(int cartID) {
         Map<Integer, CartItems> cartItemList = new HashMap<>();
         String sql = "SELECT * FROM CartItems WHERE CartID = ?";
@@ -135,8 +170,8 @@ public class CartItemsDAO extends DBContext {
             ps.setInt(1, cartID);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                CartItems cartItem = extractCartItemFromResultSet(rs);
-                cartItemList.put(cartItem.getCartItemID(), cartItem);
+                    CartItems cartItem = extractCartItemFromResultSet(rs);
+                    cartItemList.put(cartItem.getCartItemID(), cartItem);
                 }
             }
         } catch (SQLException e) {
@@ -144,10 +179,12 @@ public class CartItemsDAO extends DBContext {
         }
         return cartItemList;
     }
+
     public static void main(String[] args) {
         CartItemsDAO cDAO = new CartItemsDAO();
         System.out.println(cDAO.getCartItemsByCartIDasMap(1));
     }
+
     public boolean updateQuantityCartItem(int quantity, int id) {
         String sql = "UPDATE CartItems SET Quantity = ? WHERE CartItemID = ?";
 
