@@ -72,25 +72,25 @@ public class ResetPassword extends HttpServlet {
 
             try {
                 MimeMessage message = new MimeMessage(session);
-                message.setFrom(new InternetAddress(email)); // Đặt lại email gửi
+                message.setFrom(new InternetAddress(email)); 
                 message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
                 message.setSubject("Shop 4 Electrical");
                 message.setText("Your OTP is: " + otpvalue);
                 Transport.send(message);
-                System.out.println("Message sent successfully");
+                System.out.println("Tin nhắn đã được gửi thành công");
             } catch (MessagingException e) {
                 throw new RuntimeException(e);
             }
 
             dispatcher = request.getRequestDispatcher("EnterOtp.jsp");
-            request.setAttribute("message", "OTP is sent to your email id");
+            request.setAttribute("message", "OTP được gửi đến email của bạn");
             mySession.setAttribute("otp", otpvalue);
             mySession.setAttribute("email", email);
             mySession.setAttribute("otpGeneratedTime", java.time.Instant.now()); // Thêm thời gian OTP được tạo
             dispatcher.forward(request, response);
         } else {
             // Nếu email không tồn tại, thông báo lỗi
-            request.setAttribute("message", "Email does not exist!");
+            request.setAttribute("message", "Email không tồn tại!");
             dispatcher = request.getRequestDispatcher("ResetPassword.jsp");
             dispatcher.forward(request, response);
         }
