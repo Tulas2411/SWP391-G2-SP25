@@ -305,4 +305,8 @@ VALUES
 INSERT INTO Sliders (Title, Image, Backlink, Status, BlogID, ProductID) 
 VALUES
 ('Khuyến mãi mùa hè', 'assets/img/orderdetailsslider1.jpg', 'https://example.com/khuyen-mai', 'Active', NULL, 1),
+('Sản phẩm mới', 'assets/img/slider2.jpg', 'https://example.com/san-pham-moi', 'Active', NULL, 2),
+('Bài viết nổi bật', 'assets/img/slider3.jpg', 'https://example.com/blog-hot', 'Active', 1, NULL),
+('Giảm giá đặc biệt', 'assets/img/slider4.jpg', 'https://example.com/giam-gia', 'Inactive', NULL, 3),
+('Công nghệ hiện đại', 'assets/img/slider5.jpg', 'https://example.com/cong-nghe', 'Active', 2, NULL),
 ('Bài viết nổi bật', 'assets/img/slider3.jpg', 'https://example.com/blog-hot', 'Active', 1, NULL);
