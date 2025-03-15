@@ -25,6 +25,7 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import org.mindrot.jbcrypt.BCrypt;
 
 @WebServlet("/RegisterServlet")
 public class RegisterServlet extends HttpServlet {
@@ -140,6 +141,9 @@ public class RegisterServlet extends HttpServlet {
                 dispatcher.forward(request, response);
                 return;
             }
+            
+            // Mã hóa mật khẩu
+            String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
 
             // Tạo mã OTP ngẫu nhiên
             Random random = new Random();
@@ -154,7 +158,7 @@ public class RegisterServlet extends HttpServlet {
             session.setAttribute("gender", gender);
             session.setAttribute("dateOfBirth", dateOfBirth);
             session.setAttribute("email", email);
-            session.setAttribute("password", password);
+            session.setAttribute("password", hashedPassword);
             session.setAttribute("phoneNumber", phoneNumber);
             session.setAttribute("address", address);
 
