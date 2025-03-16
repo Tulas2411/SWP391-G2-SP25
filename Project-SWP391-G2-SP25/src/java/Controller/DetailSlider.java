@@ -5,7 +5,9 @@
 package Controller;
 
 import DAO.SlidersDAO;
+import DAO.UsersDAO;
 import Model.Sliders;
+import Model.Users;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,6 +15,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -60,6 +63,14 @@ public class DetailSlider extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        UsersDAO userDAO = new UsersDAO();
+        HttpSession session = request.getSession();
+        String emailSession = (String) session.getAttribute("email");
+        Users user = userDAO.getUserByEmail(emailSession);
+        if (user != null) {
+            if (user.getRole().equalsIgnoreCase("marketing")) {
+        
         SlidersDAO sliderDAO = new SlidersDAO();
 
        int sliderID = Integer.parseInt(request.getParameter("sliderID"));
@@ -73,7 +84,16 @@ public class DetailSlider extends HttpServlet {
             request.getRequestDispatcher("ErrorPage.jsp").forward(request, response);
             request.getRequestDispatcher("HomePage.jsp").forward(request, response);
         }
-
+        
+        
+    } else {
+                session.setAttribute("notificationErr", "Bạn không có quyền truy cập vào trang này");
+                response.sendRedirect("../Login.jsp");
+            }
+        } else {
+            session.setAttribute("notificationErr", "Bạn cần đăng nhập trước!");
+            response.sendRedirect("../Login.jsp");
+        }
     }
 
     /**
