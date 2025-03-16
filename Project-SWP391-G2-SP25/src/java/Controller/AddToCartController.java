@@ -118,18 +118,8 @@ public class AddToCartController extends HttpServlet {
             }
                 
             } else {
-                Map<Integer, Integer> cart = (Map<Integer, Integer>) session.getAttribute("cart");
-                if (cart == null) {
-                cart = new HashMap<>();
-                session.setAttribute("cart", cart); // Lưu giỏ hàng vào session
-                }  
-                if (cart.containsKey(productId)) {
-                // Nếu sản phẩm đã có trong giỏ hàng, cộng thêm số lượng
-                cart.put(productId, cart.get(productId) + quantity);
-            } else {
-                // Nếu sản phẩm chưa có trong giỏ hàng, thêm mới
-                cart.put(productId, quantity);
-            }
+                request.setAttribute("loginError", "Bạn cần phải đăng nhập trước");
+                response.sendRedirect("LoginServlet");
             }
             
 
