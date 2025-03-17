@@ -4,7 +4,9 @@
  */
 package Controller;
 
+import DAO.UserLogDAO;
 import DAO.UsersDAO;
+import Model.UserLog;
 import Model.Users;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -149,6 +151,31 @@ public class CustomerManagementController extends HttpServlet {
                         return;
                     }
 
+                    // Build a log message with only the changed fields.
+                    StringBuilder changes = new StringBuilder();
+                    if (!firstName.equals(user.getFirstName())) {
+                        changes.append("FirstName: [").append(user.getFirstName()).append("] -> [").append(firstName).append("], ");
+                    }
+                    if (!lastName.equals(user.getLastName())) {
+                        changes.append("LastName: [").append(user.getLastName()).append("] -> [").append(lastName).append("], ");
+                    }
+                    if (!gender.equals(user.getGender())) {
+                        changes.append("Gender: [").append(user.getGender()).append("] -> [").append(gender).append("], ");
+                    }
+                    if (!email.equals(user.getEmail())) {
+                        changes.append("Email: [").append(user.getEmail()).append("] -> [").append(email).append("], ");
+                    }
+                    if (!phoneNumber.equals(user.getPhoneNumber())) {
+                        changes.append("PhoneNumber: [").append(user.getPhoneNumber()).append("] -> [").append(phoneNumber).append("], ");
+                    }
+                    if (!address.equals(user.getAddress())) {
+                        changes.append("Address: [").append(user.getAddress()).append("] -> [").append(address).append("], ");
+                    }
+                    if (!status.equals(user.getStatus())) {
+                        changes.append("Status: [").append(user.getStatus()).append("] -> [").append(status).append("], ");
+                    }
+
+                    // Update user details.
                     user.setFirstName(firstName);
                     user.setLastName(lastName);
                     user.setGender(gender);
@@ -160,6 +187,15 @@ public class CustomerManagementController extends HttpServlet {
                     boolean updated = userDAO.updateUserProfile(user);
                     if (updated) {
                         session.setAttribute("notification", "Cập nhật khách hàng thành công!");
+                        if (changes.length() > 0) {
+                            // Remove the trailing comma and space.
+                            changes.setLength(changes.length() - 2);
+                            UserLogDAO userLogDAO = new UserLogDAO();
+                            UserLog userLog = new UserLog();
+                            userLog.setUserId(userID);
+                            userLog.setLog("Marketing đã sửa: " + changes.toString());
+                            userLogDAO.addLogs(userLog);
+                        }
                     } else {
                         session.setAttribute("notificationErr", "Cập nhật khách hàng thất bại.");
                     }
