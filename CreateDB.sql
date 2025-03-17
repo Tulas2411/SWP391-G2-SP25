@@ -310,3 +310,12 @@ VALUES
 ('Giảm giá đặc biệt', 'assets/img/slider4.jpg', 'https://example.com/giam-gia', 'Inactive', NULL, 3),
 ('Công nghệ hiện đại', 'assets/img/slider5.jpg', 'https://example.com/cong-nghe', 'Active', 2, NULL),
 ('Bài viết nổi bật', 'assets/img/slider3.jpg', 'https://example.com/blog-hot', 'Active', 1, NULL);
+
+-- Taọ bảng lịch sử chỉnh sửa thông tin
+CREATE TABLE user_logs (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  userID INT,
+  log TEXT,
+  change_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (userID) REFERENCES users(userID)
+);

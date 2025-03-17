@@ -33,6 +33,24 @@
                     <input type="hidden" name="settingID" value="${setting.settingID}" />
 
                     <div class="mb-3">
+                        <label class="form-label">ID Type</label>
+                        <input type="text" name="idType" class="form-control" value="${setting.idType}"
+                               required minlength="2" maxlength="50" 
+                               title="ID Type phải từ 2 đến 50 ký tự">
+                        <div class="invalid-feedback">
+                            Vui lòng nhập ID Type (2-50 ký tự).
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Priority</label>
+                        <input type="number" name="priority" class="form-control" value="${setting.priority}"
+                               required min="1" max="10" 
+                               title="Priority phải từ 1 đến 10">
+                        <div class="invalid-feedback">
+                            Vui lòng nhập loại cài đặt (2-50 ký tự).
+                        </div>
+                    </div>
+                    <div class="mb-3">
                         <label class="form-label">Loại cài đặt</label>
                         <input type="text" name="settingType" class="form-control" value="${setting.settingType}"
                                required minlength="2" maxlength="50" 
@@ -70,8 +88,10 @@
             <c:otherwise>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item"><strong>ID:</strong> ${setting.settingID}</li>
-                    <li class="list-group-item"><strong>Loại cài đặt:</strong> ${setting.settingType}</li>
-                    <li class="list-group-item"><strong>Giá trị:</strong> ${setting.settingValue}</li>
+                    <li class="list-group-item"><strong>ID Type:</strong> ${setting.idType}</li>
+                    <li class="list-group-item"><strong>Type:</strong> ${setting.settingType}</li>
+                    <li class="list-group-item"><strong>Priority:</strong> ${setting.priority}</li>
+                    <li class="list-group-item"><strong>Name:</strong> ${setting.settingValue}</li>
                     <li class="list-group-item">
                         <strong>Trạng thái:</strong>
                         <c:choose>
