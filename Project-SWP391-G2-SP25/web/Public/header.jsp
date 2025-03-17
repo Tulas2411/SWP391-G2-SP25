@@ -32,6 +32,9 @@
             <div class="header__introduce-account">
                 <ul class="header__introduce-account-list">
                     <li class="header__introduce-account-items">
+                        <a href="/Project-SWP391-G2-SP25/TestNoLogin" class="header__introduce-account-link"> Test</a>
+                    </li>
+                    <li class="header__introduce-account-items">
                         <a href="UserProfile.jsp" class="header__introduce-account-link"> Tài khoản</a>
                     </li>
                     <li class="header__introduce-account-items header__introduce-account-items--vertical">
