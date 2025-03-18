@@ -11,6 +11,8 @@ package Model;
 public class Settings {
     private int settingID;
     private String settingType;
+    private String idType;
+    private int priority;
     private String settingValue;
     private String status;
 
@@ -54,6 +56,22 @@ public class Settings {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getIdType() {
+        return idType;
+    }
+
+    public void setIdType(String idType) {
+        this.idType = idType;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
     }
     
 }

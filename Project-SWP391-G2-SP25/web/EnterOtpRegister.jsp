@@ -42,7 +42,7 @@ if(request.getAttribute("message")!=null)
 
                                 <div class="panel-body">
 
-                                    <form id="register-form" action="ValidateOtp" role="form" autocomplete="off"
+                                    <form id="register-form" action="ValidateOtpRegister" role="form" autocomplete="off"
                                           class="form" method="post">
 
                                         <div class="form-group">
@@ -56,7 +56,7 @@ if(request.getAttribute("message")!=null)
                                         <div class="form-group">
                                             <input name="recover-submit"
                                                    class="btn btn-lg btn-primary btn-block"
-                                                   value="Đặt lại mật khẩu" type="submit">
+                                                   value="Xác Nhận" type="submit">
                                         </div>
                                 </div>
                                 <div id="countdown" style="font-weight:bold; color: red; margin-top: 20px;"></div>
@@ -71,10 +71,10 @@ if(request.getAttribute("message")!=null)
                                         var countdownTimer = setInterval(function () {
                                             if (timeLeft <= 0) {
                                                 clearInterval(countdownTimer);
-                                                countdownElement.innerHTML = "OTP đã hết hạn. Đang chuyển hướng đến Đăng nhập...";
+                                                countdownElement.innerHTML = "OTP đã hết hạn. Đang chuyển hướng đến Đăng Kí...";
                                                 setTimeout(function () {
                                                     // Chuyển hướng sau khi OTP hết hạn
-                                                    window.location.href = "Login.jsp";
+                                                    window.location.href = "Register.jsp";
                                                 }, 2000); // Chờ 2 giây trước khi chuyển hướng
                                             } else {
                                                 countdownElement.innerHTML = "Thời gian còn: " + timeLeft + " giây";

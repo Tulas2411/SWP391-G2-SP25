@@ -1,22 +1,31 @@
 package Controller;
 
 import DAO.CartsDAO;
-import static DAO.DBContext.makeConnection;
 import DAO.UsersDAO;
-import Model.Carts;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Properties;
+import java.util.Random;
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import org.mindrot.jbcrypt.BCrypt;
 
 @WebServlet("/RegisterServlet")
 public class RegisterServlet extends HttpServlet {
@@ -79,7 +88,7 @@ public class RegisterServlet extends HttpServlet {
                 dispatcher.forward(request, response);
                 return;
             }
-            
+
             // Kiểm tra xem số điện thoại đã tồn tại chưa
             if (uDAO.isPhoneNumberExists(phoneNumber)) {
                 request.setAttribute("status", "phone_exists");
@@ -88,51 +97,105 @@ public class RegisterServlet extends HttpServlet {
                 return;
             }
 
-            // Tạo kết nối tới cơ sở dữ liệu
-            Connection con = null;
+            // Kiểm tra ngày sinh hợp lệ
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            sdf.setLenient(false); // Không cho phép chuyển đổi tự động các ngày không hợp lệ
+
             try {
-                con = makeConnection();
-                if (con != null) {
-                    // Chuẩn bị truy vấn SQL để thêm người dùng mới
-                    String query = "INSERT INTO Users(FirstName, LastName, UserName, Gender, DateOfBirth, Email, Password, Role, PhoneNumber, Address) "
-                            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-                    PreparedStatement pst = con.prepareStatement(query);
-                    pst.setString(1, firstName);
-                    pst.setString(2, lastName);
-                    pst.setString(3, userName);
-                    pst.setString(4, gender);
-                    pst.setString(5, dateOfBirth);
-                    pst.setString(6, email);
-                    pst.setString(7, password);
-                    pst.setString(8, "Customer");
-                    pst.setString(9, phoneNumber);
-                    pst.setString(10, address);
+                Date dateOfBirthStr = sdf.parse(dateOfBirth);
+                Date currentDate = new Date();
 
-                    // Thực thi truy vấn
-                    int rowCount = pst.executeUpdate();
-                    RequestDispatcher dispatcher = request.getRequestDispatcher("registerSuccess.jsp");
-
-                    if (rowCount > 0) {
-                        request.setAttribute("status", "success");
-                        cDAO.addCart(new Carts(uDAO.getUserByUserName(userName).getUserID(), "Normal"));
-                    } else {
-                        request.setAttribute("status", "failed");
-                    }
-
+                // Kiểm tra ngày sinh không được là ngày trong tương lai
+                if (dateOfBirthStr.after(currentDate)) {
+                    request.setAttribute("status", "invalid_date");
+                    request.setAttribute("message", "Ngày sinh không hợp lệ. Vui lòng nhập lại.");
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("Register.jsp");
                     dispatcher.forward(request, response);
+                    return;
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                // Đóng kết nối cơ sở dữ liệu
-                if (con != null) {
-                    try {
-                        con.close();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
+
+                // Kiểm tra người dùng phải đủ ít nhất 13 tuổi
+                Calendar dob = Calendar.getInstance();
+                dob.setTime(dateOfBirthStr);
+                Calendar today = Calendar.getInstance();
+                int age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR);
+
+                if (today.get(Calendar.MONTH) < dob.get(Calendar.MONTH)
+                        || (today.get(Calendar.MONTH) == dob.get(Calendar.MONTH) && today.get(Calendar.DAY_OF_MONTH) < dob.get(Calendar.DAY_OF_MONTH))) {
+                    age--;
                 }
+
+                if (age < 13) {
+                    request.setAttribute("status", "underage");
+                    request.setAttribute("message", "Bạn phải đủ 13 tuổi để đăng ký.");
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("Register.jsp");
+                    dispatcher.forward(request, response);
+                    return;
+                }
+
+            } catch (ParseException e) {
+                // Ngày sinh không hợp lệ
+                request.setAttribute("status", "invalid_date");
+                request.setAttribute("message", "Ngày sinh không hợp lệ. Vui lòng nhập lại.");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("Register.jsp");
+                dispatcher.forward(request, response);
+                return;
             }
+            
+            // Mã hóa mật khẩu
+            String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
+
+            // Tạo mã OTP ngẫu nhiên
+            Random random = new Random();
+            int otp = 100000 + random.nextInt(900000); // OTP 6 chữ số
+
+            // Lưu thông tin người dùng và OTP vào session
+            HttpSession session = request.getSession();
+            session.setAttribute("otp", otp);
+            session.setAttribute("firstName", firstName);
+            session.setAttribute("lastName", lastName);
+            session.setAttribute("userName", userName);
+            session.setAttribute("gender", gender);
+            session.setAttribute("dateOfBirth", dateOfBirth);
+            session.setAttribute("email", email);
+            session.setAttribute("password", hashedPassword);
+            session.setAttribute("phoneNumber", phoneNumber);
+            session.setAttribute("address", address);
+
+            // Gửi mã OTP qua email
+            sendOTPEmail(email, otp);
+
+            // Chuyển hướng đến trang nhập OTP
+            response.sendRedirect("EnterOtpRegister.jsp");
+        }
+    }
+
+    private void sendOTPEmail(String email, int otp) {
+
+        Properties props = new Properties();
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.socketFactory.port", "465");
+        props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.port", "465");
+
+        Session session = Session.getInstance(props, new Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication("luuthequangbkvip@gmail.com", "oouvorqzkguxbmez");
+            }
+        });
+
+        try {
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(email));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email));
+            message.setSubject("Shop 4 Electrical");
+            message.setText("Your OTP is: " + otp);
+
+            Transport.send(message);
+            System.out.println("OTP đã được gửi thành công đến " + email);
+        } catch (MessagingException e) {
+            e.printStackTrace();
         }
     }
 }

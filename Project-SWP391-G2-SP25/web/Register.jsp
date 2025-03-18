@@ -129,7 +129,6 @@
         </script>
 
         <div class="main">
-            <!-- Sign up form -->
             <section class="signup">
                 <div class="container">
                     <div class="signup-content">
@@ -159,6 +158,12 @@
                                 <div class="form-group">
                                     <label for="DateOfBirth"><i class="zmdi zmdi-calendar-alt"></i></label>
                                     <input type="date" name="DateOfBirth" id="DateOfBirth" placeholder="Ngày sinh" required=""/>
+                                    <br>
+                                    <%
+                                    if (request.getAttribute("message") != null) {
+                                    out.print("<p style='color: red;'>" + request.getAttribute("message") + "</p>");
+                                    }
+                                    %>
                                 </div>
                                 <div class="form-group">
                                     <label for="email"><i class="zmdi zmdi-email"></i></label>
@@ -182,13 +187,6 @@
                                 <div class="form-group">
                                     <label for="address"><i class="zmdi zmdi-pin"></i></label>
                                     <input type="text" name="address" id="address" placeholder="Địa chỉ" required=""/>
-                                </div>
-                                <div class="form-group">
-                                    <input type="checkbox" name="agree-term" id="agree-term" class="agree-term" />
-                                    <label for="agree-term" class="label-agree-term">
-                                        <span><span></span></span>Tôi đồng ý với tất cả
-                                        <a href="#" class="term-service">Điều khoản dịch vụ</a>
-                                    </label>
                                 </div>
                                 <div class="form-group form-button">
                                     <input type="submit" name="signup" id="signup" class="form-submit" value="Đăng kí" />

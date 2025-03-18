@@ -55,16 +55,19 @@
                             <thead>
                                 <tr>
                                     <th>STT</th>
-                                    <th>Kiểu</th>
-                                    <th>Giá trị</th>
-                                    <th>Trạng thái</th>
-                                    <th style="width: 300px;">Hành động</th>
+                                    <th>ID_Type</th>
+                                    <th>Type</th>
+                                    <th>Name</th>
+                                    <th>Status</th>
+                                    <th>Priority</th>
+                                    <th style="width: 300px;">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                             <c:forEach var="s" items="${listSettings}" varStatus="loop">
                                 <tr>
                                     <td>${s.settingID}</td>
+                                    <td>${s.idType}</td>
                                     <td>${s.settingType}</td>
                                     <td>${s.settingValue}</td>
                                     <td>
@@ -74,6 +77,7 @@
                                             <c:otherwise>Không hoạt động</c:otherwise>
                                         </c:choose>
                                     </td>
+                                    <td>${s.priority}</td>
                                     <td>
                                         <!-- Xem chi tiết -->
                                         <a href="${contextPath}/admin/setting-detail?id=${s.settingID}" 
@@ -115,6 +119,15 @@
                 <div class="modal-body">
                     <input type="hidden" name="action" value="add">
                     <div class="mb-3">
+                        <label class="form-label">ID Type</label>
+                        <input type="text" name="idType" class="form-control" required 
+                               minlength="2" maxlength="50"
+                               title="Loại cài đặt phải từ 2 đến 50 ký tự">
+                        <div class="invalid-feedback">
+                            Vui lòng nhập ID Type (2-50 ký tự).
+                        </div>
+                    </div>
+                     <div class="mb-3">
                         <label class="form-label">Loại cài đặt</label>
                         <input type="text" name="settingType" class="form-control" required 
                                minlength="2" maxlength="50"
@@ -128,6 +141,13 @@
                         <textarea name="settingValue" class="form-control" rows="3" required></textarea>
                         <div class="invalid-feedback">
                             Vui lòng nhập giá trị cài đặt.
+                        </div>
+                    </div>
+                     <div class="mb-3">
+                        <label class="form-label">priority</label>
+                        <input name="priority" class="form-control" type="number" min="1" max="10" required>
+                        <div class="invalid-feedback">
+                            Vui lòng nhập priority cài đặt.
                         </div>
                     </div>
                     <div class="mb-3">
