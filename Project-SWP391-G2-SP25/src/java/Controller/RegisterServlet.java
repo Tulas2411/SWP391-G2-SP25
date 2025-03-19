@@ -39,6 +39,19 @@ public class RegisterServlet extends HttpServlet {
         super();
     }
 
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String action = request.getParameter("action");
+
+        // Xử lý yêu cầu gửi lại mã OTP
+        if ("resendOTP".equals(action)) {
+            resendOTP(request, response);
+        } else {
+            // Xử lý các yêu cầu GET khác (nếu có)
+            super.doGet(request, response);
+        }
+    }
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
@@ -141,7 +154,7 @@ public class RegisterServlet extends HttpServlet {
                 dispatcher.forward(request, response);
                 return;
             }
-            
+
             // Mã hóa mật khẩu
             String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
 
@@ -196,6 +209,34 @@ public class RegisterServlet extends HttpServlet {
             System.out.println("OTP đã được gửi thành công đến " + email);
         } catch (MessagingException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void resendOTP(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        HttpSession session = request.getSession();
+
+        // Lấy thông tin người dùng từ session
+        String email = (String) session.getAttribute("email");
+
+        if (email != null) {
+            // Tạo mã OTP mới
+            Random random = new Random();
+            int newOTP = 100000 + random.nextInt(900000); // OTP 6 chữ số
+
+            // Cập nhật mã OTP mới vào session
+            session.setAttribute("otp", newOTP);
+
+            // Gửi lại mã OTP mới qua email
+            sendOTPEmail(email, newOTP);
+
+            // Chuyển hướng lại trang nhập OTP với thông báo thành công
+            request.setAttribute("status", "Mã OTP mới đã được gửi lại!");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("EnterOtpRegister.jsp");
+            dispatcher.forward(request, response);
+        } else {
+            // Nếu không có email trong session, chuyển hướng về trang đăng ký
+            response.sendRedirect("Register.jsp");
         }
     }
 }
