@@ -7,9 +7,11 @@ package Controller;
 import DAO.BlogDAO;
 import DAO.ProductsDAO;
 import DAO.SlidersDAO;
+import DAO.UsersDAO;
 import Model.Blog;
 import Model.Products;
 import Model.Sliders;
+import Model.Users;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -17,6 +19,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -63,6 +66,12 @@ public class AddSlider extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+       UsersDAO userDAO = new UsersDAO();
+        HttpSession session = request.getSession();
+        String emailSession = (String) session.getAttribute("email");
+        Users user = userDAO.getUserByEmail(emailSession);
+        if (user != null) {
+            if (user.getRole().equalsIgnoreCase("marketing")) {
         ProductsDAO productdao = new ProductsDAO();
         BlogDAO blogDAO = new BlogDAO(); 
         
@@ -72,6 +81,14 @@ public class AddSlider extends HttpServlet {
         request.setAttribute("blogs", blogs);
         request.setAttribute("productList", productList); 
         request.getRequestDispatcher("addSlider.jsp").forward(request, response);
+            } else {
+                session.setAttribute("notificationErr", "Bạn không có quyền truy cập vào trang này");
+                response.sendRedirect("../Login.jsp");
+            }
+        } else {
+            session.setAttribute("notificationErr", "Bạn cần đăng nhập trước!");
+            response.sendRedirect("../Login.jsp");
+        }
     }
 
     /**
@@ -84,7 +101,14 @@ public class AddSlider extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    String title = request.getParameter("title");
+    UsersDAO userDAO = new UsersDAO();
+        HttpSession session = request.getSession();
+        String emailSession = (String) session.getAttribute("email");
+        Users user = userDAO.getUserByEmail(emailSession);
+        if (user != null) {
+            if (user.getRole().equalsIgnoreCase("marketing")) {
+
+        String title = request.getParameter("title");
     String backlink = request.getParameter("backlink");
     String image = request.getParameter("image");
     String status = request.getParameter("status");
@@ -117,7 +141,15 @@ public class AddSlider extends HttpServlet {
 
     // Chuyển hướng về danh sách sliders
     response.sendRedirect("ListSliders");
-}
+       } else {
+                session.setAttribute("notificationErr", "Bạn không có quyền truy cập vào trang này");
+                response.sendRedirect("../Login.jsp");
+            }
+        } else {
+            session.setAttribute("notificationErr", "Bạn cần đăng nhập trước!");
+            response.sendRedirect("../Login.jsp");
+        }
+    }
 
     /**
      * Returns a short description of the servlet.
