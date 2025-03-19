@@ -309,6 +309,8 @@ public class UsersDAO extends DBContext {
         UsersDAO dao = new UsersDAO();
 
         Users u = new Users();
-        System.out.println(dao.getAllUsers());
+        u = dao.getUserByID(6);
+        u.setRole("Shipper");
+        System.out.println(dao.updateUser(u));
     }
 }

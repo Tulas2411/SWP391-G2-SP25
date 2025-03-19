@@ -65,7 +65,7 @@
                                 <tr>
                                     <td>${status.index + 1}</td>
                                     <td><img src="${contextPath}/${p.imageLink}" width="90" height="60" alt="${p.productName}"/></td>
-                                    <td>${p.productName}</td>
+                                    <td><a href="/Project-SWP391-G2-SP25/ProductDetailController?id=${p.productID}">${p.productName}</a></td>
                                     <td>${p.category.categoryName}</td>
                                     <td>${p.provider}</td>
                                     <td>${p.getPriceFormat()}</td>
