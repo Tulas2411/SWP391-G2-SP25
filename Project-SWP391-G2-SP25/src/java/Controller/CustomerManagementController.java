@@ -183,7 +183,7 @@ public class CustomerManagementController extends HttpServlet {
                     user.setPhoneNumber(phoneNumber);
                     user.setAddress(address);
                     user.setStatus(status);
-
+                       System.out.println(user);
                     boolean updated = userDAO.updateUserProfile(user);
                     if (updated) {
                         session.setAttribute("notification", "Cập nhật khách hàng thành công!");

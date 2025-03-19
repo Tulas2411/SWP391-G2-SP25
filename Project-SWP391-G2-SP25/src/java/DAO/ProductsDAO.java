@@ -23,7 +23,7 @@ public class ProductsDAO extends DBContext {
         Map<Integer, Products> list = new HashMap<>();
         try {
             String sql = "SELECT * "
-                    + "FROM Products";
+                    + "FROM Products where status = 'active'";
             Statement st = connection.createStatement();
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
@@ -52,7 +52,7 @@ public class ProductsDAO extends DBContext {
 
     public Vector<Products> getAllProductsAsVector() {
         Vector<Products> products = new Vector<>();
-        String sql = "SELECT * FROM Products";
+        String sql = "SELECT * FROM Products where status = 'active'";
 
         try (Statement st = connection.createStatement(); ResultSet rs = st.executeQuery(sql)) {
             while (rs.next()) {
@@ -109,7 +109,7 @@ public class ProductsDAO extends DBContext {
 
     public List<Products> getProductsByCategory(String categoryID) {
         List<Products> productList = new ArrayList<>();
-        String sql = "SELECT * FROM Products WHERE CategoryID = ?";
+        String sql = "SELECT * FROM Products WHERE CategoryID = ? and status = 'active'";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, categoryID);
@@ -201,7 +201,7 @@ public class ProductsDAO extends DBContext {
 
     public List<Products> getProductsByPaging(int index, int pageSize, String name, List<String> categoryIds, String orderBy) {
         List<Products> productList = new LinkedList<>();
-        String sql = "SELECT * FROM Products WHERE ProductName like ? ";
+        String sql = "SELECT * FROM Products WHERE ProductName like ? and status = 'active' ";
         if (categoryIds.size() != 0) {
             sql += " AND ";
             String conditionCategory = "(";

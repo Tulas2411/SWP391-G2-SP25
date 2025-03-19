@@ -59,7 +59,12 @@ public class LoginServlet extends HttpServlet {
 
                         Users u = userDAO.getUserByEmail(email);
 
-                        // Kiểm tra vai trò và chuyển hướng người dùng
+                        if (u.getStatus().equalsIgnoreCase("Deactive")){
+                            request.setAttribute("loginError", "Tài khoản của bạn đã bị vô hiệu hóa");
+                            dispatcher = request.getRequestDispatcher("Login.jsp");
+                            dispatcher.forward(request, response);
+                        }
+
                         if (u.getRole().equalsIgnoreCase("Admin")) {
                             response.sendRedirect("admin/dashboard");
                         } else if (u.getRole().equalsIgnoreCase("marketing")) {

@@ -297,13 +297,16 @@ VALUES
 ('Giảm giá đặc biệt', 'assets/img/slider4.jpg', 'https://example.com/giam-gia', 'Inactive', NULL, 3),
 ('Công nghệ hiện đại', 'assets/img/slider5.jpg', 'https://example.com/cong-nghe', 'Active', 2, NULL);
 
+-- Taọ bảng lịch sử chỉnh sửa thông tin
+CREATE TABLE user_logs (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  userID INT,
+  log TEXT,
+  change_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (userID) REFERENCES users(userID)
+);
+
+alter table settings add column ID_Type varchar(10) default null;
+alter table settings add column priority int default 0
 
 select * from users
-ALTER TABLE users add column status varchar(12) default 'Active';
-ALTER TABLE Products ADD COLUMN OldPrice DECIMAL(10,2) NULL;
-UPDATE Products
-SET OldPrice = Price * 1.10
-WHERE IsPromoted = 1;
-
-update users set role = 'admin
-' where userid = 6
