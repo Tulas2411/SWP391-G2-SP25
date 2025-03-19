@@ -5,7 +5,9 @@
 package Controller;
 
 import DAO.MarketingPostsDAO;
+import DAO.UsersDAO;
 import Model.MarketingPosts;
+import Model.Users;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -13,6 +15,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 
 /**
@@ -75,6 +78,13 @@ public class AddPost extends HttpServlet {
     @Override
 protected void doPost(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
+     UsersDAO userDAO = new UsersDAO();
+        HttpSession session = request.getSession();
+        String emailSession = (String) session.getAttribute("email");
+        Users user = userDAO.getUserByEmail(emailSession);
+        if (user != null) {
+            if (user.getRole().equalsIgnoreCase("marketing")) {
+
     try {
         String title = request.getParameter("title");
         String content = request.getParameter("content");
@@ -104,7 +114,15 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
        
         request.getRequestDispatcher("addDFDAPost.jsp").forward(request, response);
     }
-}
+       } else {
+                session.setAttribute("notificationErr", "Bạn không có quyền truy cập vào trang này");
+                response.sendRedirect("../Login.jsp");
+            }
+        } else {
+            session.setAttribute("notificationErr", "Bạn cần đăng nhập trước!");
+            response.sendRedirect("../Login.jsp");
+        }
+    }
 
 
     /**
