@@ -30,11 +30,12 @@
                 <label for="status" class="form-label">Trạng thái:</label>
                 <select id="status" name="status" class="form-select">
                     <option value="">Tất cả trạng thái</option>
-                    <option value="pending" ${param.status == 'pending' ? 'selected' : ''}>Chờ xử lý</option>
+                    <option value="Pending" ${param.status == 'Pending' ? 'selected' : ''}>Chờ xử lý</option>
                     <option value="Cancelled" ${param.status == 'Cancelled' ? 'selected' : ''}>Đã hủy</option>
                     <option value="Shipped" ${param.status == 'Shipped' ? 'selected' : ''}>Đã giao hàng</option>
                     <option value="Delivered" ${param.status == 'Delivered' ? 'selected' : ''}>Đã giao thành công</option>
                     <option value="Processing" ${param.status == 'Processing' ? 'selected' : ''}>Đang xử lý</option>
+                    <option value="Completed" ${param.status == 'Completed' ? 'selected' : ''}>Thành công</option>
                 </select>
             </div>
             <div class="col-12 text-center">
@@ -68,7 +69,16 @@
                             <td>${order.customerFirstName} ${order.customerLastName}</td>
                             <td>${order.deliveryAddress}</td>
                             <td>${order.totalAmount}</td>
-                            <td>${order.status}</td>
+                            <td>
+                                <c:choose>
+                                    <c:when test="${order.status eq 'Pending'}">Chờ xử lý</c:when>
+                                    <c:when test="${order.status eq 'Cancelled'}">Đã hủy</c:when>
+                                    <c:when test="${order.status eq 'Shipped'}">Đã giao hàng</c:when>
+                                    <c:when test="${order.status eq 'Delivered'}">Đã giao thành công</c:when>
+                                    <c:when test="${order.status eq 'Processing'}">Đang xử lý</c:when>
+                                    <c:when test="${order.status eq 'Completed'}">Thành công</c:when>
+                                </c:choose>
+                            </td>
                             <td>
                                 <button class="btn btn-info btn-sm" onclick="window.location.href='OrderDetail?id=${order.orderID}'">
                                     Xem chi tiết

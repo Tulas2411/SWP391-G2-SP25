@@ -73,6 +73,10 @@ public class ProductDetailController extends HttpServlet {
         request.setAttribute("product", p);
         request.setAttribute("listr", listr);
         
+        Users user = (Users) session.getAttribute("user");
+        OrdersDAO ordersDAO = new OrdersDAO();
+        boolean checkUserPurchasedProduct = user == null ? false : ordersDAO.hasUserPurchasedProduct(user.getUserID(), id);
+        request.setAttribute("checkUserPurchasedProduct", checkUserPurchasedProduct);
 //        if(!role.equals("Customer")) {
             request.getRequestDispatcher("marketing/ProductDetail.jsp").forward(request, response);
 //        } else {

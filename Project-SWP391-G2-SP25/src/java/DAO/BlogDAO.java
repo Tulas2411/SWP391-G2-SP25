@@ -28,12 +28,49 @@ public class BlogDAO extends DBContext {
         }
         return blogList;
     }
+
+    public List<Blog> getAllBlogsAndPagination(int page, int limit) {
+        List<Blog> blogs = new ArrayList<>();
+        String sql = "SELECT * FROM Blog ORDER BY CreateDate DESC LIMIT ? OFFSET ?"; // Đúng thứ tự
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, limit);
+            ps.setInt(2, (page - 1) * limit);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Blog blog = extractBlogFromResultSet(rs);
+                    blogs.add(blog);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching blogs: " + e.getMessage());
+        }
+        return blogs;
+    }
+
+    public List<Blog> getLatestBlogs() {
+        List<Blog> blogs = new ArrayList<>();
+        String sql = "SELECT * FROM Blog ORDER BY CreateDate DESC LIMIT 4";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Blog blog = extractBlogFromResultSet(rs);
+                blogs.add(blog);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching latest blogs: " + e.getMessage());
+        }
+
+        return blogs;
+    }
+
     public List<Blog> getAllBlogs1() {
         List<Blog> blogs = new ArrayList<>();
-        String query = "SELECT * FROM Blog ORDER BY CreateDate DESC"; 
+        String query = "SELECT * FROM Blog ORDER BY CreateDate DESC";
 
-        try (PreparedStatement st = connection.prepareStatement(query);
-             ResultSet rs = st.executeQuery()) {
+        try (PreparedStatement st = connection.prepareStatement(query); ResultSet rs = st.executeQuery()) {
 
             while (rs.next()) {
                 Blog blog = new Blog();

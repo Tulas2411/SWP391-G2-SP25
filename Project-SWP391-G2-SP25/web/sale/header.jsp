@@ -47,13 +47,18 @@
                 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                     <div class="sb-sidenav-menu">
                         <div class="nav">
-                            <div class="sb-sidenav-menu-heading">Core</div>
-                         
-                                 <a class="nav-link" href="${contextPath}/sale/OrdersList">
+                            <a class="nav-link" href="${contextPath}/sale/OrdersList">
                                 <div class="sb-nav-link-icon"><i class="fa fa-user"></i></div>
                                 Danh Sách Đơn Mua
                             </a>  
-                        
+
+                        </div>
+                        <div class="nav">
+                            <a class="nav-link" href="${contextPath}/sale/statistics">
+                                <div class="sb-nav-link-icon"><i class="fa fa-chart-bar"></i></div>
+                                Thống kê
+                            </a>  
+
                         </div>
                     </div>
                 </nav>

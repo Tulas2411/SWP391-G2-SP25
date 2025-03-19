@@ -10,14 +10,14 @@
             <c:if test="${not empty sessionScope.notification}">
                 <div class="alert alert-success alert-dismissible fade show" role="alert" style="text-align: center">
                     ${sessionScope.notification}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng"></button>
                 </div>
                 <% session.removeAttribute("notification"); %>
             </c:if>
             <c:if test="${not empty sessionScope.notificationErr}">
                 <div class="alert alert-danger alert-dismissible fade show" role="alert" style="text-align: center">
                     ${sessionScope.notificationErr}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng"></button>
                 </div>
                 <% session.removeAttribute("notificationErr");%>
             </c:if>
@@ -40,10 +40,6 @@
                                                 <option value="${c.categoryID}" ${param.category eq c.categoryID ? 'selected' : ''}>${c.categoryName}</option>
                                             </c:forEach>
                                         </select>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label for="search" class="form-label">Tìm kiếm</label>
-                                        <input type="text" class="form-control" id="search" name="search" value="${param.search}" placeholder="Nhập tiêu đề hoặc mô tả">
                                     </div>
                                 </form>
                             </div>
@@ -126,6 +122,7 @@
                         <div class="mb-3">
                             <label for="productName" class="form-label">Tên sản phẩm</label>
                             <input type="text" class="form-control" id="productName" name="productName" required>
+                            <div class="invalid-feedback">Vui lòng nhập tên sản phẩm.</div>
                         </div>
                         <div class="mb-3">
                             <label for="categoryID" class="form-label">Loại sản phẩm</label>
@@ -135,34 +132,42 @@
                                     <option value="${c.categoryID}">${c.categoryName}</option>
                                 </c:forEach>
                             </select>
+                            <div class="invalid-feedback">Vui lòng chọn loại sản phẩm.</div>
                         </div>
                         <div class="mb-3">
                             <label for="provider" class="form-label">Nhà cung cấp</label>
                             <input type="text" class="form-control" id="provider" name="provider" required>
+                            <div class="invalid-feedback">Vui lòng nhập nhà cung cấp.</div>
                         </div>
                         <div class="mb-3">
-                            <label for="warrantyPeriod" class="form-label">Thời gian bảo hành (Năm)</label> <!-- Sửa ID -->
+                            <label for="warrantyPeriod" class="form-label">Thời gian bảo hành (Năm)</label>
                             <input type="number" min="1" class="form-control" id="warrantyPeriod" name="warrantyPeriod" required>
+                            <div class="invalid-feedback">Vui lòng nhập thời gian bảo hành (ít nhất 1 năm).</div>
                         </div>
                         <div class="mb-3">
                             <label for="price" class="form-label">Giá</label>
                             <input type="number" min="1" class="form-control" id="price" name="price" required>
+                            <div class="invalid-feedback">Vui lòng nhập giá (ít nhất 1).</div>
                         </div>
                         <div class="mb-3">
                             <label for="oldprice" class="form-label">Giá cũ</label>
                             <input type="number" min="0" class="form-control" id="oldprice" name="oldprice" value="0" required>
+                            <div class="invalid-feedback">Vui lòng nhập giá cũ (ít nhất 0).</div>
                         </div>
                         <div class="mb-3">
                             <label for="amount" class="form-label">Số lượng</label>
                             <input type="number" min="1" class="form-control" id="amount" name="amount" required>
+                            <div class="invalid-feedback">Vui lòng nhập số lượng (ít nhất 1).</div>
                         </div>
                         <div class="mb-3">
                             <label for="imageFile" class="form-label">Ảnh sản phẩm</label>
                             <input type="file" class="form-control" id="imageFile" name="imageFile" required>
+                            <div class="invalid-feedback">Vui lòng chọn ảnh sản phẩm.</div>
                         </div>
                         <div class="mb-3">
                             <label for="description" class="form-label">Mô tả</label>
-                            <textarea class="form-control" id="description" name="description" required></textarea> <!-- Sửa ID -->
+                            <textarea class="form-control" id="description" name="description" required></textarea>
+                            <div class="invalid-feedback">Vui lòng nhập mô tả.</div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -182,12 +187,13 @@
                     <input type="hidden" name="productID" id="editProductID">
                     <div class="modal-header">
                         <h5 class="modal-title">Chỉnh sửa sản phẩm</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
                             <label for="editProductName" class="form-label">Tên sản phẩm</label>
                             <input type="text" class="form-control" id="editProductName" name="productName" required>
+                            <div class="invalid-feedback">Vui lòng nhập tên sản phẩm.</div>
                         </div>
                         <div class="mb-3">
                             <label for="editCategoryID" class="form-label">Loại sản phẩm</label>
@@ -196,30 +202,36 @@
                                     <option value="${c.categoryID}">${c.categoryName}</option>
                                 </c:forEach>
                             </select>
+                            <div class="invalid-feedback">Vui lòng chọn loại sản phẩm.</div>
                         </div>
                         <div class="mb-3">
                             <label for="editProvider" class="form-label">Nhà cung cấp</label>
                             <input type="text" class="form-control" id="editProvider" name="provider" required>
+                            <div class="invalid-feedback">Vui lòng nhập nhà cung cấp.</div>
                         </div>
                         <div class="mb-3">
                             <label for="editWarrantyPeriod" class="form-label">Thời gian bảo hành (Năm)</label>
                             <input type="number" class="form-control" id="editWarrantyPeriod" name="warrantyPeriod" required>
+                            <div class="invalid-feedback">Vui lòng nhập thời gian bảo hành.</div>
                         </div>
                         <div class="mb-3">
                             <label for="editPrice" class="form-label">Giá</label>
                             <input type="number" class="form-control" id="editPrice" name="price" required>
+                            <div class="invalid-feedback">Vui lòng nhập giá.</div>
                         </div>
                         <div class="mb-3">
                             <label for="editOldPrice" class="form-label">Giá cũ</label>
                             <input type="number" class="form-control" id="editOldPrice" name="oldprice" required>
+                            <div class="invalid-feedback">Vui lòng nhập giá cũ.</div>
                         </div>
                         <div class="mb-3">
                             <label for="editAmount" class="form-label">Số lượng</label>
                             <input type="number" class="form-control" id="editAmount" name="amount" required>
+                            <div class="invalid-feedback">Vui lòng nhập số lượng.</div>
                         </div>
                         <div class="mb-3 text-center">
                             <label class="form-label">Ảnh hiện tại</label>
-                            <img id="editCurrentImage" src="" class="img-fluid rounded" width="150" alt="Current Image">
+                            <img id="editCurrentImage" src="" class="img-fluid rounded" width="150" alt="Ảnh hiện tại">
                         </div>
                         <div class="mb-3">
                             <label for="editImageFile" class="form-label">Tải ảnh mới</label>
@@ -228,6 +240,7 @@
                         <div class="mb-3">
                             <label for="editDescription" class="form-label">Mô tả</label>
                             <textarea class="form-control" id="editDescription" name="description"></textarea>
+                            <div class="invalid-feedback">Vui lòng nhập mô tả.</div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -239,6 +252,7 @@
         </div>
     </div>
 
+    <!-- Modal Xác Nhận Thay Đổi Trạng Thái -->
     <div class="modal fade" id="confirmToggleModal" tabindex="-1" aria-labelledby="confirmToggleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -262,29 +276,6 @@
         </div>
     </div>
 
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var editRoleModal = document.getElementById('editRoleModal');
-            editRoleModal.addEventListener('show.bs.modal', function (event) {
-                // Get the button that triggered the modal
-                var button = event.relatedTarget;
-                // Extract the data attributes
-                var userId = button.getAttribute('data-userid');
-                var userName = button.getAttribute('data-username');
-                var currentRole = button.getAttribute('data-currentrole');
-
-                // Update the modal's content.
-                var modalTitle = editRoleModal.querySelector('.modal-title');
-                var hiddenInput = editRoleModal.querySelector('#editUserId');
-                var roleSelect = editRoleModal.querySelector('#roleSelect');
-
-                modalTitle.textContent = 'Edit Role for User  ' + userName;
-                hiddenInput.value = userId;
-                roleSelect.value = currentRole; // pre-select the current role
-            });
-        });
-    </script>
     <script>
         // Bootstrap 5 custom form validation
         (function () {
@@ -327,6 +318,7 @@
                 document.getElementById('editCurrentImage').src = currentImage;
             });
         });
+
         document.addEventListener('DOMContentLoaded', function () {
             var confirmToggleModal = document.getElementById('confirmToggleModal');
 
@@ -348,8 +340,6 @@
                         (newStatus === 'Active' ? 'Hoạt động' : 'Không hoạt động') + "'?";
             });
         });
-
-
     </script>
 
     <jsp:include page="footer.jsp"></jsp:include>

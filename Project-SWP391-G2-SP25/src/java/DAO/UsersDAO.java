@@ -36,7 +36,6 @@ public class UsersDAO extends DBContext {
         }
         return userList;
     }
-    
 
     public Users getUserByID(int id) {
         String sql = "SELECT * FROM Users WHERE UserID = ?";
@@ -52,7 +51,7 @@ public class UsersDAO extends DBContext {
         }
         return null;
     }
-    
+
     public Users getUserByEmail(String email) {
         String sql = "SELECT * FROM Users WHERE Email = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -91,6 +90,7 @@ public class UsersDAO extends DBContext {
             return false;
         }
     }
+
     public boolean isPhoneNumberExists(String phoneNumber) {
         String query = "SELECT * FROM Users WHERE PhoneNumber = ?";
         try (java.sql.Connection con = makeConnection(); PreparedStatement pst = con.prepareStatement(query)) {
@@ -159,7 +159,7 @@ public class UsersDAO extends DBContext {
 
     // Cập nhật thông tin người dùng chỉ cho phép sửa username, firstname, lastname, gender, DateOfBirth, PhoneNumber, Address
     public boolean updateUserProfile(Users user) {
-        String sql = "UPDATE Users SET UserName = ?, FirstName = ?, LastName = ?, Gender = ?, DateOfBirth = ?, PhoneNumber = ?, Address = ? WHERE UserID = ?";
+        String sql = "UPDATE Users SET UserName = ?, FirstName = ?, LastName = ?, Gender = ?, DateOfBirth = ?, PhoneNumber = ?, Address = ?, status = ? WHERE UserID = ?";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, user.getUserName());
@@ -169,7 +169,8 @@ public class UsersDAO extends DBContext {
             ps.setString(5, user.getDateOfBirth());
             ps.setString(6, user.getPhoneNumber());
             ps.setString(7, user.getAddress());
-            ps.setInt(8, user.getUserID());
+            ps.setString(8, user.getStatus());
+            ps.setInt(9, user.getUserID());
             ps.executeUpdate();
             return true;
         } catch (SQLException e) {

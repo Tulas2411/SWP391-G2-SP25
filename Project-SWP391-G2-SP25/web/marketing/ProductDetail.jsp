@@ -1,7 +1,7 @@
-    <%-- 
-    Document   : HomePage
-    Created on : Jan 18, 2025, 12:47:06 AM
-    Author     : Tung Duong
+<%-- 
+Document   : HomePage
+Created on : Jan 18, 2025, 12:47:06 AM
+Author     : Tung Duong
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -122,15 +122,15 @@
                     <div class="col-md-5">
                         <div class="product-details">
                             <div class="switch-container">
-                             <input type="hidden" id="product-id" value="<%= p.getProductID() %>">
-                             <input type="hidden" id="product-img" value="<%= p.getImageLink() %>">
-                             <input type="hidden" id="product-pro" value="<%= p.getIsPromoted() %>">
-                            <h2 id="product-name"><%= p.getProductName() %></h2>
-                            <label class="switch">
-                                <input type="checkbox" id="edit-toggle">
-                                <span class="slider"></span>
-                            </label>
-                            <span class="switch-label">Chế độ chỉnh sửa</span>
+                                <input type="hidden" id="product-id" value="<%= p.getProductID() %>">
+                                <input type="hidden" id="product-img" value="<%= p.getImageLink() %>">
+                                <input type="hidden" id="product-pro" value="<%= p.getIsPromoted() %>">
+                                <h2 id="product-name"><%= p.getProductName() %></h2>
+                                <label class="switch">
+                                    <input type="checkbox" id="edit-toggle">
+                                    <span class="slider"></span>
+                                </label>
+                                <span class="switch-label">Chế độ chỉnh sửa</span>
                             </div>
                             <%
                                 double rate = 0;
@@ -175,7 +175,7 @@
 
                                 <span class="product-available">Còn Hàng</span>
                             </div>
-                                <p id="Description"><%= p.getDescription() %></p>
+                            <p id="Description"><%= p.getDescription() %></p>
 
                             <div class="add-to-cart">
                                 <div class="qty-label">
@@ -232,7 +232,7 @@
                             <ul class="tab-nav">
                                 <li class="active"><a data-toggle="tab" href="#tab1">Description</a></li>
                                 <li><a data-toggle="tab" href="#tab2">Details</a></li>
-                                <li><a data-toggle="tab" href="#tab3">Reviews (<%=listr.size()%>)</a></li>
+                                <li><a data-toggle="tab" href="#tab3">Feedbacks (<%=listr.size()%>)</a></li>
                             </ul>
                             <!-- /product tab nav -->
 
@@ -260,12 +260,12 @@
 
                                 <!-- tab3  -->
                                 <div id="tab3" class="tab-pane fade in">
-                                    
+
                                     <div class="row">
                                         <!-- Rating -->
                                         <%
                                         if (listr == null || listr.size() == 0) {
-                                    %>
+                                        %>
                                         <div class="col-md-9">
                                             <p>Sản phậm hiện chưa có đánh giá. Hãy là người đầu tiên để lại đánh giá của sản phẩm này</p>
                                         </div>
@@ -448,26 +448,30 @@
                                         <!-- /Reviews -->
                                         <%}%>
                                         <!-- Review Form -->
-                                        <div class="col-md-3">
-                                            <div id="review-form">
-                                                <form class="review-form">
-                                                    <input class="input" type="text" placeholder="Your Name">
-                                                    <input class="input" type="email" placeholder="Your Email">
-                                                    <textarea class="input" placeholder="Your Review"></textarea>
-                                                    <div class="input-rating">
-                                                        <span>Your Rating: </span>
-                                                        <div class="stars">
-                                                            <input id="star5" name="rating" value="5" type="radio"><label for="star5"></label>
-                                                            <input id="star4" name="rating" value="4" type="radio"><label for="star4"></label>
-                                                            <input id="star3" name="rating" value="3" type="radio"><label for="star3"></label>
-                                                            <input id="star2" name="rating" value="2" type="radio"><label for="star2"></label>
-                                                            <input id="star1" name="rating" value="1" type="radio"><label for="star1"></label>
+                                        <c:if test="${checkUserPurchasedProduct == true}">
+                                            <div class="col-md-3">
+
+                                                <div id="review-form">
+                                                    <form class="review-form" method="POST" action="create-review">
+                                                        <input name="productId" hidden="" value="<%= p.getProductID() %>"/>
+                                                        <textarea name="comment" class="input" placeholder="Your Review" required=""></textarea>
+                                                        <div class="input-rating">
+                                                            <span>Your Rating: </span>
+                                                            <div class="stars">
+                                                                <input id="star5" name="rating" value="5" type="radio"><label for="star5"></label>
+                                                                <input id="star4" name="rating" value="4" type="radio"><label for="star4"></label>
+                                                                <input id="star3" name="rating" value="3" type="radio"><label for="star3"></label>
+                                                                <input id="star2" name="rating" value="2" type="radio"><label for="star2"></label>
+                                                                <input id="star1" name="rating" value="1" type="radio"><label for="star1"></label>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <button class="primary-btn">Submit</button>
-                                                </form>
+                                                        <button class="primary-btn">Submit</button>
+                                                    </form>
+                                                </div>
                                             </div>
-                                        </div>
+
+                                        </c:if>
+
                                         <!-- /Review Form -->
                                     </div>                                               
                                 </div>
@@ -632,268 +636,268 @@
         <script src="TulasCSS/js/main.js"></script>
 
     </body>
-    
+
     <script>
-       document.getElementById('add-to-cart-btn').addEventListener('click', function () {
-    // Lấy productId và số lượng
-    const productId = document.getElementById('product-id').value;
-    const quantity = document.getElementById('quantity-input').value;
+        document.getElementById('add-to-cart-btn').addEventListener('click', function () {
+            // Lấy productId và số lượng
+            const productId = document.getElementById('product-id').value;
+            const quantity = document.getElementById('quantity-input').value;
 
-    // Kiểm tra số lượng hợp lệ
-    if (quantity < 1) {
-        alert('Số lượng phải lớn hơn 0');
-        return;
-    }
-
-    // Gửi dữ liệu lên server bằng AJAX
-    $.ajax({
-        url: '<%=request.getContextPath()%>/add-to-cart',
-        method: 'POST',
-        data: {
-            productId: productId,
-            quantity: quantity
-        },
-        success: function (data) {
-            if (data.success) {
-                alert('Đã thêm sản phẩm vào giỏ hàng!');
-            } else {
-                alert('Lỗi: ' + data.error);
+            // Kiểm tra số lượng hợp lệ
+            if (quantity < 1) {
+                alert('Số lượng phải lớn hơn 0');
+                return;
             }
-        },
-        error: function (xhr, status, error) {
-            console.error('AJAX Error:', error);
-            alert('Có lỗi xảy ra khi thêm vào giỏ hàng');
-        }
-    });
-}); 
+
+            // Gửi dữ liệu lên server bằng AJAX
+            $.ajax({
+                url: '<%=request.getContextPath()%>/add-to-cart',
+                method: 'POST',
+                data: {
+                    productId: productId,
+                    quantity: quantity
+                },
+                success: function (data) {
+                    if (data.success) {
+                        alert('Đã thêm sản phẩm vào giỏ hàng!');
+                    } else {
+                        alert('Lỗi: ' + data.error);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('AJAX Error:', error);
+                    alert('Có lỗi xảy ra khi thêm vào giỏ hàng');
+                }
+            });
+        });
     </script>
-    
+
     <script>
-    document.getElementById('save-button').addEventListener('click', function() {
-    var newProductId = document.getElementById('product-id').value;
-    var newProductImg = document.getElementById('product-img').value;
-    var newProductPro = document.getElementById('product-pro').checked;
-    var newProductName = document.getElementById('product-name-input').value;
-    var newProductPrice = document.getElementById('product-new-price-input').value;
-    var newProductOldPrice = document.getElementById('product-old-price-input').value;
-    var newProductDescription = document.getElementById('product-description-input').value;
-    var newProductCategory = document.getElementById('product-category-input').value;
-    var newProductAmount = document.getElementById('product-amount-input').value;
-    var newProductWarranty = document.getElementById('product-warranty-input').value;
-    var newProductProvider = document.getElementById('product-provider-input').value;
+        document.getElementById('save-button').addEventListener('click', function () {
+            var newProductId = document.getElementById('product-id').value;
+            var newProductImg = document.getElementById('product-img').value;
+            var newProductPro = document.getElementById('product-pro').checked;
+            var newProductName = document.getElementById('product-name-input').value;
+            var newProductPrice = document.getElementById('product-new-price-input').value;
+            var newProductOldPrice = document.getElementById('product-old-price-input').value;
+            var newProductDescription = document.getElementById('product-description-input').value;
+            var newProductCategory = document.getElementById('product-category-input').value;
+            var newProductAmount = document.getElementById('product-amount-input').value;
+            var newProductWarranty = document.getElementById('product-warranty-input').value;
+            var newProductProvider = document.getElementById('product-provider-input').value;
 
-    // Tạo đối tượng chứa tất cả các giá trị cần cập nhật
-    var productData = {
-        productId: newProductId,
-        newProductImg: newProductImg,
-        newProductPro: newProductPro,
-        productName: newProductName,
-        productPrice: newProductPrice,
-        productOldPrice: newProductOldPrice,
-        productDescription: newProductDescription,
-        productCategory: newProductCategory,
-        productAmount: newProductAmount,
-        productWarranty: newProductWarranty,
-        productProvider: newProductProvider
-    };
+            // Tạo đối tượng chứa tất cả các giá trị cần cập nhật
+            var productData = {
+                productId: newProductId,
+                newProductImg: newProductImg,
+                newProductPro: newProductPro,
+                productName: newProductName,
+                productPrice: newProductPrice,
+                productOldPrice: newProductOldPrice,
+                productDescription: newProductDescription,
+                productCategory: newProductCategory,
+                productAmount: newProductAmount,
+                productWarranty: newProductWarranty,
+                productProvider: newProductProvider
+            };
 
-    // Debug: In ra dữ liệu sản phẩm để kiểm tra
-    console.log('Product Data:', productData);
+            // Debug: In ra dữ liệu sản phẩm để kiểm tra
+            console.log('Product Data:', productData);
 
-    // Gửi yêu cầu AJAX để cập nhật thông tin sản phẩm
-    $.ajax({
-        url: '<%=request.getContextPath()%>/update-product',
-        method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(productData),
-        success: function(data) {
-            if (data.success) {
-                alert('Thông tin sản phẩm đã được cập nhật thành công');
-                // Tắt chế độ chỉnh sửa
-                document.getElementById('edit-toggle').checked = false;
+            // Gửi yêu cầu AJAX để cập nhật thông tin sản phẩm
+            $.ajax({
+                url: '<%=request.getContextPath()%>/update-product',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(productData),
+                success: function (data) {
+                    if (data.success) {
+                        alert('Thông tin sản phẩm đã được cập nhật thành công');
+                        // Tắt chế độ chỉnh sửa
+                        document.getElementById('edit-toggle').checked = false;
 
-                // Kích hoạt sự kiện change để khôi phục giao diện
-                document.getElementById('edit-toggle').dispatchEvent(new Event('change'));
-            } else {
-                alert('Có lỗi xảy ra khi cập nhật thông tin sản phẩm' + data.error);
-                console.error(data.error);  // Log lỗi trả về từ server
-            }
-        },
-        error: function(xhr, status, error) {
-            console.error('AJAX Error:', error);  // Log lỗi AJAX nếu có
-            alert('Có lỗi xảy ra khi gửi yêu cầu cập nhật');
-        }
-    });
-});
-
-
-
-
-</script>
-    
-    <script>
-document.getElementById('edit-toggle').addEventListener('change', function() {
-    const productNameElement = document.getElementById('product-name');
-    const productNewPriceElement = document.querySelector('.product-price');
-    const productOldPriceElement = document.querySelector('.product-old-price');
-    const productDescriptionElement = document.getElementById('Description');
-    const productCategoryElement = document.getElementById('Category');
-    const productAmountElement = document.getElementById('Amount');
-    const productWarrantyElement = document.getElementById('WarrantyPeriod');
-    const productProviderElement = document.getElementById('Provider');
-    var saveButton = document.getElementById('save-button');
-    
-    if (this.checked) {
-        // Chuyển đổi Product Name
-        const nameInput = document.createElement('input');
-        nameInput.type = 'text';
-        nameInput.value = productNameElement.textContent;
-        nameInput.className = 'edit-mode-input';
-        nameInput.id = 'product-name-input';
-        productNameElement.parentNode.replaceChild(nameInput, productNameElement);
-
-        // Chuyển đổi New Price
-        const newPriceInput = document.createElement('input');
-        newPriceInput.type = 'text';
-        newPriceInput.value = productNewPriceElement.textContent.replace(/\D/g, '');
-        newPriceInput.className = 'edit-mode-input';
-        newPriceInput.id = 'product-new-price-input';
-        productNewPriceElement.parentNode.replaceChild(newPriceInput, productNewPriceElement);
-
-        // Chuyển đổi Old Price
-        const oldPriceInput = document.createElement('input');
-        oldPriceInput.type = 'text';
-        oldPriceInput.value = productOldPriceElement.textContent.replace(/\D/g, '');
-        oldPriceInput.className = 'edit-mode-input';
-        oldPriceInput.id = 'product-old-price-input';
-        productOldPriceElement.parentNode.replaceChild(oldPriceInput, productOldPriceElement);
-
-        // Chuyển đổi Description
-        const descriptionInput = document.createElement('textarea');
-        descriptionInput.value = productDescriptionElement.textContent;
-        descriptionInput.className = 'edit-mode-input';
-        descriptionInput.id = 'product-description-input';
-        productDescriptionElement.parentNode.replaceChild(descriptionInput, productDescriptionElement);
-
-        window.categories = <%= categoriesJson %>;
-        // Chuyển đổi Danh mục
-        const categorySelect = document.createElement('select');
-        categorySelect.className = 'edit-mode-input';
-        categorySelect.id = 'product-category-input';
-
-        // Lấy giá trị category hiện tại của sản phẩm
-        const currentCategoryName = productCategoryElement.textContent.trim();
-
-        // Lặp qua danh sách categories từ biến JavaScript
-        window.categories.forEach(category => {
-            const option = document.createElement('option');
-            option.value = category.categoryID; // Sử dụng CategoryID làm giá trị
-            option.textContent = category.categoryName; // Hiển thị CategoryName
-
-            // So sánh tên category để chọn mục hiện tại
-            if (category.categoryName === currentCategoryName) {
-                option.selected = true;
-            }
-            categorySelect.appendChild(option);
+                        // Kích hoạt sự kiện change để khôi phục giao diện
+                        document.getElementById('edit-toggle').dispatchEvent(new Event('change'));
+                    } else {
+                        alert('Có lỗi xảy ra khi cập nhật thông tin sản phẩm' + data.error);
+                        console.error(data.error);  // Log lỗi trả về từ server
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('AJAX Error:', error);  // Log lỗi AJAX nếu có
+                    alert('Có lỗi xảy ra khi gửi yêu cầu cập nhật');
+                }
+            });
         });
 
-        
-        productCategoryElement.parentNode.replaceChild(categorySelect, productCategoryElement);
 
-        // Chuyển đổi Số lượng tồn kho
-        const amountInput = document.createElement('input');
-        amountInput.type = 'number';
-        amountInput.value = productAmountElement.textContent;
-        amountInput.className = 'edit-mode-input';
-        amountInput.id = 'product-amount-input';
-        productAmountElement.parentNode.replaceChild(amountInput, productAmountElement);
 
-        // Chuyển đổi Thời gian bảo hành
-        const warrantyInput = document.createElement('input');
-        warrantyInput.type = 'text';
-        warrantyInput.value = productWarrantyElement.textContent;
-        warrantyInput.className = 'edit-mode-input';
-        warrantyInput.id = 'product-warranty-input';
-        productWarrantyElement.parentNode.replaceChild(warrantyInput, productWarrantyElement);
-        
-        const ProviderInput = document.createElement('input');
-        ProviderInput.type = 'text';
-        ProviderInput.value = productProviderElement.textContent;
-        ProviderInput.className = 'edit-mode-input';
-        ProviderInput.id = 'product-provider-input';
-        productProviderElement.parentNode.replaceChild(ProviderInput, productProviderElement);
-        
-        saveButton.style.display = 'inline-block';
 
-        // Tự động focus vào trường đầu tiên
-        setTimeout(() => nameInput.focus(), 50);
-    } else {
-        // Khôi phục Product Name
-        const nameInput = document.getElementById('product-name-input');
-        const nameText = document.createElement('h2');
-        nameText.id = 'product-name';
-        nameText.textContent = nameInput.value;
-        nameInput.parentNode.replaceChild(nameText, nameInput);
+    </script>
 
-        // Khôi phục New Price
-        const newPriceInput = document.getElementById('product-new-price-input');
-        const newPriceText = document.createElement('h3');
-        newPriceText.className = 'product-price';
-        newPriceText.textContent = formatCurrency(parseInt(newPriceInput.value.replace(/\D/g, ''))); // Định dạng lại giá trị
-        newPriceInput.parentNode.replaceChild(newPriceText, newPriceInput);
+    <script>
+        document.getElementById('edit-toggle').addEventListener('change', function () {
+            const productNameElement = document.getElementById('product-name');
+            const productNewPriceElement = document.querySelector('.product-price');
+            const productOldPriceElement = document.querySelector('.product-old-price');
+            const productDescriptionElement = document.getElementById('Description');
+            const productCategoryElement = document.getElementById('Category');
+            const productAmountElement = document.getElementById('Amount');
+            const productWarrantyElement = document.getElementById('WarrantyPeriod');
+            const productProviderElement = document.getElementById('Provider');
+            var saveButton = document.getElementById('save-button');
 
-        // Khôi phục Old Price
-        const oldPriceInput = document.getElementById('product-old-price-input');
-        const oldPriceText = document.createElement('del');
-        oldPriceText.className = 'product-old-price';
-        oldPriceText.textContent = formatCurrency(parseInt(oldPriceInput.value.replace(/\D/g, ''))); // Định dạng lại giá trị
-        oldPriceInput.parentNode.replaceChild(oldPriceText, oldPriceInput);
+            if (this.checked) {
+                // Chuyển đổi Product Name
+                const nameInput = document.createElement('input');
+                nameInput.type = 'text';
+                nameInput.value = productNameElement.textContent;
+                nameInput.className = 'edit-mode-input';
+                nameInput.id = 'product-name-input';
+                productNameElement.parentNode.replaceChild(nameInput, productNameElement);
 
-        // Khôi phục Description
-        const descriptionInput = document.getElementById('product-description-input');
-        const descriptionText = document.createElement('p');
-        descriptionText.id = 'Description';
-        descriptionText.textContent = descriptionInput.value;
-        descriptionInput.parentNode.replaceChild(descriptionText, descriptionInput);
+                // Chuyển đổi New Price
+                const newPriceInput = document.createElement('input');
+                newPriceInput.type = 'text';
+                newPriceInput.value = productNewPriceElement.textContent.replace(/\D/g, '');
+                newPriceInput.className = 'edit-mode-input';
+                newPriceInput.id = 'product-new-price-input';
+                productNewPriceElement.parentNode.replaceChild(newPriceInput, productNewPriceElement);
 
-        // Khôi phục Danh mục
-        const categorySelect = document.getElementById('product-category-input');
-        const categoryText = document.createElement('a');
-        categoryText.href = '#';
-        categoryText.id = 'Category';
-        categoryText.textContent = categorySelect.options[categorySelect.selectedIndex].text;
-        categorySelect.parentNode.replaceChild(categoryText, categorySelect);
+                // Chuyển đổi Old Price
+                const oldPriceInput = document.createElement('input');
+                oldPriceInput.type = 'text';
+                oldPriceInput.value = productOldPriceElement.textContent.replace(/\D/g, '');
+                oldPriceInput.className = 'edit-mode-input';
+                oldPriceInput.id = 'product-old-price-input';
+                productOldPriceElement.parentNode.replaceChild(oldPriceInput, productOldPriceElement);
 
-        // Khôi phục Số lượng tồn kho
-        const amountInput = document.getElementById('product-amount-input');
-        const amountText = document.createElement('a');
-        amountText.href = '#';
-        amountText.id = 'Amount';
-        amountText.textContent = amountInput.value;
-        amountInput.parentNode.replaceChild(amountText, amountInput);
+                // Chuyển đổi Description
+                const descriptionInput = document.createElement('textarea');
+                descriptionInput.value = productDescriptionElement.textContent;
+                descriptionInput.className = 'edit-mode-input';
+                descriptionInput.id = 'product-description-input';
+                productDescriptionElement.parentNode.replaceChild(descriptionInput, productDescriptionElement);
 
-        // Khôi phục Thời gian bảo hành
-        const warrantyInput = document.getElementById('product-warranty-input');
-        const warrantyText = document.createElement('a');
-        warrantyText.href = '#';
-        warrantyText.id = 'WarrantyPeriod';
-        warrantyText.textContent = warrantyInput.value;
-        warrantyInput.parentNode.replaceChild(warrantyText, warrantyInput);
-        
-        // Khôi phục Thời gian bảo hành
-        const ProviderInput = document.getElementById('product-provider-input');
-        const ProviderText = document.createElement('a');
-        ProviderText.href = '#';
-        ProviderText.id = 'Provider';
-        ProviderText.textContent = ProviderInput.value;
-        ProviderInput.parentNode.replaceChild(ProviderText, ProviderInput);
-        
-        saveButton.style.display = 'none';
-    }
-});
+                window.categories = <%= categoriesJson %>;
+                // Chuyển đổi Danh mục
+                const categorySelect = document.createElement('select');
+                categorySelect.className = 'edit-mode-input';
+                categorySelect.id = 'product-category-input';
 
-function formatCurrency(value) {
-    return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
-}
-</script>
+                // Lấy giá trị category hiện tại của sản phẩm
+                const currentCategoryName = productCategoryElement.textContent.trim();
+
+                // Lặp qua danh sách categories từ biến JavaScript
+                window.categories.forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category.categoryID; // Sử dụng CategoryID làm giá trị
+                    option.textContent = category.categoryName; // Hiển thị CategoryName
+
+                    // So sánh tên category để chọn mục hiện tại
+                    if (category.categoryName === currentCategoryName) {
+                        option.selected = true;
+                    }
+                    categorySelect.appendChild(option);
+                });
+
+
+                productCategoryElement.parentNode.replaceChild(categorySelect, productCategoryElement);
+
+                // Chuyển đổi Số lượng tồn kho
+                const amountInput = document.createElement('input');
+                amountInput.type = 'number';
+                amountInput.value = productAmountElement.textContent;
+                amountInput.className = 'edit-mode-input';
+                amountInput.id = 'product-amount-input';
+                productAmountElement.parentNode.replaceChild(amountInput, productAmountElement);
+
+                // Chuyển đổi Thời gian bảo hành
+                const warrantyInput = document.createElement('input');
+                warrantyInput.type = 'text';
+                warrantyInput.value = productWarrantyElement.textContent;
+                warrantyInput.className = 'edit-mode-input';
+                warrantyInput.id = 'product-warranty-input';
+                productWarrantyElement.parentNode.replaceChild(warrantyInput, productWarrantyElement);
+
+                const ProviderInput = document.createElement('input');
+                ProviderInput.type = 'text';
+                ProviderInput.value = productProviderElement.textContent;
+                ProviderInput.className = 'edit-mode-input';
+                ProviderInput.id = 'product-provider-input';
+                productProviderElement.parentNode.replaceChild(ProviderInput, productProviderElement);
+
+                saveButton.style.display = 'inline-block';
+
+                // Tự động focus vào trường đầu tiên
+                setTimeout(() => nameInput.focus(), 50);
+            } else {
+                // Khôi phục Product Name
+                const nameInput = document.getElementById('product-name-input');
+                const nameText = document.createElement('h2');
+                nameText.id = 'product-name';
+                nameText.textContent = nameInput.value;
+                nameInput.parentNode.replaceChild(nameText, nameInput);
+
+                // Khôi phục New Price
+                const newPriceInput = document.getElementById('product-new-price-input');
+                const newPriceText = document.createElement('h3');
+                newPriceText.className = 'product-price';
+                newPriceText.textContent = formatCurrency(parseInt(newPriceInput.value.replace(/\D/g, ''))); // Định dạng lại giá trị
+                newPriceInput.parentNode.replaceChild(newPriceText, newPriceInput);
+
+                // Khôi phục Old Price
+                const oldPriceInput = document.getElementById('product-old-price-input');
+                const oldPriceText = document.createElement('del');
+                oldPriceText.className = 'product-old-price';
+                oldPriceText.textContent = formatCurrency(parseInt(oldPriceInput.value.replace(/\D/g, ''))); // Định dạng lại giá trị
+                oldPriceInput.parentNode.replaceChild(oldPriceText, oldPriceInput);
+
+                // Khôi phục Description
+                const descriptionInput = document.getElementById('product-description-input');
+                const descriptionText = document.createElement('p');
+                descriptionText.id = 'Description';
+                descriptionText.textContent = descriptionInput.value;
+                descriptionInput.parentNode.replaceChild(descriptionText, descriptionInput);
+
+                // Khôi phục Danh mục
+                const categorySelect = document.getElementById('product-category-input');
+                const categoryText = document.createElement('a');
+                categoryText.href = '#';
+                categoryText.id = 'Category';
+                categoryText.textContent = categorySelect.options[categorySelect.selectedIndex].text;
+                categorySelect.parentNode.replaceChild(categoryText, categorySelect);
+
+                // Khôi phục Số lượng tồn kho
+                const amountInput = document.getElementById('product-amount-input');
+                const amountText = document.createElement('a');
+                amountText.href = '#';
+                amountText.id = 'Amount';
+                amountText.textContent = amountInput.value;
+                amountInput.parentNode.replaceChild(amountText, amountInput);
+
+                // Khôi phục Thời gian bảo hành
+                const warrantyInput = document.getElementById('product-warranty-input');
+                const warrantyText = document.createElement('a');
+                warrantyText.href = '#';
+                warrantyText.id = 'WarrantyPeriod';
+                warrantyText.textContent = warrantyInput.value;
+                warrantyInput.parentNode.replaceChild(warrantyText, warrantyInput);
+
+                // Khôi phục Thời gian bảo hành
+                const ProviderInput = document.getElementById('product-provider-input');
+                const ProviderText = document.createElement('a');
+                ProviderText.href = '#';
+                ProviderText.id = 'Provider';
+                ProviderText.textContent = ProviderInput.value;
+                ProviderInput.parentNode.replaceChild(ProviderText, ProviderInput);
+
+                saveButton.style.display = 'none';
+            }
+        });
+
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('vi-VN', {style: 'currency', currency: 'VND'}).format(value);
+        }
+    </script>
 </html>

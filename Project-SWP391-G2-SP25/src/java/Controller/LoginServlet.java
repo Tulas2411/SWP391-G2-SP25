@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpSession;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import org.mindrot.jbcrypt.BCrypt; 
+import org.mindrot.jbcrypt.BCrypt; // Import thư viện BCrypt
 
 @WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
 public class LoginServlet extends HttpServlet {
@@ -59,7 +59,12 @@ public class LoginServlet extends HttpServlet {
 
                         Users u = userDAO.getUserByEmail(email);
 
-                        // Kiểm tra vai trò và chuyển hướng người dùng
+                        if (u.getStatus().equalsIgnoreCase("Deactive")){
+                            request.setAttribute("loginError", "Tài khoản của bạn đã bị vô hiệu hóa");
+                            dispatcher = request.getRequestDispatcher("Login.jsp");
+                            dispatcher.forward(request, response);
+                        }
+
                         if (u.getRole().equalsIgnoreCase("Admin")) {
                             response.sendRedirect("admin/dashboard");
                         } else if (u.getRole().equalsIgnoreCase("marketing")) {
@@ -89,15 +94,9 @@ public class LoginServlet extends HttpServlet {
         } finally {
             // Đóng kết nối và tài nguyên
             try {
-                if (rs != null) {
-                    rs.close();
-                }
-                if (pst != null) {
-                    pst.close();
-                }
-                if (con != null) {
-                    con.close();
-                }
+                if (rs != null) rs.close();
+                if (pst != null) pst.close();
+                if (con != null) con.close();
             } catch (Exception e) {
                 e.printStackTrace();
             }
