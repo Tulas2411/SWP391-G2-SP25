@@ -319,3 +319,8 @@ CREATE TABLE user_logs (
   change_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (userID) REFERENCES users(userID)
 );
+
+alter table settings add column ID_Type varchar(10) default null;
+alter table settings add column priority int default 0
+
+select * from users
