@@ -37,7 +37,7 @@ public class ShipperDashBoardController extends HttpServlet {
             request.setAttribute("orders", orderList);
             request.setAttribute("currentUser", user);
             request.setAttribute("title", "Danh sách đơn hàng");
-            request.getRequestDispatcher("/Shipper/ShipperDashBoard.jsp").forward(request, response);
+            request.getRequestDispatcher("Shipper/ShipperDashBoard.jsp").forward(request, response);
         } else {
             session.setAttribute("notificationErr", "Bạn không có quyền truy cập vào trang này");
             response.sendRedirect("/Project-SWP391-G2-SP25/Login.jsp");
@@ -59,7 +59,7 @@ public class ShipperDashBoardController extends HttpServlet {
                     Orders order = orderDAO.getOrderByID(orderID);
                     if (order == null) {
                         session.setAttribute("notificationErr", "Đơn hàng không tồn tại.");
-                        response.sendRedirect(request.getContextPath() + "/Shipper/ShipperDashBoard");
+                        response.sendRedirect(request.getContextPath() + "ShipperDashBoard");
                         return;
                     }
 
@@ -74,7 +74,7 @@ public class ShipperDashBoardController extends HttpServlet {
                     session.setAttribute("notificationErr", "ID đơn hàng không hợp lệ.");
                 }
             }
-            response.sendRedirect(request.getContextPath() + "/Shipper/ShipperDashBoard");
+            response.sendRedirect(request.getContextPath() + "ShipperDashBoard");
         } else {
             session.setAttribute("notificationErr", "Bạn không có quyền truy cập vào trang này");
             response.sendRedirect(request.getContextPath() + "/Login.jsp");
