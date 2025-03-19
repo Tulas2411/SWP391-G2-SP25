@@ -45,7 +45,7 @@
                             <c:forEach var="category" items="${categories}">
                                 <c:if test="${category.categoryID == categoryID}">
                                     <li class="main__left-category-items">
-                                        <a href="Category.jsp?id=${category.categoryID}" class="main__left-category-link">
+                                        <a href="productsList?category=${category.categoryID}" class="main__left-category-link">
                                             ${category.categoryName}
                                         </a>
                                     </li>

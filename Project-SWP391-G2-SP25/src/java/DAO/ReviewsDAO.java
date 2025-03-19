@@ -184,7 +184,7 @@ public class ReviewsDAO extends DBContext {
     }
 
     public boolean addReview(Reviews review) {
-        String sql = "INSERT INTO Reviews (ProductID, CustomerID, Rating, Comment, ReviewDate) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Reviews (ProductID, CustomerID, Rating, Comment) VALUES (?, ?, ?, ?)";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             setReviewPreparedStatement(ps, review);

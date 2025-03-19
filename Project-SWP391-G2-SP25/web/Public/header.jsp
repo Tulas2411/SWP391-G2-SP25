@@ -113,7 +113,7 @@
                             </ul>
                         </li>
                         <li class="header__table-items header__table-items-underlined">
-                            <a href="#" class="header__table-link">
+                            <a href="/blogs" class="header__table-link">
                                 TIN TỨC
                             </a>
                         </li>
@@ -210,7 +210,7 @@
                         </div>
                     </li>
                     <li class="header__navbar-items header__navbar-items-vertical">
-                        <a href="#" class="header__navbar-link">
+                        <a href="blogs" class="header__navbar-link">
                             Tin tức
                         </a>
                     </li>

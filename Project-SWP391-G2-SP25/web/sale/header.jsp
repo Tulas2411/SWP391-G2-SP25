@@ -53,6 +53,13 @@
                             </a>  
 
                         </div>
+                        <div class="nav">
+                            <a class="nav-link" href="${contextPath}/sale/statistics">
+                                <div class="sb-nav-link-icon"><i class="fa fa-chart-bar"></i></div>
+                                Thống kê
+                            </a>  
+
+                        </div>
                     </div>
                 </nav>
             </div>
