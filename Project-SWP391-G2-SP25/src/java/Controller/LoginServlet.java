@@ -1,3 +1,7 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ */
 package Controller;
 
 import DAO.UsersDAO;
@@ -13,11 +17,23 @@ import jakarta.servlet.http.HttpSession;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import org.mindrot.jbcrypt.BCrypt;
 
+/**
+ *
+ * @author luuth
+ */
 @WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
 public class LoginServlet extends HttpServlet {
 
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     UsersDAO userDAO = new UsersDAO();
 
     @Override
@@ -33,84 +49,90 @@ public class LoginServlet extends HttpServlet {
         ResultSet rs = null;
 
         try {
-            // Kết nối đến cơ sở dữ liệu
+
+            // Sử dụng phương thức makeConnection
             con = makeConnection();
             if (con != null) {
-                // Truy vấn để lấy mật khẩu đã mã hóa từ cơ sở dữ liệu
-                pst = con.prepareStatement("SELECT * FROM Users WHERE Email = ?");
+                pst = con.prepareStatement("SELECT * FROM Users WHERE Email = ? AND Password = ?");
                 pst.setString(1, email);
+                pst.setString(2, password); // Lưu ý: nên mã hóa mật khẩu trước khi lưu và kiểm tra
                 rs = pst.executeQuery();
 
                 if (rs.next()) {
-                    // Lấy mật khẩu đã mã hóa từ cơ sở dữ liệu
-                    String hashedPasswordFromDB = rs.getString("Password");
+                    // Lấy tên người dùng từ kết quả truy vấn
+                    String username = rs.getString("username");
+                    // Lấy email từ kết quả truy vấn
+                    String emailFromDB = rs.getString("Email");
+                    Users u = userDAO.getUserByEmail(email);
 
-                    // Kiểm tra mật khẩu người dùng nhập vào có khớp với mật khẩu đã mã hóa không
-                    if (BCrypt.checkpw(password, hashedPasswordFromDB)) {
-                        // Lấy thông tin người dùng từ kết quả truy vấn
-                        String username = rs.getString("username");
-                        String emailFromDB = rs.getString("Email");
-                        String role = rs.getString("Role");
-
-                        // Lấy thông tin người dùng từ DAO
-                        Users u = userDAO.getUserByEmail(email);
-
-                        // Kiểm tra trạng thái tài khoản (giữ lại từ nhánh teedee)
-                        if (u.getStatus().equalsIgnoreCase("Deactive")) {
-                            session.setAttribute("notificationErr", "Tài khoản của bạn đã bị vô hiệu hóa!");
-                            response.sendRedirect("Login.jsp");
-                            return;
-                        }
-
-                        // Thêm thông tin người dùng vào session (giữ lại từ nhánh main)
-                        session.setAttribute("username", username);
-                        session.setAttribute("email", emailFromDB);
-                        session.setAttribute("role", role);
-
-                        // Kiểm tra vai trò và chuyển hướng người dùng
-                        if (u.getRole().equalsIgnoreCase("Admin")) {
-                            response.sendRedirect("admin/dashboard");
-                        } else if (u.getRole().equalsIgnoreCase("marketing")) {
-                            response.sendRedirect("marketing/dashboard");
-                        } else if (u.getRole().equalsIgnoreCase("sale")) {
-                            response.sendRedirect("sale/OrdersList");
-                        } else {
-                            // Chuyển hướng người dùng đến trang HomePage sau khi đăng nhập thành công
-                            session.setAttribute("user", userDAO.getUserByUserName(username));
-                            response.sendRedirect("/Project-SWP391-G2-SP25/home");
-                        }
-                    } else {
-                        // Mật khẩu không khớp
-                        request.setAttribute("loginError", "Sai tài khoản hoặc mật khẩu");
-                        dispatcher = request.getRequestDispatcher("Login.jsp");
-                        dispatcher.forward(request, response);
+                    // Kiểm tra trạng thái tài khoản (giữ lại từ nhánh teedee)
+                    if (u.getStatus().equalsIgnoreCase("Deactive")) {
+                        session.setAttribute("notificationErr", "Tài khoản của bạn đã bị vô hiệu hóa!");
+                        response.sendRedirect("Login.jsp");
+                        return;
                     }
+
+                    // Thêm username vào session
+                    session.setAttribute("username", username);
+                    // Thêm email vào session
+                    session.setAttribute("email", emailFromDB);
+                    session.setAttribute("role", rs.getString("Role"));
+
+                    if (u.getStatus().equalsIgnoreCase("Deactive")) {
+                        session.setAttribute("notificationErr", "Tài khoản của bạn đã bị vô hiệu hóa!");
+                        response.sendRedirect("Login.jsp");
+                        return;
+                    }
+                    if (u.getRole().equalsIgnoreCase("Admin")) {
+                        response.sendRedirect("admin/dashboard");
+                    } else if (u.getRole().equalsIgnoreCase("marketing")) {
+                        response.sendRedirect("marketing/dashboard");
+                    } else if (u.getRole().equalsIgnoreCase("sale")) {
+                        response.sendRedirect("sale/OrdersList");
+                    } else {
+                        // Chuyển hướng người dùng đến trang HomePage sau khi đăng nhập thành công
+                        session.setAttribute("user", userDAO.getUserByUserName(username));
+                        response.sendRedirect("/Project-SWP391-G2-SP25/home");
+                    }
+
                 } else {
-                    // Email không tồn tại
                     request.setAttribute("loginError", "Sai tài khoản hoặc mật khẩu");
-                    dispatcher = request.getRequestDispatcher("Login.jsp");
+                    request.getRequestDispatcher("Login.jsp").forward(request, response);
                     dispatcher.forward(request, response);
                 }
+
             }
         } catch (Exception e) {
             e.printStackTrace();
+            // Xử lý lỗi bằng cách chuyển hướng đến trang lỗi hoặc hiển thị thông báo lỗi
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Đã xảy ra lỗi trong quá trình đăng nhập.");
         } finally {
-            // Đóng kết nối và tài nguyên
+            // Đảm bảo đóng các tài nguyên đúng cách
             try {
-                if (rs != null) rs.close();
-                if (pst != null) pst.close();
-                if (con != null) con.close();
+                if (rs != null) {
+                    rs.close();
+                }
+                if (pst != null) {
+                    pst.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
 
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
     @Override
     public String getServletInfo() {
         return "Short description";
-    }
+    }// </editor-fold>
 
     public static java.sql.Connection makeConnection() {
         java.sql.Connection conn = null;
@@ -122,4 +144,5 @@ public class LoginServlet extends HttpServlet {
         }
         return conn;
     }
+
 }
