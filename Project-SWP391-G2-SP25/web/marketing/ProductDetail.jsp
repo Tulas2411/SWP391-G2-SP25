@@ -58,8 +58,7 @@
 
     </head>
     <body>
-
-        <%@ include file="./Public/header.jsp" %>
+        
         <%
             UsersDAO uDAO = new UsersDAO();
             ProductsDAO pDAO = new ProductsDAO();
@@ -623,7 +622,6 @@
         </div>
         <!-- /Section -->
 
-        <%@ include file="./Public/footer.jsp" %>
 
         <!-- jQuery Plugins -->
         <script src="TulasCSS/js/jquery.min.js"></script>

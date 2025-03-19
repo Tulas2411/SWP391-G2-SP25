@@ -14,6 +14,7 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
     </head>
     <body>
+        <jsp:include page="header.jsp"></jsp:include>
         <div class="container mt-4">
             <h2 class="mb-4">Danh Sách Phản Hồi</h2>
             <!-- Form lọc và tìm kiếm -->
@@ -184,6 +185,7 @@
                     </div>
                 </div>
             </div>
+            <jsp:include page="footer.jsp"></jsp:include>
             <!-- Thêm thư viện jQuery và Bootstrap JS -->
             <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
             <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -240,6 +242,6 @@
                     });
                 });
             </script>
-
+            
     </body>
 </html>

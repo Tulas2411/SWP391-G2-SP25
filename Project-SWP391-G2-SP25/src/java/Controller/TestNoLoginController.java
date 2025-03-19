@@ -63,10 +63,11 @@ public class TestNoLoginController extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         UsersDAO uDAO = new UsersDAO();
-        Users u = uDAO.getUserByEmail("tuanminh2424@gmail.com");
+        Users u = uDAO.getUserByEmail("admin@example.com");
         session.setAttribute("user", u);
+        session.setAttribute("email", u.getEmail());
         session.setAttribute("username", u.getUserName());
-        response.sendRedirect("/Project-SWP391-G2-SP25//home");
+        response.sendRedirect("/Project-SWP391-G2-SP25/admin/dashboard");
     }
 
     /**
