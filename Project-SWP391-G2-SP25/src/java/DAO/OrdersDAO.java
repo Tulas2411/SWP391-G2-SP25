@@ -1,5 +1,6 @@
 package DAO;
 
+import Model.DailyRevenue;
 import Model.Orders;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -28,12 +29,13 @@ public class OrdersDAO extends DBContext {
         }
         return orderList;
     }
+
     public boolean updateOrderStatus(int orderId, String status) {
         boolean isUpdated = false;
         String query = "UPDATE Orders SET Status = ? WHERE OrderID = ?";
 
         try (// Lấy kết nối
-             PreparedStatement ps = connection.prepareStatement(query)) {
+                PreparedStatement ps = connection.prepareStatement(query)) {
 
             ps.setString(1, status); // Set giá trị trạng thái mới
             ps.setInt(2, orderId);   // Set OrderID
@@ -48,180 +50,177 @@ public class OrdersDAO extends DBContext {
 
         return isUpdated;
     }
+
     public List<Orders> searchOrders(String search, String fromDate, String toDate, String saleName, String status) {
-    List<Orders> orderList = new ArrayList<>();
-    StringBuilder sql = new StringBuilder("SELECT o.*, u.FirstName, u.LastName FROM Orders o ");
-    sql.append("JOIN Users u ON o.CustomerID = u.UserID WHERE 1=1");
+        List<Orders> orderList = new ArrayList<>();
+        StringBuilder sql = new StringBuilder("SELECT o.*, u.FirstName, u.LastName FROM Orders o ");
+        sql.append("JOIN Users u ON o.CustomerID = u.UserID WHERE 1=1");
 
-   
-    if (search != null && !search.isEmpty()) {
-        sql.append(" AND (o.OrderID LIKE ? OR u.FirstName LIKE ? OR u.LastName LIKE ?)");
-    }
-    if (fromDate != null && !fromDate.isEmpty()) {
-        sql.append(" AND o.OrderDate >= ?");
-    }
-    if (toDate != null && !toDate.isEmpty()) {
-        sql.append(" AND o.OrderDate <= ?");
-    }
-    if (saleName != null && !saleName.isEmpty()) {
-        sql.append(" AND o.SaleName LIKE ?");
-    }
-    if (status != null && !status.isEmpty()) {
-        sql.append(" AND o.Status = ?");
-    }
-
-    try (PreparedStatement ps = connection.prepareStatement(sql.toString())) {
-        int paramIndex = 1;
-        
-     
         if (search != null && !search.isEmpty()) {
-            ps.setString(paramIndex++, "%" + search + "%");  
-          
+            sql.append(" AND (o.OrderID LIKE ? OR u.FirstName LIKE ? OR u.LastName LIKE ?)");
         }
         if (fromDate != null && !fromDate.isEmpty()) {
-            ps.setString(paramIndex++, fromDate);
+            sql.append(" AND o.OrderDate >= ?");
         }
         if (toDate != null && !toDate.isEmpty()) {
-            ps.setString(paramIndex++, toDate);
+            sql.append(" AND o.OrderDate <= ?");
         }
         if (saleName != null && !saleName.isEmpty()) {
-            ps.setString(paramIndex++, "%" + saleName + "%");
+            sql.append(" AND o.SaleName LIKE ?");
         }
         if (status != null && !status.isEmpty()) {
-            ps.setString(paramIndex++, status);
+            sql.append(" AND o.Status = ?");
         }
 
-        // Thực thi câu truy vấn
-        try (ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                Orders order = extractOrderFromResultSet(rs);
-                // Thêm thông tin khách hàng (FirstName, LastName, Email) vào đối tượng Order
-                order.setCustomerFirstName(rs.getString("FirstName"));
-                order.setCustomerLastName(rs.getString("LastName"));
-                order.setCustomerEmail(rs.getString("Email"));
-                orderList.add(order);
+        try (PreparedStatement ps = connection.prepareStatement(sql.toString())) {
+            int paramIndex = 1;
+
+            if (search != null && !search.isEmpty()) {
+                ps.setString(paramIndex++, "%" + search + "%");
+
             }
+            if (fromDate != null && !fromDate.isEmpty()) {
+                ps.setString(paramIndex++, fromDate);
+            }
+            if (toDate != null && !toDate.isEmpty()) {
+                ps.setString(paramIndex++, toDate);
+            }
+            if (saleName != null && !saleName.isEmpty()) {
+                ps.setString(paramIndex++, "%" + saleName + "%");
+            }
+            if (status != null && !status.isEmpty()) {
+                ps.setString(paramIndex++, status);
+            }
+
+            // Thực thi câu truy vấn
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Orders order = extractOrderFromResultSet(rs);
+                    // Thêm thông tin khách hàng (FirstName, LastName, Email) vào đối tượng Order
+                    order.setCustomerFirstName(rs.getString("FirstName"));
+                    order.setCustomerLastName(rs.getString("LastName"));
+                    order.setCustomerEmail(rs.getString("Email"));
+                    orderList.add(order);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error executing search query: " + e.getMessage());
         }
-    } catch (SQLException e) {
-        System.out.println("Error executing search query: " + e.getMessage());
+        return orderList;
     }
-    return orderList;
-}
 
     public List<Orders> getOrdersPaginated(String search, String fromDate, String toDate, String saleName, String status, int page, int pageSize) {
-    List<Orders> orderList = new ArrayList<>();
-    StringBuilder sql = new StringBuilder("SELECT o.*, u.FirstName, u.LastName, u.Email FROM Orders o ");
-    sql.append("JOIN Users u ON o.CustomerID = u.UserID WHERE 1=1");
+        List<Orders> orderList = new ArrayList<>();
+        StringBuilder sql = new StringBuilder("SELECT o.*, u.FirstName, u.LastName, u.Email FROM Orders o ");
+        sql.append("JOIN Users u ON o.CustomerID = u.UserID WHERE 1=1");
 
-    if (search != null && !search.isEmpty()) {
-        sql.append(" AND (o.OrderID LIKE ? OR o.CustomerID LIKE ?)");
-    }
-    if (fromDate != null && !fromDate.isEmpty()) {
-        sql.append(" AND o.OrderDate >= ?");
-    }
-    if (toDate != null && !toDate.isEmpty()) {
-        sql.append(" AND o.OrderDate <= ?");
-    }
-    if (saleName != null && !saleName.isEmpty()) {
-        sql.append(" AND o.SaleName LIKE ?");
-    }
-    if (status != null && !status.isEmpty()) {
-        sql.append(" AND o.Status = ?");
-    }
-
-    int offset = (page - 1) * pageSize;
-    sql.append(" LIMIT ? OFFSET ?");
-
-    try (PreparedStatement ps = connection.prepareStatement(sql.toString())) {
-        int paramIndex = 1;
         if (search != null && !search.isEmpty()) {
-            ps.setString(paramIndex++, "%" + search + "%");
-            ps.setString(paramIndex++, "%" + search + "%");
+            sql.append(" AND (o.OrderID LIKE ? OR o.CustomerID LIKE ?)");
         }
         if (fromDate != null && !fromDate.isEmpty()) {
-            ps.setString(paramIndex++, fromDate);
+            sql.append(" AND o.OrderDate >= ?");
         }
         if (toDate != null && !toDate.isEmpty()) {
-            ps.setString(paramIndex++, toDate);
+            sql.append(" AND o.OrderDate <= ?");
         }
         if (saleName != null && !saleName.isEmpty()) {
-            ps.setString(paramIndex++, "%" + saleName + "%");
+            sql.append(" AND o.SaleName LIKE ?");
         }
         if (status != null && !status.isEmpty()) {
-            ps.setString(paramIndex++, status);
+            sql.append(" AND o.Status = ?");
         }
 
-        ps.setInt(paramIndex++, pageSize);
-        ps.setInt(paramIndex++, offset);
+        int offset = (page - 1) * pageSize;
+        sql.append(" LIMIT ? OFFSET ?");
 
-        try (ResultSet rs = ps.executeQuery()) {
-            while (rs.next()) {
-                Orders order = extractOrderFromResultSet(rs);
-                
-                order.setCustomerFirstName(rs.getString("FirstName"));
-                order.setCustomerLastName(rs.getString("LastName"));
-                order.setCustomerEmail(rs.getString("Email"));
-                orderList.add(order);
+        try (PreparedStatement ps = connection.prepareStatement(sql.toString())) {
+            int paramIndex = 1;
+            if (search != null && !search.isEmpty()) {
+                ps.setString(paramIndex++, "%" + search + "%");
+                ps.setString(paramIndex++, "%" + search + "%");
             }
+            if (fromDate != null && !fromDate.isEmpty()) {
+                ps.setString(paramIndex++, fromDate);
+            }
+            if (toDate != null && !toDate.isEmpty()) {
+                ps.setString(paramIndex++, toDate);
+            }
+            if (saleName != null && !saleName.isEmpty()) {
+                ps.setString(paramIndex++, "%" + saleName + "%");
+            }
+            if (status != null && !status.isEmpty()) {
+                ps.setString(paramIndex++, status);
+            }
+
+            ps.setInt(paramIndex++, pageSize);
+            ps.setInt(paramIndex++, offset);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Orders order = extractOrderFromResultSet(rs);
+
+                    order.setCustomerFirstName(rs.getString("FirstName"));
+                    order.setCustomerLastName(rs.getString("LastName"));
+                    order.setCustomerEmail(rs.getString("Email"));
+                    orderList.add(order);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error executing search query: " + e.getMessage());
         }
-    } catch (SQLException e) {
-        System.out.println("Error executing search query: " + e.getMessage());
-    }
-    return orderList;
-}
-
-
-    
-public int getTotalOrders(String search, String fromDate, String toDate, String saleName, String status) {
-    StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM Orders o ");
-    sql.append("JOIN Users u ON o.CustomerID = u.UserID WHERE 1=1");
-
-    if (search != null && !search.isEmpty()) {
-        sql.append(" AND (o.OrderID LIKE ? OR u.FirstName LIKE ? OR u.LastName LIKE ?)");
-    }
-    if (fromDate != null && !fromDate.isEmpty()) {
-        sql.append(" AND o.OrderDate >= ?");
-    }
-    if (toDate != null && !toDate.isEmpty()) {
-        sql.append(" AND o.OrderDate <= ?");
-    }
-    if (saleName != null && !saleName.isEmpty()) {
-        sql.append(" AND o.SaleName LIKE ?");
-    }
-    if (status != null && !status.isEmpty()) {
-        sql.append(" AND o.Status = ?");
+        return orderList;
     }
 
-    try (PreparedStatement ps = connection.prepareStatement(sql.toString())) {
-        int paramIndex = 1;
+    public int getTotalOrders(String search, String fromDate, String toDate, String saleName, String status) {
+        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM Orders o ");
+        sql.append("JOIN Users u ON o.CustomerID = u.UserID WHERE 1=1");
+
         if (search != null && !search.isEmpty()) {
-            ps.setString(paramIndex++, "%" + search + "%"); // tìm theo OrderID
-            ps.setString(paramIndex++, "%" + search + "%"); // tìm theo FirstName
-            ps.setString(paramIndex++, "%" + search + "%"); // tìm theo LastName
+            sql.append(" AND (o.OrderID LIKE ? OR u.FirstName LIKE ? OR u.LastName LIKE ?)");
         }
         if (fromDate != null && !fromDate.isEmpty()) {
-            ps.setString(paramIndex++, fromDate);
+            sql.append(" AND o.OrderDate >= ?");
         }
         if (toDate != null && !toDate.isEmpty()) {
-            ps.setString(paramIndex++, toDate);
+            sql.append(" AND o.OrderDate <= ?");
         }
         if (saleName != null && !saleName.isEmpty()) {
-            ps.setString(paramIndex++, "%" + saleName + "%");
+            sql.append(" AND o.SaleName LIKE ?");
         }
         if (status != null && !status.isEmpty()) {
-            ps.setString(paramIndex++, status);
+            sql.append(" AND o.Status = ?");
         }
 
-        try (ResultSet rs = ps.executeQuery()) {
-            if (rs.next()) {
-                return rs.getInt(1); // Trả về tổng số đơn hàng
+        try (PreparedStatement ps = connection.prepareStatement(sql.toString())) {
+            int paramIndex = 1;
+            if (search != null && !search.isEmpty()) {
+                ps.setString(paramIndex++, "%" + search + "%"); // tìm theo OrderID
+                ps.setString(paramIndex++, "%" + search + "%"); // tìm theo FirstName
+                ps.setString(paramIndex++, "%" + search + "%"); // tìm theo LastName
             }
+            if (fromDate != null && !fromDate.isEmpty()) {
+                ps.setString(paramIndex++, fromDate);
+            }
+            if (toDate != null && !toDate.isEmpty()) {
+                ps.setString(paramIndex++, toDate);
+            }
+            if (saleName != null && !saleName.isEmpty()) {
+                ps.setString(paramIndex++, "%" + saleName + "%");
+            }
+            if (status != null && !status.isEmpty()) {
+                ps.setString(paramIndex++, status);
+            }
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1); // Trả về tổng số đơn hàng
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error getting total orders: " + e.getMessage());
         }
-    } catch (SQLException e) {
-        System.out.println("Error getting total orders: " + e.getMessage());
+        return 0;
     }
-    return 0;
-}
 
     public List<Orders> getAllOrders1() {
         List<Orders> orderList = new ArrayList<>();
@@ -302,7 +301,6 @@ public int getTotalOrders(String search, String fromDate, String toDate, String 
         return 0;
     }
 
-    
     public Vector<Orders> getOrdersByCustomerID(int customerID) {
         Vector<Orders> ordersList = new Vector<>();
         String sql = "SELECT * FROM Orders WHERE CustomerID = ?";
@@ -429,6 +427,49 @@ public int getTotalOrders(String search, String fromDate, String toDate, String 
             System.out.println("Error fetching the latest order: " + e.getMessage());
         }
         return null; // Trả về null nếu không tìm thấy
+    }
+
+    public List<DailyRevenue> getDailyRevenueByMonthYear(int month, int year) {
+        List<DailyRevenue> revenueList = new ArrayList<>();
+        String sql = "SELECT DAY(orderDate) AS day, SUM(totalAmount) AS totalRevenue "
+                + "FROM Orders WHERE MONTH(orderDate) = ? AND YEAR(orderDate) = ? "
+                + "GROUP BY DAY(orderDate) ORDER BY day";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, month);
+            ps.setInt(2, year);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    revenueList.add(new DailyRevenue(rs.getInt("day"), rs.getDouble("totalRevenue")));
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching daily revenue: " + e.getMessage());
+        }
+
+        return revenueList;
+    }
+
+    public boolean hasUserPurchasedProduct(int userId, int productId) {
+        String sql = "SELECT COUNT(*) FROM Orders o "
+                + "JOIN OrderDetails od ON o.OrderID = od.OrderID "
+                + "WHERE o.CustomerID = ? AND od.ProductID = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ps.setInt(2, productId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next() && rs.getInt(1) > 0) {
+                    return true;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error checking purchase history: " + e.getMessage());
+        }
+
+        return false;
     }
 
     public static void main(String[] args) {

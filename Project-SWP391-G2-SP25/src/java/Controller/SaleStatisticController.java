@@ -4,10 +4,8 @@
  */
 package Controller;
 
-import DAO.*;
-import Model.Products;
-import Model.Reviews;
-import Model.Users;
+import DAO.OrdersDAO;
+import Model.DailyRevenue;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -15,15 +13,15 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import java.util.Map;
+import java.time.LocalDate;
+import java.util.List;
 
 /**
  *
- * @author admin
+ * @author daoducdanh
  */
-@WebServlet(name = "ProductDetailController", urlPatterns = {"/ProductDetailController"})
-public class ProductDetailController extends HttpServlet {
+@WebServlet(name = "SaleStatisticController", urlPatterns = {"/sale/statistics"})
+public class SaleStatisticController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,18 +35,7 @@ public class ProductDetailController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ProductDetailController</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ProductDetailController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -61,28 +48,36 @@ public class ProductDetailController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-       protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
-        HttpSession session = request.getSession();
-        String role = (String) session.getAttribute("role");
-        ProductsDAO pDAO = new ProductsDAO();
-        ReviewsDAO r = new ReviewsDAO();
-        Products p = pDAO.getProductByID(id);
-        Map<Integer, Reviews> listr = r.getAllReviewsByProductID(id);
-        request.setAttribute("product", p);
-        request.setAttribute("listr", listr);
+        processRequest(request, response);
         
-        Users user = (Users) session.getAttribute("user");
         OrdersDAO ordersDAO = new OrdersDAO();
-        boolean checkUserPurchasedProduct = user == null ? false : ordersDAO.hasUserPurchasedProduct(user.getUserID(), id);
-        request.setAttribute("checkUserPurchasedProduct", checkUserPurchasedProduct);
-//        if(!role.equals("Customer")) {
-            request.getRequestDispatcher("ProductDetail.jsp").forward(request, response);
-//        } else {
-//            request.getRequestDispatcher("ProductDetailCustomer.jsp").forward(request, response);
-//        }
-
+        
+        LocalDate currentDate = LocalDate.now();
+        int currentYear = currentDate.getYear();
+        int currentMonth = currentDate.getMonthValue();
+        
+        String yearParam = request.getParameter("year");
+        String monthParam = request.getParameter("month");
+        
+        
+        int year = (yearParam != null) ? Integer.parseInt(yearParam) : currentYear;
+        int month = (monthParam != null) ? Integer.parseInt(monthParam) : currentMonth;
+        
+        List<DailyRevenue> statistic = ordersDAO.getDailyRevenueByMonthYear(month, year);
+        
+        List<Integer> dayArr = statistic.stream()
+                .map((t) -> t.getDay())
+                .toList();
+        List<Double> totalArr = statistic.stream()
+                .map((t) -> t.getTotalRevenue())
+                .toList();
+        request.setAttribute("dayArr", dayArr);
+        request.setAttribute("totalArr", totalArr);
+        request.setAttribute("selectedMonth", month);
+        request.setAttribute("selectedYear", year);
+        request.getRequestDispatcher("Statistics.jsp").forward(request, response);
     }
 
     /**

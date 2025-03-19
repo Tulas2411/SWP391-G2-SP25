@@ -4,8 +4,8 @@
  */
 package Controller;
 
-import DAO.*;
-import Model.Products;
+import DAO.OrdersDAO;
+import DAO.ReviewsDAO;
 import Model.Reviews;
 import Model.Users;
 import java.io.IOException;
@@ -16,14 +16,10 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.util.Map;
+import java.time.Instant;
 
-/**
- *
- * @author admin
- */
-@WebServlet(name = "ProductDetailController", urlPatterns = {"/ProductDetailController"})
-public class ProductDetailController extends HttpServlet {
+@WebServlet(name = "CreateReviewController", urlPatterns = {"/create-review"})
+public class CreateReviewController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,18 +33,7 @@ public class ProductDetailController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ProductDetailController</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ProductDetailController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -61,28 +46,9 @@ public class ProductDetailController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-       protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
-        HttpSession session = request.getSession();
-        String role = (String) session.getAttribute("role");
-        ProductsDAO pDAO = new ProductsDAO();
-        ReviewsDAO r = new ReviewsDAO();
-        Products p = pDAO.getProductByID(id);
-        Map<Integer, Reviews> listr = r.getAllReviewsByProductID(id);
-        request.setAttribute("product", p);
-        request.setAttribute("listr", listr);
-        
-        Users user = (Users) session.getAttribute("user");
-        OrdersDAO ordersDAO = new OrdersDAO();
-        boolean checkUserPurchasedProduct = user == null ? false : ordersDAO.hasUserPurchasedProduct(user.getUserID(), id);
-        request.setAttribute("checkUserPurchasedProduct", checkUserPurchasedProduct);
-//        if(!role.equals("Customer")) {
-            request.getRequestDispatcher("ProductDetail.jsp").forward(request, response);
-//        } else {
-//            request.getRequestDispatcher("ProductDetailCustomer.jsp").forward(request, response);
-//        }
-
+        processRequest(request, response);
     }
 
     /**
@@ -97,6 +63,29 @@ public class ProductDetailController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+        int productId = Integer.parseInt(request.getParameter("productId"));
+        String comment = request.getParameter("comment");
+        int rating = Integer.parseInt(request.getParameter("rating"));
+
+        HttpSession session = request.getSession();
+        Users user = (Users) session.getAttribute("user");
+        
+        ReviewsDAO reviewsDAO = new ReviewsDAO();
+        if (user == null) {
+            response.sendRedirect("Login.jsp");
+            return;
+        }
+
+        Reviews reviews = new Reviews();
+        reviews.setProductID(productId);
+        reviews.setCustomerID(user.getUserID());
+        reviews.setRating(rating);
+        reviews.setComment(comment);
+        if (reviewsDAO.addReview(reviews)) {
+            response.sendRedirect("/Project-SWP391-G2-SP25/ProductDetailController?id=" + productId);
+        } else {
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Đã xảy ra lỗi trong quá trình thêm đánh giá.");
+        }
     }
 
     /**

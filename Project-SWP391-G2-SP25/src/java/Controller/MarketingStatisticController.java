@@ -4,10 +4,7 @@
  */
 package Controller;
 
-import DAO.*;
-import Model.Products;
-import Model.Reviews;
-import Model.Users;
+import DAO.StatisticsDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -15,15 +12,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-import java.util.Map;
 
 /**
  *
- * @author admin
+ * @author daoducdanh
  */
-@WebServlet(name = "ProductDetailController", urlPatterns = {"/ProductDetailController"})
-public class ProductDetailController extends HttpServlet {
+@WebServlet(name = "MarketingStatisticController", urlPatterns = {"/marketing/statistics"})
+public class MarketingStatisticController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,18 +32,6 @@ public class ProductDetailController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ProductDetailController</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ProductDetailController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -61,28 +44,16 @@ public class ProductDetailController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-       protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int id = Integer.parseInt(request.getParameter("id"));
-        HttpSession session = request.getSession();
-        String role = (String) session.getAttribute("role");
-        ProductsDAO pDAO = new ProductsDAO();
-        ReviewsDAO r = new ReviewsDAO();
-        Products p = pDAO.getProductByID(id);
-        Map<Integer, Reviews> listr = r.getAllReviewsByProductID(id);
-        request.setAttribute("product", p);
-        request.setAttribute("listr", listr);
+        processRequest(request, response);
+        StatisticsDAO statisticsDAO = new StatisticsDAO();
         
-        Users user = (Users) session.getAttribute("user");
-        OrdersDAO ordersDAO = new OrdersDAO();
-        boolean checkUserPurchasedProduct = user == null ? false : ordersDAO.hasUserPurchasedProduct(user.getUserID(), id);
-        request.setAttribute("checkUserPurchasedProduct", checkUserPurchasedProduct);
-//        if(!role.equals("Customer")) {
-            request.getRequestDispatcher("ProductDetail.jsp").forward(request, response);
-//        } else {
-//            request.getRequestDispatcher("ProductDetailCustomer.jsp").forward(request, response);
-//        }
-
+        request.setAttribute("topViewedArticles", statisticsDAO.getTopViewedArticles());
+        request.setAttribute("topSellingProducts", statisticsDAO.getTopSellingProducts());
+        request.setAttribute("topSpendingCustomers", statisticsDAO.getTopSpendingCustomers());
+        request.setAttribute("topRatedProducts", statisticsDAO.getTopRatedProducts());
+        request.getRequestDispatcher("Statistics.jsp").forward(request, response);
     }
 
     /**
