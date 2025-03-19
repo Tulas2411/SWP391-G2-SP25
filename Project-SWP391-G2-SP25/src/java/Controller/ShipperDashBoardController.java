@@ -5,8 +5,8 @@
 
 package Controller;
 
-import DAO.OrdersDAO; // Giả định có DAO cho Orders
-import Model.Orders; // Giả định có model Orders
+import DAO.OrdersDAO;
+import Model.Orders;
 import DAO.UsersDAO;
 import Model.Users;
 import java.io.IOException;
@@ -33,14 +33,14 @@ public class ShipperDashBoardController extends HttpServlet {
 
         if (user != null && user.getRole().equalsIgnoreCase("Shipper")) { // Chỉ cho Shipper truy cập
             String statusFilter = request.getParameter("status"); // Lọc theo trạng thái đơn hàng
-            List<Orders> orderList = orderDAO.getAllOrders1(); // Lấy danh sách đơn hàng
+            List<Orders> orderList = orderDAO.getAllOrdersForShipper(user.getUserID(), statusFilter); // Lấy danh sách đơn hàng
             request.setAttribute("orders", orderList);
             request.setAttribute("currentUser", user);
             request.setAttribute("title", "Danh sách đơn hàng");
-            request.getRequestDispatcher("ShipperDashBoard.jsp").forward(request, response);
+            request.getRequestDispatcher("/Shipper/ShipperDashBoard.jsp").forward(request, response);
         } else {
             session.setAttribute("notificationErr", "Bạn không có quyền truy cập vào trang này");
-            response.sendRedirect("../Login.jsp");
+            response.sendRedirect("/Project-SWP391-G2-SP25/Login.jsp");
         }
     }
 
@@ -59,7 +59,7 @@ public class ShipperDashBoardController extends HttpServlet {
                     Orders order = orderDAO.getOrderByID(orderID);
                     if (order == null) {
                         session.setAttribute("notificationErr", "Đơn hàng không tồn tại.");
-                        response.sendRedirect(request.getContextPath() + "/ShipperDashBoard");
+                        response.sendRedirect(request.getContextPath() + "/Shipper/ShipperDashBoard");
                         return;
                     }
 
@@ -74,7 +74,7 @@ public class ShipperDashBoardController extends HttpServlet {
                     session.setAttribute("notificationErr", "ID đơn hàng không hợp lệ.");
                 }
             }
-            response.sendRedirect(request.getContextPath() + "/ShipperDashBoard");
+            response.sendRedirect(request.getContextPath() + "/Shipper/ShipperDashBoard");
         } else {
             session.setAttribute("notificationErr", "Bạn không có quyền truy cập vào trang này");
             response.sendRedirect(request.getContextPath() + "/Login.jsp");
