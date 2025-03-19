@@ -144,7 +144,7 @@
                     <div class="main__right-sensor">
                         <h3 class="main__right-heading">
                             <span class="main__right-heading-title">Thiết bị quạt</span>
-                            <a href="Category.jsp?id=TBQ" class="main__right-heading-link">
+                            <a href="productsList?category=TBQ" class="main__right-heading-link">
                                 Xem thêm
                                 <i class="main__right-heading-icon fa-solid fa-angle-right"></i>
                             </a>
@@ -171,7 +171,7 @@
                     <div class="main__right-sensor">
                         <h3 class="main__right-heading">
                             <span class="main__right-heading-title">Thiết bị chiếu sáng</span>
-                            <a href="Category.jsp?id=TBCS" class="main__right-heading-link">
+                            <a href="productsList?category=TBCS" class="main__right-heading-link">
                                 Xem thêm
                                 <i class="main__right-heading-icon fa-solid fa-angle-right"></i>
                             </a>
@@ -207,7 +207,7 @@
                     <div class="main__right-sensor">
                         <h3 class="main__right-heading">
                             <span class="main__right-heading-title">Công tắc điện</span>
-                            <a href="Category.jsp?id=CTD" class="main__right-heading-link">
+                            <a href="productsList?category=CTD" class="main__right-heading-link">
                                 Xem thêm
                                 <i class="main__right-heading-icon fa-solid fa-angle-right"></i>
                             </a>
@@ -243,7 +243,7 @@
                     <div class="main__right-sensor">
                         <h3 class="main__right-heading">
                             <span class="main__right-heading-title">Thiết bị thông minh</span>
-                            <a href="#" class="main__right-heading-link">
+                            <a href="productsList?category=TBTM" class="main__right-heading-link">
                                 Xem thêm
                                 <i class="main__right-heading-icon fa-solid fa-angle-right"></i>
                             </a>
