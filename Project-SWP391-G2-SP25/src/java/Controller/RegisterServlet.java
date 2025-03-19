@@ -231,7 +231,7 @@ public class RegisterServlet extends HttpServlet {
             sendOTPEmail(email, newOTP);
 
             // Chuyển hướng lại trang nhập OTP với thông báo thành công
-            request.setAttribute("status", "Mã OTP mới đã được gửi lại!");
+            request.setAttribute("message", "Mã OTP mới đã được gửi lại!");
             RequestDispatcher dispatcher = request.getRequestDispatcher("EnterOtpRegister.jsp");
             dispatcher.forward(request, response);
         } else {
