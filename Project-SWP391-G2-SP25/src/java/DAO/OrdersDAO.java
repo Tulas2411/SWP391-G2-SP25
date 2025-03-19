@@ -336,11 +336,11 @@ public class OrdersDAO extends DBContext {
     }
 
     public boolean updateOrder(Orders order) {
-        String sql = "UPDATE Orders SET CustomerID = ?, OrderDate = ?, DeliveryAddress = ?, Status = ?, TotalAmount = ?, BillOfLading = ? WHERE OrderID = ?";
+        String sql = "UPDATE Orders SET CustomerID = ?, OrderDate = ?, DeliveryAddress = ?, Status = ?, TotalAmount = ?, BillOfLading = ?, ShipperID = ? WHERE OrderID = ?";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             setOrderPreparedStatement(ps, order);
-            ps.setInt(7, order.getOrderID());
+            ps.setInt(8, order.getOrderID());
             ps.executeUpdate();
             return true;
         } catch (SQLException e) {
@@ -371,6 +371,7 @@ public class OrdersDAO extends DBContext {
         order.setStatus(rs.getString("Status"));
         order.setTotalAmount(rs.getDouble("TotalAmount"));
         order.setBillOfLading(rs.getString("BillOfLading"));
+        order.setShipperID(rs.getInt("ShipperID"));
         return order;
     }
 
@@ -381,6 +382,7 @@ public class OrdersDAO extends DBContext {
         ps.setString(4, order.getStatus());
         ps.setDouble(5, order.getTotalAmount());
         ps.setString(6, order.getBillOfLading());
+        ps.setInt(7, order.getShipperID());
     }
 
     public Map<Integer, Orders> getOrdersByCustomerIDasMap(int customerID) {
@@ -472,9 +474,37 @@ public class OrdersDAO extends DBContext {
         return false;
     }
 
+    public List<Orders> getAllOrdersForShipper(int shipperID, String status) {
+        List<Orders> orderList = new ArrayList<>();
+        String sql = "SELECT * FROM orders WHERE shipperID = ?";
+        if (status != null && !status.trim().isEmpty()) {
+            sql += " AND status = ?";
+        }
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            // Gán giá trị cho ShipperID
+            ps.setInt(1, shipperID);
+            // Gán giá trị cho Status nếu có
+            if (status != null && !status.trim().isEmpty()) {
+                ps.setString(2, status);
+            }
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Orders order = extractOrderFromResultSet(rs);
+                orderList.add(order);
+            }
+        } catch (SQLException e) {
+            System.out.println("ERROR fetching orders: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return orderList;
+    }
+
     public static void main(String[] args) {
         OrdersDAO oDAO = new OrdersDAO();
-        Orders order = new Orders(6, null, null, "Pending", 0, null);
-        System.out.println(oDAO.getLatestOrder().getOrderDate());
+        Orders order = oDAO.getOrderByID(21);
+        order.setShipperID(6);
+        System.out.println(oDAO.getAllOrdersForShipper(6, null));
     }
 }
