@@ -25,7 +25,7 @@ import java.util.List;
  */
 @WebServlet(name = "OrdersList", urlPatterns = {"/sale/OrdersList"})
 public class OrdersList extends HttpServlet {
-    private static final int PAGE_SIZE = 3;  
+    private static final int PAGE_SIZE = 5;  
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>

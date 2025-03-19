@@ -9,14 +9,14 @@
         <c:if test="${not empty sessionScope.notification}">
             <div class="alert alert-success alert-dismissible fade show" role="alert" style="text-align: center">
                 ${sessionScope.notification}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng"></button>
             </div>
             <% session.removeAttribute("notification"); %>
         </c:if>
         <c:if test="${not empty sessionScope.notificationErr}">
             <div class="alert alert-danger alert-dismissible fade show" role="alert" style="text-align: center">
                 ${sessionScope.notificationErr}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng"></button>
             </div>
             <% session.removeAttribute("notificationErr");%>
         </c:if>
@@ -42,12 +42,12 @@
                                 <div class="col-md-3">
                                     <label for="roleFilter" class="form-label">Vai trò</label>
                                     <select name="role" id="roleFilter" class="form-select" onchange="this.form.submit()">
-                                        <option value="" ${empty param.role ? 'selected' : ''}>All</option>
-                                        <option value="Admin" ${param.role eq 'Admin' ? 'selected' : ''}>Admin</option>
-                                        <option value="SaleManager" ${param.role eq 'SaleManager' ? 'selected' : ''}>Sale Manager</option>
-                                        <option value="Sale" ${param.role eq 'Sale' ? 'selected' : ''}>Sale</option>
+                                        <option value="" ${empty param.role ? 'selected' : ''}>Tất cả</option>
+                                        <option value="Admin" ${param.role eq 'Admin' ? 'selected' : ''}>Quản trị viên</option>
+                                        <option value="SaleManager" ${param.role eq 'SaleManager' ? 'selected' : ''}>Quản lý bán hàng</option>
+                                        <option value="Sale" ${param.role eq 'Sale' ? 'selected' : ''}>Nhân viên bán hàng</option>
                                         <option value="Marketing" ${param.role eq 'Marketing' ? 'selected' : ''}>Marketing</option>
-                                        <option value="Customer" ${param.role eq 'Customer' ? 'selected' : ''}>Customer</option>
+                                        <option value="Customer" ${param.role eq 'Customer' ? 'selected' : ''}>Khách hàng</option>
                                     </select>
                                 </div>
                                 <div class="col-md-3">
@@ -79,8 +79,21 @@
                                 <td>${status.index + 1}</td>
                                 <td>${u.firstName} ${u.lastName}</td>
                                 <td>${u.userName} </td>
-                                <td>${u.gender} </td>
-                                <td>${u.role} </td>
+                                <td>
+                                    <c:choose>
+                                        <c:when test="${u.gender eq 'Male'}">Nam</c:when>
+                                        <c:otherwise>Nữ</c:otherwise>
+                                    </c:choose>
+                                </td>
+                                <td>
+                                    <c:choose>
+                                        <c:when test="${u.role eq 'Admin'}">Quản trị viên</c:when>
+                                        <c:when test="${u.role eq 'SaleManager'}">Quản lý bán hàng</c:when>
+                                        <c:when test="${u.role eq 'Sale'}">Nhân viên bán hàng</c:when>
+                                        <c:when test="${u.role eq 'Marketing'}">Marketing</c:when>
+                                        <c:otherwise>Khách hàng</c:otherwise>
+                                    </c:choose>
+                                </td>
                                 <td>${u.email} </td>
                                 <td>
                                     <c:choose>
@@ -113,7 +126,6 @@
                                         </form>
                                     </c:if>
                                 </td>
-
                             </tr>
                         </c:forEach>
                     </tbody>
@@ -122,28 +134,28 @@
         </div>
     </div>
 </main>
-<!-- Edit Role Modal -->
+<!-- Modal Sửa Vai Trò -->
 <div class="modal fade" id="editRoleModal" tabindex="-1" aria-labelledby="editRoleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <!-- Form to submit the role change -->
+            <!-- Form để gửi thay đổi vai trò -->
             <form action="${contextPath}/admin/user-management" method="POST">
                 <div class="modal-header">
                     <h5 class="modal-title" id="editRoleModalLabel">Cập nhật người dùng</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
                 </div>
                 <div class="modal-body">
-                    <!-- Hidden field to store the user ID -->
+                    <!-- Trường ẩn để lưu ID người dùng -->
                     <input type="hidden" id="editUserId" name="id" value="">
-                    <input type="hidden"  name="action" value="edit">
+                    <input type="hidden" name="action" value="edit">
                     <div class="mb-3">
                         <label for="roleSelect" class="form-label">Vai trò</label>
                         <select class="form-select" name="role" id="roleSelect">
-                            <option value="Admin">Admin</option>
-                            <option value="SaleManager">Sale Manager</option>
-                            <option value="Sale">Sale</option>
+                            <option value="Admin">Quản trị viên</option>
+                            <option value="SaleManager">Quản lý bán hàng</option>
+                            <option value="Sale">Nhân viên bán hàng</option>
                             <option value="Marketing">Marketing</option>
-                            <option value="Customer">Customer</option>
+                            <option value="Customer">Khách hàng</option>
                         </select>
                     </div>
                 </div>
@@ -155,7 +167,6 @@
         </div>
     </div>
 </div>
-<!-- Add User Modal -->
 <!-- Modal Thêm Người Dùng -->
 <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -225,7 +236,7 @@
                         <label for="role" class="form-label">Vai trò</label>
                         <select class="form-select" id="role" name="role" required>
                             <option value="">Chọn vai trò</option>
-                            <option value="Admin">Admin</option>
+                            <option value="Admin">Quản trị viên</option>
                             <option value="SaleManager">Quản lý bán hàng</option>
                             <option value="Sale">Nhân viên bán hàng</option>
                             <option value="Marketing">Marketing</option>
@@ -261,31 +272,26 @@
     </div>
 </div>
 
-
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var editRoleModal = document.getElementById('editRoleModal');
         editRoleModal.addEventListener('show.bs.modal', function (event) {
-            // Get the button that triggered the modal
             var button = event.relatedTarget;
-            // Extract the data attributes
             var userId = button.getAttribute('data-userid');
             var userName = button.getAttribute('data-username');
             var currentRole = button.getAttribute('data-currentrole');
 
-            // Update the modal's content.
             var modalTitle = editRoleModal.querySelector('.modal-title');
             var hiddenInput = editRoleModal.querySelector('#editUserId');
             var roleSelect = editRoleModal.querySelector('#roleSelect');
 
-            modalTitle.textContent = 'Edit Role for User  ' + userName;
+            modalTitle.textContent = 'Sửa Vai Trò cho Người Dùng ' + userName;
             hiddenInput.value = userId;
-            roleSelect.value = currentRole; // pre-select the current role
+            roleSelect.value = currentRole;
         });
     });
 </script>
 <script>
-    // Bootstrap 5 custom form validation
     (function () {
         'use strict';
         var forms = document.querySelectorAll('.needs-validation');

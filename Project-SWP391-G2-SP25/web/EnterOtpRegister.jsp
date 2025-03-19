@@ -39,7 +39,9 @@ if(request.getAttribute("message")!=null)
 }
 		  
                                 %>
-
+                                <c:if test="${not empty status}">
+                                    <p style="color: green;">${status}</p>
+                                </c:if>
                                 <div class="panel-body">
 
                                     <form id="register-form" action="ValidateOtpRegister" role="form" autocomplete="off"
@@ -91,6 +93,7 @@ if(request.getAttribute("message")!=null)
                                 <input type="hidden" class="hide" name="token" id="token"
                                        value="">
                                 </form>
+                                <p>Không nhận được mã? <a href="RegisterServlet?action=resendOTP">Gửi lại mã OTP</a></p>
 
                             </div>
                         </div>

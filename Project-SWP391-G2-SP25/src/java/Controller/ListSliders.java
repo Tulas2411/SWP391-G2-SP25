@@ -5,7 +5,9 @@
 package Controller;
 
 import DAO.SlidersDAO;
+import DAO.UsersDAO;
 import Model.Sliders;
+import Model.Users;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -14,6 +16,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -62,38 +65,49 @@ public class ListSliders extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    
+        UsersDAO userDAO = new UsersDAO();
+        HttpSession session = request.getSession();
+        String emailSession = (String) session.getAttribute("email");
+        Users user = userDAO.getUserByEmail(emailSession);
         String search = request.getParameter("search");
         String status = request.getParameter("status");
 
+        if (user != null) {
+            if (user.getRole().equalsIgnoreCase("marketing")) {
+                int currentPage = 1;
+                String pageParam = request.getParameter("page");
+                if (pageParam != null && !pageParam.isEmpty()) {
+                    try {
+                        currentPage = Integer.parseInt(pageParam);
+                    } catch (NumberFormatException e) {
+                        currentPage = 1;
+                    }
+                }
 
-        int currentPage = 1;
-        String pageParam = request.getParameter("page");
-        if (pageParam != null && !pageParam.isEmpty()) {
-            try {
-                currentPage = Integer.parseInt(pageParam);
-            } catch (NumberFormatException e) {
-                currentPage = 1; 
+                int pageSize = 5;
+
+                SlidersDAO slidersDAO = new SlidersDAO();
+                int totalRecords = slidersDAO.countSliders(search, status);
+                int totalPages = (int) Math.ceil((double) totalRecords / pageSize);
+
+                List<Sliders> sliders = slidersDAO.getSlidersByPage(search, status, currentPage, pageSize);
+
+                request.setAttribute("sliders", sliders);
+                request.setAttribute("currentPage", currentPage);
+                request.setAttribute("totalPages", totalPages);
+                request.setAttribute("search", search);
+                request.setAttribute("status", status);
+                 request.getRequestDispatcher("SliderList.jsp").forward(request, response);
+            } else {
+                session.setAttribute("notificationErr", "Bạn không có quyền truy cập vào trang này");
+                response.sendRedirect("../Login.jsp");
             }
+        } else {
+            session.setAttribute("notificationErr", "Bạn cần đăng nhập trước!");
+            response.sendRedirect("../Login.jsp");
         }
 
-        int pageSize = 5;
-
-
-        SlidersDAO slidersDAO = new SlidersDAO();
-        int totalRecords = slidersDAO.countSliders(search, status);  
-        int totalPages = (int) Math.ceil((double) totalRecords / pageSize); 
-
-      
-        List<Sliders> sliders = slidersDAO.getSlidersByPage(search, status, currentPage, pageSize);
-
-        request.setAttribute("sliders", sliders);
-        request.setAttribute("currentPage", currentPage);
-        request.setAttribute("totalPages", totalPages);
-        request.setAttribute("search", search);
-        request.setAttribute("status", status);
-
-        request.getRequestDispatcher("SliderList.jsp").forward(request, response);
+       
     }
 
     /**

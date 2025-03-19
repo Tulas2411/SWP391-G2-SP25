@@ -4,90 +4,86 @@
 <c:set var="contextPath" value="${pageContext.request.contextPath}" />
 <jsp:include page="header.jsp"></jsp:include>
 
-<main>
-    <div class="container-fluid px-4">
-        <h1 class="mt-4">Dashboard</h1>
-        
-        <!-- Date Range Form -->
-        <div class="row mb-4">
-            <div class="col-md-12">
-                <form action="${contextPath}/admin/dashboard" method="get" class="form-inline">
-                    <label for="startDate">Start Date:</label>
+    <main>
+        <div class="container-fluid px-4">
+            <h1 class="mt-4">Bảng điều khiển</h1>
+
+            <!-- Form Khoảng Thời Gian -->
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <form action="${contextPath}/admin/dashboard" method="get" class="form-inline">
+                    <label for="startDate">Ngày bắt đầu:</label>
                     <input type="date" id="startDate" name="startDate" value="${startDate}" required />
-                    &nbsp;&nbsp;
-                    <label for="endDate">End Date:</label>
+                      
+                    <label for="endDate">Ngày kết thúc:</label>
                     <input type="date" id="endDate" name="endDate" value="${endDate}" required />
-                    &nbsp;&nbsp;
-                    <button type="submit" class="btn btn-primary">Filter</button>
+                      
+                    <button type="submit" class="btn btn-primary">Lọc</button>
                 </form>
             </div>
         </div>
-        
-        <!-- Dashboard Cards -->
+
+        <!-- Các Thẻ Thông Tin Bảng Điều Khiển -->
         <div class="row">
-            <!-- Successful Orders Card -->
+            <!-- Thẻ Đơn Hàng Thành Công -->
             <div class="col-xl-3 col-md-6">
                 <div class="card bg-primary text-white mb-4">
                     <div class="card-body">
-                        Successful Orders: ${orderStats.successOrders}
+                        Đơn hàng thành công: ${orderStats.successOrders}
                     </div>
                     <div class="card-footer d-flex align-items-center justify-content-between">
-                        
                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                     </div>
                 </div>
             </div>
-            <!-- Cancelled Orders Card -->
+            <!-- Thẻ Đơn Hàng Bị Hủy -->
             <div class="col-xl-3 col-md-6">
                 <div class="card bg-warning text-white mb-4">
                     <div class="card-body">
-                        Cancelled Orders: ${orderStats.cancelledOrders}
+                        Đơn hàng bị hủy: ${orderStats.cancelledOrders}
                     </div>
                     <div class="card-footer d-flex align-items-center justify-content-between">
-                        
                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                     </div>
                 </div>
             </div>
-            <!-- Submitted Orders Card -->
+            <!-- Thẻ Đơn Hàng Đã Gửi -->
             <div class="col-xl-3 col-md-6">
                 <div class="card bg-success text-white mb-4">
                     <div class="card-body">
-                        Submitted Orders: ${orderStats.submittedOrders}
+                        Đơn hàng đã gửi: ${orderStats.submittedOrders}
                     </div>
                     <div class="card-footer d-flex align-items-center justify-content-between">
-                        
                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                     </div>
                 </div>
             </div>
-            <!-- Total Revenue Card -->
+            <!-- Thẻ Tổng Doanh Thu -->
             <div class="col-xl-3 col-md-6">
                 <div class="card bg-danger text-white mb-4">
                     <div class="card-body">
-                        Total Revenue: <fmt:formatNumber value="${totalRevenue}" type="currency" currencySymbol="$"/>
+                        Tổng doanh thu: <fmt:formatNumber value="${totalRevenue}" type="number" groupingUsed="true" />đ
                     </div>
                     <div class="card-footer d-flex align-items-center justify-content-between">
-                        
                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                     </div>
                 </div>
             </div>
         </div>
-        
-        <!-- Order Trends Table -->
+
+        <!-- Bảng Xu Hướng Đơn Hàng -->
         <div class="card mb-4">
             <div class="card-header">
                 <i class="fas fa-table me-1"></i>
-                Order Trends (from ${startDate} to ${endDate})
+                Xu hướng đơn hàng (từ ${startDate} đến ${endDate})
             </div>
             <div class="card-body">
                 <table class="table table-bordered" id="trendTable">
                     <thead>
                         <tr>
-                            <th>Order Day</th>
-                            <th>Total Orders</th>
-                            <th>Successful Orders</th>
+                            <th>Ngày đặt hàng</th>
+                            <th>Tổng số đơn hàng</th>
+                            <th>Đơn hàng thành công</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -102,8 +98,6 @@
                 </table>
             </div>
         </div>
-        
-        
     </div>
 </main>
 

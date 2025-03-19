@@ -18,7 +18,7 @@
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Blog Details</title>
+        <title>Chi Tiết Bài Viết</title>
         <link rel="shortcut icon" href="assets/img/S4EWhite.PNG" type="image/x-icon" />
         <link rel="stylesheet" href="assets/css/reset.css" />
         <link rel="stylesheet" href="assets/css/base.css" />
@@ -42,8 +42,8 @@
             <div class="post-container" style="margin-top: 10px;">
                 <!-- Nút chuyển đổi chế độ chỉnh sửa -->
                 <label class="switch">
-                                <input type="checkbox" id="edit-toggle">
-                                <span class="slider"></span>
+                    <input type="checkbox" id="edit-toggle">
+                    <span class="slider"></span>
                 </label>
 
                 <div class="post-header">
@@ -53,7 +53,7 @@
 
                     <!-- Thông tin meta -->
                     <p id="post-meta">
-                        🗓 <%= post.getCreateDate()%> &nbsp;&nbsp;
+                        🗓 <%= post.getCreateDate()%>   
                         ✍️ Tác giả: <%= post.getAuthor()%>
                     </p>
                 </div>
@@ -126,8 +126,8 @@
                         }
                     },
                     error: function(xhr, status, error) {
-                        console.error('AJAX Error:', error);
-                        alert('Lỗi server: ' + xhr.responseText);
+                        console.error('Lỗi AJAX:', error);
+                        alert('Lỗi máy chủ: ' + xhr.responseText);
                     }
                 });
             });
