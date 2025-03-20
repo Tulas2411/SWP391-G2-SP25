@@ -4,7 +4,16 @@
  */
 package Controller;
 
+import DAO.OrderDetailsDAO;
+import DAO.OrdersDAO;
+import DAO.ProductsDAO;
 import DAO.SendMail;
+import DAO.UsersDAO;
+import Model.EmailTemplate;
+import Model.OrderDetailWithProduct;
+import Model.OrderDetails;
+import Model.Orders;
+import Model.Products;
 import Model.Users;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -14,6 +23,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Vector;
 
 /**
  *
@@ -77,11 +89,29 @@ public class FeedBackController extends HttpServlet {
         
         SendMail sendMail = new SendMail();
         
-        HttpSession httpSession = request.getSession();
-        Users users = (Users) httpSession.getAttribute("user");
-        String feedBackUrl = "http://localhost:8080/Project-SWP391-G2-SP25/feed-back";
+        OrdersDAO ordersDAO = new OrdersDAO();
+        UsersDAO usersDAO = new UsersDAO();
+        OrderDetailsDAO orderDetailsDAO = new OrderDetailsDAO();
+        ProductsDAO productsDAO = new ProductsDAO();
         
-        sendMail.sendMail(users.getEmail(), "Đặt hàng thành công", "Shop xin feedback của bạn: " + feedBackUrl);
+        
+        
+        Orders orders = ordersDAO.getOrderByID(2);
+        Users users = usersDAO.getUserByID(orders.getCustomerID());
+        
+        Vector<OrderDetails> orderDetailses = orderDetailsDAO.getOrderDetailsByOrderID(2);
+        
+        List<OrderDetailWithProduct> list = new ArrayList<>();
+        
+        for(OrderDetails details : orderDetailses){
+            Products products = productsDAO.getProductByID(details.getProductID());
+            list.add(new OrderDetailWithProduct(details, products));
+        }
+        
+        EmailTemplate emailTemplate = new EmailTemplate(orders, list, users);
+        
+        
+        sendMail.sendMail(users.getEmail(), "Đặt hàng thành công", emailTemplate.getTemplate());
         response.sendRedirect("home");
     }
 

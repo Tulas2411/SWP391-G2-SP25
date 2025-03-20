@@ -16,7 +16,7 @@
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Cửa hàng đồ điện - S4E</title>
+        <title>Cửa hàng đồ diện - S4E</title>
         <link rel="shortcut icon" href="assets/img/S4EWhite.PNG" type="image/x-icon" />
         <link rel="stylesheet" href="assets/css/reset.css" />
         <link rel="stylesheet" href="assets/css/base.css" />
@@ -26,6 +26,7 @@
         <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css" />
         <link rel="stylesheet" href="assets/fonts/fontawesome-free-6.0.0-web/css/all.css" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swapsubset=vietnamese" />
+
     </head>
     <body>
         <%@ include file="./Public/header.jsp" %>
@@ -36,6 +37,8 @@
                 <div class="main__left">
                     <!-- Danh mục sản phẩm - Gom các sản phẩm thành các danh mục nhỏ - Hiển thị trên cùng bên trái main trang web -->
                     <h2 class="main__left-title">DANH MỤC SẢN PHẨM</h2>
+
+                 
 
                     <ul class="main__left-category-list">
                         <c:forEach var="categoryID" items="${['TBQ', 'TBCS', 'CTD', 'TBTM', 'TBSCBT']}">
@@ -51,7 +54,8 @@
                         </c:forEach>
                     </ul>
 
-                    <!-- Sản phẩm khuyến mãi -->
+                    <!-- Main Left Promotional Products : Sản phẩm khuyến mãi -->
+                    <!-- Một số sản phẩm khuyến mãi - Hiển thị dưới Danh mục sản phẩm -->
                     <h2 class="main__left-title main__left-margin-top">SẢN PHẨM KHUYẾN MÃI</h2>
                     <ul class="main__left-product-list">
                         <c:forEach var="product" items="${promotedProducts}" varStatus="status">
@@ -73,7 +77,8 @@
                         </c:forEach>
                     </ul>
 
-                    <!-- Sản phẩm mới -->
+                    <!-- Main Left New products : Sản phẩm mới -->
+                    <!-- Một số sản phẩm mới của cửa hàng - Hiển thị dưới Sản phẩm khuyến mãi -->
                     <h2 class="main__left-title main__left-margin-top">SẢN PHẨM MỚI</h2>
                     <ul class="main__left-product-list">
                         <c:forEach var="product" items="${newProducts}" varStatus="status">
@@ -92,7 +97,8 @@
                         </c:forEach>
                     </ul>
 
-                    <!-- Bài viết mới -->
+                    <!-- Main Left Post -->
+                    <!-- Các bài báo mới - Hiển thị dưới Sản phẩm mới -->
                     <h2 class="main__left-title main__left-margin-top">BÀI VIẾT MỚI</h2>
                     <ul class="main__left-posts-list">
                         <c:forEach var="post" items="${latestPosts}">
@@ -104,13 +110,14 @@
                             </li>
                         </c:forEach>
                     </ul>
+
                 </div>
 
                 <!-- Main Right -->
                 <!-- Đây là phần thân bên phải của trang web -->
                 <div class="main__right">
                     <!-- Panel của trang web - Có thể lướt qua lại, dùng để quảng cáo làm cho trang web nổi bật hơn -->
-                    <!-- Bắt đầu Slider Hình ảnh -->
+                    <!-- Imgage Slider start -->
                     <div class="main__right-panel">
                         <div class="swiper swiper-panel">
                             <!-- Additional required wrapper -->
@@ -128,9 +135,10 @@
                             <div class="panel-next">
                                 <i class="fa-solid fa-angle-right button-next"></i>
                             </div>
+
                         </div>
                     </div>   
-                    <!-- Kết thúc Slider Hình ảnh -->
+                    <!-- Imgage Slider end -->
 
                     <!-- Danh mục các sản phẩm quạt điện -->
                     <div class="main__right-sensor">
@@ -158,7 +166,8 @@
                         </div>
                     </div>
 
-                    <!-- Thiết bị chiếu sáng - Bắt đầu -->
+                    <!--Danh mục Thiết bị chiếu sáng 
+                        Lighting equipment : Thiết bị chiếu sáng - Start -->
                     <div class="main__right-sensor">
                         <h3 class="main__right-heading">
                             <span class="main__right-heading-title">Thiết bị chiếu sáng</span>
@@ -191,9 +200,10 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Thiết bị chiếu sáng - Kết thúc -->
+                    <!--Lighting equipment : Thiết bị chiếu sáng - End -->
 
-                    <!-- Công tắc điện - Bắt đầu -->
+                    <!-- Danh mục các sản phẩm Công tắc điện -->
+                    <!-- Electronic Switch : Công tắc điện - Start -->
                     <div class="main__right-sensor">
                         <h3 class="main__right-heading">
                             <span class="main__right-heading-title">Công tắc điện</span>
@@ -226,9 +236,10 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Công tắc điện - Kết thúc -->
+                    <!-- Electronic Switch : Công tắc điện - End -->
 
-                    <!-- Thiết bị thông minh - Bắt đầu -->
+                    <!-- Thiết bị thông minh - Start -->
+                    <!-- Main Right Smart Devices -->
                     <div class="main__right-sensor">
                         <h3 class="main__right-heading">
                             <span class="main__right-heading-title">Thiết bị thông minh</span>
@@ -252,7 +263,8 @@
                             </c:forEach>
                         </div>
                     </div>
-                    <!-- Thiết bị thông minh - Kết thúc -->
+
+                    <!-- Thiết bị thông minh - End -->
                 </div>
                 <div class="clear"></div>
 
