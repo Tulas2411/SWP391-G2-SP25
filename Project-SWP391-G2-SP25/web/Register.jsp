@@ -138,10 +138,24 @@
                                 <div class="form-group">
                                     <label for="firstname"><i class="zmdi zmdi-account material-icons-name"></i></label>
                                     <input type="text" name="firstname" id="firstname" placeholder="Họ" required="" />
+                                    <div id="error-firstname-message" style="font-size: 10px; color: red;">
+                                        <%
+                                            if ("invalid_firstname".equals(request.getAttribute("status"))) {
+                                                out.print(request.getAttribute("status"));
+                                            }
+                                        %>
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="lastname"><i class="zmdi zmdi-account material-icons-name"></i></label>
                                     <input type="text" name="lastname" id="lastname" placeholder="Tên" required=""/>
+                                    <div id="error-lastname-message" style="font-size: 10px; color: red;">
+                                        <%
+                                            if ("invalid_lastname".equals(request.getAttribute("status"))) {
+                                                out.print(request.getAttribute("status"));
+                                            }
+                                        %>
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="username"><i class="zmdi zmdi-account material-icons-name"></i></label>
