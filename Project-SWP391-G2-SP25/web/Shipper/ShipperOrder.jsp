@@ -79,7 +79,10 @@
                 } else if ("Delivered".equals(status)) {
                     color = "green";
                     statusText = "Giao thành công";
-                } else {
+                } else if ("Processed".equals(status)) {
+                    color = "Orange";
+                    statusText = "Chờ nhận đơn";
+                }else {
                     color = "red";
                     statusText = "Đã hủy"; // Giả định trạng thái khác là "Cancelled"
                 }
@@ -93,8 +96,16 @@
     <form action="${contextPath}/ShipperOrderDetail" method="POST" style="display:inline"
           onsubmit="return confirm('Xác nhận giao hàng thành công?');">
         <input type="hidden" name="action" value="updateStatus">
-        <input type="hidden" name="orderID" value="<%=o.getOrderID()%>}">
+        <input type="hidden" name="orderID" value="<%=o.getOrderID()%>">
         <button type="submit" class="btn btn-success btn-sm">Giao Thành Công</button>
+    </form>
+    <%}%>
+    <%if(o.getStatus().equalsIgnoreCase("Processed")){%>
+    <form action="${contextPath}/ShipperOrderDetail" method="POST" style="display:inline"
+          onsubmit="return confirm('Bạn muốn nhận đơn hàng?');">
+        <input type="hidden" name="action" value="updateStatus1">
+        <input type="hidden" name="orderID" value="<%=o.getOrderID()%>">
+        <button type="submit" class="btn btn-success btn-sm">Nhận đơn hàng</button>
     </form>
     <%}%>
 </main>

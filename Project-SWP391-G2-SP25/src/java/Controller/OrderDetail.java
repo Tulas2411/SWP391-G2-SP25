@@ -167,7 +167,7 @@ public class OrderDetail extends HttpServlet {
                     }
 
                     // Cập nhật trạng thái thành "Delivered"
-                    boolean updated = ordersDAO.updateOrderStatus(orderID, "Shipping");
+                    boolean updated = ordersDAO.updateOrderStatus(orderID, "Processed");
                     if (updated) {
                         session.setAttribute("notification", "Cập nhật trạng thái đơn hàng thành công");
                         response.sendRedirect(request.getContextPath() + "/sale/OrderDetail?id=" + orderID);

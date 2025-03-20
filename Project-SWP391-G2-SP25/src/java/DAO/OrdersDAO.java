@@ -500,11 +500,35 @@ public class OrdersDAO extends DBContext {
         }
         return orderList;
     }
+    public List<Orders> getAllOrdersbyStatus(String status) {
+        List<Orders> orderList = new ArrayList<>();
+        String sql = "SELECT * FROM orders WHERE";
+        if (status != null && !status.trim().isEmpty()) {
+            sql += " status = ?";
+        }
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            // Gán giá trị cho Status nếu có
+            if (status != null && !status.trim().isEmpty()) {
+                ps.setString(1, status);
+            }
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Orders order = extractOrderFromResultSet(rs);
+                orderList.add(order);
+            }
+        } catch (SQLException e) {
+            System.out.println("ERROR fetching orders: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return orderList;
+    }
 
     public static void main(String[] args) {
         OrdersDAO oDAO = new OrdersDAO();
         Orders order = oDAO.getOrderByID(21);
         order.setShipperID(6);
-        System.out.println(oDAO.getAllOrdersForShipper(6, null));
+        System.out.println(oDAO.getAllOrdersbyStatus("Processed"));
     }
 }

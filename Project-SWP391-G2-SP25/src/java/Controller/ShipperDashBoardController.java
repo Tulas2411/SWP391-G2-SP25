@@ -74,7 +74,7 @@ public class ShipperDashBoardController extends HttpServlet {
                     session.setAttribute("notificationErr", "ID đơn hàng không hợp lệ.");
                 }
             }
-            response.sendRedirect(request.getContextPath() + "ShipperDashBoard");
+            response.sendRedirect(request.getContextPath() + "/ShipperDashBoard");
         } else {
             session.setAttribute("notificationErr", "Bạn không có quyền truy cập vào trang này");
             response.sendRedirect(request.getContextPath() + "/Login.jsp");

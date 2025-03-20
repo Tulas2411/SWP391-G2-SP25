@@ -4,8 +4,10 @@
  */
 package Controller;
 
-import DAO.*;
-import Model.*;
+import DAO.OrdersDAO;
+import DAO.UsersDAO;
+import Model.Orders;
+import Model.Users;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -15,18 +17,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
-import java.util.Map;
 
 /**
  *
  * @author admin
  */
-@WebServlet(name = "ShipperOrderDetailController", urlPatterns = {"/ShipperOrderDetail"})
-public class ShipperOrderDetailController extends HttpServlet {
+@WebServlet(name = "ShipperOrderProController", urlPatterns = {"/ShipperOrderPro"})
+public class ShipperOrderProController extends HttpServlet {
 
     UsersDAO userDAO = new UsersDAO();
-    OrdersDAO orderDAO = new OrdersDAO();
-    OrderDetailsDAO odDAO = new OrderDetailsDAO();
+    OrdersDAO orderDAO = new OrdersDAO(); // Thêm DAO cho Orders
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -45,10 +45,10 @@ public class ShipperOrderDetailController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ShipperOrderDetailController</title>");
+            out.println("<title>Servlet ShipperOrderProController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ShipperOrderDetailController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ShipperOrderProController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -67,42 +67,52 @@ public class ShipperOrderDetailController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        Users user = (Users) session.getAttribute("user");
-        int id = Integer.parseInt(request.getParameter("id"));
+        String emailSession = (String) session.getAttribute("email");
+        Users user = userDAO.getUserByEmail(emailSession);
+
         if (user != null && user.getRole().equalsIgnoreCase("Shipper")) { // Chỉ cho Shipper truy cập
-            Map<Integer, OrderDetails> orderList = odDAO.getOrderDetailsByOrderIDasMap(id);
-            Orders o = orderDAO.getOrderByID(id);
-            request.setAttribute("list", orderList);
-            request.setAttribute("o", o);
+            List<Orders> orderList = orderDAO.getAllOrdersbyStatus( "Processed"); // Lấy danh sách đơn hàng
+            request.setAttribute("orders", orderList);
             request.setAttribute("currentUser", user);
-            request.setAttribute("title", "Chi tiết đơn hàng");
-            request.getRequestDispatcher("/Shipper/ShipperOrder.jsp").forward(request, response);
+            request.setAttribute("title", "Danh sách đơn hàng");
+            request.getRequestDispatcher("Shipper/OrderProcessed.jsp").forward(request, response);
         } else {
             session.setAttribute("notificationErr", "Bạn không có quyền truy cập vào trang này");
             response.sendRedirect("/Project-SWP391-G2-SP25/Login.jsp");
         }
     }
 
+    /**
+     * Handles the HTTP <code>POST</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         String emailSession = (String) session.getAttribute("email");
-        Users currentUser = (Users) session.getAttribute("user");
-        int orderID = Integer.parseInt(request.getParameter("orderID"));
+        Users currentUser = userDAO.getUserByEmail(emailSession);
+
         if (currentUser != null && currentUser.getRole().equalsIgnoreCase("Shipper")) {
             String action = request.getParameter("action");
             if ("updateStatus".equals(action)) {
                 try {
+                    int orderID = Integer.parseInt(request.getParameter("orderID"));
                     Orders order = orderDAO.getOrderByID(orderID);
                     if (order == null) {
                         session.setAttribute("notificationErr", "Đơn hàng không tồn tại.");
-                        response.sendRedirect(request.getContextPath() + "/ShipperDashBoard");
+                        response.sendRedirect(request.getContextPath() + "ShipperOrderPro");
                         return;
                     }
 
-                    // Cập nhật trạng thái thành "Delivered"
-                    boolean updated = orderDAO.updateOrderStatus(orderID, "Delivered");
+                    order = orderDAO.getOrderByID(orderID);
+                    order.setShipperID(currentUser.getUserID());
+                    order.setStatus("Shipping");
+                    boolean updated = orderDAO.updateOrder(order);
                     if (updated) {
                         session.setAttribute("notification", "Cập nhật trạng thái đơn hàng thành công");
                     } else {
@@ -111,34 +121,13 @@ public class ShipperOrderDetailController extends HttpServlet {
                 } catch (NumberFormatException e) {
                     session.setAttribute("notificationErr", "ID đơn hàng không hợp lệ.");
                 }
-            } else if ("updateStatus1".equals(action)) {
-                try {
-                    Orders order = orderDAO.getOrderByID(orderID);
-                    if (order == null) {
-                        session.setAttribute("notificationErr", "Đơn hàng không tồn tại.");
-                        response.sendRedirect(request.getContextPath() + "/ShipperDashBoard");
-                        return;
-                    }
-
-                    // Cập nhật trạng thái thành "Delivered"
-                    order = orderDAO.getOrderByID(orderID);
-                    order.setShipperID(currentUser.getUserID());
-                    order.setStatus("Shipping");
-                    boolean updated = orderDAO.updateOrder(order);
-                    if (updated) {
-                        session.setAttribute("notification", "Nhận đơn hàng thành công");
-                    } else {
-                        session.setAttribute("notificationErr", "Cập nhật trạng thái thất bại.");
-                    }
-                } catch (NumberFormatException e) {
-                    session.setAttribute("notificationErr", "ID đơn hàng không hợp lệ.");
-                }
             }
-            response.sendRedirect(request.getContextPath() + "/ShipperDashBoard" );
+            response.sendRedirect(request.getContextPath() + "/ShipperDashBoard");
         } else {
             session.setAttribute("notificationErr", "Bạn không có quyền truy cập vào trang này");
-            response.sendRedirect(request.getContextPath() + "/Project-SWP391-G2-SP25/Login.jsp");
+            response.sendRedirect(request.getContextPath() + "/Login.jsp");
         }
+    
     }
 
     /**
