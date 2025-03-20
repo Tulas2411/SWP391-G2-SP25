@@ -10,14 +10,14 @@
             <c:if test="${not empty sessionScope.notification}">
                 <div class="alert alert-success alert-dismissible fade show" role="alert" style="text-align: center">
                     ${sessionScope.notification}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng"></button>
                 </div>
                 <% session.removeAttribute("notification"); %>
             </c:if>
             <c:if test="${not empty sessionScope.notificationErr}">
                 <div class="alert alert-danger alert-dismissible fade show" role="alert" style="text-align: center">
                     ${sessionScope.notificationErr}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng"></button>
                 </div>
                 <% session.removeAttribute("notificationErr");%>
             </c:if>
@@ -40,10 +40,6 @@
                                             <option value="Deactive" ${param.status eq 'Deactive' ? 'selected' : ''}>Không hoạt động</option>
                                         </select>
                                     </div>
-                                    <div class="col-md-3">
-                                        <label for="search" class="form-label">Tìm kiếm</label>
-                                        <input type="text" class="form-control" id="search" name="search" value="${param.search}" placeholder="Tên, Email, SĐT">
-                                    </div>
                                 </form>
                             </div>
                         </div>
@@ -65,7 +61,12 @@
                                     <td>${status.index + 1}</td>
                                     <td>${u.userID}</td>
                                     <td>${u.firstName} ${u.lastName}</td>
-                                    <td>${u.gender}</td>
+                                    <td>
+                                        <c:choose>
+                                            <c:when test="${u.gender eq 'Male'}">Nam</c:when>
+                                            <c:otherwise>Nữ</c:otherwise>
+                                        </c:choose>
+                                    </td>
                                     <td>${u.email}</td>
                                     <td>${u.phoneNumber}</td>
                                     <td>
@@ -74,7 +75,11 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <a class="btn btn-secondary btn-sm" href="${contextPath}/marketing/customer-management?action=detail&id=${u.userID}"><i class="fa fa-eye"></i></a>
+                                        <!-- Nút Xem chi tiết -->
+                                        <a class="btn btn-secondary btn-sm" href="${contextPath}/marketing/customer-detail?id=${u.userID}">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                        <!-- Nút Chỉnh sửa -->
                                         <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editCustomerModal"
                                                 data-id="${u.userID}"
                                                 data-firstname="${u.firstName}"
@@ -86,13 +91,18 @@
                                                 data-status="${u.status}">
                                             <i class="fa fa-pen" style="color: white"></i>
                                         </button>
+                                        <!-- Nút Lịch sử -->
+                                        <a class="btn btn-info btn-sm" href="#" data-bs-toggle="modal" data-bs-target="#historyModal"
+                                           data-userid="${u.userID}">
+                                            <i class="fa fa-history"></i>
+                                        </a>
                                     </td>
                                 </tr>
                             </c:forEach>
                         </tbody>
                     </table>
-                    <!-- Pagination -->
-                    <nav aria-label="Page navigation">
+                    <!-- Phân trang -->
+                    <nav aria-label="Phân trang">
                         <ul class="pagination justify-content-center">
                             <c:forEach begin="1" end="${totalPages}" var="page">
                                 <li class="page-item ${page == currentPage ? 'active' : ''}">
@@ -106,7 +116,7 @@
         </div>
     </main>
 
-    <!-- Add Customer Modal -->
+    <!-- Modal Thêm Khách Hàng -->
     <div class="modal fade" id="addCustomerModal" tabindex="-1" aria-labelledby="addCustomerModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -117,6 +127,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
                     </div>
                     <div class="modal-body">
+                        <!-- Form thêm khách hàng -->
                         <div class="mb-3">
                             <label for="addFirstName" class="form-label">Tên</label>
                             <input type="text" class="form-control" id="addFirstName" name="firstName" required>
@@ -163,7 +174,7 @@
         </div>
     </div>
 
-    <!-- Edit Customer Modal -->
+    <!-- Modal Chỉnh Sửa Khách Hàng -->
     <div class="modal fade" id="editCustomerModal" tabindex="-1" aria-labelledby="editCustomerModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -172,9 +183,10 @@
                     <input type="hidden" name="id" id="editUserId">
                     <div class="modal-header">
                         <h5 class="modal-title" id="editCustomerModalLabel">Chỉnh sửa Khách Hàng</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
                     </div>
                     <div class="modal-body">
+                        <!-- Form chỉnh sửa khách hàng -->
                         <div class="mb-3">
                             <label for="editFirstName" class="form-label">Tên</label>
                             <input type="text" class="form-control" id="editFirstName" name="firstName" required>
@@ -226,8 +238,30 @@
         </div>
     </div>
 
+    <!-- Modal Lịch Sử -->
+    <div class="modal fade" id="historyModal" tabindex="-1" aria-labelledby="historyModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="historyModalLabel">Lịch sử thay đổi</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Nội dung log sẽ được tải qua AJAX hoặc render sẵn nếu có -->
+                    <div id="historyContent">
+                        Đang tải dữ liệu...
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            // Xử lý modal chỉnh sửa khách hàng
             var editCustomerModal = document.getElementById('editCustomerModal');
             editCustomerModal.addEventListener('show.bs.modal', function (event) {
                 var button = event.relatedTarget;
@@ -239,6 +273,22 @@
                 document.getElementById('editPhoneNumber').value = button.getAttribute('data-phonenumber');
                 document.getElementById('editAddress').value = button.getAttribute('data-address');
                 document.getElementById('editStatus').value = button.getAttribute('data-status');
+            });
+
+            // Xử lý modal history để tải log người dùng
+            var historyModal = document.getElementById('historyModal');
+            historyModal.addEventListener('show.bs.modal', function (event) {
+                var button = event.relatedTarget;
+                var userId = button.getAttribute('data-userid');
+                // Gọi AJAX để tải log của user theo userId
+                fetch('${contextPath}/marketing/user-logs?userId=' + userId)
+                        .then(response => response.text())
+                        .then(data => {
+                            document.getElementById('historyContent').innerHTML = data;
+                        })
+                        .catch(error => {
+                            document.getElementById('historyContent').innerHTML = 'Có lỗi xảy ra khi tải lịch sử.';
+                        });
             });
 
             // Bootstrap validation

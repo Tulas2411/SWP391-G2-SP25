@@ -33,7 +33,7 @@ public class UserLogsServlet extends HttpServlet {
         // Lọc ra các log của user có userID tương ứng
         StringBuilder html = new StringBuilder();
         html.append("<table class=\"table table-bordered\">");
-        html.append("<thead><tr><th>ID</th><th>Nội dung Log</th><th>Ngày thay đổi</th></tr></thead>");
+        html.append("<thead><tr><th>ID</th><th>Nội dung chỉnh sửa</th><th>Ngày thay đổi</th></tr></thead>");
         html.append("<tbody>");
         boolean found = false;
         for (UserLog log : logs) {
@@ -47,7 +47,7 @@ public class UserLogsServlet extends HttpServlet {
             }
         }
         if (!found) {
-            html.append("<tr><td colspan='3'>Không có log nào cho người dùng này.</td></tr>");
+            html.append("<tr><td colspan='3'>Không có lịch sử chỉnh sửa nào cho người dùng này.</td></tr>");
         }
         html.append("</tbody></table>");
 
