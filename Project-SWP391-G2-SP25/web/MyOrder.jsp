@@ -130,18 +130,18 @@
         </form>
 
         <main class="orders-container">
-            <h2 class="orders-title">My Orders</h2>
+            <h2 class="orders-title">Đơn hàng của tôi</h2>
 
             <!-- Orders Table -->
             <table class="orders-table">
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Ordered Date</th>
-                        <th>Delivery Address</th>
-                        <th>Total Cost</th>
-                        <th>Status</th>
-                        <th>Actions</th>
+                        <th>Ngày đặt hàng</th>
+                        <th>Địa chỉ</th>
+                        <th>Tổng tiền</th>
+                        <th>Trạng thái</th>
+                        <th>Hành Động</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -153,7 +153,7 @@
                             <td>${order.totalAmount}</td>
                             <td>${order.status}</td>
                             <td>
-                                <a href="my-order-detail?orderId=${order.orderID}" class="orders-view-link">View</a>
+                                <a href="my-order-detail?orderId=${order.orderID}" class="orders-view-link">Xem thêm</a>
                             </td>
                         </tr>
                     </c:forEach>
