@@ -13,7 +13,7 @@
             <c:if test="${not empty sessionScope.notification}">
                 <div class="alert alert-success alert-dismissible fade show" role="alert" style="text-align: center">
                     ${sessionScope.notification}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng"></button>
                 </div>
                 <%
                     session.removeAttribute("notification");
@@ -22,7 +22,7 @@
             <c:if test="${not empty sessionScope.notificationErr}">
                 <div class="alert alert-danger alert-dismissible fade show" role="alert" style="text-align: center">
                     ${sessionScope.notificationErr}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng"></button>
                 </div>
                 <%
                     session.removeAttribute("notificationErr");
@@ -50,17 +50,17 @@
 
                         </form>
 
-                        <!-- Bảng hiển thị danh sách Settings -->
-                        <table  id="datatablesSimple" class="table table-bordered">
+                        <!-- Bảng hiển thị danh sách Cài đặt -->
+                        <table id="datatablesSimple" class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th>STT</th>
                                     <th>ID_Type</th>
-                                    <th>Type</th>
-                                    <th>Name</th>
-                                    <th>Status</th>
-                                    <th>Priority</th>
-                                    <th style="width: 300px;">Action</th>
+                                    <th>Loại cài đặt</th>
+                                    <th>Tên</th>
+                                    <th>Trạng thái</th>
+                                    <th>Ưu tiên</th>
+                                    <th style="width: 300px;">Hành động</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -119,15 +119,15 @@
                 <div class="modal-body">
                     <input type="hidden" name="action" value="add">
                     <div class="mb-3">
-                        <label class="form-label">ID Type</label>
+                        <label class="form-label">ID Loại</label>
                         <input type="text" name="idType" class="form-control" required 
                                minlength="2" maxlength="50"
-                               title="Loại cài đặt phải từ 2 đến 50 ký tự">
+                               title="ID Loại phải từ 2 đến 50 ký tự">
                         <div class="invalid-feedback">
-                            Vui lòng nhập ID Type (2-50 ký tự).
+                            Vui lòng nhập ID Loại (2-50 ký tự).
                         </div>
                     </div>
-                     <div class="mb-3">
+                    <div class="mb-3">
                         <label class="form-label">Loại cài đặt</label>
                         <input type="text" name="settingType" class="form-control" required 
                                minlength="2" maxlength="50"
@@ -137,17 +137,17 @@
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Giá trị cài đặt</label>
+                        <label class="form-label">Tên cài đặt</label>
                         <textarea name="settingValue" class="form-control" rows="3" required></textarea>
                         <div class="invalid-feedback">
-                            Vui lòng nhập giá trị cài đặt.
+                            Vui lòng nhập tên cài đặt.
                         </div>
                     </div>
-                     <div class="mb-3">
-                        <label class="form-label">priority</label>
+                    <div class="mb-3">
+                        <label class="form-label">Ưu tiên</label>
                         <input name="priority" class="form-control" type="number" min="1" max="10" required>
                         <div class="invalid-feedback">
-                            Vui lòng nhập priority cài đặt.
+                            Vui lòng nhập mức độ ưu tiên (từ 1 đến 10).
                         </div>
                     </div>
                     <div class="mb-3">

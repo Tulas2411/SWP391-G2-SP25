@@ -54,12 +54,12 @@
                         // Nếu chưa đăng nhập, hiển thị Đăng Nhập
                         out.println("<a href='Login.jsp' class='header__introduce-account-link'>Đăng nhập</a>");
                     }
-                %>
+                        %>
                     </li>
 
                 </ul>
             </div>
-            
+
 
 
         </div>
@@ -113,7 +113,7 @@
                             </ul>
                         </li>
                         <li class="header__table-items header__table-items-underlined">
-                            <a href="#" class="header__table-link">
+                            <a href="/blogs" class="header__table-link">
                                 TIN TỨC
                             </a>
                         </li>
@@ -142,6 +142,17 @@
                 <!-- Các icon và thông tin sẽ hiển thị bên phải của header -->
                 <div class="header__cart">
                     <ul class="header__cart-list">
+                        <c:if test="${not empty sessionScope.user}">
+                            <li class="header__cart-items">
+                                <a href="/Project-SWP391-G2-SP25/my-order" class="header__cart-link">
+                                    <div class="icon">
+                                        <i class="icon-i fa-solid fa-list"></i>
+                                    </div>
+                                    Đơn hàng
+                                </a>
+                            </li>
+                        </c:if>
+
                         <li class="header__cart-items">
                             <a href="/Project-SWP391-G2-SP25/Cart" class="header__cart-link">
                                 <div class="icon">
@@ -210,7 +221,7 @@
                         </div>
                     </li>
                     <li class="header__navbar-items header__navbar-items-vertical">
-                        <a href="#" class="header__navbar-link">
+                        <a href="blogs" class="header__navbar-link">
                             Tin tức
                         </a>
                     </li>

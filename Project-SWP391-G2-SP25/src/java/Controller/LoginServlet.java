@@ -56,18 +56,25 @@ public class LoginServlet extends HttpServlet {
                         session.setAttribute("username", username);
                         session.setAttribute("email", emailFromDB);
                         session.setAttribute("role", role);
+                        session.setAttribute("user", userDAO.getUserByUserName(username));
 
                         Users u = userDAO.getUserByEmail(email);
 
-                        // Kiểm tra vai trò và chuyển hướng người dùng
+                        if (u.getStatus().equalsIgnoreCase("Deactive")){
+                            request.setAttribute("loginError", "Tài khoản của bạn đã bị vô hiệu hóa");
+                            dispatcher = request.getRequestDispatcher("Login.jsp");
+                            dispatcher.forward(request, response);
+                        }
+
                         if (u.getRole().equalsIgnoreCase("Admin")) {
                             response.sendRedirect("admin/dashboard");
                         } else if (u.getRole().equalsIgnoreCase("marketing")) {
                             response.sendRedirect("marketing/dashboard");
                         } else if (u.getRole().equalsIgnoreCase("sale")) {
                             response.sendRedirect("sale/OrdersList");
+                        } else if (u.getRole().equalsIgnoreCase("Shipper")) {
+                            response.sendRedirect("ShipperDashBoard");
                         } else {
-                            session.setAttribute("user", userDAO.getUserByUserName(username));
                             response.sendRedirect("/Project-SWP391-G2-SP25/home");
                         }
                     } else {
