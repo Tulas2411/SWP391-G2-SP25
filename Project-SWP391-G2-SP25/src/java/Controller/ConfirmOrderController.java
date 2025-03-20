@@ -118,6 +118,7 @@ public class ConfirmOrderController extends HttpServlet {
             } else {
                 paymentMethod = "Cash on delivery"; // Giá trị mặc định nếu trường không tồn tại
             }
+            System.out.println(paymentMethod);
             String firstname = orderData.get("firstname").getAsString();
             String lastname = orderData.get("lastname").getAsString();
             String email = orderData.get("email").getAsString();

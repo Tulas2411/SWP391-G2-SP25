@@ -17,35 +17,54 @@
 
         <main class="container mt-4">
             <h2 class="text-center">Chi tiết đơn hàng</h2>
-
-            <!-- Thông tin đơn hàng -->
-            <section class="mb-4">
-                <h3 class="border-bottom pb-2">Thông tin đơn hàng</h3>
-                <div class="table-responsive">
-                    <table class="table table-bordered">
-                        <thead class="table-light">
-                            <tr>
-                                <th>ID Chi tiết</th>
-                                <th>Tên sản phẩm</th>
-                                <th>Số lượng</th>
-                                <th>Đơn giá</th>
-                                <th>Giá gốc</th>
-                                <th>Hình ảnh</th>
-                                <th>Chi tiết</th>
-                                <th>Tổng tiền</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+        <c:if test="${not empty sessionScope.notification}">
+            <div class="alert alert-success alert-dismissible fade show" role="alert" style="text-align: center">
+                ${sessionScope.notification}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <% session.removeAttribute("notification"); %>
+        </c:if>
+        <c:if test="${not empty sessionScope.notificationErr}">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert" style="text-align: center">
+                ${sessionScope.notificationErr}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <% session.removeAttribute("notificationErr");%>
+        </c:if>
+        <!-- Thông tin đơn hàng -->
+        <section class="mb-4">
+            <h3 class="border-bottom pb-2">Thông tin đơn hàng</h3>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID Chi tiết</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Số lượng</th>
+                            <th>Đơn giá</th>
+                            <th>Giá gốc</th>
+                            <th>Hình ảnh</th>
+                            <th>Chi tiết</th>
+                            <th>Tổng tiền</th>
+                        </tr>
+                    </thead>
+                    <tbody>
                         <c:forEach var="orderDetail" items="${orderDetailsList}">
                             <tr>
                                 <td>${orderDetail.orderDetailID}</td>
                                 <td>${orderDetail.nameProduct}</td>
                                 <td>${orderDetail.quantity}</td>
-                                <td class="text-danger">${orderDetail.price}</td>
-                                <td class="text-muted text-decoration-line-through">${orderDetail.priceProduct}</td>
+                                <td class="text-danger">
+                                    <fmt:formatNumber value="${orderDetail.price}" pattern="#,##0"/> đ
+                                </td>
+                                <td class="text-muted text-decoration-line-through">
+                                    <fmt:formatNumber value="${orderDetail.priceProduct}" pattern="#,##0"/> đ
+                                </td>
                                 <td><img src="${orderDetail.imgProduct}" alt="Hình ảnh sản phẩm" class="img-thumbnail" width="100"></td>
                                 <td>${orderDetail.desProduct}</td>
-                                <td>${orderDetail.quantity * orderDetail.price}</td>
+                                <td>
+                                    <fmt:formatNumber value="${orderDetail.quantity * orderDetail.price}" pattern="#,##0"/> đ
+                                </td>
                             </tr>
                         </c:forEach>
                     </tbody>
@@ -58,26 +77,40 @@
             <h3>Thông tin người nhận</h3>
             <p><strong>Ngày đặt hàng:</strong> ${orders.orderDate}</p>
             <p><strong>Địa chỉ giao hàng:</strong> ${orders.deliveryAddress}</p>
-            <p><strong>Trạng thái:</strong> ${orders.status}</p>
-            <p><strong>Tổng tiền:</strong> ${orders.totalAmount}</p>
-            <p><strong>Mã vận đơn:</strong> ${orders.billOfLading}</p>
+            <p><strong>Trạng thái:</strong>
+                <c:choose>
+                    <c:when test="${orders.status eq 'Submitted'}">Chờ xử lý</c:when>
+                    <c:when test="${orders.status eq 'Cancelled'}">Đã hủy</c:when>
+                    <c:when test="${orders.status eq 'Shipping'}">Đang giao hàng</c:when>
+                    <c:when test="${orders.status eq 'Delivered'}">Đã giao thành công</c:when>
+                    <c:when test="${orders.status eq 'Processing'}">Đang xử lý</c:when>
+                    <c:when test="${orders.status eq 'Paid'}">Đã Thanh Toán</c:when>
+                </c:choose></p>
+            <p><strong>Tổng tiền:</strong> 
+                <fmt:formatNumber value="${orders.totalAmount}" pattern="#,##0"/> đ
+            </p>
+            <p><strong>Ghi chú:</strong> ${orders.billOfLading}</p>
         </section>
 
         <!-- Quản lý đơn hàng -->
         <section class="mt-4">
             <h3 class="border-bottom pb-2">Quản lý đơn hàng</h3>
-            <form method="POST" action="OrderDetail" class="d-flex align-items-center gap-2">
-                <input type="hidden" name="orderId" value="${orders.orderID}">
-                <label for="status" class="me-2">Trạng thái:</label>
-                <select name="status" class="form-select w-auto">
-                    <option value="Pending" ${orders.status == 'Pending' ? 'selected' : ''}>Chờ xử lý</option>
-                    <option value="Processing" ${orders.status == 'Processing' ? 'selected' : ''}>Đang xử lý</option>
-                    <option value="Shipped" ${orders.status == 'Shipped' ? 'selected' : ''}>Đã giao hàng</option>
-                    <option value="Completed" ${orders.status == 'Completed' ? 'selected' : ''}>Hoàn thành</option>
-                    <option value="Cancelled" ${orders.status == 'Cancelled' ? 'selected' : ''}>Đã hủy</option>
-                </select>
-                <button type="submit" class="btn btn-primary">Cập nhật</button>
-            </form>
+            <c:if test="${orders.status eq 'Submitted'}">
+                <form action="${contextPath}/sale/OrderDetail" method="POST" style="display:inline"
+                      onsubmit="return confirm('Xác nhận giao hàng thành công?');">
+                    <input type="hidden" name="action" value="updateStatus">
+                    <input type="hidden" name="orderID" value="${orders.orderID}">
+                    <button type="submit" class="btn btn-success btn-sm">Nhận đơn hàng</button>
+                </form>
+            </c:if>
+            <c:if test="${orders.status eq 'Processing'}">
+                <form action="${contextPath}/sale/OrderDetail" method="POST" style="display:inline"
+                      onsubmit="return confirm('Xác nhận giao hàng thành công?');">
+                    <input type="hidden" name="action" value="updateStatus1">
+                    <input type="hidden" name="orderID" value="${orders.orderID}">
+                    <button type="submit" class="btn btn-success btn-sm">Giao hàng cho Shipper</button>
+                </form>
+            </c:if>
         </section>
 
         <!-- Gán đơn hàng (chỉ dành cho quản lý) -->
