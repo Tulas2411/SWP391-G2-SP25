@@ -159,7 +159,7 @@ public class UsersDAO extends DBContext {
 
     // Cập nhật thông tin người dùng chỉ cho phép sửa username, firstname, lastname, gender, DateOfBirth, PhoneNumber, Address
     public boolean updateUserProfile(Users user) {
-        String sql = "UPDATE Users SET UserName = ?, FirstName = ?, LastName = ?, Gender = ?, DateOfBirth = ?, PhoneNumber = ?, Address = ?, status = ? WHERE UserID = ?";
+        String sql = "UPDATE Users SET UserName = ?, FirstName = ?, LastName = ?, Gender = ?, DateOfBirth = ?, Email = ?, PhoneNumber = ?, Address = ?, status = ? WHERE UserID = ?";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, user.getUserName());
@@ -167,12 +167,13 @@ public class UsersDAO extends DBContext {
             ps.setString(3, user.getLastName());
             ps.setString(4, user.getGender());
             ps.setString(5, user.getDateOfBirth());
-            ps.setString(6, user.getPhoneNumber());
-            ps.setString(7, user.getAddress());
-            ps.setString(8, user.getStatus());
-            ps.setInt(9, user.getUserID());
-            ps.executeUpdate();
-            return true;
+            ps.setString(6, user.getEmail()); // Added Email field
+            ps.setString(7, user.getPhoneNumber());
+            ps.setString(8, user.getAddress());
+            ps.setString(9, user.getStatus());
+            ps.setInt(10, user.getUserID());
+            int affectedRows = ps.executeUpdate();
+            return affectedRows > 0;
         } catch (SQLException e) {
             System.out.println("Error updating user profile: " + e.getMessage());
             return false;
