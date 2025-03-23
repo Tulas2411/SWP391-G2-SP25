@@ -77,6 +77,27 @@ public class ProductsDAO extends DBContext {
         }
         return promotedProducts;
     }
+    public List<Products> getSearchedProducts(String search) {
+        List<Products> promotedProducts = new ArrayList<>();
+        String sql = "SELECT * FROM Products";
+        if (search != null && !search.trim().isEmpty()) {
+            sql += " WHERE ProductName LIKE ?";
+        }
+
+        try (PreparedStatement ps = connection.prepareStatement(sql) ) {
+            if (search != null && !search.trim().isEmpty()) {
+                String query = "%" + search + "%";
+                ps.setString(1, query);
+            }
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                promotedProducts.add(extractProductFromResultSet(rs));
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching promoted products: " + e.getMessage());
+        }
+        return promotedProducts;
+    }
 
     public List<Products> getNewProducts() {
         List<Products> newProducts = new ArrayList<>();
@@ -501,7 +522,7 @@ public class ProductsDAO extends DBContext {
         ProductsDAO p = new ProductsDAO();
         Products p1 = p.GetProductbyID(1);
         p1.setProductName("Quat dien aaa");
-        System.out.println(p.getAllProducts());
+        System.out.println(p.getSearchedProducts("Khóa"));
     }
 
 }
