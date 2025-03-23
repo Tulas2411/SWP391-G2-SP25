@@ -74,6 +74,7 @@ public class AdminDashboardController extends HttpServlet {
                 double overallAvgRating = dao.getOverallAverageRating(startDate, endDate);
                 List<FeedbackByCategory> feedbackByCategoryList = dao.getFeedbackByCategory(startDate, endDate);
                 List<OrderTrend> orderTrendList = dao.getOrderTrendsByDay(startDate, endDate);
+                int newlyRegisteredCustomers = dao.getNewlyRegisteredCustomers(startDate, endDate);
 
                 // Set attributes to be used in the JSP.
                 request.setAttribute("orderStats", orderStats);
@@ -86,6 +87,7 @@ public class AdminDashboardController extends HttpServlet {
                 request.setAttribute("startDate", sdf.format(startDate));
                 request.setAttribute("endDate", sdf.format(endDate));
                 request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+                request.setAttribute("newlyRegisteredCustomers", newlyRegisteredCustomers);
 
             } else {
                 session.setAttribute("notificationErr", "Access Denined!");
