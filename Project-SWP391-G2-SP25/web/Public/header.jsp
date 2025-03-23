@@ -235,14 +235,119 @@
             <!-- Header Search -->
             <!-- Phần tìm kiếm bên phải menu -->
             <div class="header__search">
-                <input type="text" class="header__search-input" placeholder="Bạn cần tìm gì?" />
-
-                <button class="header__search-shop" type="button">
-                    <i class="header__search-shop-icon fa-solid fa-magnifying-glass"></i>
-                </button>
+                <div class="search-container">
+                    <input type="text" class="header__search-input" id="searchInput" placeholder="Bạn cần tìm gì?" />
+                    <button class="header__search-shop" type="button" id="searchButton">
+                        <i class="header__search-shop-icon fa-solid fa-magnifying-glass"></i>
+                    </button>
+                    <!-- Thêm div cho kết quả gợi ý -->
+                    <div id="searchResults" class="search-results"></div>
+                </div>
             </div>
         </nav>
 
     </header>
+    <style>
+        .search-container {
+            position: relative;
+        }
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #ddd;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+            z-index: 1000;
+        }
+        .search-results a {
+            display: block;
+            padding: 8px 12px;
+            text-decoration: none;
+            color: #333;
+        }
+        .search-results a:hover {
+            background: #f5f5f5;
+        }
+    </style>                       
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            let timeout = null;
 
+            $('#searchInput').on('input', function () {
+                clearTimeout(timeout);
+                let searchTerm = $(this).val().trim();
+
+                if (searchTerm.length >= 2) { // Tìm kiếm khi có ít nhất 2 ký tự
+                    timeout = setTimeout(function () {
+                        searchProducts(searchTerm);
+                    }, 300); // Delay 300ms để tránh gửi request liên tục
+                } else {
+                    $('#searchResults').hide().empty();
+                }
+            });
+
+            // Xử lý khi click nút tìm kiếm
+            $('#searchButton').click(function () {
+                let searchTerm = $('#searchInput').val().trim();
+                if (searchTerm.length > 0) {
+                    window.location.href = '/Project-SWP391-G2-SP25/productsList?name=' + encodeURIComponent(searchTerm);
+                }
+            });
+
+            // Xử lý khi nhấn Enter
+            $('#searchInput').keypress(function (e) {
+                if (e.which == 13) { // Enter key
+                    let searchTerm = $(this).val().trim();
+                    if (searchTerm.length > 0) {
+                        window.location.href = '/Project-SWP391-G2-SP25/productsList?name=' + encodeURIComponent(searchTerm);
+                    }
+                }
+            });
+
+            // Ẩn kết quả khi click ra ngoài
+            $(document).click(function (e) {
+                if (!$(e.target).closest('.search-container').length) {
+                    $('#searchResults').hide();
+                }
+            });
+        });
+
+        function searchProducts(query) {
+            $.ajax({
+                url: '/Project-SWP391-G2-SP25/SearchBar', // Đường dẫn đến servlet xử lý tìm kiếm
+                type: 'GET',
+                data: {search: query},
+                dataType: 'json',
+                success: function (response) {
+                    displayResults(response);
+                },
+                error: function (xhr, status, error) {
+                    console.log('Error: ' + error);
+                    $('#searchResults').hide().empty();
+                }
+            });
+        }
+
+        function displayResults(products) {
+            let $results = $('#searchResults');
+            $results.empty();
+
+            if (products && products.length > 0) {
+                $.each(products, function (index, product) {
+                    $results.append(
+                            '<a href="/Project-SWP391-G2-SP25/productsList?name=' + product.productName + '">' +
+                            product.productName + '</a>'
+                            );
+                });
+                $results.show();
+            } else {
+                $results.hide();
+            }
+        }
+    </script>
 </html>
