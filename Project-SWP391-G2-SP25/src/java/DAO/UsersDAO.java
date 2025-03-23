@@ -305,6 +305,20 @@ public class UsersDAO extends DBContext {
         }
         return null;
     }
+    public Users getUserByUserID(int id) {
+        String sql = "SELECT * FROM Users WHERE UserID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return extractUserFromResultSet(rs);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching user by UserName: " + e.getMessage());
+        }
+        return null;
+    }
 
     public static void main(String[] args) {
         UsersDAO dao = new UsersDAO();
