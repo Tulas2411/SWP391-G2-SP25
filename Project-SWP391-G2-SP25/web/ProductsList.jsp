@@ -163,10 +163,10 @@
                                         <c:set var="isChecked" value="true"/>
                                     </c:if>
                                 </c:forEach>
-                                
+
                                 <li class="filter-item">
                                     <input type="checkbox" class="filter-checkbox" name="category" value="${cate.categoryID}"
-                                         <c:if test="${isChecked eq 'true'}">checked</c:if>  />
+                                           <c:if test="${isChecked eq 'true'}">checked</c:if>  />
                                     <label class="filter-label">${cate.categoryName}</label>
                                 </li>
                             </c:forEach>
@@ -210,7 +210,7 @@
                                     </a>
                                     <!-- Hiển thị giá sản phẩm -->
                                     <span class="main__right-sensor-price">
-                                        <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="đ"/>
+                                        <strong><fmt:formatNumber value="${product.price}" type="number" groupingUsed="true"/>đ</strong>
                                     </span>
                                     <!--<button type="button" class="main__right-sensor-button"/>Mua ngay</button>-->
                                 </div>
