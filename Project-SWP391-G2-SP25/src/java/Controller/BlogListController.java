@@ -11,6 +11,7 @@ import DAO.ProductsDAO;
 import Model.Blog;
 import Model.Category;
 import Model.MarketingPosts;
+import Model.PostCategory;
 import Model.Products;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -55,33 +56,12 @@ public class BlogListController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
-        
+        String cateID = request.getParameter("cate");
+        String searchQuery = request.getParameter("search");
         ProductsDAO productsDAO = new ProductsDAO();
         CategoryDAO categoryDAO = new CategoryDAO();
         MarketingPostsDAO marketingPostsDAO = new MarketingPostsDAO();
         BlogDAO blogDAO = new BlogDAO();
-
-        // Lấy danh sách danh mục sản phẩm từ database dưới dạng Map
-        Map<String, Category> categoryMap = categoryDAO.getAllCategories();
-        List<Category> categories = categoryMap.values().stream().toList(); // Chuyển từ Map sang List
-
-        // Lấy danh sách 5 sản phẩm khuyến mãi
-        List<Products> promotedProducts = productsDAO.getPromotedProducts();
-
-        // Lấy danh sách sản phẩm mới
-        List<Products> newProducts = productsDAO.getNewProducts();
-
-
-        // Lấy các bài viết mới nhất
-        List<Blog> latestPosts = blogDAO.getLatestBlogs();
-
-
-        // Đưa dữ liệu vào request để truyền sang JSP
-        request.setAttribute("categories", categories);
-        request.setAttribute("promotedProducts", promotedProducts);
-        request.setAttribute("newProducts", newProducts);
-        request.setAttribute("latestPosts", latestPosts);
         
         int limit = 4; 
         int page = 1; 
@@ -97,13 +77,18 @@ public class BlogListController extends HttpServlet {
         }
         int totalBlogs = blogDAO.getAllBlogs1().size();
         int totalPages = (int) Math.ceil((double) totalBlogs / limit);
-
-        List<Blog> blogs = blogDAO.getAllBlogsAndPagination(page, limit);
-        
+        List<MarketingPosts> blogs;
+        if (searchQuery != null && !searchQuery.trim().isEmpty()) {
+            blogs = marketingPostsDAO.searchPostsByTitleAndContent(page, limit,searchQuery);
+        }else{
+        blogs = marketingPostsDAO.getAllPostAndPagination(page, limit, cateID);
+        }
+        Map<String, PostCategory> list = marketingPostsDAO.getAllPostCategories();
         request.setAttribute("blogs", blogs);
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
         request.setAttribute("limit", limit);
+        request.setAttribute("list", list);
         
         request.getRequestDispatcher("BlogList.jsp").forward(request, response);
         

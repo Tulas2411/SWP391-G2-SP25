@@ -18,6 +18,7 @@ public class MarketingPosts {
     private Date createDate;
     private String status;
     private String imageLink;
+    private String Category;
 
     public MarketingPosts() {
     }
@@ -105,6 +106,15 @@ public class MarketingPosts {
     public void setImageLink(String imageLink) {
         this.imageLink = imageLink;
     }
+
+    public String getCategory() {
+        return Category;
+    }
+
+    public void setCategory(String Category) {
+        this.Category = Category;
+    }
+    
 
     @Override
     public String toString() {
