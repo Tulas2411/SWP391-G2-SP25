@@ -47,9 +47,16 @@
                 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                     <div class="sb-sidenav-menu">
                         <div class="nav">
+                            <a class="nav-link" href="${contextPath}/ShipperOrderPro">
+                                <div class="sb-nav-link-icon"><i class="fa fa-user"></i></div>
+                                Danh Sách Đơn Hàng Chờ Nhận
+                            </a>  
+
+                        </div>
+                        <div class="nav">
                             <a class="nav-link" href="${contextPath}/ShipperDashBoard">
                                 <div class="sb-nav-link-icon"><i class="fa fa-user"></i></div>
-                                Danh Sách Đơn Hàng
+                                Danh Sách Đơn Hàng Đã Nhận
                             </a>  
 
                         </div>

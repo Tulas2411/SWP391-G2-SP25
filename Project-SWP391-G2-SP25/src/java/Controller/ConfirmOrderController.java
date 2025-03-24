@@ -106,18 +106,22 @@ public class ConfirmOrderController extends HttpServlet {
             JsonObject orderData = parser.parse(jsonData).getAsJsonObject();
 
             // Lấy các giá trị từ JsonObject
-            String comment = "";
-            if (orderData.has("comment")) { // Kiểm tra xem trường "comment" có tồn tại không
-                comment = orderData.get("comment").getAsString();
-            } else {
-                comment = "No comment provided"; // Giá trị mặc định nếu trường không tồn tại
-            }
             String paymentMethod = "";
             if (orderData.has("paymentMethod")) { // Kiểm tra xem trường "comment" có tồn tại không
                 paymentMethod = orderData.get("paymentMethod").getAsString();
             } else {
                 paymentMethod = "Cash on delivery"; // Giá trị mặc định nếu trường không tồn tại
             }
+            String comment = "";
+            if (orderData.has("comment")) { // Kiểm tra xem trường "comment" có tồn tại không
+                comment = orderData.get("comment").getAsString();
+            } else {
+                comment = "No comment provided"; // Giá trị mặc định nếu trường không tồn tại
+            }
+            if(paymentMethod.equalsIgnoreCase("VNpay")){
+                comment += " Đơn Hàng đã được thanh toán";
+            }
+            System.out.println(paymentMethod);
             String firstname = orderData.get("firstname").getAsString();
             String lastname = orderData.get("lastname").getAsString();
             String email = orderData.get("email").getAsString();

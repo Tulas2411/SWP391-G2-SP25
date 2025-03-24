@@ -2,6 +2,11 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@page import="DAO.*"%>
+<%@page import="Model.*"%>
+<%@page import="java.lang.*"%>
+<%@page import="java.util.*"%>
+<%@page import="java.text.*"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -49,88 +54,93 @@
             background-color: #D50000;
             color: white;
         }
+        /* Sidebar Styles */
+        .search-box {
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            width: calc(100% - 90px);
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .search-box button {
+            width: 80px;
+            padding: 10px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .categories, .static-links {
+            margin-bottom: 30px;
+        }
+
+        .categories h3, .static-links h3 {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .categories ul, .static-links ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .categories ul li, .static-links ul li {
+            margin-bottom: 10px;
+        }
+
+        .categories ul li a, .static-links ul li a {
+            text-decoration: none;
+            color: #555;
+            font-size: 0.9em;
+        }
+
+        .categories ul li a:hover, .static-links ul li a:hover {
+            color: #333;
+            text-decoration: underline;
+        }
+
     </style>
     <body>
         <%@ include file="./Public/header.jsp" %>
         <main class="main">
             <div class="main__gird gird"> <!-- Cái khung của trang web -->
-                <div class="main__left">
-                    <!-- Danh mục sản phẩm - Gom các sản phẩm thành các danh mục nhỏ - Hiển thị trên cùng bên trái main trang web -->
-                    <h2 class="main__left-title">DANH MỤC SẢN PHẨM</h2>
-
-
-
-                    <ul class="main__left-category-list">
-                        <c:forEach var="categoryID" items="${['TBQ', 'TBCS', 'CTD', 'TBTM', 'TBSCBT']}">
-                            <c:forEach var="category" items="${categories}">
-                                <c:if test="${category.categoryID == categoryID}">
-                                    <li class="main__left-category-items">
-                                        <a href="Category.jsp?id=${category.categoryID}" class="main__left-category-link">
-                                            ${category.categoryName}
-                                        </a>
-                                    </li>
-                                </c:if>
-                            </c:forEach>
-                        </c:forEach>
-                    </ul>
-
-                    <!-- Main Left New products : Sản phẩm mới -->
-                    <!-- Một số sản phẩm mới của cửa hàng - Hiển thị dưới Sản phẩm khuyến mãi -->
-                    <h2 class="main__left-title main__left-margin-top">SẢN PHẨM MỚI</h2>
-                    <ul class="main__left-product-list">
-                        <c:forEach var="product" items="${newProducts}" varStatus="status">
-                            <c:if test="${status.index < 5}">
-                                <li class="main__left-product-items main__left-product-items--vertical">
-                                    <a href="/Project-SWP391-G2-SP25/ProductDetailControllerCustomer?id=${product.productID}" class="main__left-product-link">
-                                        <img src="${product.imageLink}" alt="${product.productName}" class="main__left-product-img" />
-                                        <span class="main__left-product-title">${product.productName}</span>
-                                    </a>
-                                    <br />
-                                    <span class="main__right-sensor-price">
-                                        <strong><fmt:formatNumber value="${product.price}" type="number" groupingUsed="true"/>đ</strong>
-                                    </span>
-                                </li>
-                            </c:if>
-                        </c:forEach>
-                    </ul>
-
-                    <!-- Main Left Post -->
-                    <!-- Các bài báo mới - Hiển thị dưới Sản phẩm mới -->
-                    <h2 class="main__left-title main__left-margin-top">BÀI VIẾT MỚI</h2>
-                    <ul class="main__left-posts-list">
-                        <c:forEach var="post" items="${latestPosts}">
-                            <li class="main__left-posts-items main__left-posts-items--vertical">
-                                <img src="${post.thumbnail}" alt="${post.title}" class="main__left-posts-img" />
-                                <a href="PostDetailsController?postId=${post.blogID}" class="main__left-posts-link">
-                                    <span class="main__left-posts-title">${post.title}</span>
-                                </a>
-                            </li>
-                        </c:forEach>
-                    </ul>
-
-                </div>
-
+                <jsp:include page="getSidebarData" />
                 <!-- Main Right -->
                 <!-- Đây là phần thân bên phải của trang web -->
                 <div class="main__right">
-
-
-                    <c:forEach var="blog" items="${blogs}">
-                        <div class="mainTT__right-items">
-                            <div class="mainTT__right-img">
-                                <img src="${blog.thumbnail}" alt="Hình ảnh ...." />
-                                <div class="mainTT__right-date">
-                                    <fmt:formatDate value="${blog.createDate}" pattern="dd"/> <br />
-                                    th<fmt:formatDate value="${blog.createDate}" pattern="MM"/>
-                                </div>
+                    <%
+                       String result = request.getParameter("search");
+                       if(result != null && !result.trim().isEmpty()) {
+                    %>
+                    <h3 class="mainTT__right-heading">Kết quả tìm kiếm cho "<%= request.getParameter("search") != null ? request.getParameter("search") : "" %>"</h3>
+                    <%}%>
+                    <%
+                        List<MarketingPosts> blogs = (List<MarketingPosts>) request.getAttribute("blogs");
+                        for(int i = 0; i<blogs.size();i++){
+                            MarketingPosts blog = blogs.get(i);
+                    %>
+                    <div class="mainTT__right-items">
+                        <div class="mainTT__right-img">
+                            <a href="/Project-SWP391-G2-SP25/BlogDetail?id=<%=blog.getPostID()%>"><img src="<%=blog.getImageLink()%>" alt="Hình ảnh ...." /></a>
+                            <div class="mainTT__right-date">
+                                <fmt:formatDate value="<%=blog.getCreateDate()%>" pattern="dd"/> <br />
+                                th<fmt:formatDate value="<%=blog.getCreateDate()%>" pattern="MM"/>
                             </div>
-                            <div class="mainTT__right-title">
-                                <h3 class="mainTT__right-heading">${blog.title}</h3>
-                                <p class="mainTT_right-content">${blog.briefInfor} ...</p>
-                            </div>
-                            <div class="clear"></div>
                         </div>
-                    </c:forEach>
+                        <div class="mainTT__right-title">
+                            <a href="/Project-SWP391-G2-SP25/BlogDetail?id=<%=blog.getPostID()%>"><h3 class="mainTT__right-heading"><%=blog.getTitle()%></h3></a>
+                            <p class="mainTT_right-content"><%=blog.getContent()%></p>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                    <%}%>
 
                     <!-- Pagination -->
                     <div class="pagination">
@@ -146,10 +156,27 @@
                             <a href="blogs?page=${currentPage + 1}&limit=${limit}" class="pagination-link">Next</a>
                         </c:if>
                     </div>
-
-
-
-
+                    <aside class="sidebar">
+                        <div class="search-box">
+                            <form action="/Project-SWP391-G2-SP25/blogs" method="GET">
+                                <input type="text" name="search" placeholder="Tìm kiếm bài viết..." value="<%= request.getParameter("search") != null ? request.getParameter("search") : "" %>">
+                                <button type="submit">Tìm kiếm</button>
+                            </form>
+                        </div>
+                        <div class="categories">
+                            <h3>Danh mục</h3>
+                            <ul>
+                                <%
+                                    Map<String, PostCategory> list = (Map<String, PostCategory>) request.getAttribute("list");
+                                    for (String id1 : list.keySet()) {
+                                      PostCategory pc1 = list.get(id1);
+                                            
+                                %>
+                                <li><a href="/Project-SWP391-G2-SP25/blogs?cate=<%=id1%>"><%=pc1.getCategoryName()%></a></li>
+                                    <%}%>
+                            </ul>
+                        </div>
+                    </aside>
                 </div>
                 <div class="clear"></div>
 

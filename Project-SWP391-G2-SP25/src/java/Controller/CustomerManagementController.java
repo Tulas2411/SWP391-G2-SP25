@@ -1,7 +1,3 @@
-/*
- * Click nbfs://youtu/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbf://youtu/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package Controller;
 
 import DAO.UserLogDAO;
@@ -25,10 +21,6 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeUtility;
 
-/**
- *
- * @author Tùng Dương
- */
 @WebServlet(name = "CustomerManagementController", urlPatterns = {"/marketing/customer-management"})
 public class CustomerManagementController extends HttpServlet {
 
@@ -151,7 +143,7 @@ public class CustomerManagementController extends HttpServlet {
                         return;
                     }
 
-                    // Build a log message with only the changed fields.
+                    // Build a log message with only the changed fields
                     StringBuilder changes = new StringBuilder();
                     if (!firstName.equals(user.getFirstName())) {
                         changes.append("FirstName: [").append(user.getFirstName()).append("] -> [").append(firstName).append("], ");
@@ -175,7 +167,26 @@ public class CustomerManagementController extends HttpServlet {
                         changes.append("Status: [").append(user.getStatus()).append("] -> [").append(status).append("], ");
                     }
 
-                    // Update user details.
+                    // Log the OLD data (before the update)
+                    if (changes.length() > 0) {
+                        // Remove the trailing comma and space
+                        changes.setLength(changes.length() - 2);
+
+                        // Create a log entry with the OLD details
+                        UserLogDAO userLogDAO = new UserLogDAO();
+                        UserLog userLog = new UserLog();
+                        userLog.setUserId(userID);
+                        userLog.setLog("Marketing đã sửa: " + changes.toString());
+                        userLog.setEmail(user.getEmail()); // Old email
+                        userLog.setFullName(user.getFirstName() + " " + user.getLastName()); // Old full name
+                        userLog.setGender(user.getGender()); // Old gender
+                        userLog.setMobile(user.getPhoneNumber()); // Old phone number
+                        userLog.setAddress(user.getAddress()); // Old address
+                        userLog.setUpdatedBy(currentUser.getEmail()); // Log the user who made the change
+                        userLogDAO.addLogs(userLog);
+                    }
+
+                    // Update user details with the NEW data
                     user.setFirstName(firstName);
                     user.setLastName(lastName);
                     user.setGender(gender);
@@ -183,19 +194,10 @@ public class CustomerManagementController extends HttpServlet {
                     user.setPhoneNumber(phoneNumber);
                     user.setAddress(address);
                     user.setStatus(status);
-                       System.out.println(user);
+
                     boolean updated = userDAO.updateUserProfile(user);
                     if (updated) {
                         session.setAttribute("notification", "Cập nhật khách hàng thành công!");
-                        if (changes.length() > 0) {
-                            // Remove the trailing comma and space.
-                            changes.setLength(changes.length() - 2);
-                            UserLogDAO userLogDAO = new UserLogDAO();
-                            UserLog userLog = new UserLog();
-                            userLog.setUserId(userID);
-                            userLog.setLog("Marketing đã sửa: " + changes.toString());
-                            userLogDAO.addLogs(userLog);
-                        }
                     } else {
                         session.setAttribute("notificationErr", "Cập nhật khách hàng thất bại.");
                     }

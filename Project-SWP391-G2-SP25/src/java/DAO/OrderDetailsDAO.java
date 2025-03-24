@@ -185,6 +185,6 @@ public class OrderDetailsDAO extends DBContext {
     }
     public static void main(String[] args) {
         OrderDetailsDAO odDAO = new OrderDetailsDAO();
-        System.out.println(odDAO.getOrderDetailsByOrderIDasMap(6));
+        System.out.println(odDAO.getOrderDetailsByOrderID1(22));
     }
 }

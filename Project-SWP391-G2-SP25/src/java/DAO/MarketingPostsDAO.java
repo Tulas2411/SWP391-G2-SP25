@@ -1,6 +1,6 @@
 package DAO;
 
-import Model.MarketingPosts;
+import Model.*;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -31,7 +31,8 @@ public class MarketingPostsDAO extends DBContext {
 
         return postList; // Trả về danh sách các bài viết
     }
-     public List<MarketingPosts> getMarketingPostsByPage(int start, int limit) {
+
+    public List<MarketingPosts> getMarketingPostsByPage(int start, int limit) {
         List<MarketingPosts> posts = new ArrayList<>();
         String sql = "SELECT * FROM MarketingPosts LIMIT ?, ?";
 
@@ -66,21 +67,21 @@ public class MarketingPostsDAO extends DBContext {
     }
 
     public Map<Integer, MarketingPosts> getAllMarketingPostsAsMap() {
-    Map<Integer, MarketingPosts> postMap = new HashMap<>();
-    String sql = "SELECT * FROM MarketingPosts";
+        Map<Integer, MarketingPosts> postMap = new HashMap<>();
+        String sql = "SELECT * FROM MarketingPosts";
 
-    try (Statement st = connection.createStatement(); ResultSet rs = st.executeQuery(sql)) {
-        while (rs.next()) {
-            // Sử dụng phương thức extractMarketingPostFromResultSet để tạo đối tượng từ ResultSet
-            MarketingPosts post = extractMarketingPostFromResultSet(rs);
-            postMap.put(post.getPostID(), post); // Thêm vào map với postID làm key
+        try (Statement st = connection.createStatement(); ResultSet rs = st.executeQuery(sql)) {
+            while (rs.next()) {
+                // Sử dụng phương thức extractMarketingPostFromResultSet để tạo đối tượng từ ResultSet
+                MarketingPosts post = extractMarketingPostFromResultSet(rs);
+                postMap.put(post.getPostID(), post); // Thêm vào map với postID làm key
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching marketing posts: " + e.getMessage());
         }
-    } catch (SQLException e) {
-        System.out.println("Error fetching marketing posts: " + e.getMessage());
-    }
 
-    return postMap; // Trả về map chứa các bài viết
-}
+        return postMap; // Trả về map chứa các bài viết
+    }
 
     public Vector<MarketingPosts> getAllMarketingPostsAsVector() {
         Vector<MarketingPosts> posts = new Vector<>();
@@ -129,7 +130,7 @@ public class MarketingPostsDAO extends DBContext {
     }
 
     public boolean addMarketingPost(MarketingPosts post) {
-        String sql = "INSERT INTO MarketingPosts (Title, Content, Author, CreateDate, Status, ImageLink) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO MarketingPosts (Title, Content, Author, CreateDate, Status, ImageLink, CategoryID) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             setMarketingPostPreparedStatement(ps, post);
@@ -142,11 +143,11 @@ public class MarketingPostsDAO extends DBContext {
     }
 
     public boolean updateMarketingPost(MarketingPosts post) {
-        String sql = "UPDATE MarketingPosts SET Title = ?, Content = ?, Author = ?, CreateDate = ?, Status = ?, ImageLink = ? WHERE PostID = ?";
+        String sql = "UPDATE MarketingPosts SET Title = ?, Content = ?, Author = ?, CreateDate = ?, Status = ?, ImageLink = ?, CategoryID = ? WHERE PostID = ?";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             setMarketingPostPreparedStatement(ps, post);
-            ps.setInt(7, post.getPostID());
+            ps.setInt(8, post.getPostID());
             ps.executeUpdate();
             return true;
         } catch (SQLException e) {
@@ -177,6 +178,7 @@ public class MarketingPostsDAO extends DBContext {
         post.setCreateDate(rs.getDate("CreateDate"));
         post.setStatus(rs.getString("Status"));
         post.setImageLink(rs.getString("ImageLink"));
+        post.setCategory(rs.getString("CategoryID"));
         return post;
     }
 
@@ -187,17 +189,99 @@ public class MarketingPostsDAO extends DBContext {
         ps.setDate(4, (Date) post.getCreateDate());
         ps.setString(5, post.getStatus());
         ps.setString(6, post.getImageLink());
+        ps.setString(7, post.getCategory());
     }
-//public static void main(String[] args) {
-//        MarketingPostsDAO dao = new MarketingPostsDAO();
-//        List<MarketingPosts> list = dao.getAllMarketingPostsAsMap();
-//        for (MarketingPosts o : list) {
-//            System.out.println(o);
-//        }
-//    }
+
+    public boolean removePostCategory(String cateID) {
+        String sql = "DELETE FROM marketingpostcategories WHERE CategoryID = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, cateID);
+            int affectedRows = ps.executeUpdate();
+            return affectedRows > 0;
+        } catch (SQLException e) {
+            System.out.println("Error removing marketing post: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public Map<String, PostCategory> getAllPostCategories() {
+        Map<String, PostCategory> cateList = new HashMap<>();
+        String sql = "SELECT * FROM marketingpostcategories";
+
+        try (Statement st = connection.createStatement(); ResultSet rs = st.executeQuery(sql)) {
+            while (rs.next()) {
+                // Sử dụng phương thức extractMarketingPostFromResultSet để tạo đối tượng từ ResultSet
+                PostCategory cate = new PostCategory();
+                cate.setCategoryID(rs.getString("CategoryID"));
+                cate.setCategoryName(rs.getString("CategoryName"));
+                cateList.put(cate.getCategoryID(), cate); // Thêm đối tượng vào danh sách
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching marketing posts: " + e.getMessage());
+        }
+
+        return cateList; // Trả về danh sách các bài viết
+    }
+
+    public List<MarketingPosts> getAllPostAndPagination(int page, int limit, String cate) {
+        List<MarketingPosts> posts = new ArrayList<>();
+        String sql = "SELECT * FROM MarketingPosts";
+        if (cate != null && !cate.trim().isEmpty()) {
+            sql += " Where CategoryID = ?";
+        }
+        sql += " ORDER BY CreateDate DESC LIMIT ? OFFSET ?"; // Đúng thứ tự
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            if (cate != null && !cate.trim().isEmpty()) {
+                ps.setString(1, cate);
+                ps.setInt(2, limit);
+                ps.setInt(3, (page - 1) * limit);
+            } else {
+                ps.setInt(1, limit);
+                ps.setInt(2, (page - 1) * limit);
+            }
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    MarketingPosts post = extractMarketingPostFromResultSet(rs);
+                    posts.add(post);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching blogs: " + e.getMessage());
+        }
+        return posts;
+    }
+
+    public List<MarketingPosts> searchPostsByTitleAndContent(int page, int limit, String searchQuery) {
+        List<MarketingPosts> posts = new ArrayList<>();
+        String sql = "SELECT * FROM MarketingPosts WHERE Title LIKE ? OR Content LIKE ? ORDER BY CreateDate DESC LIMIT ? OFFSET ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            String query = "%" + searchQuery + "%"; // Thêm % để tìm kiếm gần đúng
+            ps.setString(1, query);
+            ps.setString(2, query);
+            ps.setInt(3, limit);
+            ps.setInt(4, (page - 1) * limit);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                MarketingPosts post = extractMarketingPostFromResultSet(rs);
+                posts.add(post);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching marketing posts: " + e.getMessage());
+        }
+
+        return posts; // Trả về danh sách các bài viết
+    }
+
+    public static void main(String[] args) {
+        MarketingPostsDAO dao = new MarketingPostsDAO();
+        MarketingPosts post = dao.getMarketingPostByID(4);
+        post.setCategory("GTSP");
+        System.out.println(dao.updateMarketingPost(post));
+    }
 
     public boolean updateMarketingPost(int i, String title, String content, int author, java.util.Date createDate, String status, String imageLink) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    }
-
+}

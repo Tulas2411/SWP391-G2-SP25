@@ -26,33 +26,48 @@ public class UserLogsServlet extends HttpServlet {
             return;
         }
 
-        // Lấy toàn bộ log từ database (nên cải tiến bằng cách tạo phương thức getLogsByUserId)
         UserLogDAO userLogDAO = new UserLogDAO();
-        List<UserLog> logs = userLogDAO.getAllUserLogs();
-        
-        // Lọc ra các log của user có userID tương ứng
+        List<UserLog> logs = userLogDAO.getLogsByUserId(userId); // Use the new method
+
         StringBuilder html = new StringBuilder();
         html.append("<table class=\"table table-bordered\">");
-        html.append("<thead><tr><th>ID</th><th>Nội dung chỉnh sửa</th><th>Ngày thay đổi</th></tr></thead>");
+        html.append("<thead><tr>")
+            .append("<th>Email</th>")
+            .append("<th>Họ và tên</th>")
+            .append("<th>Giới tính</th>")
+            .append("<th>Số điện thoại</th>")
+            .append("<th>Địa chỉ</th>")
+            .append("<th>Người cập nhật</th>")
+            .append("<th>Ngày cập nhật</th>")
+            .append("</tr></thead>");
         html.append("<tbody>");
-        boolean found = false;
+
+        boolean hasValidLog = false;
         for (UserLog log : logs) {
-            if (log.getUserId() == userId) {
-                found = true;
+            // Check if the log entry has at least one meaningful field
+            if (log.getEmail() != null || log.getFullName() != null || log.getGender() != null ||
+                log.getMobile() != null || log.getAddress() != null || log.getUpdatedBy() != null) {
+                hasValidLog = true;
                 html.append("<tr>");
-                html.append("<td>").append(log.getId()).append("</td>");
-                html.append("<td>").append(log.getLog()).append("</td>");
-                html.append("<td>").append(log.getChange_date()).append("</td>");
+                html.append("<td>").append(log.getEmail() != null ? log.getEmail() : "").append("</td>");
+                html.append("<td>").append(log.getFullName() != null ? log.getFullName() : "").append("</td>");
+                html.append("<td>").append(log.getGender() != null ? (log.getGender().equals("Male") ? "Nam" : "Nữ") : "").append("</td>");
+                html.append("<td>").append(log.getMobile() != null ? log.getMobile() : "").append("</td>");
+                html.append("<td>").append(log.getAddress() != null ? log.getAddress() : "").append("</td>");
+                html.append("<td>").append(log.getUpdatedBy() != null ? log.getUpdatedBy() : "").append("</td>");
+                html.append("<td>").append(log.getChangeDate() != null ? log.getChangeDate().toString() : "").append("</td>");
                 html.append("</tr>");
             }
         }
-        if (!found) {
-            html.append("<tr><td colspan='3'>Không có lịch sử chỉnh sửa nào cho người dùng này.</td></tr>");
+
+        if (!hasValidLog) {
+            html.append("<tr><td colspan='7'>Không có lịch sử chỉnh sửa nào cho người dùng này.</td></tr>");
         }
+
         html.append("</tbody></table>");
 
         response.setContentType("text/html;charset=UTF-8");
-        try(PrintWriter out = response.getWriter()){
+        try (PrintWriter out = response.getWriter()) {
             out.print(html.toString());
         }
     }
