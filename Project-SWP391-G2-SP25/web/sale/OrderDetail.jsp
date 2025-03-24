@@ -85,7 +85,6 @@
                     <c:when test="${orders.status eq 'Delivered'}">Đã giao thành công</c:when>
                     <c:when test="${orders.status eq 'Processing'}">Đang xử lý</c:when>
                     <c:when test="${orders.status eq 'Processed'}">Đang chờ Shipper nhận đơn</c:when>
-                    <c:when test="${orders.status eq 'Paid'}">Đã Thanh Toán</c:when>
                 </c:choose></p>
             <p><strong>Tổng tiền:</strong> 
                 <fmt:formatNumber value="${orders.totalAmount}" pattern="#,##0"/> đ
