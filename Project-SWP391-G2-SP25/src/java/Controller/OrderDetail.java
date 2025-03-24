@@ -75,6 +75,10 @@ public class OrderDetail extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        String emailSession = (String) session.getAttribute("email");
+        Users currentUser = (Users) session.getAttribute("user");
+        if (currentUser != null && currentUser.getRole().equalsIgnoreCase("Sale")) {
         // Lấy tham số id từ request
         int id = Integer.parseInt(request.getParameter("id"));
 
@@ -114,6 +118,10 @@ public class OrderDetail extends HttpServlet {
 
         // Chuyển tiếp đến trang OrderDetail.jsp để hiển thị thông tin chi tiết đơn hàng
         request.getRequestDispatcher("OrderDetail.jsp").forward(request, response);
+        }else {
+            session.setAttribute("notificationErr", "Bạn không có quyền truy cập vào trang này");
+            response.sendRedirect(request.getContextPath() + "/Login.jsp");
+        }
     }
 
     /**
