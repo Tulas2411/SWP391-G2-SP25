@@ -101,7 +101,9 @@ public class OrdersList extends HttpServlet {
                 currentPage, 
                 PAGE_SIZE
             );
-
+            for (Orders order : orders) {
+                System.out.println(orders.toString());
+            }
             int totalOrders = ordersDAO.getTotalOrdersByAssignedSale(
                 currentUser.getUserID(),
                 search,
@@ -121,12 +123,12 @@ public class OrdersList extends HttpServlet {
             request.setAttribute("toDate", toDate);
             request.setAttribute("status", status);
 
-            request.getRequestDispatcher("OrderList.jsp").forward(request, response);
+            request.getRequestDispatcher("/sale/OrderList.jsp").forward(request, response);
             
         } catch (Exception e) {
             e.printStackTrace();
             session.setAttribute("notificationErr", "Lỗi hệ thống: " + e.getMessage());
-            response.sendRedirect(request.getContextPath() + "/sale/OrdersList");
+           response.sendRedirect(request.getContextPath() + "/sale/OrderList.jsp");
         }
     }
 

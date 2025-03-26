@@ -181,5 +181,10 @@ public class Orders {
         this.billOfLading = billOfLading;
         this.ShipperID = ShipperID;
     }
+
+    @Override
+    public String toString() {
+        return "Orders{" + "orderID=" + orderID + ", customerID=" + customerID + ", orderDate=" + orderDate + ", deliveryAddress=" + deliveryAddress + ", status=" + status + ", totalAmount=" + totalAmount + ", billOfLading=" + billOfLading + ", customerFirstName=" + customerFirstName + ", customerLastName=" + customerLastName + ", customerEmail=" + customerEmail + ", ShipperID=" + ShipperID + ", SaleID=" + SaleID + ", assignedSaleId=" + assignedSaleId + '}';
+    }
     
 }

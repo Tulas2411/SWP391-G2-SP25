@@ -70,7 +70,6 @@ public class OrderDetailManager extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/SaleManager/OrdersListManager");
         } catch (Exception e) {
             e.printStackTrace();
-            session.setAttribute("notificationErr", "Lỗi hệ thống: " + e.getMessage());
             response.sendRedirect(request.getContextPath() + "/SaleManager/OrdersListManager");
         }
     }
