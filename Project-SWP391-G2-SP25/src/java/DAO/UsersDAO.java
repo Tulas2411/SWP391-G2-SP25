@@ -51,7 +51,30 @@ public class UsersDAO extends DBContext {
         }
         return null;
     }
+    
+    public List<Users> getUsersByRole(String role) {
+        List<Users> users = new ArrayList<>();
+        String sql = "SELECT * FROM Users WHERE Role = ? AND Status = 'Active'";
 
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, role);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Users user = new Users();
+                    user.setUserID(rs.getInt("UserID"));
+                    user.setFirstName(rs.getString("FirstName"));
+                    user.setLastName(rs.getString("LastName"));
+                    user.setEmail(rs.getString("Email"));
+                    user.setRole(rs.getString("Role"));
+                    users.add(user);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return users;
+    }
+    
     public Users getUserByEmail(String email) {
         String sql = "SELECT * FROM Users WHERE Email = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
