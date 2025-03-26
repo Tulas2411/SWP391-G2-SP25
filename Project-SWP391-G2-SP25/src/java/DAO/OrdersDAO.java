@@ -80,10 +80,10 @@ public class OrdersDAO extends DBContext {
     ) throws SQLException {
         List<Orders> orders = new ArrayList<>();
         StringBuilder sql = new StringBuilder(
-                "SELECT o.order_id, o.order_date, o.delivery_address, o.status, o.total_amount, "
-                + "u.user_id, u.first_name, u.last_name, u.email, u.phone "
+                "SELECT o.OrderID, o.OrderDate, o.DeliveryAddress, o.status, o.TotalAmount, "
+                + "u.UserID, u.FirstName, u.LastName, u.Email, u.PhoneNumber "
                 + "FROM orders o "
-                + "JOIN users u ON o.user_id = u.user_id "
+                + "JOIN Users u ON o.CustomerID = u.UserID "
                 + "WHERE o.assigned_sale_id = ? "
         );
 
@@ -92,7 +92,7 @@ public class OrdersDAO extends DBContext {
         params.add(saleId);
 
         if (search != null && !search.isEmpty()) {
-            sql.append("AND (o.order_id LIKE ? OR u.first_name LIKE ? OR u.last_name LIKE ? OR u.email LIKE ?) ");
+            sql.append("AND (o.OrderID LIKE ? OR u.FirstName LIKE ? OR u.LastName LIKE ? OR u.Email LIKE ?) ");
             String searchParam = "%" + search + "%";
             params.add(searchParam);
             params.add(searchParam);
@@ -101,12 +101,12 @@ public class OrdersDAO extends DBContext {
         }
 
         if (fromDate != null && !fromDate.isEmpty()) {
-            sql.append("AND o.order_date >= ? ");
+            sql.append("AND o.OrderDate >= ? ");
             params.add(fromDate);
         }
 
         if (toDate != null && !toDate.isEmpty()) {
-            sql.append("AND o.order_date <= ? ");
+            sql.append("AND o.OrderDate <= ? ");
             params.add(toDate);
         }
 
@@ -115,7 +115,7 @@ public class OrdersDAO extends DBContext {
             params.add(status);
         }
 
-        sql.append("ORDER BY o.order_date DESC LIMIT ? OFFSET ?");
+        sql.append("ORDER BY o.OrderDate DESC LIMIT ? OFFSET ?");
         params.add(pageSize);
         params.add((page - 1) * pageSize);
 
@@ -129,20 +129,14 @@ public class OrdersDAO extends DBContext {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     Orders order = new Orders();
-                    order.setOrderID(rs.getInt("order_id"));
-                    order.setDeliveryAddress(rs.getString("delivery_address"));
+                    order.setOrderID(rs.getInt("OrderID"));
+                    order.setOrderDate(rs.getString("OrderDate"));  // Thêm dòng này
+                    order.setDeliveryAddress(rs.getString("DeliveryAddress"));
                     order.setStatus(rs.getString("status"));
-                    order.setTotalAmount(rs.getDouble("total_amount"));
-
-                    // Ánh xạ thông tin khách hàng
-                    Users customer = new Users();
-                    customer.setUserID(rs.getInt("user_id"));
-                    customer.setFirstName(rs.getString("first_name"));
-                    customer.setLastName(rs.getString("last_name"));
-                    customer.setEmail(rs.getString("email"));
-                    customer.setPhoneNumber(rs.getString("phone"));                   
+                    order.setTotalAmount(rs.getDouble("TotalAmount"));
+                    order.setCustomerLastName(rs.getString("LastName"));
+                    order.setCustomerFirstName(rs.getString("FirstName"));System.out.println("Customer name :"+order);
                     orders.add(order);
-                   
                 }
             }
         }
@@ -158,15 +152,14 @@ public class OrdersDAO extends DBContext {
     ) throws SQLException {
         StringBuilder sql = new StringBuilder(
                 "SELECT COUNT(*) FROM orders o "
-                + "JOIN users u ON o.user_id = u.user_id "
-                + "WHERE o.assigned_sale_id = ? "
+                + "JOIN users u ON o.assigned_sale_id = u.UserID "
         );
 
         List<Object> params = new ArrayList<>();
-        params.add(saleId);
+
 
         if (search != null && !search.isEmpty()) {
-            sql.append("AND (o.order_id LIKE ? OR u.first_name LIKE ? OR u.last_name LIKE ? OR u.email LIKE ?) ");
+            sql.append("AND (o.OrderID LIKE ? OR u.FirstName LIKE ? OR u.LastName LIKE ? OR u.Email LIKE ?) ");
             String searchParam = "%" + search + "%";
             params.add(searchParam);
             params.add(searchParam);
@@ -175,12 +168,12 @@ public class OrdersDAO extends DBContext {
         }
 
         if (fromDate != null && !fromDate.isEmpty()) {
-            sql.append("AND o.order_date >= ? ");
+            sql.append("AND o.OrderDate >= ? ");
             params.add(fromDate);
         }
 
         if (toDate != null && !toDate.isEmpty()) {
-            sql.append("AND o.order_date <= ? ");
+            sql.append("AND o.OrderDate <= ? ");
             params.add(toDate);
         }
 
