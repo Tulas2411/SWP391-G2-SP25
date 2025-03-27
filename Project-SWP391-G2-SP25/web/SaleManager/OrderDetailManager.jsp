@@ -75,43 +75,42 @@
         <!-- Thông tin người nhận -->
         <section class="bg-light p-3 rounded">
             <h3>Thông tin người nhận</h3>
-            <p><strong>Ngày đặt hàng:</strong> ${orders.orderDate}</p>
-            <p><strong>Địa chỉ giao hàng:</strong> ${orders.deliveryAddress}</p>
+            <p><strong>Ngày đặt hàng:</strong> ${order.orderDate}</p>
+            <p><strong>Địa chỉ giao hàng:</strong> ${order.deliveryAddress}</p>
             <p><strong>Trạng thái:</strong>
                 <c:choose>
-                    <c:when test="${orders.status eq 'Submitted'}">Chờ xử lý</c:when>
-                    <c:when test="${orders.status eq 'Cancelled'}">Đã hủy</c:when>
-                    <c:when test="${orders.status eq 'Shipping'}">Đang giao hàng</c:when>
-                    <c:when test="${orders.status eq 'Delivered'}">Đã giao thành công</c:when>
-                    <c:when test="${orders.status eq 'Processing'}">Đang xử lý</c:when>
-                    <c:when test="${orders.status eq 'Processed'}">Đang chờ Shipper nhận đơn</c:when>
+                    <c:when test="${order.status eq 'Submitted'}">Chờ xử lý</c:when>
+                    <c:when test="${order.status eq 'Cancelled'}">Đã hủy</c:when>
+                    <c:when test="${order.status eq 'Shipping'}">Đang giao hàng</c:when>
+                    <c:when test="${order.status eq 'Delivered'}">Đã giao thành công</c:when>
+                    <c:when test="${order.status eq 'Processing'}">Đang xử lý</c:when>
+                    <c:when test="${order.status eq 'Processed'}">Đang chờ Shipper nhận đơn</c:when>
                 </c:choose></p>
             <p><strong>Tổng tiền:</strong> 
-                <fmt:formatNumber value="${orders.totalAmount}" pattern="#,##0"/> đ
+                <fmt:formatNumber value="${order.totalAmount}" pattern="#,##0"/> đ
             </p>
-            <p><strong>Ghi chú:</strong> ${orders.billOfLading}</p>
+            <p><strong>Ghi chú:</strong> ${order.billOfLading}</p>
         </section>
 
         <!-- Quản lý đơn hàng -->
         <section class="mt-4">
-            <h3 class="border-bottom pb-2">Quản lý đơn hàng</h3>
-            <c:if test="${orders.status eq 'Submitted'}">
-                <form action="${contextPath}/sale/OrderDetail" method="POST" style="display:inline"
-                      onsubmit="return confirm('Xác nhận giao hàng thành công?');">
-                    <input type="hidden" name="action" value="updateStatus">
-                    <input type="hidden" name="orderID" value="${orders.orderID}">
-                    <button type="submit" class="btn btn-success btn-sm">Nhận đơn hàng</button>
-                </form>
-            </c:if>
-            <c:if test="${orders.status eq 'Processing'}">
-                <form action="${contextPath}/sale/OrderDetail" method="POST" style="display:inline"
-                      onsubmit="return confirm('Xác nhận giao hàng thành công?');">
-                    <input type="hidden" name="action" value="updateStatus1">
-                    <input type="hidden" name="orderID" value="${orders.orderID}">
-                    <button type="submit" class="btn btn-success btn-sm">Giao hàng cho Shipper</button>
+            <c:if test="${order.status eq 'Submitted'}">
+                <h3 class="border-bottom pb-2">Gán đơn hàng</h3>
+                <form method="POST" action="${pageContext.request.contextPath}/AssignOrderController" class="d-flex align-items-center gap-2">
+                    <input type="hidden" name="orderId" value="${order.orderID}">
+                    <label for="sale" class="me-2">Gán cho nhân viên:</label>
+                    <select name="saleId" class="form-select w-auto" required>
+                        <option value="">-- Chọn nhân viên --</option>
+                        <c:forEach var="sale" items="${salesList}">
+                            <option value="${sale.userID}">${sale.firstName} ${sale.lastName}</option>
+                        </c:forEach>
+                    </select>
+                    <button type="submit" class="btn btn-success">Gán đơn hàng</button>
                 </form>
             </c:if>
         </section>
+
+
     </main>
 
     <jsp:include page="footer.jsp"></jsp:include>

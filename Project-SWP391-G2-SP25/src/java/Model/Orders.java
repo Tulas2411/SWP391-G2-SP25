@@ -20,6 +20,8 @@ public class Orders {
     private String customerLastName;
     private String customerEmail;
     private int ShipperID;
+    private int SaleID;
+    private Integer assignedSaleId;
 
     public Orders() {
     }
@@ -27,6 +29,15 @@ public class Orders {
     public String getCustomerFirstName() {
         return customerFirstName;
     }
+
+    public int getSaleID() {
+        return SaleID;
+    }
+
+    public void setSaleID(int SaleID) {
+        this.SaleID = SaleID;
+    }
+    
 
     public void setCustomerFirstName(String customerFirstName) {
         this.customerFirstName = customerFirstName;
@@ -152,6 +163,16 @@ public class Orders {
         this.ShipperID = ShipperID;
     }
 
+    public Integer getAssignedSaleId() {
+        return assignedSaleId;
+    }
+
+    public void setAssignedSaleId(Integer assignedSaleId) {
+        this.assignedSaleId = assignedSaleId;
+    }
+    
+    
+
     public Orders(String orderDate, String deliveryAddress, String status, double totalAmount, String billOfLading, int ShipperID) {
         this.orderDate = orderDate;
         this.deliveryAddress = deliveryAddress;
@@ -159,6 +180,11 @@ public class Orders {
         this.totalAmount = totalAmount;
         this.billOfLading = billOfLading;
         this.ShipperID = ShipperID;
+    }
+
+    @Override
+    public String toString() {
+        return "Orders{" + "orderID=" + orderID + ", customerID=" + customerID + ", orderDate=" + orderDate + ", deliveryAddress=" + deliveryAddress + ", status=" + status + ", totalAmount=" + totalAmount + ", billOfLading=" + billOfLading + ", customerFirstName=" + customerFirstName + ", customerLastName=" + customerLastName + ", customerEmail=" + customerEmail + ", ShipperID=" + ShipperID + ", SaleID=" + SaleID + ", assignedSaleId=" + assignedSaleId + '}';
     }
     
 }

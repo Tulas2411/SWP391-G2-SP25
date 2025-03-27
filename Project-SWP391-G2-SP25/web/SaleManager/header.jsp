@@ -13,13 +13,13 @@
         <meta name="author" content="" />
         <title>${title}</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
-        <link href="${contextPath}/admin/css/styles.css" rel="stylesheet" /> 
+        <link href="${contextPath}/SaleManager/css/styles.css" rel="stylesheet" /> 
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <!-- Navbar Brand-->
-            <a class="navbar-brand ps-3" href="dashboard">Marketing</a>
+            <a class="navbar-brand ps-3" href="dashboardManager">Sale Manager</a>
             <!-- Sidebar Toggle-->
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
             <!-- Navbar Search-->
@@ -34,7 +34,7 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="UserProfileRole.jsp">Settings</a></li>
+                        <li><a class="dropdown-item" href="#!">Settings</a></li>
                         <li><a class="dropdown-item" href="#!">Activity Log</a></li>
                         <li><hr class="dropdown-divider" /></li>
                         <li><a class="dropdown-item" href="${contextPath}/LogoutController">Logout</a></li>
@@ -47,36 +47,18 @@
                 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                     <div class="sb-sidenav-menu">
                         <div class="nav">
-                            <a class="nav-link" href="${contextPath}/marketing/statistics">
-                                <div class="sb-nav-link-icon"><i class="fa fa-chart-bar"></i></div>
-                                Thống kê
-                            </a> 
-                            <a class="nav-link" href="${contextPath}/marketing/product-management">
-                                <div class="sb-nav-link-icon"><i class="fa fa-gauge-simple-high"></i></div>
-                                Quản lý sản phẩm
-                            </a>
-                            <a class="nav-link" href="${contextPath}/marketing/customer-management">
+                            <a class="nav-link" href="${contextPath}/SaleManager/OrdersListManager">
                                 <div class="sb-nav-link-icon"><i class="fa fa-user"></i></div>
-                                Quản lý khách hàng
+                                Danh Sách Đơn Mua
                             </a>  
 
-                            <a class="nav-link" href="${contextPath}/reviews">
-                                <div class="sb-nav-link-icon"><i class="fa fa-comment"></i></div>
-                                Quản lí phản hồi
+                        </div>
+                        <div class="nav">
+                            <a class="nav-link" href="${contextPath}/SaleManager/StatisticsManager">
+                                <div class="sb-nav-link-icon"><i class="fa fa-chart-bar"></i></div>
+                                Thống kê
                             </a>  
-                            </a>  
-                            <a class="nav-link" href="${contextPath}/marketing/ListSliders">
-                                <div class="sb-nav-link-icon"><i class="fa fa-user"></i></div>
-                                Danh sách Sliders
-                            </a>  
-                            </a>  
-                            <a class="nav-link" href="${contextPath}/marketing/PostList">
-                                <div class="sb-nav-link-icon"><i class="fa fa-user"></i></div>
-                                Danh sách bài Post
-                            </a> 
-                            </a>  
-                            </a>  
-                            
+
                         </div>
                     </div>
                 </nav>

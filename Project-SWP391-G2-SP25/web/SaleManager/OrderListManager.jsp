@@ -17,7 +17,7 @@
                 <h2 class="text-center mb-4">Danh sách đơn hàng</h2>
 
                 <!-- Bộ lọc và tìm kiếm -->
-                <form method="GET" action="OrdersList" class="row g-3 mb-4">
+                <form method="GET" action="OrdersListManager" class="row g-3 mb-4">
                     <div class="col-md-4">
                         <label for="fromDate" class="form-label">Từ ngày:</label>
                         <input type="date" id="fromDate" name="fromDate" value="${param.fromDate}" class="form-control">
@@ -61,7 +61,7 @@
                         <c:forEach var="order" items="${orders}">
                             <tr>
                                 <td>
-                                    <button class="btn btn-link" onclick="window.location.href = 'OrderDetail?id=${order.orderID}'">
+                                    <button class="btn btn-link" onclick="window.location.href = 'OrderDetailManager?id=${order.orderID}'">
                                         ${order.orderID}
                                     </button>
                                 </td>
@@ -82,7 +82,7 @@
                                     </c:choose>
                                 </td>
                                 <td>
-                                    <button class="btn btn-info btn-sm" onclick="window.location.href = 'OrderDetail?id=${order.orderID}'">
+                                    <button class="btn btn-info btn-sm" onclick="window.location.href = 'OrderDetailManager?id=${order.orderID}'">
                                         Xem chi tiết
                                     </button>
                                 </td>
@@ -97,7 +97,7 @@
                 <ul class="pagination justify-content-center">
                     <c:if test="${currentPage > 1}">
                         <li class="page-item">
-                            <a class="page-link" href="OrdersList?page=${currentPage - 1}&search=${param.search}&fromDate=${param.fromDate}&toDate=${param.toDate}&saleName=${param.saleName}&status=${param.status}">
+                            <a class="page-link" href="OrdersListManager?page=${currentPage - 1}&search=${param.search}&fromDate=${param.fromDate}&toDate=${param.toDate}&saleName=${param.saleName}&status=${param.status}">
                                 Trước
                             </a>
                         </li>
@@ -107,7 +107,7 @@
                     </li>
                     <c:if test="${currentPage < totalPages}">
                         <li class="page-item">
-                            <a class="page-link" href="OrdersList?page=${currentPage + 1}&search=${param.search}&fromDate=${param.fromDate}&toDate=${param.toDate}&saleName=${param.saleName}&status=${param.status}">
+                            <a class="page-link" href="OrdersListManager?page=${currentPage + 1}&search=${param.search}&fromDate=${param.fromDate}&toDate=${param.toDate}&saleName=${param.saleName}&status=${param.status}">
                                 Tiếp
                             </a>
                         </li>
@@ -116,5 +116,6 @@
             </nav>
         </main>
 
+        <jsp:include page="footer.jsp"></jsp:include>
     </body>
 </html>
