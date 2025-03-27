@@ -1,4 +1,4 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+==<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
@@ -8,6 +8,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <link rel="stylesheet" href="assets/css/base.css" />
     </head>
     <body class="bg-light">
         <jsp:include page="header.jsp"/>
@@ -40,8 +41,6 @@
 
             <canvas id="salesChart" width="400" height="200"></canvas>
         </main>
-
-        <jsp:include page="footer.jsp"/>
 
         <script>
             document.addEventListener("DOMContentLoaded", function () {

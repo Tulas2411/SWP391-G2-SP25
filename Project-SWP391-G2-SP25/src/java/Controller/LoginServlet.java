@@ -69,7 +69,7 @@ public class LoginServlet extends HttpServlet {
                         if (u.getRole().equalsIgnoreCase("Admin")) {
                             response.sendRedirect("admin/dashboard");
                         } else if (u.getRole().equalsIgnoreCase("Marketing")) {
-                            response.sendRedirect("marketing/dashboard");
+                            response.sendRedirect("marketing/statistics");
                         } else if (u.getRole().equalsIgnoreCase("Sale")) {
                             response.sendRedirect("sale/OrdersList");
                         } else if (u.getRole().equalsIgnoreCase("SaleManager")) {
