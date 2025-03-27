@@ -47,10 +47,10 @@
                 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                     <div class="sb-sidenav-menu">
                         <div class="nav">
-                            <a class="nav-link" href="${contextPath}/marketing/dashboard">
-                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                Dashboard
-                            </a>
+                            <a class="nav-link" href="${contextPath}/marketing/statistics">
+                                <div class="sb-nav-link-icon"><i class="fa fa-chart-bar"></i></div>
+                                Thống kê
+                            </a> 
                             <a class="nav-link" href="${contextPath}/marketing/product-management">
                                 <div class="sb-nav-link-icon"><i class="fa fa-gauge-simple-high"></i></div>
                                 Quản lý sản phẩm
@@ -76,10 +76,7 @@
                             </a> 
                             </a>  
                             </a>  
-                            <a class="nav-link" href="${contextPath}/marketing/statistics">
-                                <div class="sb-nav-link-icon"><i class="fa fa-chart-bar"></i></div>
-                                Thống kê
-                            </a> 
+                            
                         </div>
                     </div>
                 </nav>

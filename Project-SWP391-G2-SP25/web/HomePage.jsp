@@ -26,7 +26,6 @@
         <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css" />
         <link rel="stylesheet" href="assets/fonts/fontawesome-free-6.0.0-web/css/all.css" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swapsubset=vietnamese" />
-
     </head>
     <body>
         <%@ include file="./Public/header.jsp" %>
@@ -38,7 +37,7 @@
                     <!-- Danh mục sản phẩm - Gom các sản phẩm thành các danh mục nhỏ - Hiển thị trên cùng bên trái main trang web -->
                     <h2 class="main__left-title">DANH MỤC SẢN PHẨM</h2>
 
-                 
+
 
                     <ul class="main__left-category-list">
                         <c:forEach var="categoryID" items="${['TBQ', 'TBCS', 'CTD', 'TBTM', 'TBSCBT']}">
