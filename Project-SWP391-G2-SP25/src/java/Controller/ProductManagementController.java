@@ -193,7 +193,7 @@ public class ProductManagementController extends HttpServlet {
                 product.setImageLink("assets/img/" + fileName); // Save relative path
 
                 // Add product to database
-                boolean added = productDAO.addProducts(product);
+                boolean added = productDAO.addProduct(product);
                 if (added) {
                     session.setAttribute("notification", "Thêm sản phẩm thành công!");
                 } else {

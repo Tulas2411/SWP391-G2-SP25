@@ -32,6 +32,7 @@ public class ProductsDAO extends DBContext {
                 b.setCategoryID(rs.getString("CategoryID"));
                 b.setProductName(rs.getString("ProductName"));
                 b.setDescription(rs.getString("Description"));
+                b.setProductDetails(rs.getString("ProductDetail"));
                 b.setProvider(rs.getString("Provider"));
                 b.setPrice(rs.getFloat("Price"));
                 b.setWarrantyPeriod(rs.getString("WarrantyPeriod"));
@@ -146,7 +147,7 @@ public class ProductsDAO extends DBContext {
     }
 
     public boolean addProduct(Products product) {
-        String sql = "INSERT INTO Products (CategoryID, ProductName, Description, Provider, Price, WarrantyPeriod, Amount, ImageLink, IsPromoted, OldPrice, CreateAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Products (CategoryID, ProductName, Description, ProductDetail, Provider, Price, WarrantyPeriod, Amount, ImageLink, IsPromoted, OldPrice, CreateAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             setProductPreparedStatement(ps, product);
@@ -158,8 +159,8 @@ public class ProductsDAO extends DBContext {
         }
     }
 
-    public boolean addProducts(Products product) {
-        String sql = "INSERT INTO Products (CategoryID, ProductName, Description, Provider, Price, WarrantyPeriod, Amount, ImageLink, IsPromoted) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    public boolean aaaaddProducts(Products product) {
+        String sql = "INSERT INTO Products (CategoryID, ProductName, Description, ProductDetail, Provider, Price, WarrantyPeriod, Amount, ImageLink, IsPromoted) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, product.getCategoryID());
@@ -180,7 +181,7 @@ public class ProductsDAO extends DBContext {
     }
 
     public boolean updateProduct(Products product) {
-        String sql = "UPDATE Products SET CategoryID = ?, ProductName = ?, Description = ?, Provider = ?, Price = ?, WarrantyPeriod = ?, Amount = ?, ImageLink = ?, IsPromoted = ?, OldPrice = ?, CreateAt = ? WHERE ProductID = ?";
+        String sql = "UPDATE Products SET CategoryID = ?, ProductName = ?, Description = ?, ProductDetail = ?, Provider = ?, Price = ?, WarrantyPeriod = ?, Amount = ?, ImageLink = ?, IsPromoted = ?, OldPrice = ?, WHERE ProductID = ?";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             setProductPreparedStatement(ps, product);
@@ -194,11 +195,11 @@ public class ProductsDAO extends DBContext {
     }
 
     public boolean updateProducts(Products product) {
-        String sql = "UPDATE Products SET CategoryID = ?, ProductName = ?, Description = ?, Provider = ?, Price = ?, WarrantyPeriod = ?, Amount = ?, ImageLink = ?, IsPromoted = ?, OldPrice = ? WHERE ProductID = ?";
+        String sql = "UPDATE Products SET CategoryID = ?, ProductName = ?, Description = ?, ProductDetail = ?, Provider = ?, Price = ?, WarrantyPeriod = ?, Amount = ?, ImageLink = ?, IsPromoted = ?, OldPrice = ? WHERE ProductID = ?";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             setProductPreparedStatement(ps, product);
-            ps.setInt(11, product.getProductID());
+            ps.setInt(12, product.getProductID());
             int affectedRows = ps.executeUpdate();
             return affectedRows > 0;
         } catch (SQLException e) {
@@ -207,7 +208,7 @@ public class ProductsDAO extends DBContext {
         }
     }
 
-    public boolean removeProduct(int id) {
+    public boolean removeProduct9(int id) {
         String sql = "DELETE FROM Products WHERE ProductID = ?";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -301,6 +302,7 @@ public class ProductsDAO extends DBContext {
         product.setImageLink(rs.getString("ImageLink"));
         product.setIsPromoted(rs.getBoolean("IsPromoted"));
         product.setStatus(rs.getString("status"));
+        product.setProductDetails(rs.getString("ProductDetail"));
         return product;
     }
 
@@ -308,13 +310,14 @@ public class ProductsDAO extends DBContext {
         ps.setString(1, product.getCategoryID());
         ps.setString(2, product.getProductName());
         ps.setString(3, product.getDescription());
-        ps.setString(4, product.getProvider());
-        ps.setFloat(5, product.getPrice());
-        ps.setString(6, product.getWarrantyPeriod());
-        ps.setInt(7, product.getAmount());
-        ps.setString(8, product.getImageLink());
-        ps.setBoolean(9, product.getIsPromoted());
-        ps.setFloat(10, product.getOldprice());
+        ps.setString(4, product.getProductDetails());
+        ps.setString(5, product.getProvider());
+        ps.setFloat(6, product.getPrice());
+        ps.setString(7, product.getWarrantyPeriod());
+        ps.setInt(8, product.getAmount());
+        ps.setString(9, product.getImageLink());
+        ps.setBoolean(10, product.getIsPromoted());
+        ps.setFloat(11, product.getOldprice());
     }
 
     public Products GetProductbyID(int id) {
@@ -328,6 +331,7 @@ public class ProductsDAO extends DBContext {
                 b.setCategoryID(rs.getString("CategoryID"));
                 b.setProductName(rs.getString("ProductName"));
                 b.setDescription(rs.getString("Description"));
+                b.setProductDetails(rs.getString("ProductDetail"));
                 b.setProvider(rs.getString("Provider"));
                 b.setPrice(rs.getFloat("Price"));
                 b.setWarrantyPeriod(rs.getString("WarrantyPeriod"));
@@ -349,21 +353,11 @@ public class ProductsDAO extends DBContext {
     public boolean updateProduct1(Products product) {
         String sql = "UPDATE Products SET CategoryID = ?, ProductName = ?, Description = ?, Provider = ?, Price = ?, WarrantyPeriod = ?, Amount = ?, ImageLink = ?, IsPromoted = ?, OldPrice = ? WHERE ProductID = ?";
 
-        try (PreparedStatement pre = connection.prepareStatement(sql)) {
-            pre.setString(1, product.getCategoryID());
-            pre.setString(2, product.getProductName());
-            pre.setString(3, product.getDescription());
-            pre.setString(4, product.getProvider());
-            pre.setFloat(5, product.getPrice());
-            pre.setString(6, product.getWarrantyPeriod());
-            pre.setInt(7, product.getAmount());
-            pre.setString(8, product.getImageLink());
-            pre.setBoolean(9, product.getIsPromoted());
-            pre.setFloat(10, product.getOldprice());
-            pre.setInt(11, product.getProductID());
-
-            pre.executeUpdate();
-            return true;
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            setProductPreparedStatement(ps, product);
+            ps.setInt(12, product.getProductID());
+            int affectedRows = ps.executeUpdate();
+            return affectedRows > 0;
         } catch (SQLException e) {
             System.out.println("Error updating product: " + e.getMessage());
             return false;
@@ -416,6 +410,7 @@ public class ProductsDAO extends DBContext {
                 product.setCategoryID(rs.getString("CategoryID"));
                 product.setProductName(rs.getString("ProductName"));
                 product.setDescription(rs.getString("Description"));
+                product.setProductDetails(rs.getString("ProductDetail"));
                 product.setProvider(rs.getString("Provider"));
                 product.setPrice(rs.getFloat("Price"));
                 product.setOldprice(rs.getFloat("OldPrice"));
@@ -464,6 +459,7 @@ public class ProductsDAO extends DBContext {
                     product.setCategoryID(rs.getString("CategoryID"));
                     product.setProductName(rs.getString("ProductName"));
                     product.setDescription(rs.getString("Description"));
+                    product.setProductDetails(rs.getString("ProductDetail"));
                     product.setProvider(rs.getString("Provider"));
                     product.setPrice(rs.getFloat("Price"));
                     product.setOldprice(rs.getFloat("OldPrice"));
@@ -522,7 +518,7 @@ public class ProductsDAO extends DBContext {
         ProductsDAO p = new ProductsDAO();
         Products p1 = p.GetProductbyID(1);
         p1.setProductName("Quat dien aaa");
-        System.out.println(p.getSearchedProducts("Khóa"));
+        System.out.println(p.addProduct(p1));
     }
 
 }
