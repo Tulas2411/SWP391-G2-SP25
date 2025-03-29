@@ -61,7 +61,7 @@
                                     <fmt:formatNumber value="${orderDetail.priceProduct}" pattern="#,##0"/> đ
                                 </td>
                                 <td><img src="${orderDetail.imgProduct}" alt="Hình ảnh sản phẩm" class="img-thumbnail" width="100"></td>
-                                <td>${orderDetail.desProduct}</td>
+                                <td>${orderDetail.desProduct}</td>                                                             
                                 <td>
                                     <fmt:formatNumber value="${orderDetail.quantity * orderDetail.price}" pattern="#,##0"/> đ
                                 </td>

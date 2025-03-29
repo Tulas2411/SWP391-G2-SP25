@@ -6,6 +6,7 @@ package Controller;
 
 import DAO.OrdersDAO;
 import DAO.SlidersDAO;
+import DAO.UsersDAO;
 import Model.Orders;
 import Model.Sliders;
 import Model.Users;
@@ -80,16 +81,21 @@ public class OrdersListManager extends HttpServlet {
             String toDate = request.getParameter("toDate");
             String saleName = request.getParameter("saleName");
             String status = request.getParameter("status");
+            String assignedSaleId = request.getParameter("assignedSale");
 
             int currentPage = 1;
             if (request.getParameter("page") != null) {
                 currentPage = Integer.parseInt(request.getParameter("page"));
             }
-
+            UsersDAO usersDAO = new UsersDAO();
+            List<Users> allSales = usersDAO.getUsersByRole("Sale");
+            
             OrdersDAO ordersDAO = new OrdersDAO();
+            
+            List<Orders> orders = ordersDAO.getOrdersPaginated(search, fromDate, toDate, saleName, status, assignedSaleId, currentPage, PAGE_SIZE);
 
-            List<Orders> orders = ordersDAO.getOrdersPaginated(search, fromDate, toDate, saleName, status, currentPage, PAGE_SIZE);
-
+//            List<Orders> orders = ordersDAO.getOrdersWithFilters(search, fromDate, toDate, status, assignedSaleId, currentPage, PAGE_SIZE);
+            
             int totalOrders = ordersDAO.getTotalOrders(search, fromDate, toDate, saleName, status);
             int totalPages = (int) Math.ceil((double) totalOrders / PAGE_SIZE);
 
@@ -102,6 +108,7 @@ public class OrdersListManager extends HttpServlet {
             request.setAttribute("toDate", toDate);
             request.setAttribute("saleName", saleName);
             request.setAttribute("status", status);
+            request.setAttribute("allSales", allSales);
 
             // Chuyển tiếp đến trang JSP
             request.getRequestDispatcher("OrderListManager.jsp").forward(request, response);
