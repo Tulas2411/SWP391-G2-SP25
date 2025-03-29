@@ -20,6 +20,7 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeUtility;
+import org.mindrot.jbcrypt.BCrypt;
 
 @WebServlet(name = "CustomerManagementController", urlPatterns = {"/marketing/customer-management"})
 public class CustomerManagementController extends HttpServlet {
@@ -237,7 +238,7 @@ public class CustomerManagementController extends HttpServlet {
                 newUser.setGender(gender);
                 newUser.setAddress(address);
                 newUser.setUserName(email.substring(0, email.indexOf("@")));
-                newUser.setPassword(randomPassword);
+                newUser.setPassword(PasswordEncoder.encode(randomPassword));
                 newUser.setRole("Customer");
                 newUser.setStatus("Active");
 
@@ -302,4 +303,17 @@ public class CustomerManagementController extends HttpServlet {
             return false;
         }
     }
+    
+    public class PasswordEncoder {
+    // Mã hóa mật khẩu
+    public static String encode(String plainPassword) {
+        return BCrypt.hashpw(plainPassword, BCrypt.gensalt());
+    }
+    
+    // Kiểm tra mật khẩu
+    public static boolean matches(String plainPassword, String hashedPassword) {
+        return BCrypt.checkpw(plainPassword, hashedPassword);
+    }
+}
+    
 }
