@@ -130,7 +130,7 @@ public class MarketingPostsDAO extends DBContext {
     }
 
     public boolean addMarketingPost(MarketingPosts post) {
-        String sql = "INSERT INTO MarketingPosts (Title, Content, Author, CreateDate, Status, ImageLink, CategoryID) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO MarketingPosts (CategoryID, Title, Content, Author, CreateDate, Status, ImageLink) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             setMarketingPostPreparedStatement(ps, post);
@@ -143,7 +143,7 @@ public class MarketingPostsDAO extends DBContext {
     }
 
     public boolean updateMarketingPost(MarketingPosts post) {
-        String sql = "UPDATE MarketingPosts SET Title = ?, Content = ?, Author = ?, CreateDate = ?, Status = ?, ImageLink = ?, CategoryID = ? WHERE PostID = ?";
+        String sql = "UPDATE MarketingPosts SET CategoryID = ?, Title = ?, Content = ?, Author = ?, CreateDate = ?, Status = ?, ImageLink = ?  WHERE PostID = ?";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             setMarketingPostPreparedStatement(ps, post);
@@ -183,13 +183,14 @@ public class MarketingPostsDAO extends DBContext {
     }
 
     private void setMarketingPostPreparedStatement(PreparedStatement ps, MarketingPosts post) throws SQLException {
-        ps.setString(1, post.getTitle());
-        ps.setString(2, post.getContent());
-        ps.setInt(3, post.getAuthor());
-        ps.setDate(4, (Date) post.getCreateDate());
-        ps.setString(5, post.getStatus());
-        ps.setString(6, post.getImageLink());
-        ps.setString(7, post.getCategory());
+        ps.setString(1, post.getCategory());
+        ps.setString(2, post.getTitle());
+        ps.setString(3, post.getContent());
+        ps.setInt(4, post.getAuthor());
+        ps.setDate(5, (Date) post.getCreateDate());
+        ps.setString(6, post.getStatus());
+        ps.setString(7, post.getImageLink());
+        
     }
 
     public boolean removePostCategory(String cateID) {
