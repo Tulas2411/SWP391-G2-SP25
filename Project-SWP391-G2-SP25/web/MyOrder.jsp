@@ -125,9 +125,9 @@
     <body>
         <%@ include file="./Public/header.jsp" %>
         
-        <form action="feed-back" method="POST">
+<!--        <form action="feed-back" method="POST">
             <button type="submit">Send Feedback</button>
-        </form>
+        </form>-->
 
         <main class="orders-container">
             <h2 class="orders-title">Đơn hàng của tôi</h2>
@@ -150,8 +150,8 @@
                             <td>${order.orderID}</td>
                             <td>${order.orderDate}</td>
                             <td>${order.deliveryAddress}</td>
-                            <td>${order.totalAmount}</td>
-                            <td>${order.status}</td>
+                            <td><fmt:formatNumber value="${order.totalAmount}" pattern="#,### đ" /></td>
+                            <td>${order.statusOrder}</td>
                             <td>
                                 <a href="my-order-detail?orderId=${order.orderID}" class="orders-view-link">View</a>
                             </td>

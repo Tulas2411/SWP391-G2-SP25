@@ -52,7 +52,7 @@ public class StatisticsDAO extends DBContext{
         String sql = "SELECT CONCAT(u.FirstName, ' ', u.LastName) AS CustomerName, SUM(o.TotalAmount) AS TotalSpent "
                 + "FROM Orders o "
                 + "JOIN Users u ON o.CustomerID = u.UserID "
-                + "WHERE o.Status = 'Completed' "
+                + "WHERE o.Status = 'Delivered' "
                 + "GROUP BY o.CustomerID, CustomerName "
                 + "ORDER BY TotalSpent DESC LIMIT 5";
 

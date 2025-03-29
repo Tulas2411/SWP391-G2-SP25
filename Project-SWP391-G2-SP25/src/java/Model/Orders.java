@@ -187,4 +187,14 @@ public class Orders {
         return "Orders{" + "orderID=" + orderID + ", customerID=" + customerID + ", orderDate=" + orderDate + ", deliveryAddress=" + deliveryAddress + ", status=" + status + ", totalAmount=" + totalAmount + ", billOfLading=" + billOfLading + ", customerFirstName=" + customerFirstName + ", customerLastName=" + customerLastName + ", customerEmail=" + customerEmail + ", ShipperID=" + ShipperID + ", SaleID=" + SaleID + ", assignedSaleId=" + assignedSaleId + '}';
     }
     
+    public String getStatusOrder(){
+        if("Delivered".equals(status)){
+            return "Đã giao";
+        }
+        else if("Submit".equals(status)){
+            return "Đặt hàng";
+        }
+        return "Không xác định"; 
+    }
+    
 }

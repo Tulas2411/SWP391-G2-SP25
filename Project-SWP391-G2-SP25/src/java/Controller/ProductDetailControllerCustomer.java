@@ -7,12 +7,15 @@ package Controller;
 
 import DAO.CategoryDAO;
 import DAO.MarketingPostsDAO;
+import DAO.OrdersDAO;
 import DAO.ProductsDAO;
 import DAO.ReviewsDAO;
+import DAO.UsersDAO;
 import Model.Category;
 import Model.MarketingPosts;
 import Model.Products;
 import Model.Reviews;
+import Model.Users;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -20,6 +23,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
 /**
@@ -115,6 +119,23 @@ public class ProductDetailControllerCustomer extends HttpServlet {
         Map<Integer, Reviews> listr = r.getAllReviewsByProductID(id);
         request.setAttribute("product", p);
         request.setAttribute("listr", listr);
+        
+        HttpSession session = request.getSession();
+        
+        UsersDAO usersDAO = new UsersDAO();
+
+        String userId = request.getParameter("user");
+        if(userId != null){
+            Users users = usersDAO.getUserByID(Integer.parseInt(userId));
+            session.setAttribute("user", users);
+            session.setAttribute("username", users.getUserName());
+        }
+
+        Users user = (Users) session.getAttribute("user");
+        OrdersDAO ordersDAO = new OrdersDAO();
+        boolean checkUserPurchasedProduct = user == null ? false : ordersDAO.hasUserPurchasedProduct(user.getUserID(), id);
+        request.setAttribute("checkUserPurchasedProduct", checkUserPurchasedProduct);
+        
         request.getRequestDispatcher("ProductDetailCustomer.jsp").forward(request, response);
     } 
 

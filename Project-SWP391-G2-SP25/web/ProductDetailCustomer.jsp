@@ -536,12 +536,13 @@ Author     : Tung Duong
                                             <!-- /Reviews -->
                                             <%}%>
                                             <!-- Review Form -->
+                                            <c:if test="${checkUserPurchasedProduct == true}">
                                             <div class="col-md-3">
+
                                                 <div id="review-form">
-                                                    <form class="review-form">
-                                                        <input class="input" type="text" placeholder="Your Name">
-                                                        <input class="input" type="email" placeholder="Your Email">
-                                                        <textarea class="input" placeholder="Your Review"></textarea>
+                                                    <form class="review-form" method="POST" action="create-review">
+                                                        <input name="productId" hidden="" value="<%= p.getProductID() %>"/>
+                                                        <textarea name="comment" class="input" placeholder="Your Review" required=""></textarea>
                                                         <div class="input-rating">
                                                             <span>Your Rating: </span>
                                                             <div class="stars">
@@ -556,6 +557,8 @@ Author     : Tung Duong
                                                     </form>
                                                 </div>
                                             </div>
+
+                                        </c:if>
                                             <!-- /Review Form -->
                                         </div>                                               
                                     </div>

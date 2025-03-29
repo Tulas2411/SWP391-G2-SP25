@@ -71,7 +71,7 @@ public class ShipperOrderProController extends HttpServlet {
         Users user = userDAO.getUserByEmail(emailSession);
 
         if (user != null && user.getRole().equalsIgnoreCase("Shipper")) { // Chỉ cho Shipper truy cập
-            List<Orders> orderList = orderDAO.getAllOrdersbyStatus( "Processed"); // Lấy danh sách đơn hàng
+            List<Orders> orderList = orderDAO.getAllOrdersbyStatus("Processed"); // Lấy danh sách đơn hàng
             request.setAttribute("orders", orderList);
             request.setAttribute("currentUser", user);
             request.setAttribute("title", "Danh sách đơn hàng");
