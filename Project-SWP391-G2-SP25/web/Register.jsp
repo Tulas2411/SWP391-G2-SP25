@@ -125,6 +125,11 @@
                 document.getElementById("alert").style.backgroundColor = "#f8d7da";
                 document.getElementById("alert").style.color = "#721c24";
                 document.getElementById("alert-message").textContent = "Lỗi: Số điện thoại đã tồn tại.";
+            } else if (status === "empty_space") {
+                document.getElementById("alert").style.display = "block";
+                document.getElementById("alert").style.backgroundColor = "#f8d7da";
+                document.getElementById("alert").style.color = "#721c24";
+                document.getElementById("alert-message").textContent = "Vui lòng điền đầy đủ thông tin!";
             }
         </script>
 
