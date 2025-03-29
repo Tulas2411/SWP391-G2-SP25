@@ -11,7 +11,7 @@
         <style>
               
             body {
-                font-family: 'Open Sans', Arial, sans-serif;
+                font-family: 'Roboto', sans-serif;
                 background-color: #f8f9fa;
             }
             .stat-table {

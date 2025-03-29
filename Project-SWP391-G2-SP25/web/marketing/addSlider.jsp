@@ -9,6 +9,11 @@
         <title>Thêm Slider</title>
         <link rel="stylesheet" href="assets/css/style.css">
         <style>
+            @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+            body {
+                font-family: 'Roboto', sans-serif;
+            }
             .slider-form {
                 display: flex;
                 flex-direction: column;
