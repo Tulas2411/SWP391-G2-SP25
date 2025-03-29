@@ -150,6 +150,7 @@
                 <div class="header__cart">
                     <ul class="header__cart-list">
                         <c:if test="${not empty sessionScope.user}">
+                            <%if(user.getRole().equalsIgnoreCase("Customer")){%>
                             <li class="header__cart-items">
                                 <a href="/Project-SWP391-G2-SP25/my-order" class="header__cart-link">
                                     <div class="icon">
@@ -158,8 +159,10 @@
                                     Đơn hàng
                                 </a>
                             </li>
+                            <%}%>
                         </c:if>
-
+                        <c:if test="${not empty sessionScope.user}">
+                            <%if(user.getRole().equalsIgnoreCase("Customer")){%>
                         <li class="header__cart-items">
                             <a href="/Project-SWP391-G2-SP25/Cart" class="header__cart-link">
                                 <div class="icon">
@@ -168,6 +171,8 @@
                                 Giỏ hàng
                             </a>
                         </li>
+                        <%}%>
+                        </c:if>
                         <li class="header__cart-items">
                             <a href="#" class="header__cart-link">
                                 <div class="icon">

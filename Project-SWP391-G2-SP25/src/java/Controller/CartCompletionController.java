@@ -73,7 +73,10 @@ public class CartCompletionController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String transResult = request.getParameter("transResult"); // Lấy giá trị từ URL
+        String transResult = "true";
+        if(request.getParameter("transResult")!=null){
+        transResult = request.getParameter("transResult");
+        }// Lấy giá trị từ URL
         RequestDispatcher dispatcher = null;
         String email = null;
         HttpSession session = request.getSession();
@@ -144,9 +147,9 @@ public class CartCompletionController extends HttpServlet {
                 message.setContent(emailContent, "text/html; charset=UTF-8");
                 Transport.send(message);
                 System.out.println("Message sent successfully");
-                request.setAttribute("transResult", "true");
+                request.setAttribute("transResult", transResult);
                 }
-                request.setAttribute("transResult", "false");
+                request.setAttribute("transResult", transResult);
                 request.getRequestDispatcher("CartCompletion.jsp").forward(request, response);
             } catch (MessagingException e) {
                 throw new RuntimeException(e);

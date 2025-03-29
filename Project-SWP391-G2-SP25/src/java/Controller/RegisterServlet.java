@@ -71,29 +71,32 @@ public class RegisterServlet extends HttpServlet {
             String address = request.getParameter("address").trim();
 
             // Regex để kiểm tra first name và last name
-        String nameRegex = "^[a-zA-Z\\s]{2,}$"; 
-
-        // Kiểm tra first name
-        if (!firstName.matches(nameRegex)) {
-            request.setAttribute("status", "Vui lòng kiểm tra lại trường này");
-            RequestDispatcher dispatcher = request.getRequestDispatcher("Register.jsp");
-            dispatcher.forward(request, response);
-            return;
-        }
-
-        // Kiểm tra last name
-        if (!lastName.matches(nameRegex)) {
-            request.setAttribute("status", "Vui lòng kiểm tra lại trường này");
-            RequestDispatcher dispatcher = request.getRequestDispatcher("Register.jsp");
-            dispatcher.forward(request, response);
-            return;
-        }
+//        String nameRegex = "^[a-zA-Z\\s]{2,}$"; 
+//
+//        // Kiểm tra first name
+//        if (!firstName.matches(nameRegex)) {
+//            request.setAttribute("status", "Vui lòng kiểm tra lại trường này");
+//            RequestDispatcher dispatcher = request.getRequestDispatcher("Register.jsp");
+//            dispatcher.forward(request, response);
+//            System.out.println("10");
+//            return;
+//        }
+//
+//        // Kiểm tra last name
+//        if (!lastName.matches(nameRegex)) {
+//            request.setAttribute("status", "Vui lòng kiểm tra lại trường này");
+//            RequestDispatcher dispatcher = request.getRequestDispatcher("Register.jsp");
+//            dispatcher.forward(request, response);
+//            System.out.println("9");
+//            return;
+//        }
         
             // Kiểm tra nếu bất kì trường nào là rỗng sau khi loại bỏ khoảng trắng
             if (firstName.trim().isEmpty() || lastName.trim().isEmpty() || userName.trim().isEmpty() || gender.trim().isEmpty() || email.trim().isEmpty() || password.trim().isEmpty() || rePassword.trim().isEmpty() || phoneNumber.trim().isEmpty() || address.trim().isEmpty()) {
                 request.setAttribute("status", "empty_space");
                 RequestDispatcher dispatcher = request.getRequestDispatcher("Register.jsp");
                 dispatcher.forward(request, response);
+                System.out.println("1");
                 return;
             }
 
@@ -102,6 +105,7 @@ public class RegisterServlet extends HttpServlet {
                 request.setAttribute("status", "password_mismatch");
                 RequestDispatcher dispatcher = request.getRequestDispatcher("Register.jsp");
                 dispatcher.forward(request, response);
+                System.out.println("2");
                 return;
             }
 
@@ -110,6 +114,7 @@ public class RegisterServlet extends HttpServlet {
                 request.setAttribute("status", "email_exists");
                 RequestDispatcher dispatcher = request.getRequestDispatcher("Register.jsp");
                 dispatcher.forward(request, response);
+                System.out.println("3");
                 return;
             }
 
@@ -118,6 +123,7 @@ public class RegisterServlet extends HttpServlet {
                 request.setAttribute("status", "username_exists");
                 RequestDispatcher dispatcher = request.getRequestDispatcher("Register.jsp");
                 dispatcher.forward(request, response);
+                System.out.println("4");
                 return;
             }
 
@@ -126,6 +132,7 @@ public class RegisterServlet extends HttpServlet {
                 request.setAttribute("status", "phone_exists");
                 RequestDispatcher dispatcher = request.getRequestDispatcher("Register.jsp");
                 dispatcher.forward(request, response);
+                System.out.println("5");
                 return;
             }
 
@@ -143,6 +150,7 @@ public class RegisterServlet extends HttpServlet {
                     request.setAttribute("message", "Ngày sinh không hợp lệ. Vui lòng nhập lại.");
                     RequestDispatcher dispatcher = request.getRequestDispatcher("Register.jsp");
                     dispatcher.forward(request, response);
+                    System.out.println("6");
                     return;
                 }
 
@@ -162,6 +170,7 @@ public class RegisterServlet extends HttpServlet {
                     request.setAttribute("message", "Bạn phải đủ 13 tuổi để đăng ký.");
                     RequestDispatcher dispatcher = request.getRequestDispatcher("Register.jsp");
                     dispatcher.forward(request, response);
+                    System.out.println("7");
                     return;
                 }
 
@@ -171,6 +180,7 @@ public class RegisterServlet extends HttpServlet {
                 request.setAttribute("message", "Ngày sinh không hợp lệ. Vui lòng nhập lại.");
                 RequestDispatcher dispatcher = request.getRequestDispatcher("Register.jsp");
                 dispatcher.forward(request, response);
+                System.out.println("8");
                 return;
             }
 
