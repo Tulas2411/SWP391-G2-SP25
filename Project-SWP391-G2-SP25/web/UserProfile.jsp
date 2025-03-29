@@ -134,13 +134,11 @@
                 <input type="text" id="lastName" name="lastName" value="<%= user.getLastName() %>" required><br>
 
                 <label for="gender">Giới Tính:</label>
-                <select id="gender" name="gender">
-                    <option value="Male" <%= "Male".equals(user.getGender()) ? "selected" : "" %>>Nam</option>
-                    <option value="Female" <%= "Female".equals(user.getGender()) ? "selected" : "" %>>Nữ</option>
-                </select><br>
+                <input type="text" id="gender" name="gender" 
+                       value="${user.gender eq 'Male' ? 'Nam' : (user.gender eq 'Female' ? 'Nữ' : user.gender)}" readonly>
 
                 <label for="dateOfBirth">Ngày Sinh:</label>
-                <input type="date" id="dateOfBirth" name="dateOfBirth" value="<%= user.getDateOfBirth() %>"><br>
+                <input type="date" id="dateOfBirth" name="dateOfBirth" value="<%= user.getDateOfBirth() %>" readonly><br>
 
                 <label for="phoneNumber">Số Điện Thoại:</label>
                 <input type="tel" id="phoneNumber" name="phoneNumber" value="<%= user.getPhoneNumber() %>" pattern="0[0-9]{9}" title="The phone number must have 10 digits and start with 0" required><br>

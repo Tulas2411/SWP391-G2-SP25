@@ -90,8 +90,8 @@ public class RegisterServlet extends HttpServlet {
         }
         
             // Kiểm tra nếu bất kì trường nào là rỗng sau khi loại bỏ khoảng trắng
-            if (firstName.isEmpty() || lastName.isEmpty() || userName.isEmpty() || gender.isEmpty() || email.isEmpty() || password.isEmpty() || rePassword.isEmpty() || phoneNumber.isEmpty() || address.isEmpty()) {
-                request.setAttribute("status", "empty_fields");
+            if (firstName.trim().isEmpty() || lastName.trim().isEmpty() || userName.trim().isEmpty() || gender.trim().isEmpty() || email.trim().isEmpty() || password.trim().isEmpty() || rePassword.trim().isEmpty() || phoneNumber.trim().isEmpty() || address.trim().isEmpty()) {
+                request.setAttribute("status", "empty_space");
                 RequestDispatcher dispatcher = request.getRequestDispatcher("Register.jsp");
                 dispatcher.forward(request, response);
                 return;
