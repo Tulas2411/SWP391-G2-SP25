@@ -28,6 +28,7 @@ public class Products {
     private Date CreateAt;
     private String status;
     private Category category;
+    private String ProductDetails;
 
     public Products() {
     }
@@ -185,6 +186,14 @@ public class Products {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getProductDetails() {
+        return ProductDetails;
+    }
+
+    public void setProductDetails(String ProductDetails) {
+        this.ProductDetails = ProductDetails;
     }
     
     
