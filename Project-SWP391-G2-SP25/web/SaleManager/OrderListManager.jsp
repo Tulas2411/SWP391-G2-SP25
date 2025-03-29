@@ -18,15 +18,15 @@
 
                 <!-- Bộ lọc và tìm kiếm -->
                 <form method="GET" action="OrdersListManager" class="row g-3 mb-4">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label for="fromDate" class="form-label">Từ ngày:</label>
                         <input type="date" id="fromDate" name="fromDate" value="${param.fromDate}" class="form-control">
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label for="toDate" class="form-label">Đến ngày:</label>
                     <input type="date" id="toDate" name="toDate" value="${param.toDate}" class="form-control">
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label for="status" class="form-label">Trạng thái:</label>
                     <select id="status" name="status" class="form-select">
                         <option value="">Tất cả trạng thái</option>
@@ -38,6 +38,17 @@
                         <option value="Completed" ${param.status == 'Processed' ? 'selected' : ''}>Đang chờ Shipper nhận đơn</option>
                     </select>
                 </div>
+                        <div class="col-md-3">
+                            <label for="assignedSale" class="form-label">Sale phụ trách:</label>
+                            <select id="assignedSale" name="assignedSale" class="form-select">
+                                <option value="">Tất cả Sale</option>
+                                <c:forEach var="sale" items="${allSales}"> 
+                                    <option value="${sale.userID}" ${param.assignedSale eq sale.userID.toString() ? 'selected' : ''}>
+                                        ${sale.firstName} ${sale.lastName}
+                                    </option>
+                                </c:forEach>
+                            </select>
+                        </div>
                 <div class="col-12 text-center">
                     <button type="submit" class="btn btn-primary">Lọc</button>
                 </div>
@@ -53,7 +64,7 @@
                             <th>Tên khách hàng</th>
                             <th>Địa chỉ giao hàng</th>
                             <th>Tổng tiền</th>
-                            <th>Trạng thái</th>
+                            <th>Trạng thái</th>                     
                             <th>Hành động</th>
                         </tr>
                     </thead>
@@ -116,6 +127,6 @@
             </nav>
         </main>
 
-        <jsp:include page="footer.jsp"></jsp:include>
+        <%--<jsp:include page="footer.jsp"></jsp:include>--%>
     </body>
 </html>

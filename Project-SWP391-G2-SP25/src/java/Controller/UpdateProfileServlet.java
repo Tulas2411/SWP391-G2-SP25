@@ -4,6 +4,7 @@ import DAO.UserLogDAO;
 import DAO.UsersDAO;
 import Model.UserLog;
 import Model.Users;
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -16,13 +17,13 @@ public class UpdateProfileServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Lấy thông tin từ form
-        String userName = request.getParameter("userName");
-        String firstName = request.getParameter("firstName");
-        String lastName = request.getParameter("lastName");
+        String userName = request.getParameter("userName").trim();
+        String firstName = request.getParameter("firstName").trim();
+        String lastName = request.getParameter("lastName").trim();
         String gender = request.getParameter("gender");
         String dateOfBirth = request.getParameter("dateOfBirth");
         String phoneNumber = request.getParameter("phoneNumber");
-        String address = request.getParameter("address");
+        String address = request.getParameter("address").trim();
         int userID = Integer.parseInt(request.getParameter("userID"));
 
         // Khởi tạo DAO và lấy thông tin người dùng từ database
@@ -54,6 +55,12 @@ public class UpdateProfileServlet extends HttpServlet {
         // Xử lý kết quả cập nhật
         if (isUpdated) {
             StringBuilder changes = new StringBuilder();
+            if (firstName.trim().isEmpty() || lastName.trim().isEmpty() || address.trim().isEmpty()) {
+                request.setAttribute("updateSuccess", "Vui lòng điền đầy đủ thông tin!");
+                RequestDispatcher dispatcher = request.getRequestDispatcher("UserProfile.jsp");
+                dispatcher.forward(request, response);
+                return;
+            }
             if (!firstName.equals(oldFirstName)) {
                 changes.append("FirstName: [").append(oldFirstName).append("] -> [").append(firstName).append("], ");
             }
