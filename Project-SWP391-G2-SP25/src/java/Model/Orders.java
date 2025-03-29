@@ -19,7 +19,9 @@ public class Orders {
     private String customerFirstName;
     private String customerLastName;
     private String customerEmail;
-    private int GuestID;
+    private int ShipperID;
+    private int SaleID;
+    private Integer assignedSaleId;
 
     public Orders() {
     }
@@ -27,6 +29,15 @@ public class Orders {
     public String getCustomerFirstName() {
         return customerFirstName;
     }
+
+    public int getSaleID() {
+        return SaleID;
+    }
+
+    public void setSaleID(int SaleID) {
+        this.SaleID = SaleID;
+    }
+    
 
     public void setCustomerFirstName(String customerFirstName) {
         this.customerFirstName = customerFirstName;
@@ -144,21 +155,36 @@ public class Orders {
         this.billOfLading = billOfLading;
     }
 
-    public int getGuestID() {
-        return GuestID;
+    public int getShipperID() {
+        return ShipperID;
     }
 
-    public void setGuestID(int GuestID) {
-        this.GuestID = GuestID;
+    public void setShipperID(int ShipperID) {
+        this.ShipperID = ShipperID;
     }
 
-    public Orders(String orderDate, String deliveryAddress, String status, double totalAmount, String billOfLading, int GuestID) {
+    public Integer getAssignedSaleId() {
+        return assignedSaleId;
+    }
+
+    public void setAssignedSaleId(Integer assignedSaleId) {
+        this.assignedSaleId = assignedSaleId;
+    }
+    
+    
+
+    public Orders(String orderDate, String deliveryAddress, String status, double totalAmount, String billOfLading, int ShipperID) {
         this.orderDate = orderDate;
         this.deliveryAddress = deliveryAddress;
         this.status = status;
         this.totalAmount = totalAmount;
         this.billOfLading = billOfLading;
-        this.GuestID = GuestID;
+        this.ShipperID = ShipperID;
+    }
+
+    @Override
+    public String toString() {
+        return "Orders{" + "orderID=" + orderID + ", customerID=" + customerID + ", orderDate=" + orderDate + ", deliveryAddress=" + deliveryAddress + ", status=" + status + ", totalAmount=" + totalAmount + ", billOfLading=" + billOfLading + ", customerFirstName=" + customerFirstName + ", customerLastName=" + customerLastName + ", customerEmail=" + customerEmail + ", ShipperID=" + ShipperID + ", SaleID=" + SaleID + ", assignedSaleId=" + assignedSaleId + '}';
     }
     
 }

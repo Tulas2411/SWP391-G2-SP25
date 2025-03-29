@@ -163,10 +163,10 @@
                                         <c:set var="isChecked" value="true"/>
                                     </c:if>
                                 </c:forEach>
-                                
+
                                 <li class="filter-item">
                                     <input type="checkbox" class="filter-checkbox" name="category" value="${cate.categoryID}"
-                                         <c:if test="${isChecked eq 'true'}">checked</c:if>  />
+                                           <c:if test="${isChecked eq 'true'}">checked</c:if>  />
                                     <label class="filter-label">${cate.categoryName}</label>
                                 </li>
                             </c:forEach>
@@ -204,13 +204,13 @@
                         <div class="main__right-sensor-list">
                             <c:forEach var="product" items="${products}">
                                 <div class="main__right-sensor-items">
-                                    <a href="ProductDetailController?id=${product.productID}" class="main__right-sensor-link">
+                                    <a href="ProductDetailControllerCustomer?id=${product.productID}" class="main__right-sensor-link">
                                         <img src="${product.imageLink}" height="200px" alt="${product.productName}" class="main__right-sensor-img" />
                                         <div class="main__right-sensor-title">${product.productName}</div>
                                     </a>
                                     <!-- Hiển thị giá sản phẩm -->
                                     <span class="main__right-sensor-price">
-                                        <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="đ"/>
+                                        <strong><fmt:formatNumber value="${product.price}" type="number" groupingUsed="true"/>đ</strong>
                                     </span>
                                     <!--<button type="button" class="main__right-sensor-button"/>Mua ngay</button>-->
                                 </div>
@@ -223,7 +223,6 @@
                         </c:forEach>
 
                         <div class="pagination">
-                            <a href="productsList?${queryParams}&index=${index-1}" class="pagination-arrow">&laquo;</a>
                             <c:choose>
                                 <c:when test="${index <= 4}">
                                     <c:choose>
@@ -266,7 +265,6 @@
                                     </c:forEach>
                                 </c:when>
                             </c:choose>
-                            <a href="productsList?${queryParams}&index=${index+1}" class="pagination-arrow">&raquo;</a>
                         </div>
 
                     </div>

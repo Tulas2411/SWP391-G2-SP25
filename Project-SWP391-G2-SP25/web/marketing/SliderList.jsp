@@ -8,6 +8,13 @@
 <jsp:include page="header.jsp"></jsp:include>
 
     <main>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+            body {
+                font-family: 'Roboto', sans-serif;
+            }
+        </style>
         <div class="container-fluid px-4">
             <h1 class="mt-4">Bảng điều khiển</h1>
             <ol class="breadcrumb mb-4">
@@ -69,14 +76,14 @@
                                 <td>${slider.title}</td>
                                 <td><a href="${slider.backlink}">${slider.backlink}</a></td>
                                 <td>${slider.status}</td>
-                               
+
                                 <td>
                                     <a href="DetailSlider?sliderID=${slider.sliderID}" class="btn btn-warning btn-sm">Chỉnh sửa</a>
                                     <a href="ShowDetailSlider?sliderID=${slider.sliderID}" class="btn btn-info btn-sm">Xem chi tiết</a>
                                     <a href="DeleteSlider?sliderID=${slider.sliderID}" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn xóa slider này không?');">Xóa</a>
                                 </td>
 
-                              
+
                             </tr>
                         </c:forEach>
                     </tbody>

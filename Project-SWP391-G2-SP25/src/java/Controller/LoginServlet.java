@@ -56,6 +56,7 @@ public class LoginServlet extends HttpServlet {
                         session.setAttribute("username", username);
                         session.setAttribute("email", emailFromDB);
                         session.setAttribute("role", role);
+                        session.setAttribute("user", userDAO.getUserByUserName(username));
 
                         Users u = userDAO.getUserByEmail(email);
 
@@ -67,12 +68,15 @@ public class LoginServlet extends HttpServlet {
 
                         if (u.getRole().equalsIgnoreCase("Admin")) {
                             response.sendRedirect("admin/dashboard");
-                        } else if (u.getRole().equalsIgnoreCase("marketing")) {
-                            response.sendRedirect("marketing/dashboard");
-                        } else if (u.getRole().equalsIgnoreCase("sale")) {
+                        } else if (u.getRole().equalsIgnoreCase("Marketing")) {
+                            response.sendRedirect("marketing/statistics");
+                        } else if (u.getRole().equalsIgnoreCase("Sale")) {
                             response.sendRedirect("sale/OrdersList");
+                        } else if (u.getRole().equalsIgnoreCase("SaleManager")) {
+                            response.sendRedirect("SaleManager/OrdersListManager");   
+                        } else if (u.getRole().equalsIgnoreCase("Shipper")) {
+                            response.sendRedirect("ShipperDashBoard");
                         } else {
-                            session.setAttribute("user", userDAO.getUserByUserName(username));
                             response.sendRedirect("/Project-SWP391-G2-SP25/home");
                         }
                     } else {

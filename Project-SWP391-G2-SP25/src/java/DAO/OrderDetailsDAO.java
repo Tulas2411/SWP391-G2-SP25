@@ -57,7 +57,8 @@ public class OrderDetailsDAO extends DBContext {
         }
         return null;
     }
-     public List<OrderDetails> getOrderDetailsByOrderID1(int orderID) {
+
+    public List<OrderDetails> getOrderDetailsByOrderID1(int orderID) {
         List<OrderDetails> orderDetailsList = new ArrayList<>();
         String sql = "SELECT "
                 + "    od.*, "
@@ -92,7 +93,7 @@ public class OrderDetailsDAO extends DBContext {
         }
         return orderDetailsList;
     }
-    
+
     public Vector<OrderDetails> getOrderDetailsByOrderID(int orderID) {
         Vector<OrderDetails> orderDetailsList = new Vector<>();
         String sql = "SELECT * FROM OrderDetails WHERE OrderID = ?";
@@ -166,6 +167,7 @@ public class OrderDetailsDAO extends DBContext {
         ps.setInt(3, orderDetail.getQuantity());
         ps.setDouble(4, orderDetail.getPrice());
     }
+
     public Map<Integer, OrderDetails> getOrderDetailsByOrderIDasMap(int orderID) {
         Map<Integer, OrderDetails> orderDetailList = new HashMap<>();
         String sql = "SELECT * FROM OrderDetails WHERE OrderID = ?";
@@ -183,8 +185,9 @@ public class OrderDetailsDAO extends DBContext {
         }
         return orderDetailList;
     }
+
     public static void main(String[] args) {
         OrderDetailsDAO odDAO = new OrderDetailsDAO();
-        System.out.println(odDAO.getOrderDetailsByOrderIDasMap(6));
+        System.out.println(odDAO.getOrderDetailsByOrderID1(22));
     }
 }

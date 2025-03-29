@@ -70,9 +70,28 @@ public class RegisterServlet extends HttpServlet {
             String phoneNumber = request.getParameter("contact").trim();
             String address = request.getParameter("address").trim();
 
+            // Regex để kiểm tra first name và last name
+        String nameRegex = "^[a-zA-Z\\s]{2,}$"; 
+
+        // Kiểm tra first name
+        if (!firstName.matches(nameRegex)) {
+            request.setAttribute("status", "Vui lòng kiểm tra lại trường này");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("Register.jsp");
+            dispatcher.forward(request, response);
+            return;
+        }
+
+        // Kiểm tra last name
+        if (!lastName.matches(nameRegex)) {
+            request.setAttribute("status", "Vui lòng kiểm tra lại trường này");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("Register.jsp");
+            dispatcher.forward(request, response);
+            return;
+        }
+        
             // Kiểm tra nếu bất kì trường nào là rỗng sau khi loại bỏ khoảng trắng
-            if (firstName.isEmpty() || lastName.isEmpty() || userName.isEmpty() || gender.isEmpty() || email.isEmpty() || password.isEmpty() || rePassword.isEmpty() || phoneNumber.isEmpty() || address.isEmpty()) {
-                request.setAttribute("status", "empty_fields");
+            if (firstName.trim().isEmpty() || lastName.trim().isEmpty() || userName.trim().isEmpty() || gender.trim().isEmpty() || email.trim().isEmpty() || password.trim().isEmpty() || rePassword.trim().isEmpty() || phoneNumber.trim().isEmpty() || address.trim().isEmpty()) {
+                request.setAttribute("status", "empty_space");
                 RequestDispatcher dispatcher = request.getRequestDispatcher("Register.jsp");
                 dispatcher.forward(request, response);
                 return;

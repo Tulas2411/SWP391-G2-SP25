@@ -2,6 +2,7 @@ package DAO;
 
 import Model.DailyRevenue;
 import Model.Orders;
+import Model.Users;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -28,6 +29,241 @@ public class OrdersDAO extends DBContext {
             System.out.println("Error fetching orders: " + e.getMessage());
         }
         return orderList;
+    }
+
+    public Orders getOrderById(int orderId) throws SQLException {
+        String sql = "SELECT * FROM Orders WHERE OrderID = ?";
+        Orders order = null;
+
+        try (Connection conn = makeConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, orderId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    order = new Orders();
+                    order.setOrderID(rs.getInt("OrderID"));
+                    order.setCustomerID(rs.getInt("CustomerID"));
+                    order.setDeliveryAddress(rs.getString("DeliveryAddress"));
+                    order.setStatus(rs.getString("Status"));
+                    order.setTotalAmount(rs.getDouble("TotalAmount"));
+                    order.setBillOfLading(rs.getString("BillOfLading"));
+                    // Thêm các trường khác nếu cần
+                }
+            }
+        }
+        return order;
+    }
+
+    public boolean assignOrderToSale(int orderId, int saleId) {
+        String sql = "UPDATE Orders SET assigned_sale_id = ?, Status = 'Processing' WHERE OrderID = ?";
+
+        try (Connection conn = makeConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, saleId);
+            stmt.setInt(2, orderId);
+
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    public List<Orders> getOrdersWithFilters(
+    String search, 
+    String fromDate, 
+    String toDate, 
+    String status,
+    String assignedSaleId, 
+    int page, 
+    int pageSize
+) throws SQLException {
+    List<Orders> orders = new ArrayList<>();
+    StringBuilder sql = new StringBuilder(
+        "SELECT o.*, u.FirstName as customerFirstName, u.LastName as customerLastName " +
+        "FROM orders o JOIN users u ON o.CustomerID = u.UserID WHERE 1=1"
+    );
+    
+    List<Object> params = new ArrayList<>();
+    
+    // Thêm điều kiện lọc theo Sale được gán
+    if (assignedSaleId != null && !assignedSaleId.isEmpty()) {
+        sql.append(" AND o.assigned_sale_id = ?");
+        params.add(Integer.parseInt(assignedSaleId));
+    }
+    
+    if (search != null && !search.isEmpty()) {
+            sql.append("AND (o.OrderID LIKE ? OR u.FirstName LIKE ? OR u.LastName LIKE ? OR u.Email LIKE ?) ");
+            String searchParam = "%" + search + "%";
+            params.add(searchParam);
+            params.add(searchParam);
+            params.add(searchParam);
+            params.add(searchParam);
+        }
+
+        if (fromDate != null && !fromDate.isEmpty()) {
+            sql.append("AND o.OrderDate >= ? ");
+            params.add(fromDate);
+        }
+
+        if (toDate != null && !toDate.isEmpty()) {
+            sql.append("AND o.OrderDate <= ? ");
+            params.add(toDate);
+        }
+
+        if (status != null && !status.isEmpty()) {
+            sql.append("AND o.status = ? ");
+            params.add(status);
+        }
+
+        sql.append("ORDER BY o.OrderDate DESC LIMIT ? OFFSET ?");
+        params.add(pageSize);
+        params.add((page - 1) * pageSize);
+
+        try (Connection conn = makeConnection(); PreparedStatement stmt = conn.prepareStatement(sql.toString())) {
+
+            // Thiết lập các tham số
+            for (int i = 0; i < params.size(); i++) {
+                stmt.setObject(i + 1, params.get(i));
+            }
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Orders order = new Orders();
+                    order.setOrderID(rs.getInt("OrderID"));
+                    order.setOrderDate(rs.getString("OrderDate")); 
+                    order.setDeliveryAddress(rs.getString("DeliveryAddress"));
+                    order.setStatus(rs.getString("status"));
+                    order.setTotalAmount(rs.getDouble("TotalAmount"));
+                    order.setCustomerLastName(rs.getString("LastName"));
+                    order.setCustomerFirstName(rs.getString("FirstName"));
+                    orders.add(order);
+                }
+            }
+        }
+    
+        return orders;
+}
+
+    public List<Orders> getOrdersByAssignedSalePaginated(
+            int saleId, String search, String fromDate, String toDate, String status, int page, int pageSize) throws SQLException {
+        List<Orders> orders = new ArrayList<>();
+        StringBuilder sql = new StringBuilder(
+                "SELECT o.OrderID, o.OrderDate, o.DeliveryAddress, o.status, o.TotalAmount, "
+                + "u.UserID, u.FirstName, u.LastName, u.Email, u.PhoneNumber "
+                + "FROM orders o "
+                + "JOIN Users u ON o.CustomerID = u.UserID "
+                + "WHERE o.assigned_sale_id = ? "
+        );
+
+        // Thêm điều kiện tìm kiếm
+        List<Object> params = new ArrayList<>();
+        params.add(saleId);
+
+        if (search != null && !search.isEmpty()) {
+            sql.append("AND (o.OrderID LIKE ? OR u.FirstName LIKE ? OR u.LastName LIKE ? OR u.Email LIKE ?) ");
+            String searchParam = "%" + search + "%";
+            params.add(searchParam);
+            params.add(searchParam);
+            params.add(searchParam);
+            params.add(searchParam);
+        }
+
+        if (fromDate != null && !fromDate.isEmpty()) {
+            sql.append("AND o.OrderDate >= ? ");
+            params.add(fromDate);
+        }
+
+        if (toDate != null && !toDate.isEmpty()) {
+            sql.append("AND o.OrderDate <= ? ");
+            params.add(toDate);
+        }
+
+        if (status != null && !status.isEmpty()) {
+            sql.append("AND o.status = ? ");
+            params.add(status);
+        }
+
+        sql.append("ORDER BY o.OrderDate DESC LIMIT ? OFFSET ?");
+        params.add(pageSize);
+        params.add((page - 1) * pageSize);
+
+        try (Connection conn = makeConnection(); PreparedStatement stmt = conn.prepareStatement(sql.toString())) {
+
+            // Thiết lập các tham số
+            for (int i = 0; i < params.size(); i++) {
+                stmt.setObject(i + 1, params.get(i));
+            }
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Orders order = new Orders();
+                    order.setOrderID(rs.getInt("OrderID"));
+                    order.setOrderDate(rs.getString("OrderDate"));  // Thêm dòng này
+                    order.setDeliveryAddress(rs.getString("DeliveryAddress"));
+                    order.setStatus(rs.getString("status"));
+                    order.setTotalAmount(rs.getDouble("TotalAmount"));
+                    order.setCustomerLastName(rs.getString("LastName"));
+                    order.setCustomerFirstName(rs.getString("FirstName"));System.out.println("Customer name :"+order);
+                    orders.add(order);
+                }
+            }
+        }
+        return orders;
+    }
+
+    public int getTotalOrdersByAssignedSale(
+            int saleId,
+            String search,
+            String fromDate,
+            String toDate,
+            String status
+    ) throws SQLException {
+        StringBuilder sql = new StringBuilder(
+                "SELECT COUNT(*) FROM orders o "
+                + "JOIN users u ON o.assigned_sale_id = u.UserID "
+        );
+
+        List<Object> params = new ArrayList<>();
+
+
+        if (search != null && !search.isEmpty()) {
+            sql.append("AND (o.OrderID LIKE ? OR u.FirstName LIKE ? OR u.LastName LIKE ? OR u.Email LIKE ?) ");
+            String searchParam = "%" + search + "%";
+            params.add(searchParam);
+            params.add(searchParam);
+            params.add(searchParam);
+            params.add(searchParam);
+        }
+
+        if (fromDate != null && !fromDate.isEmpty()) {
+            sql.append("AND o.OrderDate >= ? ");
+            params.add(fromDate);
+        }
+
+        if (toDate != null && !toDate.isEmpty()) {
+            sql.append("AND o.OrderDate <= ? ");
+            params.add(toDate);
+        }
+
+        if (status != null && !status.isEmpty()) {
+            sql.append("AND o.status = ? ");
+            params.add(status);
+        }
+
+        try (Connection conn = makeConnection(); PreparedStatement stmt = conn.prepareStatement(sql.toString())) {
+
+            for (int i = 0; i < params.size(); i++) {
+                stmt.setObject(i + 1, params.get(i));
+            }
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        }
+        return 0;
     }
 
     public boolean updateOrderStatus(int orderId, String status) {
@@ -109,7 +345,7 @@ public class OrdersDAO extends DBContext {
         return orderList;
     }
 
-    public List<Orders> getOrdersPaginated(String search, String fromDate, String toDate, String saleName, String status, int page, int pageSize) {
+    public List<Orders> getOrdersPaginated(String search, String fromDate, String toDate, String saleName, String status, String assignedSaleId, int page, int pageSize) {
         List<Orders> orderList = new ArrayList<>();
         StringBuilder sql = new StringBuilder("SELECT o.*, u.FirstName, u.LastName, u.Email FROM Orders o ");
         sql.append("JOIN Users u ON o.CustomerID = u.UserID WHERE 1=1");
@@ -319,7 +555,7 @@ public class OrdersDAO extends DBContext {
     }
 
     public boolean addOrder(Orders order) {
-        String sql = "INSERT INTO Orders (CustomerID, OrderDate, DeliveryAddress, Status, TotalAmount, BillOfLading) VALUES (?, NOW(), ?, ?, ?, ?)";
+        String sql = "INSERT INTO Orders (CustomerID, OrderDate, DeliveryAddress, Status, TotalAmount, BillOfLading, ShipperID, assigned_sale_id ) VALUES (?, NOW(), ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, order.getCustomerID());
@@ -327,6 +563,8 @@ public class OrdersDAO extends DBContext {
             ps.setString(3, order.getStatus());
             ps.setDouble(4, order.getTotalAmount());
             ps.setString(5, order.getBillOfLading());
+            ps.setInt(6, order.getShipperID());
+            ps.setInt(7, order.getSaleID());
             ps.executeUpdate();
             return true;
         } catch (SQLException e) {
@@ -336,11 +574,11 @@ public class OrdersDAO extends DBContext {
     }
 
     public boolean updateOrder(Orders order) {
-        String sql = "UPDATE Orders SET CustomerID = ?, OrderDate = ?, DeliveryAddress = ?, Status = ?, TotalAmount = ?, BillOfLading = ? WHERE OrderID = ?";
+        String sql = "UPDATE Orders SET CustomerID = ?, OrderDate = ?, DeliveryAddress = ?, Status = ?, TotalAmount = ?, BillOfLading = ?, ShipperID = ?,  assigned_sale_id = ? WHERE OrderID = ?";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             setOrderPreparedStatement(ps, order);
-            ps.setInt(7, order.getOrderID());
+            ps.setInt(9, order.getOrderID());
             ps.executeUpdate();
             return true;
         } catch (SQLException e) {
@@ -371,6 +609,8 @@ public class OrdersDAO extends DBContext {
         order.setStatus(rs.getString("Status"));
         order.setTotalAmount(rs.getDouble("TotalAmount"));
         order.setBillOfLading(rs.getString("BillOfLading"));
+        order.setShipperID(rs.getInt("ShipperID"));
+        order.setSaleID(rs.getInt("assigned_sale_id"));
         return order;
     }
 
@@ -381,6 +621,8 @@ public class OrdersDAO extends DBContext {
         ps.setString(4, order.getStatus());
         ps.setDouble(5, order.getTotalAmount());
         ps.setString(6, order.getBillOfLading());
+        ps.setInt(7, order.getShipperID());
+        ps.setInt(8, order.getSaleID());
     }
 
     public Map<Integer, Orders> getOrdersByCustomerIDasMap(int customerID) {
@@ -472,9 +714,61 @@ public class OrdersDAO extends DBContext {
         return false;
     }
 
+    public List<Orders> getAllOrdersForShipper(int shipperID, String status) {
+        List<Orders> orderList = new ArrayList<>();
+        String sql = "SELECT * FROM orders WHERE shipperID = ?";
+        if (status != null && !status.trim().isEmpty()) {
+            sql += " AND status = ?";
+        }
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            // Gán giá trị cho ShipperID
+            ps.setInt(1, shipperID);
+            // Gán giá trị cho Status nếu có
+            if (status != null && !status.trim().isEmpty()) {
+                ps.setString(2, status);
+            }
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Orders order = extractOrderFromResultSet(rs);
+                orderList.add(order);
+            }
+        } catch (SQLException e) {
+            System.out.println("ERROR fetching orders: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return orderList;
+    }
+
+    public List<Orders> getAllOrdersbyStatus(String status) {
+        List<Orders> orderList = new ArrayList<>();
+        String sql = "SELECT * FROM orders WHERE";
+        if (status != null && !status.trim().isEmpty()) {
+            sql += " status = ?";
+        }
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            // Gán giá trị cho Status nếu có
+            if (status != null && !status.trim().isEmpty()) {
+                ps.setString(1, status);
+            }
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Orders order = extractOrderFromResultSet(rs);
+                orderList.add(order);
+            }
+        } catch (SQLException e) {
+            System.out.println("ERROR fetching orders: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return orderList;
+    }
+
     public static void main(String[] args) {
         OrdersDAO oDAO = new OrdersDAO();
-        Orders order = new Orders(6, null, null, "Pending", 0, null);
-        System.out.println(oDAO.getLatestOrder().getOrderDate());
+        Orders o = new Orders(15, null, "Hanoi", "Submitted", 20000, "Hello");
+        System.out.println(oDAO.addOrder(o));
     }
 }

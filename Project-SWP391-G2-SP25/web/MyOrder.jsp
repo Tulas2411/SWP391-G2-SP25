@@ -137,11 +137,11 @@
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Ngày đặt hàng</th>
-                        <th>Địa chỉ</th>
-                        <th>Tổng tiền</th>
+                        <th>Ngày mua hàng</th>
+                        <th>Địa chỉ giao hàng</th>
+                        <th>Tổng chi phí</th>
                         <th>Trạng thái</th>
-                        <th>Hành Động</th>
+                        <th>Hành động</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -153,7 +153,7 @@
                             <td>${order.totalAmount}</td>
                             <td>${order.status}</td>
                             <td>
-                                <a href="my-order-detail?orderId=${order.orderID}" class="orders-view-link">Xem thêm</a>
+                                <a href="my-order-detail?orderId=${order.orderID}" class="orders-view-link">View</a>
                             </td>
                         </tr>
                     </c:forEach>

@@ -43,7 +43,7 @@ public class ReviewsServlet extends HttpServlet {
         request.setAttribute("reviewsList", reviewsList);
         request.setAttribute("currentPage", page);
         request.setAttribute("limit", limit);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("Reviews.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("marketing/Reviews.jsp");
         dispatcher.forward(request, response);
     }
 }

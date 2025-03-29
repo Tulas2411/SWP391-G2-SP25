@@ -14,8 +14,15 @@ public class UserLog {
     private int id;
     private String log;
     private int userId;
-    private Timestamp change_date;
+    private String email;
+    private String fullName;
+    private String gender;
+    private String mobile;
+    private String address;
+    private String updatedBy;
+    private Timestamp changeDate;
 
+    // Getters and Setters
     public int getId() {
         return id;
     }
@@ -32,14 +39,6 @@ public class UserLog {
         this.log = log;
     }
 
-    public Timestamp getChange_date() {
-        return change_date;
-    }
-
-    public void setChange_date(Timestamp change_date) {
-        this.change_date = change_date;
-    }
-
     public int getUserId() {
         return userId;
     }
@@ -47,6 +46,60 @@ public class UserLog {
     public void setUserId(int userId) {
         this.userId = userId;
     }
-    
-    
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(String updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+
+    public Timestamp getChangeDate() {
+        return changeDate;
+    }
+
+    public void setChangeDate(Timestamp changeDate) {
+        this.changeDate = changeDate;
+    }
 }

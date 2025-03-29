@@ -77,42 +77,52 @@ Purchase Premium Metronic Admin Theme: http://themeforest.net/item/metronic-resp
         <link rel="stylesheet" href="assets/fonts/fontawesome-free-6.0.0-web/css/all.css" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swapsubset=vietnamese" />
         <style>
-            
-select {
-    /* Đặt kích thước và padding giống với các input khác */
-    width: 100%;
-    height: 34px; /* Điều chỉnh chiều cao nếu cần */
-    padding: 8px 10px;
-    box-sizing: border-box;
 
-    /* Kiểu dáng nền và viền */
-    border: 1px solid #dbdbdb; /* Viền xám giống các input */
-    color: #777777; /* Chữ màu trắng */
-    font-size: 14px; /* Kích thước chữ giống các input */
+            select {
+                /* Đặt kích thước và padding giống với các input khác */
+                width: 100%;
+                height: 34px; /* Điều chỉnh chiều cao nếu cần */
+                padding: 8px 10px;
+                box-sizing: border-box;
 
-    /* Tùy chỉnh giao diện dropdown */
-    appearance: none; /* Xóa giao diện mặc định của trình duyệt */
-    -webkit-appearance: none;
-    -moz-appearance: none;
+                /* Kiểu dáng nền và viền */
+                border: 1px solid #dbdbdb; /* Viền xám giống các input */
+                color: #777777; /* Chữ màu trắng */
+                font-size: 14px; /* Kích thước chữ giống các input */
 
-    /* Thêm mũi tên tùy chỉnh */
-    background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    background-size: 12px;
-}
+                /* Tùy chỉnh giao diện dropdown */
+                appearance: none; /* Xóa giao diện mặc định của trình duyệt */
+                -webkit-appearance: none;
+                -moz-appearance: none;
 
-/* Đảm bảo select không bị thay đổi khi focus */
-select:focus {
-    outline: none;
-    border-color: #4a4a4a; /* Giữ viền xám khi focus */
-}
+                /* Thêm mũi tên tùy chỉnh */
+                background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+                background-repeat: no-repeat;
+                background-position: right 10px center;
+                background-size: 12px;
+            }
 
-/* Nếu select có placeholder hoặc giá trị mặc định, bạn có thể tùy chỉnh màu */
-select option {
-    background-color: #ffffff; /* Nền của các option */
-    color: #777777; /* Chữ trắng */
-}
+            /* Đảm bảo select không bị thay đổi khi focus */
+            select:focus {
+                outline: none;
+                border-color: #4a4a4a; /* Giữ viền xám khi focus */
+            }
+
+            /* Nếu select có placeholder hoặc giá trị mặc định, bạn có thể tùy chỉnh màu */
+            select option {
+                background-color: #ffffff; /* Nền của các option */
+                color: #777777; /* Chữ trắng */
+                .disabled-link {
+                    pointer-events: none; /* Ngăn nhấp chuột */
+                    color: #ccc; /* Làm mờ chữ để biểu thị không hoạt động */
+                    cursor: not-allowed; /* Con trỏ chuột biểu thị không nhấp được */
+                }
+                .enabled-link {
+                    pointer-events: auto; /* Cho phép nhấp */
+                    color: #333; /* Màu chữ bình thường */
+                    cursor: pointer; /* Con trỏ chuột bình thường */
+                }
+            }
         </style>
     </head>
     <!-- Head END -->
@@ -123,16 +133,16 @@ select option {
         <div class="main">
             <div class="container">
                 <ul class="breadcrumb">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="">Store</a></li>
-                    <li class="active">Checkout</li>
+                    <li><a href="/Project-SWP391-G2-SP25/home">Trang chủ</a></li>
+                    <li><a href="/Project-SWP391-G2-SP25/Cart">Giỏ Hàng</a></li>
+                    <li class="active">Đơn hàng</li>
                 </ul>
                 <!-- BEGIN SIDEBAR & CONTENT -->
 
                 <div class="row margin-bottom-40">
                     <!-- BEGIN CONTENT -->
                     <div class="col-md-12 col-sm-12">
-                        <h1>Checkout</h1>
+                        <h1>Đơn hàng</h1>
                         <!-- BEGIN CHECKOUT PAGE -->
                         <div class="panel-group checkout-page accordion scrollable" id="checkout-page">
 
@@ -141,29 +151,29 @@ select option {
                                 <div class="panel-heading">
                                     <h2 class="panel-title">
                                         <a data-toggle="collapse" data-parent="#checkout-page" href="#shipping-address-content" class="accordion-toggle">
-                                            Step 1: Delivery Details
+                                            Step 1: Thông tin đơn hàng
                                         </a>
                                     </h2>
                                 </div>
-                                <div id="shipping-address-content" class="panel-collapse collapse">
+                                <div id="shipping-address-content" class="panel-collapse collapse in">
                                     <div class="panel-body row">
                                         <div class="col-md-6 col-sm-6">
                                             <div class="form-group">
-                                                <label for="firstname-dd">First Name <span class="require">*</span></label>
+                                                <label for="firstname-dd">Họ <span class="require">*</span></label>
                                                 <input type="text" id="firstname-dd" class="form-control" value="<%= (user != null) ? user.getFirstName() : "" %>">
                                             </div>
                                             <div class="form-group">
-                                                <label for="lastname-dd">Last Name <span class="require">*</span></label>
+                                                <label for="lastname-dd">Tên <span class="require">*</span></label>
                                                 <input type="text" id="lastname-dd" class="form-control" value="<%= (user != null) ? user.getLastName() : "" %>">
                                             </div>
                                             <div class="form-group">
                                                 <label for="email-dd">E-Mail <span class="require">*</span></label>
-                                                <input type="text" id="email-dd" class="form-control" value="<%= (user != null) ? user.getEmail() : "" %>">
+                                                <input type="text" id="email-dd" class="form-control" value="<%= (user != null) ? user.getEmail() : "" %>" readonly>
                                             </div>
                                         </div>
                                         <div class="col-md-6 col-sm-6">
                                             <div class="form-group">
-                                                <label for="address1-dd">Address</label>
+                                                <label for="address1-dd">Địa chỉ</label>
                                                 <input type="text" id="address-dd" class="form-control" value="<%= (user != null) ? user.getAddress() : "" %>">
                                             </div>
                                             <div class="form-group">
@@ -174,12 +184,12 @@ select option {
                                                 </select>
                                             </div>
                                             <div class="form-group">
-                                                <label for="telephone-dd">Telephone <span class="require">*</span></label>
+                                                <label for="telephone-dd">Số điện thoại <span class="require">*</span></label>
                                                 <input type="text" id="phone-dd" class="form-control" value="<%= (user != null) ? user.getPhoneNumber() : "" %>">
                                             </div>
                                         </div>
                                         <div class="col-md-12">
-                                            <button class="btn btn-primary  pull-right" type="submit" id="button-shipping-address" data-toggle="collapse" data-parent="#checkout-page" data-target="#shipping-method-content">Continue</button>
+                                            <button class="btn btn-primary  pull-right" type="submit" id="button-shipping-address" data-toggle="collapse" data-parent="#checkout-page" data-target="#payment-method-content">Tiếp tục</button>
                                         </div>
                                     </div>
                                 </div>
@@ -191,30 +201,30 @@ select option {
                                 <div class="panel-heading">
                                     <h2 class="panel-title">
                                         <a data-toggle="collapse" data-parent="#checkout-page" href="#payment-method-content" class="accordion-toggle">
-                                            Step 2: Payment Method
+                                            Step 2: Phương thức thanh toán
                                         </a>
                                     </h2>
                                 </div>
                                 <div id="payment-method-content" class="panel-collapse collapse">
                                     <div class="panel-body row">
                                         <div class="col-md-12">
-                                            <p>Please select the preferred payment method to use on this order.</p>
+                                            <p>Hãy chọn phương thức thanh toán cho đơn hàng của bạn</p>
                                             <div class="radio-list">
                                                 <label>
-                                                    <input type="radio" name="paymentMethod" value="CashOnDelivery" id="cash-on-delivery"> Cash On Delivery
+                                                    <input type="radio" name="paymentMethod" value="CashOnDelivery" id="cash-on-delivery"> Trả tiền lúc nhận hàng
                                                 </label>
                                                 <label>
                                                     <input type="radio" name="paymentMethod" value="VNpay" id="vnpay"> VNPay
                                                 </label>
                                             </div>
                                             <div class="form-group">
-                                                <label for="delivery-payment-method">Add Comments About Your Order</label>
+                                                <label for="delivery-payment-method">Thêm ghi chú vào đơn hàng của bạn</label>
                                                 <textarea id="comment-dd" rows="8" class="form-control" id="comment-dd"></textarea>
                                             </div>
-                                            <button class="btn btn-primary  pull-right" type="submit" id="button-payment-method" data-toggle="collapse" data-parent="#checkout-page" data-target="#confirm-content">Continue</button>
+                                            <button class="btn btn-primary  pull-right" type="submit" id="button-payment-method" data-toggle="collapse" data-parent="#checkout-page" data-target="#confirm-content">Tiếp tục</button>
                                             <div class="checkbox pull-right">
                                                 <label>
-                                                    <input type="checkbox"> I have read and agree to the <a title="Terms & Conditions" href="javascript:;">Terms & Conditions </a> &nbsp;&nbsp;&nbsp; 
+                                                    <input type="checkbox"> Tôi đồng ý với <a title="Terms & Conditions" href="/Project-SWP391-G2-SP25/BaoMat.jsp">Điều khoản dịch vụ </a> &nbsp;&nbsp;&nbsp; 
                                                 </label>
                                             </div>  
                                         </div>
@@ -227,8 +237,8 @@ select option {
                             <div id="confirm" class="panel panel-default">
                                 <div class="panel-heading">
                                     <h2 class="panel-title">
-                                        <a data-toggle="collapse" data-parent="#checkout-page" href="#confirm-content" class="accordion-toggle">
-                                            Step 3: Confirm Order
+                                        <a id="confirm-toggle" data-parent="#checkout-page" href="#confirm-content" class="accordion-toggle disabled-link">
+                                            Step 3: Xác nhận đơn hàng
                                         </a>
                                     </h2>
                                 </div>
@@ -238,17 +248,18 @@ select option {
                                             <div class="table-wrapper-responsive">
                                                 <table>
                                                     <tr>
-                                                        <th class="checkout-image">Image</th>
-                                                        <th class="checkout-description">Description</th>
-                                                        <th class="checkout-model">Model</th>
-                                                        <th class="checkout-quantity">Quantity</th>
-                                                        <th class="checkout-price">Price</th>
-                                                        <th class="checkout-total">Total</th>
+                                                        <th class="checkout-image">Hình ảnh</th>
+                                                        <th class="checkout-description">Mô tả sản phẩm</th>
+                                                        <th class="checkout-model">Danh mục</th>
+                                                        <th class="checkout-quantity">Số lượng</th>
+                                                        <th class="checkout-price">Đơn giá</th>
+                                                        <th class="checkout-total">Thành giá</th>
                                                     </tr>
                                                     <%
                                                             // Lấy danh sách các sản phẩm đã chọn từ session
                                                             ProductsDAO pDAO = new ProductsDAO();
                                                             CartItemsDAO ciDAO = new CartItemsDAO();
+                                                            CategoryDAO cDAO = new CategoryDAO();
                                                             Map<Integer, Integer> list = (Map<Integer, Integer>) request.getAttribute("list");
                                                             // Lấy đối tượng NumberFormat cho định dạng tiền Việt Nam
                                                             NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
@@ -266,11 +277,11 @@ select option {
                                                             <img src="<%=p.getImageLink()%>">
                                                         </td>
                                                         <td class="checkout-description">
-                                                            <h3><a href="javascript:;">Cool green dress with red bell</a></h3>
-                                                            <p><strong><%=p.getProductName()%></strong></p>
+                                                            <h3><a href="javascript:;"><%=p.getProductName()%></a></h3>
+                                                            <p><strong><%=p.getDescription()%></strong></p>
                                                             <em><%=p.getDescription()%></em>
                                                         </td>
-                                                        <td class="checkout-model"><%=p.getDescription()%></td>
+                                                        <td class="checkout-model"><%=cDAO.getCategoryByID(p.getCategoryID()).getCategoryName()%></td>
                                                         <td class="checkout-quantity"><%=ci.getQuantity()%>
                                                             <input type="number" class="product-quantity" data-product-id="<%=id%>" value="<%=ci.getQuantity()%>" min="1" readonly hidden>
                                                         </td>
@@ -344,85 +355,151 @@ select option {
                 Layout.initTouchspin();
                 Layout.initUniform();
                 Layout.initSliderRange();
-                // Kiểm tra nếu user đã đăng nhập
-            <c:if test="${user != null}">
-                // Vô hiệu hóa Step 1
-                $('#step1-toggle').attr('data-toggle', '').removeAttr('href');
-                $('#step1-toggle').css('pointer-events', 'none'); // Ngăn chặn click
-                $('#step1-toggle').css('color', '#ccc'); // Làm mờ liên kết
-                $('#step1-toggle').css('cursor', 'not-allowed'); // Thay đổi con trỏ chuột
-            </c:if>
             });
         </script>
-        
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script>
-    $(document).ready(function() {
-    $('#button-confirm').on('click', function() {
-        var paymentMethod = $('input[name="paymentMethod"]:checked').val();
-        
-        var firstname = $('#firstname-dd').val();
-        var lastname = $('#lastname-dd').val();
-        var email = $('#email-dd').val();
-        var phone = $('#phone-dd').val();
-        var gender = $('#gender-dd').val();
-        var address = $('#address-dd').val();
-        var comment = $('#comment-dd').val();
+        <script>
+            $(document).ready(function () {
+                // Vô hiệu hóa nút Continue và Step 3 ban đầu
+                $('#button-payment-method').prop('disabled', true);
+                $('#confirm-toggle').addClass('disabled-link').removeAttr('data-toggle');
 
-        var products = [];
-        $('table tr').each(function() {
-            var productId = $(this).find('.product-quantity').data('product-id');
-            var quantity = $(this).find('.product-quantity').val();
-            if (productId && quantity) {
-                products.push({
-                    productId: parseInt(productId),
-                    quantity: parseInt(quantity)
-                });
-            }
-        });
-        
-        var data = {
-            firstname: firstname,
-            lastname: lastname,
-            email: email,
-            phone: phone,
-            gender: gender,
-            address: address,
-            comment: comment,
-            paymentMethod: paymentMethod,
-            products: products
-        };
+                // Hàm tính tổng giá trị đơn hàng
+                // Hàm tính tổng giá trị đơn hàng từ cột Total
+                function calculateTotalPrice() {
+                    var total = 0;
+                    $('table tr').each(function () {
+                        var totalText = $(this).find('.checkout-total strong').text(); // Lấy giá trị từ cột Total
 
-        console.log(JSON.stringify(data));
-
-        $.ajax({
-            url: '<%=request.getContextPath()%>/ConfirmOrder',
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(data),
-            success: function(response) {
-                console.log(response);
-                if (paymentMethod === 'VNpay') {
-                    // Tạo form ẩn để POST sang /payment
-                    var form = $('<form/>', {
-                        action: '<%=request.getContextPath()%>/payment',
-                        method: 'POST',
-                        style: 'display: none'
+                        // Chỉ xử lý các hàng có giá trị hợp lệ
+                        if (totalText) {
+                            // Loại bỏ ký tự không phải số (như "đ", dấu cách, dấu chấm) và chuyển thành số
+                            var totalValue = parseFloat(totalText.replace(/[^\d]/g, ''));
+                            if (!isNaN(totalValue)) {
+                                total += totalValue;
+                            }
+                        }
                     });
-                    $('body').append(form);
-                    form.submit();
-                } else if (paymentMethod === 'CashOnDelivery') {
-                    window.location.href = '<%=request.getContextPath()%>/CartCompletion';
+
+                    // Định dạng tổng giá trị đơn hàng (thêm dấu chấm và ký hiệu đ)
+                    var formattedTotal = total.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'});
+                    $('#total-price').text(formattedTotal); // Hiển thị tổng giá trị
                 }
-            },
-            error: function(xhr, status, error) {
-                console.error(error);
-                alert('An error occurred while processing your request: ' + error);
-            }
-        });
-    });
-});
-</script>
+
+                // Gọi hàm tính tổng khi trang tải hoặc khi mở Step 3
+                calculateTotalPrice();
+
+                // Hàm kiểm tra điều kiện để bật nút Continue và Step 3
+                function checkConditions() {
+                    var paymentSelected = $('input[name="paymentMethod"]:checked').length > 0;
+                    var termsAgreed = $('input[type="checkbox"]').is(':checked');
+
+                    if (paymentSelected && termsAgreed) {
+                        $('#button-payment-method').prop('disabled', false);
+                        $('#confirm-toggle')
+                                .removeClass('disabled-link')
+                                .addClass('enabled-link')
+                                .attr('data-toggle', 'collapse'); // Kích hoạt nhấp vào Step 3
+                    } else {
+                        $('#button-payment-method').prop('disabled', true);
+                        $('#confirm-toggle')
+                                .addClass('disabled-link')
+                                .removeClass('enabled-link')
+                                .removeAttr('data-toggle'); // Vô hiệu hóa nhấp vào Step 3
+                    }
+                }
+
+                // Lắng nghe sự thay đổi của radio button và checkbox
+                $('input[name="paymentMethod"]').on('change', checkConditions);
+                $('input[type="checkbox"]').on('change', checkConditions);
+
+                // Xử lý sự kiện click nút Continue
+                $('#button-payment-method').on('click', function (e) {
+                    var paymentSelected = $('input[name="paymentMethod"]:checked').length > 0;
+                    var termsAgreed = $('input[type="checkbox"]').is(':checked');
+
+                    if (!paymentSelected && !termsAgreed) {
+                        e.preventDefault(); // Ngăn hành động mặc định (mở Step 3)
+                        alert('Vui lòng chọn phương thức thanh toán và đồng ý với điều khoản!');
+                    } else if (!paymentSelected) {
+                        e.preventDefault();
+                        alert('Vui lòng chọn phương thức thanh toán!');
+                    } else if (!termsAgreed) {
+                        e.preventDefault();
+                        alert('Vui lòng đồng ý với điều khoản!');
+                    }
+                    // Nếu cả hai điều kiện đều thỏa mãn, nút sẽ mở Step 3 bình thường
+                });
+            });
+        </script>
+        <script>
+            $(document).ready(function () {
+                $('#button-confirm').on('click', function () {
+                    var paymentMethod = $('input[name="paymentMethod"]:checked').val();
+
+                    var firstname = $('#firstname-dd').val();
+                    var lastname = $('#lastname-dd').val();
+                    var email = $('#email-dd').val();
+                    var phone = $('#phone-dd').val();
+                    var gender = $('#gender-dd').val();
+                    var address = $('#address-dd').val();
+                    var comment = $('#comment-dd').val();
+
+                    var products = [];
+                    $('table tr').each(function () {
+                        var productId = $(this).find('.product-quantity').data('product-id');
+                        var quantity = $(this).find('.product-quantity').val();
+                        if (productId && quantity) {
+                            products.push({
+                                productId: parseInt(productId),
+                                quantity: parseInt(quantity)
+                            });
+                        }
+                    });
+
+                    var data = {
+                        firstname: firstname,
+                        lastname: lastname,
+                        email: email,
+                        phone: phone,
+                        gender: gender,
+                        address: address,
+                        comment: comment,
+                        paymentMethod: paymentMethod,
+                        products: products
+                    };
+
+                    console.log(JSON.stringify(data));
+
+                    $.ajax({
+                        url: '<%=request.getContextPath()%>/ConfirmOrder',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(data),
+                        success: function (response) {
+                            console.log(response);
+                            if (paymentMethod === 'VNpay') {
+                                // Tạo form ẩn để POST sang /payment
+                                var form = $('<form/>', {
+                                    action: '<%=request.getContextPath()%>/payment',
+                                    method: 'POST',
+                                    style: 'display: none'
+                                });
+                                $('body').append(form);
+                                form.submit();
+                            } else if (paymentMethod === 'CashOnDelivery') {
+                                window.location.href = '<%=request.getContextPath()%>/CartCompletion';
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(error);
+                            alert('An error occurred while processing your request: ' + error);
+                        }
+                    });
+                });
+            });
+        </script>
 
         <!-- END PAGE LEVEL JAVASCRIPTS -->
     </body>

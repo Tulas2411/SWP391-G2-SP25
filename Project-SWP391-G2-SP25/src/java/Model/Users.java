@@ -136,5 +136,10 @@ public class Users {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        return "Users{" + "userID=" + userID + ", firstName=" + firstName + ", lastName=" + lastName + ", gender=" + gender + ", dateOfBirth=" + dateOfBirth + ", userName=" + userName + ", password=" + password + ", role=" + role + ", email=" + email + ", phoneNumber=" + phoneNumber + ", address=" + address + ", status=" + status + '}';
+    }
     
 }
