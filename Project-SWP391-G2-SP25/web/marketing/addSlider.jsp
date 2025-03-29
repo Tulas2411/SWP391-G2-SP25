@@ -46,46 +46,92 @@
             .btn:hover {
                 background-color: #2980b9;
             }
+            .disabled-select {
+                background-color: #f2f2f2;
+                color: #999;
+                cursor: not-allowed;
+            }
         </style>
     </head>
     <body>
 
         <jsp:include page="header.jsp"></jsp:include>
             <main class="container">
-                <form action="AddSlider" method="post" class="slider-form">
+                <form action="AddSlider" method="post" class="slider-form" onsubmit="return validateForm()">
                     <label for="title">Tiêu đề:</label>
                     <input type="text" id="title" name="title" required>
 
                     <label for="image">URL hình ảnh:</label>
                     <input type="text" id="image" name="image" required>
 
-                    <label for="backlink">Liên kết:</label>
-                    <input type="text" id="backlink" name="backlink" required>
-
                     <label for="status">Trạng thái:</label>
                     <select id="status" name="status">
                         <option value="active">Hoạt động</option>
                         <option value="inactive">Không hoạt động</option>
                     </select>
-                    <label for="blog">Blog:</label>
-                    <select id="blog" name="blogID">
-                    <c:forEach var="blog" items="${blogs}">
-                        <option value="${blog.blogID}">${blog.title}</option>
-                    </c:forEach>
-                </select>
+                    
+                    <label for="blog">Chọn Blog:</label>
+                    <select id="blog" name="blogID" onchange="handleBlogChange()">
+                        <option value="">-- Chọn Blog --</option>
+                        <c:forEach var="blog" items="${blogs}">
+                            <option value="${blog.postID}">${blog.title}</option>
+                        </c:forEach>
+                    </select>
 
-                <label for="product">Chọn sản phẩm:</label>
-                <select id="product" name="productId">
-                    <c:forEach var="product" items="${productList}">
-                        <option value="${product.productID}">${product.productName}</option>
-                    </c:forEach>
-                </select>
+                    <label for="product">Chọn sản phẩm:</label>
+                    <select id="product" name="productId" onchange="handleProductChange()">
+                        <option value="">-- Chọn Sản phẩm --</option>
+                        <c:forEach var="product" items="${productList}">
+                            <option value="${product.productID}">${product.productName}</option>
+                        </c:forEach>
+                    </select>
 
-                <button type="submit" class="btn">Thêm Slider</button>
-                <button type="button" class="btn" onclick="window.location.href = 'ListSliders';">Quay lại danh sách</button>
-            </form>
-        </main>
+                    <button type="submit" class="btn">Thêm Slider</button>
+                    <button type="button" class="btn" onclick="window.location.href = 'ListSliders';">Quay lại danh sách</button>
+                </form>
+            </main>
         <jsp:include page="footer.jsp"></jsp:include>
 
+        <script>
+            function handleBlogChange() {
+                const blogSelect = document.getElementById('blog');
+                const productSelect = document.getElementById('product');
+                
+                if (blogSelect.value !== "") {
+                    productSelect.disabled = true;
+                    productSelect.classList.add('disabled-select');
+                    productSelect.value = ""; // Reset giá trị sản phẩm nếu có
+                } else {
+                    productSelect.disabled = false;
+                    productSelect.classList.remove('disabled-select');
+                }
+            }
+            
+            function handleProductChange() {
+                const blogSelect = document.getElementById('blog');
+                const productSelect = document.getElementById('product');
+                
+                if (productSelect.value !== "") {
+                    blogSelect.disabled = true;
+                    blogSelect.classList.add('disabled-select');
+                    blogSelect.value = ""; // Reset giá trị blog nếu có
+                } else {
+                    blogSelect.disabled = false;
+                    blogSelect.classList.remove('disabled-select');
+                }
+            }
+            
+            function validateForm() {
+                const blogSelect = document.getElementById('blog');
+                const productSelect = document.getElementById('product');
+                
+                if (blogSelect.value === "" && productSelect.value === "") {
+                    alert("Vui lòng chọn Blog hoặc Sản phẩm");
+                    return false;
+                }
+                
+                return true;
+            }
+        </script>
     </body>
 </html>

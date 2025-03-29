@@ -39,6 +39,15 @@ public class Sliders {
         this.productID = productID;
     }
 
+    public Sliders(String title, String image, String status, int blogID, int productID) {
+        this.title = title;
+        this.image = image;
+        this.status = status;
+        this.blogID = blogID;
+        this.productID = productID;
+    }
+    
+
     public int getSliderID() {
         return sliderID;
     }

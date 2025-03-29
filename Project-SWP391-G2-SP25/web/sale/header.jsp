@@ -35,6 +35,7 @@
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" href="${contextPath}/LogoutController" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="UserProfileRole.jsp">Cài đặt</a></li>
+                        <li><a class="dropdown-item" href="/Project-SWP391-G2-SP25/home">Trang chủ</a></li>
                         <li><hr class="dropdown-divider" /></li>
                         <li><a class="dropdown-item" href="${contextPath}/LogoutController">Đăng xuất</a></li>
                     </ul>
