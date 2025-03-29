@@ -90,11 +90,11 @@ public class AdminDashboardController extends HttpServlet {
                 request.setAttribute("newlyRegisteredCustomers", newlyRegisteredCustomers);
 
             } else {
-                session.setAttribute("notificationErr", "Access Denined!");
+                session.setAttribute("notificationErr", "Truy cập từ chối!");
                 response.sendRedirect("../Login.jsp");
             }
         } else {
-            session.setAttribute("notificationErr", "You must login first!");
+            session.setAttribute("notificationErr", "Bạn cần đăng nhập trước");
             response.sendRedirect("../Login.jsp");
         }
     }

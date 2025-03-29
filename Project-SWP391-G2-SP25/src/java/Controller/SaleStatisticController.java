@@ -67,58 +67,32 @@ public class SaleStatisticController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        UsersDAO userDAO = new UsersDAO();
-        HttpSession session = request.getSession();
-        String emailSession = (String) session.getAttribute("email");
-        Users user = userDAO.getUserByEmail(emailSession);
-
-        processRequest(request, response);
-        if (user != null) {
-            if (user.getRole().equalsIgnoreCase("marketing")) {
-                int currentPage = 1;
-                String pageParam = request.getParameter("page");
-                if (pageParam != null && !pageParam.isEmpty()) {
-                    try {
-                        currentPage = Integer.parseInt(pageParam);
-                    } catch (NumberFormatException e) {
-                        currentPage = 1;
-                    }
-                }
-
-                OrdersDAO ordersDAO = new OrdersDAO();
-
-                LocalDate currentDate = LocalDate.now();
-                int currentYear = currentDate.getYear();
-                int currentMonth = currentDate.getMonthValue();
-
-                String yearParam = request.getParameter("year");
-                String monthParam = request.getParameter("month");
+       OrdersDAO ordersDAO = new OrdersDAO();
+        
+        LocalDate currentDate = LocalDate.now();
+        int currentYear = currentDate.getYear();
+        int currentMonth = currentDate.getMonthValue();
+        
+        String yearParam = request.getParameter("year");
+        String monthParam = request.getParameter("month");
         
         
-                int year = (yearParam != null) ? Integer.parseInt(yearParam) : currentYear;
-                int month = (monthParam != null) ? Integer.parseInt(monthParam) : currentMonth;
-
-                List<DailyRevenue> statistic = ordersDAO.getDailyRevenueByMonthYear(month, year);
-
-                List<Integer> dayArr = statistic.stream()
-                        .map((t) -> t.getDay())
-                        .toList();
-                List<Double> totalArr = statistic.stream()
-                        .map((t) -> t.getTotalRevenue())
-                        .toList();
-                request.setAttribute("dayArr", dayArr);
-                request.setAttribute("totalArr", totalArr);
-                request.setAttribute("selectedMonth", month);
-                request.setAttribute("selectedYear", year);
-                request.getRequestDispatcher("Statistics.jsp").forward(request, response);
-            } else {
-                session.setAttribute("notificationErr", "Bạn không có quyền truy cập vào trang này");
-                response.sendRedirect("../Login.jsp");
-            }
-        } else {
-            session.setAttribute("notificationErr", "Bạn cần đăng nhập trước!");
-            response.sendRedirect("../Login.jsp");
-        }
+        int year = (yearParam != null) ? Integer.parseInt(yearParam) : currentYear;
+        int month = (monthParam != null) ? Integer.parseInt(monthParam) : currentMonth;
+        
+        List<DailyRevenue> statistic = ordersDAO.getDailyRevenueByMonthYear(month, year);
+        
+        List<Integer> dayArr = statistic.stream()
+                .map((t) -> t.getDay())
+                .toList();
+        List<Double> totalArr = statistic.stream()
+                .map((t) -> t.getTotalRevenue())
+                .toList();
+        request.setAttribute("dayArr", dayArr);
+        request.setAttribute("totalArr", totalArr);
+        request.setAttribute("selectedMonth", month);
+        request.setAttribute("selectedYear", year);
+        request.getRequestDispatcher("Statistics.jsp").forward(request, response);
     }
 
     /**
@@ -132,17 +106,7 @@ public class SaleStatisticController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-                SlidersDAO sliderDAO = new SlidersDAO();
-
-        
-        String search = request.getParameter("search");
-        String status = request.getParameter("status");
-        List<Sliders> sliders = sliderDAO.searchSliders(search, status);
-        request.setAttribute("sliders", sliders);
-        request.setAttribute("search", search);
-        request.setAttribute("status", status);
-        
-        request.getRequestDispatcher("SliderList.jsp").forward(request, response);
+     processRequest(request, response);
     }
 
     /**
