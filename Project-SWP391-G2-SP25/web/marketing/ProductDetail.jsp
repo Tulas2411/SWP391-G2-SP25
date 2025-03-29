@@ -230,9 +230,9 @@ Author     : Tung Duong
                         <div id="product-tab">
                             <!-- product tab nav -->
                             <ul class="tab-nav">
-                                <li class="active"><a data-toggle="tab" href="#tab1">Description</a></li>
-                                <li><a data-toggle="tab" href="#tab2">Details</a></li>
-                                <li><a data-toggle="tab" href="#tab3">Feedbacks (<%=listr.size()%>)</a></li>
+                                <li class="active"><a data-toggle="tab" href="#tab1">Mô tả</a></li>
+                                <li><a data-toggle="tab" href="#tab2">Chi tiết</a></li>
+                                <li><a data-toggle="tab" href="#tab3">Đánh giá (<%=listr.size()%>)</a></li>
                             </ul>
                             <!-- /product tab nav -->
 

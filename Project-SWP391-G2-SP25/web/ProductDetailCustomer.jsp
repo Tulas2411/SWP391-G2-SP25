@@ -75,90 +75,89 @@ Author     : Tung Duong
     <body>
 
         <%@ include file="./Public/header.jsp" %>
-        <%
-            UsersDAO uDAO = new UsersDAO();
+        <%            UsersDAO uDAO = new UsersDAO();
             ProductsDAO pDAO = new ProductsDAO();
             List<Category> categories = pDAO.getAllCategories();
             request.setAttribute("categories", categories);
             String categoriesJson = new Gson().toJson(categories);
             Products p = (Products) request.getAttribute("product");
-            Map<Integer, Reviews> listr = (Map<Integer, Reviews>)request.getAttribute("listr");
+            Map<Integer, Reviews> listr = (Map<Integer, Reviews>) request.getAttribute("listr");
         %>
-            <div class="main__left">
-                <!-- Danh mục sản phẩm - Gom các sản phẩm thành các danh mục nhỏ - Hiển thị trên cùng bên trái main trang web -->
-                <h2 class="main__left-title">DANH MỤC SẢN PHẨM</h2>
-                <ul class="main__left-category-list">
-                    <c:forEach var="categoryID" items="${['TBQ', 'TBCS', 'CTD', 'TBTM', 'TBSCBT']}">
-                        <c:forEach var="category" items="${categories}">
-                            <c:if test="${category.categoryID == categoryID}">
-                                <li class="main__left-category-items">
-                                    <a href="Category.jsp?id=${category.categoryID}" class="main__left-category-link">
-                                        ${category.categoryName}
-                                    </a>
-                                </li>
-                            </c:if>
-                        </c:forEach>
-                    </c:forEach>
-                </ul>
-
-                <!-- Main Left Promotional Products : Sản phẩm khuyến mãi -->
-                <!-- Một số sản phẩm khuyến mãi - Hiển thị dưới Danh mục sản phẩm -->
-                <h2 class="main__left-title main__left-margin-top">SẢN PHẨM KHUYẾN MÃI</h2>
-                <ul class="main__left-product-list">
-                    <c:forEach var="product" items="${promotedProducts}" varStatus="status">
-                        <c:if test="${status.index < 5}">  <%-- Chỉ hiển thị 5 sản phẩm đầu tiên --%>
-                            <li class="main__left-product-items main__left-product-items--vertical">
-                                <a href="/Project-SWP391-G2-SP25/ProductDetailController?id=${product.productID}" class="main__left-product-link">
-                                    <img src="${product.imageLink}" alt="${product.productName}" class="main__left-product-img" />
-                                    <span class="main__left-product-title">${product.productName}</span>
+        <div class="main__left">
+            <!-- Danh mục sản phẩm - Gom các sản phẩm thành các danh mục nhỏ - Hiển thị trên cùng bên trái main trang web -->
+            <h2 class="main__left-title">DANH MỤC SẢN PHẨM</h2>
+            <ul class="main__left-category-list">
+                <c:forEach var="categoryID" items="${['TBQ', 'TBCS', 'CTD', 'TBTM', 'TBSCBT']}">
+                    <c:forEach var="category" items="${categories}">
+                        <c:if test="${category.categoryID == categoryID}">
+                            <li class="main__left-category-items">
+                                <a href="Category.jsp?id=${category.categoryID}" class="main__left-category-link">
+                                    ${category.categoryName}
                                 </a>
-                                <br />
-                                <span class="main__left-product"><del>
-                                        <fmt:formatNumber value="${product.oldprice}" type="number" groupingUsed="true"/>đ
-                                    </del></span>
-                                <span class="main__right-sensor-price">
-                                    <strong><fmt:formatNumber value="${product.price}" type="number" groupingUsed="true"/>đ</strong>
-                                </span>
                             </li>
                         </c:if>
                     </c:forEach>
-                </ul>
+                </c:forEach>
+            </ul>
 
-                <!-- Main Left New products : Sản phẩm mới -->
-                <!-- Một số sản phẩm mới của cửa hàng - Hiển thị dưới Sản phẩm khuyến mãi -->
-                <h2 class="main__left-title main__left-margin-top">SẢN PHẨM MỚI</h2>
-                <ul class="main__left-product-list">
-                    <c:forEach var="product" items="${newProducts}" varStatus="status">
-                        <c:if test="${status.index < 5}">
-                            <li class="main__left-product-items main__left-product-items--vertical">
-                                <a href="/Project-SWP391-G2-SP25/ProductDetailController?id=${product.productID}" class="main__left-product-link">
-                                    <img src="${product.imageLink}" alt="${product.productName}" class="main__left-product-img" />
-                                    <span class="main__left-product-title">${product.productName}</span>
-                                </a>
-                                <br />
-                                <span class="main__right-sensor-price">
-                                    <strong><fmt:formatNumber value="${product.price}" type="number" groupingUsed="true"/>đ</strong>
-                                </span>
-                            </li>
-                        </c:if>
-                    </c:forEach>
-                </ul>
-
-                <!-- Main Left Post -->
-                <!-- Các bài báo mới - Hiển thị dưới Sản phẩm mới -->
-                <h2 class="main__left-title main__left-margin-top">BÀI VIẾT MỚI</h2>
-                <ul class="main__left-posts-list">
-                    <c:forEach var="post" items="${latestPosts}">
-                        <li class="main__left-posts-items main__left-posts-items--vertical">
-                            <img src="${post.imageLink}" alt="${post.title}" class="main__left-posts-img" />
-                            <a href="PostDetailsController?postId=${post.postID}" class="main__left-posts-link">
-                                <span class="main__left-posts-title">${post.title}</span>
+            <!-- Main Left Promotional Products : Sản phẩm khuyến mãi -->
+            <!-- Một số sản phẩm khuyến mãi - Hiển thị dưới Danh mục sản phẩm -->
+            <h2 class="main__left-title main__left-margin-top">SẢN PHẨM KHUYẾN MÃI</h2>
+            <ul class="main__left-product-list">
+                <c:forEach var="product" items="${promotedProducts}" varStatus="status">
+                    <c:if test="${status.index < 5}">  <%-- Chỉ hiển thị 5 sản phẩm đầu tiên --%>
+                        <li class="main__left-product-items main__left-product-items--vertical">
+                            <a href="/Project-SWP391-G2-SP25/ProductDetailController?id=${product.productID}" class="main__left-product-link">
+                                <img src="${product.imageLink}" alt="${product.productName}" class="main__left-product-img" />
+                                <span class="main__left-product-title">${product.productName}</span>
                             </a>
+                            <br />
+                            <span class="main__left-product"><del>
+                                    <fmt:formatNumber value="${product.oldprice}" type="number" groupingUsed="true"/>đ
+                                </del></span>
+                            <span class="main__right-sensor-price">
+                                <strong><fmt:formatNumber value="${product.price}" type="number" groupingUsed="true"/>đ</strong>
+                            </span>
                         </li>
-                    </c:forEach>
-                </ul>
+                    </c:if>
+                </c:forEach>
+            </ul>
 
-            </div>
+            <!-- Main Left New products : Sản phẩm mới -->
+            <!-- Một số sản phẩm mới của cửa hàng - Hiển thị dưới Sản phẩm khuyến mãi -->
+            <h2 class="main__left-title main__left-margin-top">SẢN PHẨM MỚI</h2>
+            <ul class="main__left-product-list">
+                <c:forEach var="product" items="${newProducts}" varStatus="status">
+                    <c:if test="${status.index < 5}">
+                        <li class="main__left-product-items main__left-product-items--vertical">
+                            <a href="/Project-SWP391-G2-SP25/ProductDetailController?id=${product.productID}" class="main__left-product-link">
+                                <img src="${product.imageLink}" alt="${product.productName}" class="main__left-product-img" />
+                                <span class="main__left-product-title">${product.productName}</span>
+                            </a>
+                            <br />
+                            <span class="main__right-sensor-price">
+                                <strong><fmt:formatNumber value="${product.price}" type="number" groupingUsed="true"/>đ</strong>
+                            </span>
+                        </li>
+                    </c:if>
+                </c:forEach>
+            </ul>
+
+            <!-- Main Left Post -->
+            <!-- Các bài báo mới - Hiển thị dưới Sản phẩm mới -->
+            <h2 class="main__left-title main__left-margin-top">BÀI VIẾT MỚI</h2>
+            <ul class="main__left-posts-list">
+                <c:forEach var="post" items="${latestPosts}">
+                    <li class="main__left-posts-items main__left-posts-items--vertical">
+                        <img src="${post.imageLink}" alt="${post.title}" class="main__left-posts-img" />
+                        <a href="PostDetailsController?postId=${post.postID}" class="main__left-posts-link">
+                            <span class="main__left-posts-title">${post.title}</span>
+                        </a>
+                    </li>
+                </c:forEach>
+            </ul>
+
+        </div>
 
 
         <div class="main__right">
@@ -172,19 +171,19 @@ Author     : Tung Duong
                         <div class="col-md-5 col-md-push-2">
                             <div id="product-main-img">
                                 <div class="product-preview">
-                                    <img src="<%= p.getImageLink() %>" alt="">
+                                    <img src="<%= p.getImageLink()%>" alt="">
                                 </div>
 
                                 <div class="product-preview">
-                                    <img src="<%= p.getImageLink() %>" alt="">
+                                    <img src="<%= p.getImageLink()%>" alt="">
                                 </div>
 
                                 <div class="product-preview">
-                                    <img src="<%= p.getImageLink() %>" alt="">
+                                    <img src="<%= p.getImageLink()%>" alt="">
                                 </div>
 
                                 <div class="product-preview">
-                                    <img src="<%= p.getImageLink() %>" alt="">
+                                    <img src="<%= p.getImageLink()%>" alt="">
                                 </div>
                             </div>
                         </div>
@@ -194,19 +193,19 @@ Author     : Tung Duong
                         <div class="col-md-2  col-md-pull-5">
                             <div id="product-imgs">
                                 <div class="product-preview">
-                                    <img src="<%= p.getImageLink() %>" alt="">
+                                    <img src="<%= p.getImageLink()%>" alt="">
                                 </div>
 
                                 <div class="product-preview">
-                                    <img src="<%= p.getImageLink() %>" alt="">
+                                    <img src="<%= p.getImageLink()%>" alt="">
                                 </div>
 
                                 <div class="product-preview">
-                                    <img src="<%= p.getImageLink() %>" alt="">
+                                    <img src="<%= p.getImageLink()%>" alt="">
                                 </div>
 
                                 <div class="product-preview">
-                                    <img src="<%= p.getImageLink() %>" alt="">
+                                    <img src="<%= p.getImageLink()%>" alt="">
                                 </div>
                             </div>
                         </div>
@@ -216,10 +215,10 @@ Author     : Tung Duong
                         <div class="col-md-5">
                             <div class="product-details">
                                 <div class="switch-container">
-                                    <input type="hidden" id="product-id" value="<%= p.getProductID() %>">
-                                    <input type="hidden" id="product-img" value="<%= p.getImageLink() %>">
-                                    <input type="hidden" id="product-pro" value="<%= p.getIsPromoted() %>">
-                                    <h2 id="product-name"><%= p.getProductName() %></h2>
+                                    <input type="hidden" id="product-id" value="<%= p.getProductID()%>">
+                                    <input type="hidden" id="product-img" value="<%= p.getImageLink()%>">
+                                    <input type="hidden" id="product-pro" value="<%= p.getIsPromoted()%>">
+                                    <h2 id="product-name"><%= p.getProductName()%></h2>
                                 </div>
                                 <%
                                     double rate = 0;
@@ -233,38 +232,38 @@ Author     : Tung Duong
                                         <i class="fa fa-star-o"></i>
                                         <i class="fa fa-star-o"></i>
                                     </div>
-                                    <a class="review-link" href="#">0 Review(s) | Add your review</a>
+                                    <a class="review-link" href="#">0 Đánh giá | Thêm đánh giá</a>
                                 </div>
                                 <%
-                                                            } else {%>
+                                } else {%>
                                 <div>
                                     <div class="product-rating">
                                         <%
-                                                for (int id : listr.keySet()) {
-                                                    Reviews r = listr.get(id);
-                                                    if (r != null) { // Kiểm tra r có tồn tại không
-                                                        rate += r.getRating();
-                                                    }
+                                            for (int id : listr.keySet()) {
+                                                Reviews r = listr.get(id);
+                                                if (r != null) { // Kiểm tra r có tồn tại không
+                                                    rate += r.getRating();
                                                 }
-                                                rate = listr.size() > 0 ? rate / listr.size() : 0; // Tránh chia cho 0
-                                                for (int i = 0; i < rate; i++) {
+                                            }
+                                            rate = listr.size() > 0 ? rate / listr.size() : 0; // Tránh chia cho 0
+                                            for (int i = 0; i < rate; i++) {
                                         %>
                                         <i class="fa fa-star"></i>
                                         <%}
-                                        for (int i = 0; i < 5-rate; i++) {
+                                            for (int i = 0; i < 5 - rate; i++) {
                                         %>
                                         <i class="fa fa-star-o"></i>
                                         <%}%>
                                     </div>
-                                    <a class="review-link" href="#"><%= (listr != null) ? listr.size() : 0 %> Review(s) | Add your review</a>
+                                    <a class="review-link" href="#"><%= (listr != null) ? listr.size() : 0%> Review(s) | Add your review</a>
                                 </div>
                                 <%}%>
                                 <div>
-                                    <h3 class="product-price"><%= p.getPriceFormat() %></h3><del class="product-old-price"> <%= p.getOldPriceFormat()%></del>
+                                    <h3 class="product-price"><%= p.getPriceFormat()%></h3><del class="product-old-price"> <%= p.getOldPriceFormat()%></del>
 
                                     <span class="product-available">Còn Hàng</span>
                                 </div>
-                                <p id="Description"><%= p.getDescription() %></p>
+                                <p id="Description"><%= p.getDescription()%></p>
 
                                 <div class="add-to-cart">
                                     <div class="qty-label">
@@ -276,8 +275,8 @@ Author     : Tung Duong
                                         </div>
                                     </div>
                                     <button class="add-to-cart-btn" id="add-to-cart-btn">
-                                    <i class="fa fa-shopping-cart"></i> Add to cart
-                                </button>
+                                        <i class="fa fa-shopping-cart"></i> Add to cart
+                                    </button>
                                 </div>
 
                                 <ul class="product-btns">
@@ -286,19 +285,19 @@ Author     : Tung Duong
 
                                 <ul class="product-links">
                                     <li>Danh mục:</li>
-                                    <li><a href="#" id="Category"><%= pDAO.GetCategorybyID(p.getCategoryID()).getCategoryName() %></a></li>
+                                    <li><a href="#" id="Category"><%= pDAO.GetCategorybyID(p.getCategoryID()).getCategoryName()%></a></li>
                                 </ul>
                                 <ul class="product-links">
                                     <li>Số lượng tồn kho:</li>
-                                    <li><a href="#" id="Amount"><%= p.getAmount() %></a></li>
+                                    <li><a href="#" id="Amount"><%= p.getAmount()%></a></li>
                                 </ul>
                                 <ul class="product-links">
                                     <li>Thời gian bảo hành:</li>
-                                    <li><a href="#" id="WarrantyPeriod"><%= p.getWarrantyPeriod() %></a></li>
+                                    <li><a href="#" id="WarrantyPeriod"><%= p.getWarrantyPeriod()%></a></li>
                                 </ul>
                                 <ul class="product-links">
                                     <li>Nhà cung cấp:</li>
-                                    <li><a href="#" id="Provider"><%= p.getProvider() %></a></li>
+                                    <li><a href="#" id="Provider"><%= p.getProvider()%></a></li>
                                 </ul>
                                 <button id="save-button" style="display:none;">Lưu</button>
 
@@ -319,9 +318,9 @@ Author     : Tung Duong
                             <div id="product-tab">
                                 <!-- product tab nav -->
                                 <ul class="tab-nav">
-                                    <li class="active"><a data-toggle="tab" href="#tab1">Description</a></li>
-                                    <li><a data-toggle="tab" href="#tab2">Details</a></li>
-                                    <li><a data-toggle="tab" href="#tab3">Reviews (<%=listr.size()%>)</a></li>
+                                    <li class="active"><a data-toggle="tab" href="#tab1">Mô tả</a></li>
+                                    <li><a data-toggle="tab" href="#tab2">Chi Tiết</a></li>
+                                    <li><a data-toggle="tab" href="#tab3">Đánh Giá  (<%=listr.size()%>)</a></li>
                                 </ul>
                                 <!-- /product tab nav -->
 
@@ -331,7 +330,7 @@ Author     : Tung Duong
                                     <div id="tab1" class="tab-pane fade in active">
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <p><%= p.getDescription() %></p>
+                                                <p><%= p.getDescription()%></p>
                                             </div>
                                         </div>
                                     </div>
@@ -353,12 +352,12 @@ Author     : Tung Duong
                                         <div class="row">
                                             <!-- Rating -->
                                             <%
-                                            if (listr == null || listr.size() == 0) {
+                                                if (listr == null || listr.size() == 0) {
                                             %>
                                             <div class="col-md-9">
                                                 <p>Sản phậm hiện chưa có đánh giá. Hãy là người đầu tiên để lại đánh giá của sản phẩm này</p>
                                             </div>
-                                            <%}else{%>
+                                            <%} else {%>
                                             <div class="col-md-3">
                                                 <div id="rating">
                                                     <div class="rating-avg">
@@ -368,7 +367,7 @@ Author     : Tung Duong
                                                             %>
                                                             <i class="fa fa-star"></i>
                                                             <%}
-                                                            for (int i = 0; i < 5-rate; i++) {
+                                                                for (int i = 0; i < 5 - rate; i++) {
                                                             %>
                                                             <i class="fa fa-star-o"></i>
                                                             <%}%>
@@ -383,27 +382,27 @@ Author     : Tung Duong
                                                             int count1 = 0;
                                                             for (int id : listr.keySet()) {
                                                                 Reviews r = listr.get(id);
-                                                                if(r.getRating()==5){
-                                                                count5++;
+                                                                if (r.getRating() == 5) {
+                                                                    count5++;
                                                                 }
-                                                                if(r.getRating()==4){
-                                                                count4++;
+                                                                if (r.getRating() == 4) {
+                                                                    count4++;
                                                                 }
-                                                                if(r.getRating()==3){
-                                                                count3++;
+                                                                if (r.getRating() == 3) {
+                                                                    count3++;
                                                                 }
-                                                                if(r.getRating()==2){
-                                                                count2++;
+                                                                if (r.getRating() == 2) {
+                                                                    count2++;
                                                                 }
-                                                                if(r.getRating()==1){
-                                                                count1++;
+                                                                if (r.getRating() == 1) {
+                                                                    count1++;
                                                                 }
                                                             }
-                                                            int rate5 = count5/listr.size()*100;
-                                                            int rate4 = count4/listr.size()*100;
-                                                            int rate3 = count3/listr.size()*100;
-                                                            int rate2 = count2/listr.size()*100;
-                                                            int rate1 = count1/listr.size()*100;
+                                                            int rate5 = count5 / listr.size() * 100;
+                                                            int rate4 = count4 / listr.size() * 100;
+                                                            int rate3 = count3 / listr.size() * 100;
+                                                            int rate2 = count2 / listr.size() * 100;
+                                                            int rate1 = count1 / listr.size() * 100;
                                                         %>
                                                         <li>
                                                             <div class="rating-stars">
@@ -479,40 +478,40 @@ Author     : Tung Duong
                                             <div class="col-md-6">
                                                 <div id="reviews">
                                                     <ul class="reviews">
-                                                        <% 
+                                                        <%
                                                             int reviewsPerPage = 4;
                                                             int totalReviews = (listr != null) ? listr.size() : 0;
                                                             int totalPages = (totalReviews > 0) ? (int) Math.ceil((double) totalReviews / reviewsPerPage) : 0;
-                
+
                                                             // Lấy số trang từ request, mặc định là trang 1
                                                             String pageParam = request.getParameter("page");
                                                             int currentPage = (pageParam != null) ? Integer.parseInt(pageParam) : 1;
-                
+
                                                             // Tính toán vị trí bắt đầu và kết thúc
                                                             int startIndex = (currentPage - 1) * reviewsPerPage;
                                                             int endIndex = Math.min(startIndex + reviewsPerPage, totalReviews);
-                
+
                                                             // Chuyển danh sách từ Map sang List để dễ phân trang
                                                             List<Reviews> reviewList = new ArrayList<>(listr.values());
-                
+
                                                             for (int i = startIndex; i < endIndex; i++) {
                                                                 Reviews r = reviewList.get(i);
                                                         %>
                                                         <li>
                                                             <div class="review-heading">
-                                                                <h5 class="name"><%= uDAO.getUserByID(r.getCustomerID()).getFirstName() %></h5>
-                                                                <p class="date"><%= r.getReviewDate() %></p>
+                                                                <h5 class="name"><%= uDAO.getUserByID(r.getCustomerID()).getFirstName()%></h5>
+                                                                <p class="date"><%= r.getReviewDate()%></p>
                                                                 <div class="review-rating">
                                                                     <% for (int j = 0; j < r.getRating(); j++) { %>
                                                                     <i class="fa fa-star"></i>
                                                                     <% } %>
                                                                     <% for (int j = 0; j < 5 - r.getRating(); j++) { %>
                                                                     <i class="fa fa-star-o"></i>
-                                                                    <% } %>
+                                                                    <% }%>
                                                                 </div>
                                                             </div>
                                                             <div class="review-body">
-                                                                <p><%= r.getComment() %></p>
+                                                                <p><%= r.getComment()%></p>
                                                             </div>
                                                         </li>
                                                         <% } %>
@@ -520,16 +519,16 @@ Author     : Tung Duong
 
                                                     <!-- Pagination -->
                                                     <ul class="reviews-pagination">
-                                                        <% if (currentPage > 1) { %>
-                                                        <li><a href="?page=<%= currentPage - 1 %>"><i class="fa fa-angle-left"></i></a></li>
+                                                        <% if (currentPage > 1) {%>
+                                                        <li><a href="?page=<%= currentPage - 1%>"><i class="fa fa-angle-left"></i></a></li>
                                                                 <% } %>
 
-                                                        <% for (int i = 1; i <= totalPages; i++) { %>
-                                                        <li class="<%= (i == currentPage) ? "active" : "" %>"><a href="?page=<%= i %>"><%= i %></a></li>
+                                                        <% for (int i = 1; i <= totalPages; i++) {%>
+                                                        <li class="<%= (i == currentPage) ? "active" : ""%>"><a href="?page=<%= i%>"><%= i%></a></li>
                                                             <% } %>
 
-                                                        <% if (currentPage < totalPages) { %>
-                                                        <li><a href="?page=<%= currentPage + 1 %>"><i class="fa fa-angle-right"></i></a></li>
+                                                        <% if (currentPage < totalPages) {%>
+                                                        <li><a href="?page=<%= currentPage + 1%>"><i class="fa fa-angle-right"></i></a></li>
                                                                 <% } %>
                                                     </ul>
                                                 </div>
@@ -573,148 +572,7 @@ Author     : Tung Duong
             </div>
             <!-- /SECTION -->
 
-            <!-- Section -->
-            <div class="section">
-                <!-- container -->
-                <div class="container">
-                    <!-- row -->
-                    <div class="row">
-
-                        <div class="col-md-12">
-                            <div class="section-title text-center">
-                                <h3 class="title">Related Products</h3>
-                            </div>
-                        </div>
-
-                        <!-- product -->
-                        <div class="col-md-3 col-xs-6">
-                            <div class="product">
-                                <div class="product-img">
-                                    <img src="./img/product01.png" alt="">
-                                    <div class="product-label">
-                                        <span class="sale">-30%</span>
-                                    </div>
-                                </div>
-                                <div class="product-body">
-                                    <p class="product-category">Category</p>
-                                    <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                    <h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-                                    <div class="product-rating">
-                                    </div>
-                                    <div class="product-btns">
-                                        <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
-                                        <button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
-                                        <button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
-                                    </div>
-                                </div>
-                                <div class="add-to-cart">
-                                    <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /product -->
-
-                        <!-- product -->
-                        <div class="col-md-3 col-xs-6">
-                            <div class="product">
-                                <div class="product-img">
-                                    <img src="./img/product02.png" alt="">
-                                    <div class="product-label">
-                                        <span class="new">NEW</span>
-                                    </div>
-                                </div>
-                                <div class="product-body">
-                                    <p class="product-category">Category</p>
-                                    <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                    <h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-                                    <div class="product-rating">
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                    </div>
-                                    <div class="product-btns">
-                                        <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
-                                        <button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
-                                        <button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
-                                    </div>
-                                </div>
-                                <div class="add-to-cart">
-                                    <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /product -->
-
-                        <div class="clearfix visible-sm visible-xs"></div>
-
-                        <!-- product -->
-                        <div class="col-md-3 col-xs-6">
-                            <div class="product">
-                                <div class="product-img">
-                                    <img src="./img/product03.png" alt="">
-                                </div>
-                                <div class="product-body">
-                                    <p class="product-category">Category</p>
-                                    <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                    <h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-                                    <div class="product-rating">
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                        <i class="fa fa-star-o"></i>
-                                    </div>
-                                    <div class="product-btns">
-                                        <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
-                                        <button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
-                                        <button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
-                                    </div>
-                                </div>
-                                <div class="add-to-cart">
-                                    <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /product -->
-
-                        <!-- product -->
-                        <div class="col-md-3 col-xs-6">
-                            <div class="product">
-                                <div class="product-img">
-                                    <img src="./img/product04.png" alt="">
-                                </div>
-                                <div class="product-body">
-                                    <p class="product-category">Category</p>
-                                    <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                    <h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
-                                    <div class="product-rating">
-                                    </div>
-                                    <div class="product-btns">
-                                        <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
-                                        <button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
-                                        <button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
-                                    </div>
-                                </div>
-                                <div class="add-to-cart">
-                                    <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /product -->
-
-                    </div>
-                    <!-- /row -->
-                </div>
-                <!-- /container -->
-            </div>
-            <!-- /Section -->
-
         </div>
-
-
-
         <%@ include file="./Public/footer.jsp" %>
 
         <!-- jQuery Plugins -->
@@ -727,40 +585,40 @@ Author     : Tung Duong
 
     </body>
     <script>
-       document.getElementById('add-to-cart-btn').addEventListener('click', function () {
-    // Lấy productId và số lượng
-    const productId = document.getElementById('product-id').value;
-    const quantity = document.getElementById('quantity-input').value;
+        document.getElementById('add-to-cart-btn').addEventListener('click', function () {
+            // Lấy productId và số lượng
+            const productId = document.getElementById('product-id').value;
+            const quantity = document.getElementById('quantity-input').value;
 
-    // Kiểm tra số lượng hợp lệ
-    if (quantity < 1) {
-        alert('Số lượng phải lớn hơn 0');
-        return;
-    }
-
-    // Gửi dữ liệu lên server bằng AJAX
-    $.ajax({
-        url: '<%=request.getContextPath()%>/add-to-cart',
-        method: 'POST',
-        data: {
-            productId: productId,
-            quantity: quantity
-        },
-        success: function (data) {
-            if (data.success) {
-                alert('Đã thêm sản phẩm vào giỏ hàng!');
-            } else {
-                alert('Lỗi: ' + data.error);
+            // Kiểm tra số lượng hợp lệ
+            if (quantity < 1) {
+                alert('Số lượng phải lớn hơn 0');
+                return;
             }
-        },
-        error: function (xhr, status, error) {
-            console.error('AJAX Error:', error);
-            alert('Có lỗi xảy ra khi thêm vào giỏ hàng');
-        }
-    });
-}); 
+
+            // Gửi dữ liệu lên server bằng AJAX
+            $.ajax({
+                url: '<%=request.getContextPath()%>/add-to-cart',
+                method: 'POST',
+                data: {
+                    productId: productId,
+                    quantity: quantity
+                },
+                success: function (data) {
+                    if (data.success) {
+                        alert('Đã thêm sản phẩm vào giỏ hàng!');
+                    } else {
+                        alert('Lỗi: ' + data.error);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('AJAX Error:', error);
+                    alert('Có lỗi xảy ra khi thêm vào giỏ hàng');
+                }
+            });
+        });
     </script>
-    
+
     <script>
         document.getElementById('save-button').addEventListener('click', function () {
             var newProductId = document.getElementById('product-id').value;
@@ -868,7 +726,7 @@ Author     : Tung Duong
                 descriptionInput.id = 'product-description-input';
                 productDescriptionElement.parentNode.replaceChild(descriptionInput, productDescriptionElement);
 
-                window.categories = <%= categoriesJson %>;
+                window.categories = <%= categoriesJson%>;
                 // Chuyển đổi Danh mục
                 const categorySelect = document.createElement('select');
                 categorySelect.className = 'edit-mode-input';

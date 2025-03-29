@@ -130,18 +130,18 @@
         </form>
 
         <main class="orders-container">
-            <h2 class="orders-title">My Orders</h2>
+            <h2 class="orders-title">Đơn hàng của tôi</h2>
 
             <!-- Orders Table -->
             <table class="orders-table">
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>Ordered Date</th>
-                        <th>Delivery Address</th>
-                        <th>Total Cost</th>
-                        <th>Status</th>
-                        <th>Actions</th>
+                        <th>Ngày mua hàng</th>
+                        <th>Địa chỉ giao hàng</th>
+                        <th>Tổng chi phí</th>
+                        <th>Trạng thái</th>
+                        <th>Hành động</th>
                     </tr>
                 </thead>
                 <tbody>
