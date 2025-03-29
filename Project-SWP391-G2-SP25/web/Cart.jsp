@@ -219,7 +219,7 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
                                                         $(document).ready(function () {
-                                                            $('#checkoutButton').on('click', function () {
+                                                            $('#checkoutButton').on('click', function (e) { // Thêm tham số 'e' để xử lý event
                                                                 var selectedItems = []; // Mảng để lưu các sản phẩm đã chọn
 
                                                                 // Lặp qua các sản phẩm đã chọn
@@ -244,6 +244,8 @@
                                                                     $('#checkoutForm').submit();
                                                                 } else {
                                                                     alert('Vui lòng chọn ít nhất một sản phẩm.');
+                                                                    e.preventDefault(); // Ngăn không cho form submit
+                                                                    return false; // Dừng thực thi tiếp
                                                                 }
                                                             });
                                                         });
