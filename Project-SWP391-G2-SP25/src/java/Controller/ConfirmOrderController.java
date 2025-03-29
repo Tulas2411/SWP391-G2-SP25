@@ -118,7 +118,7 @@ public class ConfirmOrderController extends HttpServlet {
             } else {
                 comment = "No comment provided"; // Giá trị mặc định nếu trường không tồn tại
             }
-            if(paymentMethod.equalsIgnoreCase("VNpay")){
+            if (paymentMethod.equalsIgnoreCase("VNpay")) {
                 comment += " Đơn Hàng đã được thanh toán";
             }
             System.out.println(paymentMethod);
@@ -129,7 +129,7 @@ public class ConfirmOrderController extends HttpServlet {
             String gender = orderData.get("gender").getAsString();
             String address = orderData.get("address").getAsString();
             JsonArray productsArray = orderData.get("products").getAsJsonArray();
-            
+            session.setAttribute("productsArray", productsArray);
             // Xử lý danh sách sản phẩm
             for (int i = 0; i < productsArray.size(); i++) {
                 JsonObject product = productsArray.get(i).getAsJsonObject();
@@ -140,38 +140,40 @@ public class ConfirmOrderController extends HttpServlet {
                 total += price;
             }
 
-                // Cập nhật thông tin người dùng
-                user.setFirstName(firstname);
-                user.setLastName(lastname);
-                user.setEmail(email);
-                user.setPhoneNumber(phone);
-                user.setGender(gender);
-                user.setAddress(address);
-                uDAO.updateUser(user);
+            // Cập nhật thông tin người dùng
+            user.setFirstName(firstname);
+            user.setLastName(lastname);
+            user.setEmail(email);
+            user.setPhoneNumber(phone);
+            user.setGender(gender);
+            user.setAddress(address);
+            uDAO.updateUser(user);
 
-                // Thêm đơn hàng mới
-                boolean isOrderAdded = oDAO.addOrder(new Orders(user.getUserID(), null, user.getAddress(), "Submitted", total, comment));
-                if (!isOrderAdded) {
-                    throw new Exception("Failed to add order.");
+            // Thêm đơn hàng mới
+            boolean isOrderAdded = oDAO.addOrder(new Orders(user.getUserID(), null, user.getAddress(), "Submitted", total, comment));
+            if (!isOrderAdded) {
+                throw new Exception("Failed to add order.");
+            }
+
+            // Thêm chi tiết đơn hàng
+            Orders latestOrder = oDAO.getLatestOrder();
+            if (latestOrder == null) {
+                throw new Exception("Failed to retrieve the latest order.");
+            }
+
+            for (int i = 0; i < productsArray.size(); i++) {
+                JsonObject product = productsArray.get(i).getAsJsonObject();
+                int cartitid = product.get("productId").getAsInt();
+                int quantity = product.get("quantity").getAsInt();
+                double price = pDAO.getProductByID(ciDAO.getCartItemByID(cartitid).getProductID()).getPrice() * quantity;
+                boolean isDetailAdded = odDAO.addOrderDetail(new OrderDetails(latestOrder.getOrderID(), ciDAO.getCartItemByID(cartitid).getProductID(), quantity, price));
+                if (!isDetailAdded) {
+                    throw new Exception("Failed to add order details.");
                 }
-
-                // Thêm chi tiết đơn hàng
-                Orders latestOrder = oDAO.getLatestOrder();
-                if (latestOrder == null) {
-                    throw new Exception("Failed to retrieve the latest order.");
-                }
-
-                for (int i = 0; i < productsArray.size(); i++) {
-                    JsonObject product = productsArray.get(i).getAsJsonObject();
-                    int cartitid = product.get("productId").getAsInt();
-                    int quantity = product.get("quantity").getAsInt();
-                    double price = pDAO.getProductByID(ciDAO.getCartItemByID(cartitid).getProductID()).getPrice() * quantity;
-                    boolean isDetailAdded = odDAO.addOrderDetail(new OrderDetails(latestOrder.getOrderID(), ciDAO.getCartItemByID(cartitid).getProductID(), quantity, price));
-                    if (!isDetailAdded) {
-                        throw new Exception("Failed to add order details.");
-                    }
+                if (!paymentMethod.equalsIgnoreCase("VNpay")) {
                     ciDAO.removeCartItem(cartitid);
                 }
+            }
             session.setAttribute("order", latestOrder);
             // Trả về JSON hợp lệ
             response.setContentType("application/json");

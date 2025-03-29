@@ -768,7 +768,7 @@ public class OrdersDAO extends DBContext {
 
     public static void main(String[] args) {
         OrdersDAO oDAO = new OrdersDAO();
-        Orders o = new Orders(21, null, "Hanoi", "Submitted", 20000, "Hello");
+        Orders o = new Orders(15, null, "Hanoi", "Submitted", 20000, "Hello");
         System.out.println(oDAO.addOrder(o));
     }
 }

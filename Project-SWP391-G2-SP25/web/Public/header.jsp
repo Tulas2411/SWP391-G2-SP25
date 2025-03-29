@@ -31,6 +31,16 @@
             <!-- Tạo tài khoản, chính sách bảo mât và đăng nhập -->
             <div class="header__introduce-account">
                 <ul class="header__introduce-account-list">
+                    <%
+                        Users user = (Users) session.getAttribute("user");
+                        if(user !=null){
+                            if(!user.getRole().equalsIgnoreCase("Customer")){
+                        
+                    %>
+                    <li class="header__introduce-account-items">
+                        <a href="/Project-SWP391-G2-SP25/DashBoard" class="header__introduce-account-link"> Dashboard</a>
+                    </li>
+                    <%}}%>
                     <li class="header__introduce-account-items">
                         <a href="UserProfile.jsp" class="header__introduce-account-link"> Tài khoản</a>
                     </li>
@@ -42,7 +52,7 @@
                         <%
                     // Lấy thông tin username từ session
                     String username = (String) session.getAttribute("username");
-                    Users user = (Users) session.getAttribute("user");
+                    
                     if (username != null) {
                         // Nếu người dùng đã đăng nhập, hiển thị Hello, [Username] và nút Đăng xuất
                         out.println("Hello, " + username + "!");

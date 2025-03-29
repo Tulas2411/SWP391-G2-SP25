@@ -73,6 +73,7 @@ public class CartCompletionController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String transResult = request.getParameter("transResult"); // Lấy giá trị từ URL
         RequestDispatcher dispatcher = null;
         String email = null;
         HttpSession session = request.getSession();
@@ -84,68 +85,73 @@ public class CartCompletionController extends HttpServlet {
         Random rand = new Random();
         Users user = new Users();
         
-        if(session.getAttribute("user")!=null){
-            user = (Users) session.getAttribute("user");
-            email = user.getEmail();
-        }else{
-            Guest guest = (Guest) session.getAttribute("guest");
-            user.setEmail(email);
-            user.setFirstName(guest.getFirstName());
-            user.setLastName(guest.getLastName());
-            user.setAddress(guest.getAddress());
-            email = guest.getEmail();
-        }
-        // Thiết lập thông số email
-        String to = email;
-        Properties props = new Properties();
-        props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.socketFactory.port", "465");
-        props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.port", "465");
-        Session sessions = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("luuthequangbkvip@gmail.com", "oouvorqzkguxbmez"); // Đặt email và mật khẩu của bạn
+            if (session.getAttribute("user") != null) {
+                user = (Users) session.getAttribute("user");
+                email = user.getEmail();
+            } else {
+                Guest guest = (Guest) session.getAttribute("guest");
+                user.setEmail(email);
+                user.setFirstName(guest.getFirstName());
+                user.setLastName(guest.getLastName());
+                user.setAddress(guest.getAddress());
+                email = guest.getEmail();
             }
-        });
+            // Thiết lập thông số email
+            String to = email;
+            Properties props = new Properties();
+            props.put("mail.smtp.host", "smtp.gmail.com");
+            props.put("mail.smtp.socketFactory.port", "465");
+            props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+            props.put("mail.smtp.auth", "true");
+            props.put("mail.smtp.port", "465");
+            Session sessions = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication("luuthequangbkvip@gmail.com", "oouvorqzkguxbmez"); // Đặt email và mật khẩu của bạn
+                }
+            });
 
-        try {
-            MimeMessage message = new MimeMessage(sessions);
-            message.setFrom(new InternetAddress(email)); // Đặt lại email gửi
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
-            message.setSubject("Shop 4 Electrical");
-            // Tạo nội dung email
-            String emailContent = "<html><body>"
-                    + "<p>Kính gửi " + user.getFirstName()+ " " + user.getLastName()+ ",</p>"
-                    + "<p>Cảm ơn bạn đã đặt hàng tại <strong>Shop 4 Electrical</strong>. Dưới đây là thông tin chi tiết về đơn hàng của bạn:</p>"
-                    + "<p><strong>Mã đơn hàng:</strong> " + o.getOrderID()+ "</p>"
-                    + "<p><strong>Ngày đặt hàng:</strong> " + o.getOrderDate() + "</p>"
-                    + "<p><strong>Tổng thanh toán:</strong> " + getPriceFormat(o.getTotalAmount()) + " VND</p>"
-                    + "<p><strong>Chi tiết đơn hàng:</strong></p>"
-                    + "<ul>";
+            try {
+                if (!transResult.equalsIgnoreCase("false")) {
+                MimeMessage message = new MimeMessage(sessions);
+                message.setFrom(new InternetAddress(email)); // Đặt lại email gửi
+                message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+                message.setSubject("Shop 4 Electrical");
+                // Tạo nội dung email
+                String emailContent = "<html><body>"
+                        + "<p>Kính gửi " + user.getFirstName() + " " + user.getLastName() + ",</p>"
+                        + "<p>Cảm ơn bạn đã đặt hàng tại <strong>Shop 4 Electrical</strong>. Dưới đây là thông tin chi tiết về đơn hàng của bạn:</p>"
+                        + "<p><strong>Mã đơn hàng:</strong> " + o.getOrderID() + "</p>"
+                        + "<p><strong>Ngày đặt hàng:</strong> " + o.getOrderDate() + "</p>"
+                        + "<p><strong>Tổng thanh toán:</strong> " + getPriceFormat(o.getTotalAmount()) + " VND</p>"
+                        + "<p><strong>Chi tiết đơn hàng:</strong></p>"
+                        + "<ul>";
 
-            Map<Integer, OrderDetails> list = odDAO.getOrderDetailsByOrderIDasMap(o.getOrderID());
+                Map<Integer, OrderDetails> list = odDAO.getOrderDetailsByOrderIDasMap(o.getOrderID());
                 for (int id : list.keySet()) {
                     OrderDetails oi = odDAO.getOrderDetailByID(id);
                     emailContent += "- " + pDAO.GetProductbyID(oi.getProductID()).getProductName() + " x " + oi.getQuantity() + " = " + getPriceFormat(oi.getPrice()) + " VND\n";
                 }
 
-            emailContent += "</ul>"
-                    + "<p><strong>Địa chỉ giao hàng:</strong></p>"
-                    + "<p>" + user.getAddress() + "</p>"
-                    + "<p>Nếu bạn có bất kỳ thắc mắc nào, vui lòng liên hệ với chúng tôi qua email <strong>support@shop4electrical.com</strong> hoặc số điện thoại <strong>0123 456 789</strong>.</p>"
-                    + "<p>Trân trọng,</p>"
-                    + "<p><strong>Shop 4 Electrical</strong></p>"
-                    + "</body></html>";
+                emailContent += "</ul>"
+                        + "<p><strong>Địa chỉ giao hàng:</strong></p>"
+                        + "<p>" + user.getAddress() + "</p>"
+                        + "<p>Nếu bạn có bất kỳ thắc mắc nào, vui lòng liên hệ với chúng tôi qua email <strong>support@shop4electrical.com</strong> hoặc số điện thoại <strong>0123 456 789</strong>.</p>"
+                        + "<p>Trân trọng,</p>"
+                        + "<p><strong>Shop 4 Electrical</strong></p>"
+                        + "</body></html>";
 
-            // Thiết lập nội dung email với mã hóa UTF-8
-            message.setContent(emailContent, "text/html; charset=UTF-8");
-            Transport.send(message);
-            System.out.println("Message sent successfully");
-            request.getRequestDispatcher("CartCompletion.jsp").forward(request, response);
-        } catch (MessagingException e) {
-            throw new RuntimeException(e);
-        }
+                // Thiết lập nội dung email với mã hóa UTF-8
+                message.setContent(emailContent, "text/html; charset=UTF-8");
+                Transport.send(message);
+                System.out.println("Message sent successfully");
+                request.setAttribute("transResult", "true");
+                }
+                request.setAttribute("transResult", "false");
+                request.getRequestDispatcher("CartCompletion.jsp").forward(request, response);
+            } catch (MessagingException e) {
+                throw new RuntimeException(e);
+            }
+        
     }
 
     public String getPriceFormat(double price) {

@@ -18,6 +18,11 @@
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <link rel="stylesheet" href="assets/fonts/fontawesome-free-6.0.0-web/css/all.css" />
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+
+            body {
+                font-family: 'Roboto', sans-serif;
+            }
         .slider-form {
             display: flex;
             flex-direction: column;

@@ -86,96 +86,99 @@
     <body class="ecommerce">
         <%@ include file="./Public/header.jsp" %>
         <div class="main">
-            <div class="container">
-                <%
-                      // Định dạng tiền tệ Việt Nam
-                      NumberFormat vnCurrencyFormat = NumberFormat.getInstance(new Locale("vi", "VN"));
-                      vnCurrencyFormat.setMaximumFractionDigits(0); // Không hiển thị phần thập phân
-                %>
-                <!-- BEGIN SIDEBAR & CONTENT -->
-                <div class="row margin-bottom-40">
-                    <!-- BEGIN CONTENT -->
-                    <div class="col-md-12 col-sm-12">
-                        <h1>Giỏ hàng</h1>
-                        <ul class="breadcrumb">
-                            <li><a href="/Project-SWP391-G2-SP25/home">Trang chủ</a></li>
-                            <li class="active">Giỏ Hàng</li>
-                        </ul>
-                        <div class="goods-page">
-                            <div class="goods-data clearfix">
-                                <div class="table-wrapper-responsive">
-                                    <table summary="Shopping cart">
-                                        <tr>
-                                            <th class="goods-page-image">Chọn</th> <!-- Thêm cột checkbox -->
-                                            <th class="goods-page-image">Hình ảnh</th>
-                                            <th class="goods-page-description">Mô tả sản phẩm</th>
-                                            <th class="goods-page-quantity">Số lượng</th>
-                                            <th class="goods-page-price">Đơn giá</th>
-                                            <th class="goods-page-total" colspan="2">Thành giá</th>
-                                        </tr>
-                                        <%
-                                            Map<Integer, CartItems> list = (Map<Integer, CartItems>) request.getAttribute("list");
-                                            Map<Integer, Integer> cart = (Map<Integer, Integer>) session.getAttribute("cart");
-                                            ProductsDAO pDAO = new ProductsDAO();
-                                              for (int id : list.keySet()) {
-                                                  CartItems ci = list.get(id);
-                                                  Products p = pDAO.getProductByID(ci.getProductID());
-                                        %>     
-                                        <tr>
-                                            <td class="goods-page-image">
-                                                <input type="checkbox" name="selectedItems" value="<%=ci.getCartItemID()%>" checked />
-                                            </td>
-                                            <td class="goods-page-image">
-                                                <a href="/Project-SWP391-G2-SP25/ProductDetailController?id=<%=p.getProductID()%>"><img src="<%=p.getImageLink()%>"></a>
-                                            </td>
-                                            <td class="goods-page-description">
-                                                <h3><a href="javascript:;">Cool green dress with red bell</a></h3>
-                                                <p><strong><%=p.getProductName()%></strong></p>
-                                                <em><%=p.getDescription()%></em>
-                                            </td>
-                                            <td class="goods-page-quantity">
-                                                <div class="product-quantity">
-                                                    <button class="btn btn-increase" data-cart-item-id="<%=ci.getCartItemID()%>">+</button>
-                                                    <input id="product-quantity-<%=ci.getCartItemID()%>" type="text" value="<%=ci.getQuantity()%>" class="form-control input-sm quantity-input" readonly>
-                                                    <input id="product-quantity1-<%=ci.getProductID()%>" value="<%=ci.getQuantity()%>" hidden>
-                                                    <button class="btn btn-decrease" data-cart-item-id="<%=ci.getCartItemID()%>">-</button>
-                                                </div>
-                                            </td>
-                                            <td class="goods-page-price">
-                                                <strong><span id="product-price-<%=ci.getCartItemID()%>"><%=p.getPriceFormat()%></span></strong>
-                                            </td>
-                                            <td class="goods-page-total">
-                                                <strong><span id="product-total-<%=ci.getCartItemID()%>"><%=p.getPrice() * ci.getQuantity()%></span></strong>
-                                            </td>
-                                            <td class="del-goods-col">
-                                                <a class="del-goods" onclick="doDelete('<%=ci.getCartItemID()%>')">&nbsp;</a>
-                                            </td>
-                                        </tr>
-                                        <%
-                                              }
-                                        %>
-                                    </table>
-                                </div>
+            <jsp:include page="getSidebarData" />
+            <div class="main__left">
+                <div class="container">
+                    <%
+                          // Định dạng tiền tệ Việt Nam
+                          NumberFormat vnCurrencyFormat = NumberFormat.getInstance(new Locale("vi", "VN"));
+                          vnCurrencyFormat.setMaximumFractionDigits(0); // Không hiển thị phần thập phân
+                    %>
+                    <!-- BEGIN SIDEBAR & CONTENT -->
+                    <div class="row margin-bottom-40">
+                        <!-- BEGIN CONTENT -->
+                        <div class="col-md-12 col-sm-12">
+                            <h1>Giỏ hàng</h1>
+                            <ul class="breadcrumb">
+                                <li><a href="/Project-SWP391-G2-SP25/home">Trang chủ</a></li>
+                                <li class="active">Giỏ Hàng</li>
+                            </ul>
+                            <div class="goods-page">
+                                <div class="goods-data clearfix">
+                                    <div class="table-wrapper-responsive">
+                                        <table summary="Shopping cart">
+                                            <tr>
+                                                <th class="goods-page-image">Chọn</th> <!-- Thêm cột checkbox -->
+                                                <th class="goods-page-image">Hình ảnh</th>
+                                                <th class="goods-page-description">Mô tả sản phẩm</th>
+                                                <th class="goods-page-quantity">Số lượng</th>
+                                                <th class="goods-page-price">Đơn giá</th>
+                                                <th class="goods-page-total" colspan="2">Thành giá</th>
+                                            </tr>
+                                            <%
+                                                Map<Integer, CartItems> list = (Map<Integer, CartItems>) request.getAttribute("list");
+                                                Map<Integer, Integer> cart = (Map<Integer, Integer>) session.getAttribute("cart");
+                                                ProductsDAO pDAO = new ProductsDAO();
+                                                  for (int id : list.keySet()) {
+                                                      CartItems ci = list.get(id);
+                                                      Products p = pDAO.getProductByID(ci.getProductID());
+                                            %>     
+                                            <tr>
+                                                <td class="goods-page-image">
+                                                    <input type="checkbox" name="selectedItems" value="<%=ci.getCartItemID()%>" checked />
+                                                </td>
+                                                <td class="goods-page-image">
+                                                    <a href="/Project-SWP391-G2-SP25/ProductDetailController?id=<%=p.getProductID()%>"><img src="<%=p.getImageLink()%>"></a>
+                                                </td>
+                                                <td class="goods-page-description">
+                                                    <h3><a href="javascript:;">Cool green dress with red bell</a></h3>
+                                                    <p><strong><%=p.getProductName()%></strong></p>
+                                                    <em><%=p.getDescription()%></em>
+                                                </td>
+                                                <td class="goods-page-quantity">
+                                                    <div class="product-quantity">
+                                                        <button class="btn btn-increase" data-cart-item-id="<%=ci.getCartItemID()%>">+</button>
+                                                        <input id="product-quantity-<%=ci.getCartItemID()%>" type="text" value="<%=ci.getQuantity()%>" class="form-control input-sm quantity-input" readonly>
+                                                        <input id="product-quantity1-<%=ci.getProductID()%>" value="<%=ci.getQuantity()%>" hidden>
+                                                        <button class="btn btn-decrease" data-cart-item-id="<%=ci.getCartItemID()%>">-</button>
+                                                    </div>
+                                                </td>
+                                                <td class="goods-page-price">
+                                                    <strong><span id="product-price-<%=ci.getCartItemID()%>"><%=p.getPriceFormat()%></span></strong>
+                                                </td>
+                                                <td class="goods-page-total">
+                                                    <strong><span id="product-total-<%=ci.getCartItemID()%>"><%=p.getPrice() * ci.getQuantity()%></span></strong>
+                                                </td>
+                                                <td class="del-goods-col">
+                                                    <a class="del-goods" onclick="doDelete('<%=ci.getCartItemID()%>')">&nbsp;</a>
+                                                </td>
+                                            </tr>
+                                            <%
+                                                  }
+                                            %>
+                                        </table>
+                                    </div>
 
-                                <div class="shopping-total">
-                                    <ul>
-                                        <li>
-                                            <em>Tổng giá trị</em>
-                                            <strong class="price"><span id="cart-total"></span></strong>
-                                        </li>
-                                    </ul>
+                                    <div class="shopping-total">
+                                        <ul>
+                                            <li>
+                                                <em>Tổng giá trị</em>
+                                                <strong class="price"><span id="cart-total"></span></strong>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
+                                <a href="/Project-SWP391-G2-SP25/home"><button class="btn btn-default" type="submit">Quay lại mua sắm <i class="fa fa-shopping-cart"></i></button></a>
+                                <form id="checkoutForm" action="CartContact" method="POST">
+                                    <input type="hidden" name="selectedItems" id="selectedItemsInput" />
+                                    <button class="btn btn-primary" id="checkoutButton">Đặt hàng <i class="fa fa-check"></i></button>
+                                </form>
                             </div>
-                            <a href="/Project-SWP391-G2-SP25/home"><button class="btn btn-default" type="submit">Quay lại mua sắm <i class="fa fa-shopping-cart"></i></button></a>
-                            <form id="checkoutForm" action="CartContact" method="POST">
-                                <input type="hidden" name="selectedItems" id="selectedItemsInput" />
-                                <button class="btn btn-primary" id="checkoutButton">Đặt hàng <i class="fa fa-check"></i></button>
-                            </form>
                         </div>
+                        <!-- END CONTENT -->
                     </div>
-                    <!-- END CONTENT -->
+                    <!-- END SIDEBAR & CONTENT -->
                 </div>
-                <!-- END SIDEBAR & CONTENT -->
             </div>
         </div>
         <%@ include file="./Public/footer.jsp" %>
@@ -203,47 +206,49 @@
 
         <script src="TulasCSS/assets/corporate/scripts/layout.js" type="text/javascript"></script>
         <script type="text/javascript">
-                                                    jQuery(document).ready(function () {
-                                                        Layout.init();
-                                                        Layout.initOWL();
-                                                        Layout.initTwitter();
-                                                        Layout.initImageZoom();
-                                                        Layout.initTouchspin();
-                                                        Layout.initUniform();
-                                                        Layout.initSliderRange();
-                                                    });
+                                                        jQuery(document).ready(function () {
+                                                            Layout.init();
+                                                            Layout.initOWL();
+                                                            Layout.initTwitter();
+                                                            Layout.initImageZoom();
+                                                            Layout.initTouchspin();
+                                                            Layout.initUniform();
+                                                            Layout.initSliderRange();
+                                                        });
         </script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
-                                                    $(document).ready(function () {
-                                                        $('#checkoutButton').on('click', function () {
-                                                            var selectedItems = []; // Mảng để lưu các sản phẩm đã chọn
+                                                        $(document).ready(function () {
+                                                            $('#checkoutButton').on('click', function (e) { // Thêm tham số 'e' để xử lý event
+                                                                var selectedItems = []; // Mảng để lưu các sản phẩm đã chọn
 
-                                                            // Lặp qua các sản phẩm đã chọn
-                                                            $('input[name="selectedItems"]:checked').each(function () {
-                                                                var productID = $(this).val(); // Lấy productID
-                                                                var quantity = parseInt($('#product-quantity1-' + productID).val()); // Lấy số lượng
+                                                                // Lặp qua các sản phẩm đã chọn
+                                                                $('input[name="selectedItems"]:checked').each(function () {
+                                                                    var productID = $(this).val(); // Lấy productID
+                                                                    var quantity = parseInt($('#product-quantity1-' + productID).val()); // Lấy số lượng
 
-                                                                // Thêm sản phẩm vào mảng
-                                                                selectedItems.push({
-                                                                    productID: productID,
-                                                                    quantity: quantity
+                                                                    // Thêm sản phẩm vào mảng
+                                                                    selectedItems.push({
+                                                                        productID: productID,
+                                                                        quantity: quantity
+                                                                    });
                                                                 });
+
+                                                                // Kiểm tra nếu có ít nhất một sản phẩm được chọn
+                                                                if (selectedItems.length > 0) {
+                                                                    // Chuyển đổi mảng thành JSON và gán vào input hidden
+                                                                    $('#selectedItemsInput').val(JSON.stringify(selectedItems));
+
+                                                                    // Gửi form
+                                                                    console.log(productID);
+                                                                    $('#checkoutForm').submit();
+                                                                } else {
+                                                                    alert('Vui lòng chọn ít nhất một sản phẩm.');
+                                                                    e.preventDefault(); // Ngăn không cho form submit
+                                                                    return false; // Dừng thực thi tiếp
+                                                                }
                                                             });
-
-                                                            // Kiểm tra nếu có ít nhất một sản phẩm được chọn
-                                                            if (selectedItems.length > 0) {
-                                                                // Chuyển đổi mảng thành JSON và gán vào input hidden
-                                                                $('#selectedItemsInput').val(JSON.stringify(selectedItems));
-
-                                                                // Gửi form
-                                                                console.log(productID);
-                                                                $('#checkoutForm').submit();
-                                                            } else {
-                                                                alert('Vui lòng chọn ít nhất một sản phẩm.');
-                                                            }
                                                         });
-                                                    });
         </script>
         <script>
             $(document).ready(function () {
