@@ -68,16 +68,85 @@ public class OrdersDAO extends DBContext {
             return false;
         }
     }
+    
+    public List<Orders> getOrdersWithFilters(
+    String search, 
+    String fromDate, 
+    String toDate, 
+    String status,
+    String assignedSaleId, 
+    int page, 
+    int pageSize
+) throws SQLException {
+    List<Orders> orders = new ArrayList<>();
+    StringBuilder sql = new StringBuilder(
+        "SELECT o.*, u.FirstName as customerFirstName, u.LastName as customerLastName " +
+        "FROM orders o JOIN users u ON o.CustomerID = u.UserID WHERE 1=1"
+    );
+    
+    List<Object> params = new ArrayList<>();
+    
+    // Thêm điều kiện lọc theo Sale được gán
+    if (assignedSaleId != null && !assignedSaleId.isEmpty()) {
+        sql.append(" AND o.assigned_sale_id = ?");
+        params.add(Integer.parseInt(assignedSaleId));
+    }
+    
+    if (search != null && !search.isEmpty()) {
+            sql.append("AND (o.OrderID LIKE ? OR u.FirstName LIKE ? OR u.LastName LIKE ? OR u.Email LIKE ?) ");
+            String searchParam = "%" + search + "%";
+            params.add(searchParam);
+            params.add(searchParam);
+            params.add(searchParam);
+            params.add(searchParam);
+        }
+
+        if (fromDate != null && !fromDate.isEmpty()) {
+            sql.append("AND o.OrderDate >= ? ");
+            params.add(fromDate);
+        }
+
+        if (toDate != null && !toDate.isEmpty()) {
+            sql.append("AND o.OrderDate <= ? ");
+            params.add(toDate);
+        }
+
+        if (status != null && !status.isEmpty()) {
+            sql.append("AND o.status = ? ");
+            params.add(status);
+        }
+
+        sql.append("ORDER BY o.OrderDate DESC LIMIT ? OFFSET ?");
+        params.add(pageSize);
+        params.add((page - 1) * pageSize);
+
+        try (Connection conn = makeConnection(); PreparedStatement stmt = conn.prepareStatement(sql.toString())) {
+
+            // Thiết lập các tham số
+            for (int i = 0; i < params.size(); i++) {
+                stmt.setObject(i + 1, params.get(i));
+            }
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Orders order = new Orders();
+                    order.setOrderID(rs.getInt("OrderID"));
+                    order.setOrderDate(rs.getString("OrderDate")); 
+                    order.setDeliveryAddress(rs.getString("DeliveryAddress"));
+                    order.setStatus(rs.getString("status"));
+                    order.setTotalAmount(rs.getDouble("TotalAmount"));
+                    order.setCustomerLastName(rs.getString("LastName"));
+                    order.setCustomerFirstName(rs.getString("FirstName"));
+                    orders.add(order);
+                }
+            }
+        }
+    
+        return orders;
+}
 
     public List<Orders> getOrdersByAssignedSalePaginated(
-            int saleId,
-            String search,
-            String fromDate,
-            String toDate,
-            String status,
-            int page,
-            int pageSize
-    ) throws SQLException {
+            int saleId, String search, String fromDate, String toDate, String status, int page, int pageSize) throws SQLException {
         List<Orders> orders = new ArrayList<>();
         StringBuilder sql = new StringBuilder(
                 "SELECT o.OrderID, o.OrderDate, o.DeliveryAddress, o.status, o.TotalAmount, "
@@ -276,7 +345,7 @@ public class OrdersDAO extends DBContext {
         return orderList;
     }
 
-    public List<Orders> getOrdersPaginated(String search, String fromDate, String toDate, String saleName, String status, int page, int pageSize) {
+    public List<Orders> getOrdersPaginated(String search, String fromDate, String toDate, String saleName, String status, String assignedSaleId, int page, int pageSize) {
         List<Orders> orderList = new ArrayList<>();
         StringBuilder sql = new StringBuilder("SELECT o.*, u.FirstName, u.LastName, u.Email FROM Orders o ");
         sql.append("JOIN Users u ON o.CustomerID = u.UserID WHERE 1=1");
