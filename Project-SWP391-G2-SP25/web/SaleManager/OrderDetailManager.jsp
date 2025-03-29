@@ -89,7 +89,7 @@
             <p><strong>Tổng tiền:</strong> 
                 <fmt:formatNumber value="${order.totalAmount}" pattern="#,##0"/> đ
             </p>
-            <p><strong>Ghi chú:</strong> ${order.billOfLading}</p>
+            <p><strong>Ghi chú:</strong> ${order.comment}</p>
         </section>
 
         <!-- Quản lý đơn hàng -->

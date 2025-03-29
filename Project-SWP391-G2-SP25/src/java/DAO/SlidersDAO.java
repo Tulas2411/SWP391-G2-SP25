@@ -24,9 +24,8 @@ public class SlidersDAO extends DBContext {
                 slider.setSliderID(rs.getInt("SliderID"));
                 slider.setTitle(rs.getString("Title"));
                 slider.setImage(rs.getString("Image"));
-                slider.setBacklink(rs.getString("Backlink"));
                 slider.setStatus(rs.getString("Status"));
-                slider.setBlogID(rs.getInt("BlogID"));
+                slider.setBlogID(rs.getInt("PostID"));
                 slider.setProductID(rs.getInt("ProductID"));
 
                 list.add(slider);
@@ -43,7 +42,7 @@ public class SlidersDAO extends DBContext {
 
         // Nếu có tiêu chí tìm kiếm theo title hoặc backlink
         if (search != null && !search.trim().isEmpty()) {
-            sql.append(" AND (Title LIKE ? OR Backlink LIKE ?)");
+            sql.append(" AND (Title LIKE ?)");
         }
 
         // Nếu có tiêu chí tìm kiếm theo status
@@ -74,9 +73,8 @@ public class SlidersDAO extends DBContext {
                     slider.setSliderID(rs.getInt("SliderID"));
                     slider.setTitle(rs.getString("Title"));
                     slider.setImage(rs.getString("Image"));
-                    slider.setBacklink(rs.getString("Backlink"));
                     slider.setStatus(rs.getString("Status"));
-                    slider.setBlogID(rs.getInt("BlogID"));
+                    slider.setBlogID(rs.getInt("PostID"));
                     slider.setProductID(rs.getInt("ProductID"));
 
                     list.add(slider);
@@ -95,7 +93,7 @@ public class SlidersDAO extends DBContext {
 
         // Thêm điều kiện tìm kiếm
         if (search != null && !search.trim().isEmpty()) {
-            sql.append(" AND (Title LIKE ? OR Backlink LIKE ?)");
+            sql.append(" AND (Title LIKE ?)");
         }
 
         if (status != null && !status.isEmpty()) {
@@ -133,7 +131,7 @@ public class SlidersDAO extends DBContext {
 
         // Thêm điều kiện tìm kiếm
         if (search != null && !search.trim().isEmpty()) {
-            sql.append(" AND (Title LIKE ? OR Backlink LIKE ?)");
+            sql.append(" AND (Title LIKE ?)");
         }
 
         if (status != null && !status.isEmpty()) {
@@ -166,9 +164,8 @@ public class SlidersDAO extends DBContext {
                     slider.setSliderID(rs.getInt("SliderID"));
                     slider.setTitle(rs.getString("Title"));
                     slider.setImage(rs.getString("Image"));
-                    slider.setBacklink(rs.getString("Backlink"));
                     slider.setStatus(rs.getString("Status"));
-                    slider.setBlogID(rs.getInt("BlogID"));
+                    slider.setBlogID(rs.getInt("PostID"));
                     slider.setProductID(rs.getInt("ProductID"));
                     list.add(slider);
                 }
@@ -191,9 +188,8 @@ public class SlidersDAO extends DBContext {
                     slider.setSliderID(rs.getInt("SliderID"));
                     slider.setTitle(rs.getString("Title"));
                     slider.setImage(rs.getString("Image"));
-                    slider.setBacklink(rs.getString("Backlink"));
                     slider.setStatus(rs.getString("Status"));
-                    slider.setBlogID(rs.getInt("BlogID"));
+                    slider.setBlogID(rs.getInt("PostID"));
                     slider.setProductID(rs.getInt("ProductID"));
 
                     return slider;
@@ -204,21 +200,22 @@ public class SlidersDAO extends DBContext {
         }
         return null;
     }
-    public void addSlider(Sliders slider) {
-    String sql = "INSERT INTO Sliders (Title, Image, Backlink, Status, BlogID, ProductID) VALUES (?, ?, ?, ?, ?, ?)";
+    public boolean addSlider(Sliders slider) {
+    String sql = "INSERT INTO Sliders (Title, Image, Status, PostID, ProductID) VALUES (?, ?, ?, ?, ?)";
     try (PreparedStatement ps = connection.prepareStatement(sql)) {
         ps.setString(1, slider.getTitle());
         ps.setString(2, slider.getImage());
-        ps.setString(3, slider.getBacklink());
-        ps.setString(4, slider.getStatus());
+        ps.setString(3, slider.getStatus());
 
         // Nếu BlogID hoặc ProductID <= 0 thì đặt NULL
-        ps.setObject(5, (slider.getBlogID() > 0) ? slider.getBlogID() : null);
-        ps.setObject(6, (slider.getProductID() > 0) ? slider.getProductID() : null);
-
+        ps.setObject(4, (slider.getBlogID() > 0) ? slider.getBlogID() : null);
+        ps.setObject(5, (slider.getProductID() > 0) ? slider.getProductID() : null);
+        
         ps.executeUpdate();
+        return true;
     } catch (Exception e) {
         e.printStackTrace();
+        return false;
     }
 }
 
@@ -248,13 +245,12 @@ public class SlidersDAO extends DBContext {
 //        return false;
 //    }
     public int updateSlider(Sliders slider) {
-        String sql = "UPDATE Sliders SET Title = ?, Image = ?, Backlink = ?, Status = ? WHERE SliderID = ?";
+        String sql = "UPDATE Sliders SET Title = ?, Image = ?, Status = ? WHERE SliderID = ?";
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             stm.setString(1, slider.getTitle());      // Cập nhật title
-            stm.setString(2, slider.getImage());      // Cập nhật image (URL mới)
-            stm.setString(3, slider.getBacklink());  // Cập nhật backlink
-            stm.setString(4, slider.getStatus());    // Cập nhật status
-            stm.setInt(5, slider.getSliderID());     // Điều kiện WHERE SliderID = ?
+            stm.setString(2, slider.getImage());      // Cập nhật image (URL mới)  // Cập nhật backlink
+            stm.setString(3, slider.getStatus());    // Cập nhật status
+            stm.setInt(4, slider.getSliderID());     // Điều kiện WHERE SliderID = ?
 
             return stm.executeUpdate();  // Trả về số dòng bị ảnh hưởng
         } catch (Exception e) {
@@ -273,5 +269,10 @@ public class SlidersDAO extends DBContext {
             System.out.println("deleteSlider: " + e.getMessage());
         }
         return false;
+    }
+    public static void main(String[] args) {
+        SlidersDAO sDAO = new SlidersDAO();
+        Sliders s = new Sliders("San pham moi", "./assets/img/Panel1.jpg", "Active", 1, 0);
+        System.out.println(sDAO.addSlider(s) + "");
     }
 }

@@ -143,7 +143,7 @@
                                 <td>${status.index + 1}</td>
                                 <td><a href="/Project-SWP391-G2-SP25/ShipperOrderDetail?id=${order.orderID}">Order#${order.orderID}</a></td>
                                 <td>${order.deliveryAddress}</td>
-                                <td>${order.billOfLading}</td>
+                                <td>${order.comment}</td>
                                 <td><fmt:formatNumber value="${order.totalAmount}" type="currency" currencySymbol="₫" /></td>
                                 <td>
                                     <c:choose>
