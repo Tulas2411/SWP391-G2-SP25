@@ -37,7 +37,7 @@
                         <<li><a class="dropdown-item" href="UserProfileRole.jsp">Cài đặt</a></li>
                         <li><a class="dropdown-item" href="/Project-SWP391-G2-SP25/home">Trang chủ</a></li>
                         <li><hr class="dropdown-divider" /></li>
-                        <li><a class="dropdown-item" href="${contextPath}/LogoutController">Logout</a></li>
+                        <li><a class="dropdown-item" href="${contextPath}/LogoutController">Đăng xuất</a></li>
                     </ul>
                 </li>
             </ul>

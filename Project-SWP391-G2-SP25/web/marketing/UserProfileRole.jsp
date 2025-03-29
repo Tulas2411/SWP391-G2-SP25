@@ -152,7 +152,7 @@
                 <div class="button-container">
                     <input type="submit" value="Lưu Thay Đổi">
                     <a href="ChangePassword.jsp" class="btn-back">Đổi Mật Khẩu</a>
-                    <a href="${pageContext.request.contextPath}/marketing/dashboard" class="btn-back">Quay lại</a>
+                    <a href="${pageContext.request.contextPath}/marketing/statistics" class="btn-back">Quay lại</a>
 
                 </div>
             </form>
