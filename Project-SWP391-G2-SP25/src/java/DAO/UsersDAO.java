@@ -345,10 +345,6 @@ public class UsersDAO extends DBContext {
 
     public static void main(String[] args) {
         UsersDAO dao = new UsersDAO();
-
-        Users u = new Users();
-        u = dao.getUserByID(6);
-        u.setRole("Shipper");
-        System.out.println(dao.updateUser(u));
+        System.out.println(dao.getUserByEmail("tuanminh2424@gmail.com"));
     }
 }

@@ -208,7 +208,7 @@ public class MarketingPostsDAO extends DBContext {
 
     public Map<String, PostCategory> getAllPostCategories() {
         Map<String, PostCategory> cateList = new HashMap<>();
-        String sql = "SELECT * FROM marketingpostcategories";
+        String sql = "SELECT * FROM MarketingPostsCategories";
 
         try (Statement st = connection.createStatement(); ResultSet rs = st.executeQuery(sql)) {
             while (rs.next()) {
@@ -279,7 +279,7 @@ public class MarketingPostsDAO extends DBContext {
         MarketingPostsDAO dao = new MarketingPostsDAO();
         MarketingPosts post = dao.getMarketingPostByID(4);
         post.setCategory("GTSP");
-        System.out.println(dao.updateMarketingPost(post));
+        System.out.println(dao.getAllPostCategories());
     }
 
     public boolean updateMarketingPost(int i, String title, String content, int author, java.util.Date createDate, String status, String imageLink) {

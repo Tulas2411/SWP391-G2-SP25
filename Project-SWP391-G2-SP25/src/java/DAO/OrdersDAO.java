@@ -46,7 +46,7 @@ public class OrdersDAO extends DBContext {
                     order.setDeliveryAddress(rs.getString("DeliveryAddress"));
                     order.setStatus(rs.getString("Status"));
                     order.setTotalAmount(rs.getDouble("TotalAmount"));
-                    order.setBillOfLading(rs.getString("BillOfLading"));
+                    order.setComment(rs.getString("Comment"));
                     // Thêm các trường khác nếu cần
                 }
             }
@@ -555,14 +555,14 @@ public class OrdersDAO extends DBContext {
     }
 
     public boolean addOrder(Orders order) {
-        String sql = "INSERT INTO Orders (CustomerID, OrderDate, DeliveryAddress, Status, TotalAmount, BillOfLading, ShipperID, assigned_sale_id ) VALUES (?, NOW(), ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Orders (CustomerID, OrderDate, DeliveryAddress, Status, TotalAmount, Comment, ShipperID, assigned_sale_id ) VALUES (?, NOW(), ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, order.getCustomerID());
             ps.setString(2, order.getDeliveryAddress());
             ps.setString(3, order.getStatus());
             ps.setDouble(4, order.getTotalAmount());
-            ps.setString(5, order.getBillOfLading());
+            ps.setString(5, order.getComment());
             ps.setInt(6, order.getShipperID());
             ps.setInt(7, order.getSaleID());
             ps.executeUpdate();
@@ -574,7 +574,7 @@ public class OrdersDAO extends DBContext {
     }
 
     public boolean updateOrder(Orders order) {
-        String sql = "UPDATE Orders SET CustomerID = ?, OrderDate = ?, DeliveryAddress = ?, Status = ?, TotalAmount = ?, BillOfLading = ?, ShipperID = ?,  assigned_sale_id = ? WHERE OrderID = ?";
+        String sql = "UPDATE Orders SET CustomerID = ?, OrderDate = ?, DeliveryAddress = ?, Status = ?, TotalAmount = ?, Comment = ?, ShipperID = ?,  assigned_sale_id = ? WHERE OrderID = ?";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             setOrderPreparedStatement(ps, order);
@@ -608,7 +608,7 @@ public class OrdersDAO extends DBContext {
         order.setDeliveryAddress(rs.getString("DeliveryAddress"));
         order.setStatus(rs.getString("Status"));
         order.setTotalAmount(rs.getDouble("TotalAmount"));
-        order.setBillOfLading(rs.getString("BillOfLading"));
+        order.setComment(rs.getString("Comment"));
         order.setShipperID(rs.getInt("ShipperID"));
         order.setSaleID(rs.getInt("assigned_sale_id"));
         return order;
@@ -620,7 +620,7 @@ public class OrdersDAO extends DBContext {
         ps.setString(3, order.getDeliveryAddress());
         ps.setString(4, order.getStatus());
         ps.setDouble(5, order.getTotalAmount());
-        ps.setString(6, order.getBillOfLading());
+        ps.setString(6, order.getComment());
         ps.setInt(7, order.getShipperID());
         ps.setInt(8, order.getSaleID());
     }
@@ -768,7 +768,7 @@ public class OrdersDAO extends DBContext {
 
     public static void main(String[] args) {
         OrdersDAO oDAO = new OrdersDAO();
-        Orders o = new Orders(15, null, "Hanoi", "Submitted", 20000, "Hello");
+        Orders o = new Orders(7, null, "Hanoi", "Submitted", 20000, "Hello");
         System.out.println(oDAO.addOrder(o));
     }
 }

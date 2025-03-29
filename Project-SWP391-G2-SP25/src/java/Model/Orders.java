@@ -15,7 +15,7 @@ public class Orders {
     private String deliveryAddress;
     private String status;
     private double totalAmount;
-    private String billOfLading;
+    private String comment;
     private String customerFirstName;
     private String customerLastName;
     private String customerEmail;
@@ -59,44 +59,44 @@ public class Orders {
         this.customerEmail = customerEmail;
     }
     
-    public Orders(int orderID, int customerID, String orderDate, String deliveryAddress, String status, double totalAmount, String billOfLading, String customerFirstName, String customerLastName, String customerEmail) {
+    public Orders(int orderID, int customerID, String orderDate, String deliveryAddress, String status, double totalAmount, String comment, String customerFirstName, String customerLastName, String customerEmail) {
         this.orderID = orderID;
         this.customerID = customerID;
         this.orderDate = orderDate;
         this.deliveryAddress = deliveryAddress;
         this.status = status;
         this.totalAmount = totalAmount;
-        this.billOfLading = billOfLading;
+        this.comment = comment;
         this.customerFirstName = customerFirstName;
         this.customerLastName = customerLastName;
         this.customerEmail = customerEmail;
     }
     
-    public Orders(int orderID, int customerID, String orderDate, String deliveryAddress, String status, double totalAmount, String billOfLading) {
+    public Orders(int orderID, int customerID, String orderDate, String deliveryAddress, String status, double totalAmount, String comment) {
         this.orderID = orderID;
         this.customerID = customerID;
         this.orderDate = orderDate;
         this.deliveryAddress = deliveryAddress;
         this.status = status;
         this.totalAmount = totalAmount;
-        this.billOfLading = billOfLading;
+        this.comment = comment;
     }
 
-    public Orders(String orderDate, String deliveryAddress, String status, double totalAmount, String billOfLading) {
+    public Orders(String orderDate, String deliveryAddress, String status, double totalAmount, String comment) {
         this.orderDate = orderDate;
         this.deliveryAddress = deliveryAddress;
         this.status = status;
         this.totalAmount = totalAmount;
-        this.billOfLading = billOfLading;
+        this.comment = comment;
     }
 
-    public Orders(int customerID, String orderDate, String deliveryAddress, String status, double totalAmount, String billOfLading) {
+    public Orders(int customerID, String orderDate, String deliveryAddress, String status, double totalAmount, String comment) {
         this.customerID = customerID;
         this.orderDate = orderDate;
         this.deliveryAddress = deliveryAddress;
         this.status = status;
         this.totalAmount = totalAmount;
-        this.billOfLading = billOfLading;
+        this.comment = comment;
     }
 
     public int getOrderID() {
@@ -147,12 +147,12 @@ public class Orders {
         this.totalAmount = totalAmount;
     }
 
-    public String getBillOfLading() {
-        return billOfLading;
+    public String getComment() {
+        return comment;
     }
 
-    public void setBillOfLading(String billOfLading) {
-        this.billOfLading = billOfLading;
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public int getShipperID() {
@@ -173,18 +173,18 @@ public class Orders {
     
     
 
-    public Orders(String orderDate, String deliveryAddress, String status, double totalAmount, String billOfLading, int ShipperID) {
+    public Orders(String orderDate, String deliveryAddress, String status, double totalAmount, String comment, int ShipperID) {
         this.orderDate = orderDate;
         this.deliveryAddress = deliveryAddress;
         this.status = status;
         this.totalAmount = totalAmount;
-        this.billOfLading = billOfLading;
+        this.comment = comment;
         this.ShipperID = ShipperID;
     }
 
     @Override
     public String toString() {
-        return "Orders{" + "orderID=" + orderID + ", customerID=" + customerID + ", orderDate=" + orderDate + ", deliveryAddress=" + deliveryAddress + ", status=" + status + ", totalAmount=" + totalAmount + ", billOfLading=" + billOfLading + ", customerFirstName=" + customerFirstName + ", customerLastName=" + customerLastName + ", customerEmail=" + customerEmail + ", ShipperID=" + ShipperID + ", SaleID=" + SaleID + ", assignedSaleId=" + assignedSaleId + '}';
+        return "Orders{" + "orderID=" + orderID + ", customerID=" + customerID + ", orderDate=" + orderDate + ", deliveryAddress=" + deliveryAddress + ", status=" + status + ", totalAmount=" + totalAmount + ", billOfLading=" + comment + ", customerFirstName=" + customerFirstName + ", customerLastName=" + customerLastName + ", customerEmail=" + customerEmail + ", ShipperID=" + ShipperID + ", SaleID=" + SaleID + ", assignedSaleId=" + assignedSaleId + '}';
     }
     
 }
