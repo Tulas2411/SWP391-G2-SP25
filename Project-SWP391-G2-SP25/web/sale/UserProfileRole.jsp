@@ -118,7 +118,7 @@
 
         <div class="container">
             <h2>Chỉnh Sửa Hồ Sơ</h2>
-            <form action="UpdateProfileRoleServlet" method="post">
+            <form action="UpdateProfileRoleSaleServlet" method="post">
                 <input type="hidden" name="userID" value="<%= user.getUserID() %>">
 
                 <label for="userName">Tên Người Dùng:</label>
@@ -152,7 +152,7 @@
                 <div class="button-container">
                     <input type="submit" value="Lưu Thay Đổi">
                     <a href="ChangePassword.jsp" class="btn-back">Đổi Mật Khẩu</a>
-                    <a href="${pageContext.request.contextPath}/marketing/dashboard" class="btn-back">Quay lại</a>
+                    <a href="${pageContext.request.contextPath}/sale/OrderList.jsp" class="btn-back">Quay lại</a>
 
                 </div>
             </form>

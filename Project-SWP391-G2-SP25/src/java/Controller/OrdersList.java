@@ -66,71 +66,56 @@ public class OrdersList extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        Users currentUser = (Users) session.getAttribute("user");
+protected void doGet(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+    HttpSession session = request.getSession();
+    Users currentUser = (Users) session.getAttribute("user");
 
-        if (currentUser == null || !"Sale".equalsIgnoreCase(currentUser.getRole())) {
-            session.setAttribute("notificationErr", "Bạn không có quyền truy cập vào trang này");
-            response.sendRedirect(request.getContextPath() + "/Login.jsp");
-            return;
-        }
-
-        try {
-            // Lấy các tham số tìm kiếm từ request
-            String search = request.getParameter("search");
-            String fromDate = request.getParameter("fromDate");
-            String toDate = request.getParameter("toDate");
-            String status = request.getParameter("status");
-
-            int currentPage = 1;
-            if (request.getParameter("page") != null) {
-                currentPage = Integer.parseInt(request.getParameter("page"));
-            }
-
-            OrdersDAO ordersDAO = new OrdersDAO();
-            
-            // Chỉ lấy đơn hàng được gán cho Sale hiện tại
-            List<Orders> orders = ordersDAO.getOrdersByAssignedSalePaginated(
-                currentUser.getUserID(), 
-                search, 
-                fromDate, 
-                toDate, 
-                status, 
-                currentPage, 
-                PAGE_SIZE
-            );
-            for (Orders order : orders) {
-                System.out.println(orders.toString());
-            }
-            int totalOrders = ordersDAO.getTotalOrdersByAssignedSale(
-                currentUser.getUserID(),
-                search,
-                fromDate,
-                toDate,
-                status
-            );
-            
-            int totalPages = (int) Math.ceil((double) totalOrders / PAGE_SIZE);
-
-            // Đặt các thuộc tính vào request
-            request.setAttribute("orders", orders);
-            request.setAttribute("currentPage", currentPage);
-            request.setAttribute("totalPages", totalPages);
-            request.setAttribute("search", search);
-            request.setAttribute("fromDate", fromDate);
-            request.setAttribute("toDate", toDate);
-            request.setAttribute("status", status);
-
-            request.getRequestDispatcher("/sale/OrderList.jsp").forward(request, response);
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-            session.setAttribute("notificationErr", "Lỗi hệ thống: " + e.getMessage());
-           response.sendRedirect(request.getContextPath() + "/sale/OrderList.jsp");
-        }
+    if (currentUser == null || currentUser.getRole() == null || !"sale".equalsIgnoreCase(currentUser.getRole())) {
+        session.setAttribute("notificationErr", "Bạn không có quyền truy cập vào trang này");
+        response.sendRedirect(request.getContextPath() + "/Login.jsp");
+        return;
     }
+
+    try {
+        // Lấy thông tin đơn hàng của nhân viên sale hiện tại
+        String search = request.getParameter("search");
+        String fromDate = request.getParameter("fromDate");
+        String toDate = request.getParameter("toDate");
+        String status = request.getParameter("status");
+
+        int currentPage = 1;
+        if (request.getParameter("page") != null) {
+            currentPage = Integer.parseInt(request.getParameter("page"));
+        }
+
+        OrdersDAO ordersDAO = new OrdersDAO();
+        List<Orders> orders = ordersDAO.getOrdersByAssignedSalePaginated(
+            currentUser.getUserID(), search, fromDate, toDate, status, currentPage, PAGE_SIZE
+        );
+
+        int totalOrders = ordersDAO.getTotalOrdersByAssignedSale(
+            currentUser.getUserID(), search, fromDate, toDate, status
+        );
+
+        int totalPages = (int) Math.ceil((double) totalOrders / PAGE_SIZE);
+
+        request.setAttribute("orders", orders);
+        request.setAttribute("currentPage", currentPage);
+        request.setAttribute("totalPages", totalPages);
+        request.setAttribute("search", search);
+        request.setAttribute("fromDate", fromDate);
+        request.setAttribute("toDate", toDate);
+        request.setAttribute("status", status);
+
+        request.getRequestDispatcher("/sale/OrderList.jsp").forward(request, response);
+    } catch (Exception e) {
+        e.printStackTrace();
+        session.setAttribute("notificationErr", "Lỗi hệ thống: " + e.getMessage());
+        response.sendRedirect(request.getContextPath() + "/sale/OrderList.jsp");
+    }
+}
+
 
     /**
      * Handles the HTTP <code>POST</code> method.
