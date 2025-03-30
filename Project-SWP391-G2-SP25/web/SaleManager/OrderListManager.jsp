@@ -35,7 +35,7 @@
                         <option value="Shipped" ${param.status == 'Shipping' ? 'selected' : ''}>Đang giao hàng</option>
                         <option value="Delivered" ${param.status == 'Delivered' ? 'selected' : ''}>Đã giao thành công</option>
                         <option value="Processing" ${param.status == 'Processing' ? 'selected' : ''}>Đang xử lý</option>
-                        <option value="Completed" ${param.status == 'Processed' ? 'selected' : ''}>Đang chờ Shipper nhận đơn</option>
+                        <option value="Processed" ${param.status == 'Processed' ? 'selected' : ''}>Đang chờ Shipper nhận đơn</option>
                     </select>
                 </div>
                         <div class="col-md-3">
