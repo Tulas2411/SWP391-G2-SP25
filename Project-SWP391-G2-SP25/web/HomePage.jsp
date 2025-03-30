@@ -125,14 +125,14 @@
                                     <c:choose>
                                         <c:when test="${slider.productID == 0 && slider.blogID != 0}">
                                             <div class="swiper-slide">
-                                                <a href="${contextPath}/BlogDetail?id=${slider.blogID}">
+                                                <a href="/Project-SWP391-G2-SP25/BlogDetail?id=${slider.blogID}">
                                                     <img src="${slider.image}" alt="" class="main__right-panel-img">
                                                 </a>
                                             </div>
                                         </c:when>
                                         <c:otherwise>
                                             <div class="swiper-slide">
-                                                <a href="${contextPath}/ProductDetailControllerCustomer?id=${slider.productID}">
+                                                <a href="/Project-SWP391-G2-SP25/ProductDetailControllerCustomer?id=${slider.productID}">
                                                     <img src="${slider.image}" alt="" class="main__right-panel-img">
                                                 </a>
                                             </div>
