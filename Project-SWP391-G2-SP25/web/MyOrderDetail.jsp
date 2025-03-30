@@ -170,7 +170,7 @@
                             <p class="product-total"><strong>Tổng: <fmt:formatNumber value="${item.orderDetails.quantity * item.products.price}" type="currency" currencySymbol="₫"/></strong></p>
                         </div>
                         <div class="product-actions">
-                            <a href="ProductDetailController?id=${item.products.productID}" class="btn btn-buy-again">Mua Lại</a>
+                            <a href="ProductDetailControllerCustomer?id=${item.products.productID}" class="btn btn-buy-again">Mua Lại</a>
                         </div>
                     </div>
                 </c:forEach>
