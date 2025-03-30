@@ -147,7 +147,7 @@ public class ProductsDAO extends DBContext {
     }
 
     public boolean addProduct(Products product) {
-        String sql = "INSERT INTO Products (CategoryID, ProductName, Description, ProductDetail, Provider, Price, WarrantyPeriod, Amount, ImageLink, IsPromoted, OldPrice, CreateAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Products (CategoryID, ProductName, Description, ProductDetail, Provider, Price, WarrantyPeriod, Amount, ImageLink, IsPromoted, OldPrice) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             setProductPreparedStatement(ps, product);

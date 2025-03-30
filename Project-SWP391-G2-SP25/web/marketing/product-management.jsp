@@ -169,6 +169,11 @@
                             <textarea class="form-control" id="description" name="description" required></textarea>
                             <div class="invalid-feedback">Vui lòng nhập mô tả.</div>
                         </div>
+                        <div class="mb-3">
+                            <label for="detail" class="form-label">Chi tiết</label>
+                            <textarea class="form-control" id="description" name="detail" required></textarea>
+                            <div class="invalid-feedback">Vui lòng nhập chi tiết.</div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
