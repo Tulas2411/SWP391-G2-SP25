@@ -3,9 +3,11 @@ package Controller;
 import DAO.CategoryDAO;
 import DAO.MarketingPostsDAO;
 import DAO.ProductsDAO;
+import DAO.SlidersDAO;
 import Model.Category;
 import Model.MarketingPosts;
 import Model.Products;
+import Model.Sliders;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -29,6 +31,7 @@ public class HomeController extends HttpServlet {
         // Khởi tạo DAO
         ProductsDAO productsDAO = new ProductsDAO();
         CategoryDAO categoryDAO = new CategoryDAO();
+        SlidersDAO slidersDAO = new SlidersDAO();
         MarketingPostsDAO marketingPostsDAO = new MarketingPostsDAO();
 
         // Lấy danh sách danh mục sản phẩm từ database dưới dạng Map
@@ -61,8 +64,9 @@ public class HomeController extends HttpServlet {
 
         // Lấy các sản phẩm thiết bị thông minh
         List<Products> smartDevices = productsDAO.getProductsByCategory("TBTM");
-
+        List<Sliders> sliders = slidersDAO.getAllSliders();
         // Đưa dữ liệu vào request để truyền sang JSP
+        request.setAttribute("sliders", sliders);
         request.setAttribute("categories", categories);
         request.setAttribute("promotedProducts", promotedProducts);
         request.setAttribute("newProducts", newProducts);
