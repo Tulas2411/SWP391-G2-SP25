@@ -2,12 +2,18 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-
 package Controller;
 
+import DAO.OrderDetailsDAO;
 import DAO.OrdersDAO;
+import DAO.ProductsDAO;
+import DAO.SendMail;
 import Model.Orders;
 import DAO.UsersDAO;
+import Model.EmailTemplate;
+import Model.OrderDetailWithProduct;
+import Model.OrderDetails;
+import Model.Products;
 import Model.Users;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -16,7 +22,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 @WebServlet(name = "ShipperDashBoardController", urlPatterns = {"/ShipperDashBoard"})
 public class ShipperDashBoardController extends HttpServlet {
@@ -49,7 +57,14 @@ public class ShipperDashBoardController extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         String emailSession = (String) session.getAttribute("email");
+
         Users currentUser = userDAO.getUserByEmail(emailSession);
+        SendMail sendMail = new SendMail();
+
+        OrdersDAO ordersDAO = new OrdersDAO();
+        UsersDAO usersDAO = new UsersDAO();
+        OrderDetailsDAO orderDetailsDAO = new OrderDetailsDAO();
+        ProductsDAO productsDAO = new ProductsDAO();
 
         if (currentUser != null && currentUser.getRole().equalsIgnoreCase("Shipper")) {
             String action = request.getParameter("action");
@@ -67,6 +82,23 @@ public class ShipperDashBoardController extends HttpServlet {
                     boolean updated = orderDAO.updateOrderStatus(orderID, "Delivered");
                     if (updated) {
                         session.setAttribute("notification", "Cập nhật trạng thái đơn hàng thành công");
+                        Orders orders = ordersDAO.getOrderByID(orderID);
+
+                        Users users = usersDAO.getUserByID(orders.getCustomerID());
+
+                        Vector<OrderDetails> orderDetailses = orderDetailsDAO.getOrderDetailsByOrderID(orderID);
+
+                        List<OrderDetailWithProduct> list = new ArrayList<>();
+
+                        for (OrderDetails details : orderDetailses) {
+                            Products products = productsDAO.getProductByID(details.getProductID());
+                            list.add(new OrderDetailWithProduct(details, products));
+                        }
+
+                        EmailTemplate emailTemplate = new EmailTemplate(orders, list, users);
+
+                        sendMail.sendMail(users.getEmail(), "Đặt hàng thành công", emailTemplate.getTemplate());
+
                     } else {
                         session.setAttribute("notificationErr", "Cập nhật trạng thái thất bại.");
                     }
