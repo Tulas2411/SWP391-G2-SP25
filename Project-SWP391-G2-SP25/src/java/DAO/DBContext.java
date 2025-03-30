@@ -12,7 +12,7 @@ public class DBContext {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			conn = DriverManager.getConnection(
-					"jdbc:mysql://localhost:3306/EcommerceDB", "springstudent", "springstudent");
+					"jdbc:mysql://localhost:3306/EcommerceDB", "root", "1234");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -28,8 +28,8 @@ public class DBContext {
         // For example : StudentDBContext extends DBContext , 
         //where StudentDBContext is located in dal package, 
         try {
-            String user = "springstudent";
-            String pass = "springstudent";
+            String user = "root";
+            String pass = "1234";
             String url = "jdbc:mysql://localhost:3306/EcommerceDB";
             Class.forName("com.mysql.cj.jdbc.Driver");
             connection = DriverManager.getConnection(url, user, pass);
