@@ -51,13 +51,11 @@ public class EditMarketingPostController extends HttpServlet {
             String title = request.getParameter("title");
             String content = request.getParameter("content");
             int author = Integer.parseInt(request.getParameter("author"));
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm"); // Định dạng của input datetime-local
-            Date createDate = sdf.parse(request.getParameter("createDate"));
             String status = request.getParameter("status");
             String imageLink = request.getParameter("imageLink");
 
             // Tạo đối tượng MarketingPosts
-            MarketingPosts post = new MarketingPosts(postID, title, content, author, createDate, status, imageLink);
+            MarketingPosts post = new MarketingPosts(postID, title, content, author, null, status, imageLink);
 
             // Gọi DAO để cập nhật dữ liệu
             MarketingPostsDAO dao = new MarketingPostsDAO();
