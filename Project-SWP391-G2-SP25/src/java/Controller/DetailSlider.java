@@ -4,8 +4,12 @@
  */
 package Controller;
 
+import DAO.MarketingPostsDAO;
+import DAO.ProductsDAO;
 import DAO.SlidersDAO;
 import DAO.UsersDAO;
+import Model.MarketingPosts;
+import Model.Products;
 import Model.Sliders;
 import Model.Users;
 import java.io.IOException;
@@ -63,30 +67,35 @@ public class DetailSlider extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         UsersDAO userDAO = new UsersDAO();
         HttpSession session = request.getSession();
         String emailSession = (String) session.getAttribute("email");
         Users user = userDAO.getUserByEmail(emailSession);
+        MarketingPostsDAO pDAO = new MarketingPostsDAO();
+        ProductsDAO productdao = new ProductsDAO();
+        List<Products> productList = productdao.getAllProducts1();
+        List<MarketingPosts> blogs = pDAO.getAllMarketingPosts();
         if (user != null) {
             if (user.getRole().equalsIgnoreCase("marketing")) {
-        
-        SlidersDAO sliderDAO = new SlidersDAO();
 
-       int sliderID = Integer.parseInt(request.getParameter("sliderID"));
-        Sliders slider = sliderDAO.getSliderById(sliderID);
+                SlidersDAO sliderDAO = new SlidersDAO();
 
-        if (slider != null) {
-            request.setAttribute("slider", slider);
-            request.getRequestDispatcher("SliderListDetail.jsp").forward(request, response);
-        } else {
-            request.setAttribute("error", "Không tìm thấy slider với ID: " + sliderID);
-            request.getRequestDispatcher("ErrorPage.jsp").forward(request, response);
-            request.getRequestDispatcher("HomePage.jsp").forward(request, response);
-        }
-        
-        
-    } else {
+                int sliderID = Integer.parseInt(request.getParameter("sliderID"));
+                Sliders slider = sliderDAO.getSliderById(sliderID);
+
+                if (slider != null) {
+                    request.setAttribute("blogs", blogs);
+                    request.setAttribute("productList", productList);
+                    request.setAttribute("slider", slider);
+                    request.getRequestDispatcher("SliderListDetail.jsp").forward(request, response);
+                } else {
+                    request.setAttribute("error", "Không tìm thấy slider với ID: " + sliderID);
+                    request.getRequestDispatcher("ErrorPage.jsp").forward(request, response);
+                    request.getRequestDispatcher("HomePage.jsp").forward(request, response);
+                }
+
+            } else {
                 session.setAttribute("notificationErr", "Bạn không có quyền truy cập vào trang này");
                 response.sendRedirect("../Login.jsp");
             }
@@ -107,30 +116,26 @@ public class DetailSlider extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-      
+
         int sliderID = Integer.parseInt(request.getParameter("sliderID"));
         String title = request.getParameter("title");
         String backlink = request.getParameter("backlink");
         String status = request.getParameter("status");
 
-    
         String newImageLink = request.getParameter("newImageURL");
 
-        
         String imagePath = (newImageLink != null && !newImageLink.isEmpty()) ? newImageLink : request.getParameter("currentImage");
 
-      
         Sliders slider = new Sliders();
         slider.setSliderID(sliderID);
         slider.setTitle(title);
-        slider.setImage(imagePath); 
+        slider.setImage(imagePath);
         slider.setBacklink(backlink);
         slider.setStatus(status);
 
         SlidersDAO slidersDAO = new SlidersDAO();
-        slidersDAO.updateSlider(slider); 
+        slidersDAO.updateSlider(slider);
 
-  
         response.sendRedirect("DetailSlider?sliderID=" + sliderID);
     }
 

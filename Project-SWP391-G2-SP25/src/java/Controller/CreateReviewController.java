@@ -82,7 +82,7 @@ public class CreateReviewController extends HttpServlet {
         reviews.setRating(rating);
         reviews.setComment(comment);
         if (reviewsDAO.addReview(reviews)) {
-            response.sendRedirect("/Project-SWP391-G2-SP25/ProductDetailController?id=" + productId);
+            response.sendRedirect("/Project-SWP391-G2-SP25/ProductDetailControllerCustomer?id=" + productId);
         } else {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Đã xảy ra lỗi trong quá trình thêm đánh giá.");
         }

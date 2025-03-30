@@ -74,16 +74,26 @@
                                 <td>${slider.getSliderID()}</td>
                                 <td><img src="${slider.image}" width="100"></td>
                                 <td>${slider.title}</td>
-                                <td><a href="${slider.backlink}">${slider.backlink}</a></td>
+                                <td>
+                                    <c:choose>
+                                        <c:when test="${slider.productID == 0 && slider.blogID != 0}">
+                                            <a href="${contextPath}/BlogDetail?id=${slider.blogID}">
+                                                ${contextPath}/BlogDetail?id=${slider.blogID}
+                                            </a>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <a href="${contextPath}/BlogDetail?id=${slider.productID}">
+                                                ${contextPath}/ProductDetailControllerCustomer?id=${slider.productID}
+                                            </a>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </td>
                                 <td>${slider.status}</td>
-
                                 <td>
                                     <a href="DetailSlider?sliderID=${slider.sliderID}" class="btn btn-warning btn-sm">Chỉnh sửa</a>
                                     <a href="ShowDetailSlider?sliderID=${slider.sliderID}" class="btn btn-info btn-sm">Xem chi tiết</a>
                                     <a href="DeleteSlider?sliderID=${slider.sliderID}" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn xóa slider này không?');">Xóa</a>
                                 </td>
-
-
                             </tr>
                         </c:forEach>
                     </tbody>

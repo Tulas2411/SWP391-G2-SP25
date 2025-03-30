@@ -4,11 +4,11 @@
  */
 package Controller;
 
-import DAO.BlogDAO;
+import DAO.*;
 import DAO.ProductsDAO;
 import DAO.SlidersDAO;
 import DAO.UsersDAO;
-import Model.Blog;
+import Model.*;
 import Model.Products;
 import Model.Sliders;
 import Model.Users;
@@ -73,10 +73,10 @@ public class AddSlider extends HttpServlet {
         if (user != null) {
             if (user.getRole().equalsIgnoreCase("marketing")) {
         ProductsDAO productdao = new ProductsDAO();
-        BlogDAO blogDAO = new BlogDAO(); 
+        MarketingPostsDAO pDAO = new MarketingPostsDAO(); 
         
         List<Products> productList = productdao.getAllProducts1(); 
-        List<Blog> blogs = blogDAO.getAllBlogs1();
+        List<MarketingPosts> blogs = pDAO.getAllMarketingPosts();
         
         request.setAttribute("blogs", blogs);
         request.setAttribute("productList", productList); 
@@ -109,7 +109,6 @@ public class AddSlider extends HttpServlet {
             if (user.getRole().equalsIgnoreCase("marketing")) {
 
         String title = request.getParameter("title");
-    String backlink = request.getParameter("backlink");
     String image = request.getParameter("image");
     String status = request.getParameter("status");
 
@@ -133,7 +132,7 @@ public class AddSlider extends HttpServlet {
     }
 
     // Tạo đối tượng Slider
-    Sliders slider = new Sliders(title, backlink, image, status, blogID, productId);
+    Sliders slider = new Sliders(title, image, status, blogID, productId);
 
     // Gọi DAO để thêm slider
     SlidersDAO sliderDAO = new SlidersDAO();

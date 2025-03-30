@@ -58,7 +58,7 @@ public class EmailTemplate {
                     "                    </td>\n" +
                     "                    <td>"+details.getQuantity()+"</td>\n" +
                     "                    <td>"+decimalFormat.format(details.getPrice())+"</td>\n" +
-                    "                    <td><a href='http://localhost:8080/Project-SWP391-G2-SP25/ProductDetailController?id="+ p.getProductID()+"&user=" + users.getUserID() +"'>Đánh giá</a></td>\n" +
+                    "                    <td><a href='http://localhost:8080/Project-SWP391-G2-SP25/ProductDetailControllerCustomer?id="+ p.getProductID()+"&user=" + users.getUserID() +"'>Đánh giá</a></td>\n" +
                     "                  </tr>";
         }
         body += "<tr>\n" +
