@@ -88,4 +88,8 @@ public class StatisticsDAO extends DBContext{
 
         return products;
     }
+    public static void main(String[] args) {
+        StatisticsDAO sDAO = new StatisticsDAO();
+        System.out.println(sDAO.getTopSellingProducts());
+    }
 }

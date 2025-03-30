@@ -36,26 +36,6 @@
 
         <!-- Fonts END -->
 
-        <!-- Global styles START -->          
-        <link href="TulasCSS/assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-        <link href="TulasCSS/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-        <!-- Global styles END --> 
-
-        <!-- Page level plugin styles START -->
-        <link href="TulasCSS/assets/plugins/fancybox/source/jquery.fancybox.css" rel="stylesheet">
-        <link href="TulasCSS/assets/plugins/owl.carousel/assets/owl.carousel.css" rel="stylesheet">
-        <link href="TulasCSS/assets/plugins/uniform/css/uniform.default.css" rel="stylesheet" type="text/css">
-        <link href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css"><!-- for slider-range -->
-        <link href="TulasCSS/assets/plugins/rateit/src/rateit.css" rel="stylesheet" type="text/css">
-        <!-- Page level plugin styles END -->
-
-        <!-- Theme styles START -->
-        <link href="TulasCSS/assets/corporate/css/style.css" rel="stylesheet">
-        <link href="TulasCSS/assets/pages/css/style-shop.css" rel="stylesheet" type="text/css">
-        <link href="TulasCSS/assets/corporate/css/style-responsive.css" rel="stylesheet">
-        <link href="TulasCSS/assets/corporate/css/themes/red.css" rel="stylesheet" id="style-color">
-        <link href="TulasCSS/assets/corporate/css/custom.css" rel="stylesheet">
-        <!-- Theme styles END -->
         <link rel="shortcut icon" href="assets/img/S4EWhite.PNG" type="image/x-icon" />
         <link rel="stylesheet" href="assets/css/reset.css" />
         <link rel="stylesheet" href="assets/css/base.css" />
@@ -76,13 +56,7 @@
         <![endif]-->
         <style>
             /* General Styles */
-            body {
-                font-family: Arial, sans-serif;
-                margin: 0;
-                padding: 0;
-                background-color: #f4f4f4;
-                color: #333;
-            }
+
 
             .container {
                 display: flex;
@@ -182,8 +156,9 @@
             }
         </style>
     </head>
+    <%@ include file="./Public/header.jsp" %>
     <body class="ecommerce">
-        <%@ include file="./Public/header.jsp" %>
+        
         <main class="main">
             <div class="main__gird gird">
                 <jsp:include page="getSidebarData" />

@@ -90,7 +90,7 @@
             <span style="color: <%=color%>;"><%=statusText%></span>
         </p>
         <p><strong>Tổng tiền:</strong> <%=currencyFormat.format(o.getTotalAmount())%></p>
-        <p><strong>Ghi chú:</strong> <%=o.getBillOfLading()%></p>
+        <p><strong>Ghi chú:</strong> <%=o.comment()%></p>
     </section>
     <%if(o.getStatus().equalsIgnoreCase("Shipping")){%>
     <form action="${contextPath}/ShipperOrderDetail" method="POST" style="display:inline"

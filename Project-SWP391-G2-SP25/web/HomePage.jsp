@@ -103,7 +103,7 @@
                         <c:forEach var="post" items="${latestPosts}">
                             <li class="main__left-posts-items main__left-posts-items--vertical">
                                 <img src="${post.imageLink}" alt="${post.title}" class="main__left-posts-img" />
-                                <a href="PostDetailsController?postId=${post.postID}" class="main__left-posts-link">
+                                <a href="/Project-SWP391-G2-SP25/BlogDetail?id=${post.postID}" class="main__left-posts-link">
                                     <span class="main__left-posts-title">${post.title}</span>
                                 </a>
                             </li>

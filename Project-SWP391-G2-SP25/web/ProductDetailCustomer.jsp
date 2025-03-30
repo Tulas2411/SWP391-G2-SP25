@@ -91,7 +91,7 @@ Author     : Tung Duong
                     <c:forEach var="category" items="${categories}">
                         <c:if test="${category.categoryID == categoryID}">
                             <li class="main__left-category-items">
-                                <a href="Category.jsp?id=${category.categoryID}" class="main__left-category-link">
+                                <a href="productsList?category=${category.categoryID}" class="main__left-category-link">
                                     ${category.categoryName}
                                 </a>
                             </li>
@@ -107,7 +107,7 @@ Author     : Tung Duong
                 <c:forEach var="product" items="${promotedProducts}" varStatus="status">
                     <c:if test="${status.index < 5}">  <%-- Chỉ hiển thị 5 sản phẩm đầu tiên --%>
                         <li class="main__left-product-items main__left-product-items--vertical">
-                            <a href="/Project-SWP391-G2-SP25/ProductDetailController?id=${product.productID}" class="main__left-product-link">
+                            <a href="/Project-SWP391-G2-SP25/ProductDetailControllerCustomer?id=${product.productID}" class="main__left-product-link">
                                 <img src="${product.imageLink}" alt="${product.productName}" class="main__left-product-img" />
                                 <span class="main__left-product-title">${product.productName}</span>
                             </a>
@@ -130,7 +130,7 @@ Author     : Tung Duong
                 <c:forEach var="product" items="${newProducts}" varStatus="status">
                     <c:if test="${status.index < 5}">
                         <li class="main__left-product-items main__left-product-items--vertical">
-                            <a href="/Project-SWP391-G2-SP25/ProductDetailController?id=${product.productID}" class="main__left-product-link">
+                            <a href="/Project-SWP391-G2-SP25/ProductDetailControllerCustomer?id=${product.productID}" class="main__left-product-link">
                                 <img src="${product.imageLink}" alt="${product.productName}" class="main__left-product-img" />
                                 <span class="main__left-product-title">${product.productName}</span>
                             </a>
@@ -150,7 +150,7 @@ Author     : Tung Duong
                 <c:forEach var="post" items="${latestPosts}">
                     <li class="main__left-posts-items main__left-posts-items--vertical">
                         <img src="${post.imageLink}" alt="${post.title}" class="main__left-posts-img" />
-                        <a href="PostDetailsController?postId=${post.postID}" class="main__left-posts-link">
+                        <a href="/Project-SWP391-G2-SP25/BlogDetail?id=${post.postID}" class="main__left-posts-link">
                             <span class="main__left-posts-title">${post.title}</span>
                         </a>
                     </li>

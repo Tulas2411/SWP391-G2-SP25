@@ -71,7 +71,7 @@ public class LoginServlet extends HttpServlet {
                         } else if (u.getRole().equalsIgnoreCase("Marketing")) {
                             response.sendRedirect("marketing/statistics");
                         } else if (u.getRole().equalsIgnoreCase("Sale")) {
-                            response.sendRedirect("sale/OrdersList");
+                            response.sendRedirect("sale/statistics");
                         } else if (u.getRole().equalsIgnoreCase("SaleManager")) {
                             response.sendRedirect("SaleManager/OrdersListManager");   
                         } else if (u.getRole().equalsIgnoreCase("Shipper")) {
@@ -94,7 +94,7 @@ public class LoginServlet extends HttpServlet {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Đã xảy ra lỗi trong quá trình đăng nhập.");
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Đã xảy ra lỗi trong quá trình đăng nhập." + e.getLocalizedMessage());
         } finally {
             // Đóng kết nối và tài nguyên
             try {

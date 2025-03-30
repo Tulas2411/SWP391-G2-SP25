@@ -36,11 +36,11 @@ public class MarketingDashboardController extends HttpServlet {
                 request.getRequestDispatcher("dashboard.jsp").forward(request, response);
 
             } else {
-                session.setAttribute("notificationErr", "Access Denined!");
+                session.setAttribute("notificationErr", "Truy cập bị từ chối!");
                 response.sendRedirect("../Login.jsp");
             }
         } else {
-            session.setAttribute("notificationErr", "You must login first!");
+            session.setAttribute("notificationErr", "Bạn phải đăng nhập trước!");
             response.sendRedirect("../Login.jsp");
         }
     }
