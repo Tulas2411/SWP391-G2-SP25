@@ -153,7 +153,7 @@
                             <td><fmt:formatNumber value="${order.totalAmount}" pattern="#,### đ" /></td>
                             <td>${order.statusOrder}</td>
                             <td>
-                                <a href="my-order-detail?orderId=${order.orderID}" class="orders-view-link">View</a>
+                                <a href="my-order-detail?orderId=${order.orderID}" class="orders-view-link">Chi tiết đơn hàng</a>
                             </td>
                         </tr>
                     </c:forEach>

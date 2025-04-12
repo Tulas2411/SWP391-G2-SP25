@@ -29,11 +29,6 @@
             </div>
             
             <div class="mb-3">
-                <label for="createDate" class="form-label">Ngày tạo</label>
-                <input type="datetime-local" class="form-control" id="createDate" name="createDate" value="${post.createDate}" required>
-            </div>
-            
-            <div class="mb-3">
                 <label for="status" class="form-label">Trạng thái</label>
                 <select class="form-select" id="status" name="status">
                     <option value="Published" ${post.status == 'Published' ? 'selected' : ''}>Published</option>
@@ -43,7 +38,7 @@
             
             <div class="mb-3">
                 <label for="imageLink" class="form-label">Link hình ảnh</label>
-                <input type="url" class="form-control" id="imageLink" name="imageLink" value="${post.imageLink}">
+                <input type="text" class="form-control" id="imageLink" name="imageLink" value="${post.imageLink}">
             </div>
             
             <div class="d-flex justify-content-between">

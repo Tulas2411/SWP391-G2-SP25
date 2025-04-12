@@ -146,6 +146,7 @@ public class ProductManagementController extends HttpServlet {
                 String oldpriceStr = request.getParameter("oldprice");
                 String warrantyPeriod = request.getParameter("warrantyPeriod");
                 String amountStr = request.getParameter("amount");
+                String detail = request.getParameter("detail");
 
                 Part filePart = request.getPart("imageFile"); // Uploaded file
 
@@ -190,6 +191,9 @@ public class ProductManagementController extends HttpServlet {
                 product.setOldprice(oldprice);
                 product.setWarrantyPeriod(warrantyPeriod + " năm");
                 product.setAmount(amount);
+                product.setIsPromoted(true);
+                product.setProductDetails(detail);
+                product.setStatus("Active");
                 product.setImageLink("assets/img/" + fileName); // Save relative path
 
                 // Add product to database

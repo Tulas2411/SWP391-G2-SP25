@@ -121,11 +121,24 @@
                         <div class="swiper swiper-panel">
                             <!-- Additional required wrapper -->
                             <div class="swiper-wrapper">
-                                <!-- Slides -->
-                                <div class="swiper-slide"><img src="./assets/img/Panel1.jpg" alt="" class="main__right-panel-img"></div>
-                                <div class="swiper-slide"><img src="./assets/img/Panel2.png" alt="" class="main__right-panel-img"></div>
-                                <div class="swiper-slide"><img src="./assets/img/Panel3.png" alt="" class="main__right-panel-img"></div>
-                                <div class="swiper-slide"><img src="./assets/img/Panel4.png" alt="" class="main__right-panel-img"></div>
+                                <c:forEach var="slider" items="${sliders}">
+                                    <c:choose>
+                                        <c:when test="${slider.productID == 0 && slider.blogID != 0}">
+                                            <div class="swiper-slide">
+                                                <a href="/Project-SWP391-G2-SP25/BlogDetail?id=${slider.blogID}">
+                                                    <img src="${slider.image}" alt="" class="main__right-panel-img">
+                                                </a>
+                                            </div>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <div class="swiper-slide">
+                                                <a href="/Project-SWP391-G2-SP25/ProductDetailControllerCustomer?id=${slider.productID}">
+                                                    <img src="${slider.image}" alt="" class="main__right-panel-img">
+                                                </a>
+                                            </div>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </c:forEach>
                             </div>
 
                             <div class="panel-prev">

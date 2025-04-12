@@ -190,7 +190,6 @@
                                     <div class="post-content">
                                         <img src="<%=post.getImageLink()%>" alt="Ảnh minh họa bài viết" class="post-image">
                                         <p><%=post.getContent()%></p>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam scelerisque ipsum vitae velit sagittis, a tincidunt nunc tincidunt. Donec euismod, nisl eget aliquam ultricies, nunc nisl aliquet nunc, eget aliquam nisl nunc eget nisl.</p>
                                     </div>
                                 </article>
                             </div>

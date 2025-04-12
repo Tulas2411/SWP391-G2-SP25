@@ -273,6 +273,6 @@ public class SlidersDAO extends DBContext {
     public static void main(String[] args) {
         SlidersDAO sDAO = new SlidersDAO();
         Sliders s = new Sliders("San pham moi", "./assets/img/Panel1.jpg", "Active", 1, 0);
-        System.out.println(sDAO.addSlider(s) + "");
+        System.out.println(sDAO.getAllSliders());
     }
 }
